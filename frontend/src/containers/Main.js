@@ -5,7 +5,6 @@ import { withRouter } from "react-router";
 
 import Header from "../components/Header";
 import ClubCard from "../components/ClubCard";
-import ClubModal from "../components/ClubModal";
 
 class Main extends React.Component {
   render() {

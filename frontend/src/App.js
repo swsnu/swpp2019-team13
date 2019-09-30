@@ -8,6 +8,7 @@ import Board from "./containers/Board";
 import ArticleCreate from "./containers/ArticleCreate";
 import MyPage from "./containers/MyPage";
 import ClubCreate from "./containers/ClubCreate";
+import ClubApply from "./containers/ClubApply";
 
 function App(props) {
   return (
@@ -16,6 +17,7 @@ function App(props) {
         <Switch>
           <Route path="/" exact component={Main} />
           <Route path="/club/create" exact component={ClubCreate} />
+          <Route path="/club/apply/:id" exact component={ClubApply} />
           <Route path="/board" exact component={Board} />
           <Route path="/article/create" exact component={ArticleCreate} />
           <Route path="/mypage/:id" exact component={MyPage} />
