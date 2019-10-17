@@ -5,34 +5,8 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
 
-import { applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-
-import { connectRouter, routerMiddleware } from "connected-react-router";
-import { createBrowserHistory } from "history";
-
-const history = createBrowserHistory();
-const rootReducer = combineReducers({
-  router: connectRouter(history)
-});
-
-const logger = store => {
-  return next => {
-    return action => {
-      // console.log("[Middleware] Dispatching", action);
-      const result = next(action);
-      // console.log("[Middleware] Next State", store.getState());
-      return result;
-    };
-  };
-};
-
-const store = createStore(
-  rootReducer,
-  applyMiddleware(logger, thunk, routerMiddleware(history))
-);
+import store, { history } from "./store/store";
 
 ReactDOM.render(
   <Provider store={store}>

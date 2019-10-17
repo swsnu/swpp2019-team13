@@ -20,7 +20,7 @@ class Header extends React.Component {
     const login_tab = (
       <span>
         {"User : My Name"}
-        <button onClick={() => {}}>log out</button>
+        <button onClick={() => {}}>Sign Out</button>
         <button onClick={() => this.props.history.push("/mypage/" + id)}>
           my page
         </button>
@@ -29,8 +29,10 @@ class Header extends React.Component {
 
     return (
       <div>
-        <button onClick={() => this.props.history.push("/")}>Club 4 U</button>
-        <button onClick={() => this.props.history.push("/board")}>Board</button>
+        <button onClick={() => this.props.history.push("/club")}>Club</button>
+        <button onClick={() => this.props.history.push("/somoim")}>
+          Somoim
+        </button>
         {isLogin ? login_tab : not_login_tab}
       </div>
     );

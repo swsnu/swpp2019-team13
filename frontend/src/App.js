@@ -3,24 +3,17 @@ import React from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 
-import Main from "./containers/Main";
-import Board from "./containers/Board";
-import ArticleCreate from "./containers/ArticleCreate";
-import MyPage from "./containers/MyPage";
-import ClubCreate from "./containers/ClubCreate";
-import ClubApply from "./containers/ClubApply";
+import ClubMain from "./containers/ClubMain";
+import SomoimMain from "./containers/SomoimMain";
 
 function App(props) {
   return (
     <ConnectedRouter history={props.history}>
       <div>
         <Switch>
-          <Route path="/" exact component={Main} />
-          <Route path="/club/create" exact component={ClubCreate} />
-          <Route path="/club/apply/:id" exact component={ClubApply} />
-          <Route path="/board" exact component={Board} />
-          <Route path="/article/create" exact component={ArticleCreate} />
-          <Route path="/mypage/:id" exact component={MyPage} />
+          <Route path="/club" exact component={ClubMain} />
+          <Route path="/somoim" exact component={SomoimMain} />
+          <Redirect exact from="/" to="/club" />
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>
       </div>

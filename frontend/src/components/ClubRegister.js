@@ -3,19 +3,24 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
-import Header from "../components/Header";
+import Header from "./Header";
 
-class ClubApply extends React.Component {
+import * as actionCreaters from "../store/actions/index";
+
+class ClubRegister extends React.Component {
   state = {
     title: "",
-    content: ""
+    content: "",
+    tag: ""
+    // TODO : Implement supporting multiple tag
+    // tag: []
   };
 
   render() {
     return (
       <div>
         <Header />
-        <h1>Club Apply</h1>
+        <h1>Create Club Advertisement</h1>
         <div>
           <div>
             title :
@@ -36,6 +41,15 @@ class ClubApply extends React.Component {
             />
           </div>
           <div>
+            tag :
+            <input
+              type="text"
+              id="club-tag-input"
+              value={this.state.tag}
+              onChange={event => this.setState({ tag: event.target.value })}
+            />
+          </div>
+          <div>
             <button
               id="back-create-club-button"
               onClick={() => this.props.history.push("/")}
@@ -46,8 +60,16 @@ class ClubApply extends React.Component {
           <div>
             <button
               id="confirm-create-club-button"
-              disabled={this.state.title === "" || this.state.content === ""}
-              onClick={() => {}}
+              disabled={
+                this.state.title === "" ||
+                this.state.content === "" ||
+                this.state.tag === ""
+              }
+              onClick={() =>
+                this.props.postClub(this.state.title, this.state.content, [
+                  this.state.tag
+                ])
+              }
             >
               Confirm
             </button>
@@ -63,10 +85,19 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    postClub: (title, content, tag) =>
+      dispatch(
+        actionCreaters.postClub({
+          title: title,
+          content: content,
+          tag: tag
+        })
+      )
+  };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(ClubApply));
+)(withRouter(ClubRegister));

@@ -6,7 +6,9 @@ import { withRouter } from "react-router";
 import Header from "../components/Header";
 import ClubCard from "../components/ClubCard";
 
-class Main extends React.Component {
+import * as actionCreaters from "../store/actions/index";
+
+class ClubMain extends React.Component {
   render() {
     return (
       <div>
@@ -14,7 +16,9 @@ class Main extends React.Component {
         <h1>Main Page</h1>
         <h1>--- Recommend Club ---</h1>
         {/* TODO : List up card form of recommend club */}
-        <ClubCard title="club 1" content="hearthstone club" />
+        {this.props.clubs.map(c => {
+          return <ClubCard title={c.title} content={c.content} />;
+        })}
         <h1>--- All Club ---</h1>
         <div>
           <button>Category 1</button>
@@ -22,8 +26,13 @@ class Main extends React.Component {
           <button>Category 3</button>
           <button>Category 4</button>
           <button>Category 5</button>
+          <button>Category 6</button>
+          <button>Category 7</button>
         </div>
         {/* TODO : List up card form of all club categorized by category */}
+        {this.props.clubs.map(c => {
+          return <ClubCard title={c.title} content={c.content} />;
+        })}
         <div>
           <button onClick={() => this.props.history.push("/club/create")}>
             +
@@ -35,7 +44,9 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    clubs: state.cl.clubs
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -45,4 +56,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(Main));
+)(withRouter(ClubMain));

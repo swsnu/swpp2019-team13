@@ -3,9 +3,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
-import Header from "../components/Header";
+import Header from "./Header";
 
-class ClubCreate extends React.Component {
+class SomoimCreate extends React.Component {
   state = {
     title: "",
     content: ""
@@ -15,13 +15,13 @@ class ClubCreate extends React.Component {
     return (
       <div>
         <Header />
-        <h1>Create Club Advertisement</h1>
+        <h1>Create Article</h1>
         <div>
           <div>
             title :
             <input
               type="text"
-              id="club-title-input"
+              id="article-title-input"
               value={this.state.title}
               onChange={event => this.setState({ title: event.target.value })}
             />
@@ -30,22 +30,22 @@ class ClubCreate extends React.Component {
             content :
             <input
               type="text"
-              id="club-content-input"
+              id="article-content-input"
               value={this.state.content}
               onChange={event => this.setState({ content: event.target.value })}
             />
           </div>
           <div>
             <button
-              id="back-create-club-button"
-              onClick={() => this.props.history.push("/")}
+              id="back-create-article-button"
+              onClick={() => this.props.history.push("/board")}
             >
               Back
             </button>
           </div>
           <div>
             <button
-              id="confirm-create-club-button"
+              id="confirm-create-article-button"
               disabled={this.state.title === "" || this.state.content === ""}
               onClick={() => {}}
             >
@@ -69,4 +69,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(ClubCreate));
+)(withRouter(SomoimCreate));

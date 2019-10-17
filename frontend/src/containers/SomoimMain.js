@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 
 import Header from "../components/Header";
 
-class Board extends React.Component {
+class SomoimMain extends React.Component {
   render() {
     return (
       <div>
@@ -41,4 +41,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(Board));
+)(withRouter(SomoimMain));
