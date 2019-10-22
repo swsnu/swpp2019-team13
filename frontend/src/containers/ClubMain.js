@@ -7,8 +7,17 @@ import Header from "../components/Header";
 import ClubCard from "../components/ClubCard";
 
 import * as actionCreaters from "../store/actions/index";
+import ClubRegister from "../components/ClubRegister";
 
 class ClubMain extends React.Component {
+  state = {
+    showClubRegisterModal: true
+  };
+
+  handleModal = modalState => {
+    this.state[modalState] = !this.state[modalState];
+  };
+
   render() {
     return (
       <div>
@@ -33,11 +42,10 @@ class ClubMain extends React.Component {
         {this.props.clubs.map(c => {
           return <ClubCard title={c.title} content={c.content} />;
         })}
-        <div>
-          <button onClick={() => this.props.history.push("/club/create")}>
-            +
-          </button>
-        </div>
+        {/* TODO : change showClubRegisterModal with state and toggle with link */}
+        <ClubRegister
+          showClubRegisterModal={this.state.showClubRegisterModal}
+        />
       </div>
     );
   }

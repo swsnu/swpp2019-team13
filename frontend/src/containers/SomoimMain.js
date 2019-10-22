@@ -4,8 +4,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
 import Header from "../components/Header";
+import SomoimCreate from "../components/SomoimCreate";
 
 class SomoimMain extends React.Component {
+  state = {
+    showSomoimCreateModal: true
+  };
+
   render() {
     return (
       <div>
@@ -25,6 +30,9 @@ class SomoimMain extends React.Component {
             +
           </button>
         </div>
+        <SomoimCreate
+          showSomoimCreateModal={this.state.showSomoimCreateModal}
+        />
       </div>
     );
   }
