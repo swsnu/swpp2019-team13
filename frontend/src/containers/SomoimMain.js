@@ -7,9 +7,14 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import Header from "../components/Header";
 import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
+import SomoimCreate from "../components/SomoimCreate";
 
 class SomoimMain extends React.Component {
-  state = { somoimDetailShow: false, selectedSomoim: null };
+  state = {
+    somoimDetailShow: false,
+    somoimCreateShow: false,
+    selectedSomoim: null
+  };
 
   somoimCardClickHandler = id => {
     this.setState({
@@ -23,6 +28,20 @@ class SomoimMain extends React.Component {
     this.setState({
       ...this.state,
       somoimDetailShow: false
+    });
+  };
+
+  somoimCreateClickHandler = () => {
+    this.setState({
+      ...this.state,
+      somoimDetailShow: true
+    });
+  };
+
+  somoimCreateCloseHandler = () => {
+    this.setState({
+      ...this.state,
+      somoimCreateShow: false
     });
   };
 
@@ -97,7 +116,13 @@ class SomoimMain extends React.Component {
               </div>
             </Col>
             <Col>
-              <h3>+</h3>
+              <Button
+                variant="outline-primary"
+                size="lg"
+                onClick={this.somoimCreateClickHandler}
+              >
+                +
+              </Button>
             </Col>
           </Row>
         </Container>
@@ -106,6 +131,11 @@ class SomoimMain extends React.Component {
           show={this.state.somoimDetailShow}
           somoim={this.state.selectedSomoim}
           closeHandler={this.somoimDetailCloseHandler}
+        />
+
+        <SomoimCreate
+          show={this.state.somoimCreateShow}
+          closeHandler={this.somoimCreateCloseHandler}
         />
       </div>
     );
