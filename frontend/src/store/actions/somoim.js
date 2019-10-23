@@ -3,12 +3,12 @@ import * as actionTypes from "./actionTypes";
 export const postSomoim_ = sm => {
   return {
     type: actionTypes.POST_SOMOIM,
-    id: sm.id,
     title: sm.title,
+    summary: "",
     description: sm.description,
-    goal_number: sm.goal_number,
     selected_dept: sm.selected_dept,
-    available_sem: sm.available_sem
+    available_sem: sm.available_sem,
+    goalJoiner: sm.goal_number
   };
 };
 

@@ -8,7 +8,7 @@ import "react-circular-progressbar/dist/styles.css";
 class SomoimCard extends React.Component {
   render() {
     let somoim = this.props.somoim;
-    let percentage = (somoim.current / somoim.goal) * 100;
+    let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
     let tagList = somoim.tag.map(item => (
       <Button key={item} variant="outline-primary">
         {"#" + this.props.tags[item].name}
@@ -39,7 +39,7 @@ class SomoimCard extends React.Component {
                 </Row>
                 <Row>{tagList}</Row>
                 <br />
-                <Row>{somoim.content}</Row>
+                <Row>{somoim.summary}</Row>
               </Col>
             </Row>
           </Container>

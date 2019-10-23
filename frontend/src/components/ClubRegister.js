@@ -15,15 +15,14 @@ class ClubRegister extends React.Component {
     auth_img_file: null
   };
 
-  category_list = [
-    "학술매체분과",
-    "취미교양분과",
-    "연행예술분과",
-    "인권봉사분과",
-    "무예운동분과",
-    "종교분과",
-    "운동부"
-  ];
+  componentWillReceiveProps() {
+    this.setState({
+      name: "",
+      clubmanager: "",
+      selected_category: 0,
+      auth_img_file: null
+    });
+  }
 
   checkMimeType = event => {
     let files = event.target.files;
@@ -111,10 +110,10 @@ class ClubRegister extends React.Component {
                 })
               }
             >
-              {this.category_list.map((a, i) => {
+              {this.props.categories.map(a => {
                 return (
-                  <option key={a} value={i}>
-                    {a}
+                  <option key={a.id} value={a.name}>
+                    {a.name}
                   </option>
                 );
               })}
@@ -142,14 +141,15 @@ class ClubRegister extends React.Component {
             <Button variant="primary">Register</Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer></Modal.Footer>
       </Modal>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    categories: state.category.categories
+  };
 };
 
 const mapDispatchToProps = dispatch => {

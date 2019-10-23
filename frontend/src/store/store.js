@@ -8,14 +8,16 @@ import SomoimReducer from "./reducers/somoim";
 import UserReducer from "./reducers/user";
 import CategoryReducer from "./reducers/category";
 import TagReducer from "./reducers/tag";
+import DeptNameReducer from "./reducers/deptName";
 
 export const history = createBrowserHistory();
 const rootReducer = combineReducers({
-  cl: ClubReducer,
+  club: ClubReducer,
   somoim: SomoimReducer,
-  us: UserReducer,
+  user: UserReducer,
   category: CategoryReducer,
   tag: TagReducer,
+  deptname: DeptNameReducer,
   router: connectRouter(history)
 });
 

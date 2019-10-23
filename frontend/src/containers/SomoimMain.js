@@ -34,7 +34,7 @@ class SomoimMain extends React.Component {
   somoimCreateClickHandler = () => {
     this.setState({
       ...this.state,
-      somoimDetailShow: true
+      somoimCreateShow: true
     });
   };
 

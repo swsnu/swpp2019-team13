@@ -7,7 +7,7 @@ const initialState = {
       title: "Let's LoL!",
       summary: "Playing LoL together!! :D",
       description: "LoL\nLoL\nLol",
-      selected_dept: [true, false, false, false, false, false, false],
+      selected_dept: [0, 1],
       available_sem: 1,
       tag: [0, 1],
       goalJoiner: 20,
@@ -17,9 +17,9 @@ const initialState = {
     {
       id: 1,
       title: "Book lovers",
-      content: "We read books until we fall asleep..",
+      summary: "We read books until we fall asleep..",
       description: "Actually, it's sleep somoim :)",
-      selected_dept: [false, false, true, false, false, true, false],
+      selected_dept: [0, 1, 3, 4, 5],
       available_sem: 1,
       tag: [2, 3],
       goalJoiner: 10,
@@ -29,9 +29,9 @@ const initialState = {
     {
       id: 2,
       title: "test somoim",
-      content: "i am testing the somoim list",
+      summary: "i am testing the somoim list",
       description: "Me too bro",
-      selected_dept: [false, false, true, false, false, true, false],
+      selected_dept: [0, 1, 3, 4, 5],
       available_sem: 3,
       tag: [4, 5],
       goalJoiner: 10,
@@ -41,9 +41,9 @@ const initialState = {
     {
       id: 3,
       title: "301 assa somoim",
-      content: "We are assa in 301",
+      summary: "We are assa in 301",
       description: "Sad..",
-      selected_dept: [false, false, true, false, false, true, false],
+      selected_dept: [0, 1, 3, 4, 5],
       available_sem: 5,
       tag: [6, 7],
       goalJoiner: 10,
@@ -62,14 +62,18 @@ const reducer = (state = initialState, action) => {
       return { ...state };
     case actionTypes.POST_SOMOIM:
       const newSomoim = {
-        id: action.id,
+        id: state.somoims.length,
         title: action.title,
+        summary: action.summary,
         description: action.description,
-        goal_number: action.goal_number,
         selected_dept: action.selected_dept,
-        available_sem: action.available_sem
+        available_sem: action.available_sem,
+        tag: [],
+        goalJoiner: action.goalJoiner,
+        currentJoiner: 0,
+        likes: 0
       };
-      return { ...state, clubs: state.somoims.concat(newSomoim) };
+      return { ...state, somoims: state.somoims.concat(newSomoim) };
     default:
       break;
   }

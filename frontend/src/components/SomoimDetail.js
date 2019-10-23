@@ -9,7 +9,7 @@ class SomoimDetail extends React.Component {
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage = (somoim.current / somoim.goal) * 100;
+      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
       let tagList = somoim.tag.map(item => (
         <Button key={item} variant="outline-primary">
           {"#" + this.props.tags[item].name}
@@ -21,7 +21,7 @@ class SomoimDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Body closeButton>
+          <Modal.Body>
             <Container>
               <Row>
                 <Col>
@@ -39,7 +39,7 @@ class SomoimDetail extends React.Component {
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.content}</Row>
+                  <Row>{somoim.summary}</Row>
                 </Col>
               </Row>
               <br />

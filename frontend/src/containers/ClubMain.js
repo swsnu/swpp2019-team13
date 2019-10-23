@@ -11,7 +11,7 @@ import ClubRegister from "../components/ClubRegister";
 
 class ClubMain extends React.Component {
   state = {
-    showClubRegisterModal: true
+    showClubRegisterModal: false
   };
 
   render() {
@@ -49,7 +49,7 @@ class ClubMain extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    clubs: state.cl.clubs
+    clubs: state.club.clubs
   };
 };
 
