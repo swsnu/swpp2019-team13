@@ -3,20 +3,22 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   somoims: [
     {
-      id: 1,
+      id: 0,
       title: "Let's LoL!",
       content: "Playing LoL together!! :D",
       tag: [{ id: 0, name: "Game" }, { id: 1, name: "Friendship" }],
       goal: 20,
-      current: 7
+      current: 7,
+      likes: 10
     },
     {
-      id: 2,
+      id: 1,
       title: "Book lovers",
       content: "We read books until we fall asleep..",
       tag: [{ id: 0, name: "Book" }, { id: 1, name: "Silence" }],
       goal: 10,
-      current: 3
+      current: 3,
+      likes: 5
     }
   ]
 };

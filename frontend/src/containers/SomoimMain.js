@@ -2,23 +2,56 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 import Header from "../components/Header";
 import SomoimCard from "../components/SomoimCard";
+import SomoimDetail from "../components/SomoimDetail";
 
 class SomoimMain extends React.Component {
+  state = { somoimDetailShow: false, selectedSomoim: null };
+
+  somoimCardClickHandler = id => {
+    this.setState({
+      ...this.state,
+      somoimDetailShow: true,
+      selectedSomoim: this.props.somoims[id]
+    });
+  };
+
+  somoimDetailCloseHandler = () => {
+    this.setState({
+      ...this.state,
+      somoimDetailShow: false
+    });
+  };
+
   render() {
+    let categoryList;
+    if (this.props.categories) {
+      categoryList = this.props.categories.map(item => (
+        <Button key={item.id} variant="outline-secondary">
+          {item.name}
+        </Button>
+      ));
+    }
+
     let recommendedList, allList;
     if (this.props.somoims) {
       recommendedList = this.props.somoims.map(item => (
         <Col sm="4" key={item.id}>
           <SomoimCard
-            title={item.title}
-            content={item.content}
-            tag={item.tag}
-            goal={item.goal}
-            current={item.current}
+            clickHandler={this.somoimCardClickHandler}
+            somoim={item}
+          />
+        </Col>
+      ));
+
+      allList = this.props.somoims.map(item => (
+        <Col sm="4" key={item.id}>
+          <SomoimCard
+            clickHandler={this.somoimCardClickHandler}
+            somoim={item}
           />
         </Col>
       ));
@@ -34,31 +67,31 @@ class SomoimMain extends React.Component {
             <h2>Recommended Somoims</h2>
           </Row>
           <Row>{recommendedList}</Row>
+          <br />
+          <br />
           <Row>
             <h2>All Somoims</h2>
           </Row>
+          <Row>{categoryList}</Row>
+          <br />
+          <Row>{allList}</Row>
         </Container>
 
-        {/* <div>
-          <button>Category 1</button>
-          <button>Category 2</button>
-          <button>Category 3</button>
-          <button>Category 4</button>
-          <button>Category 5</button>
-        </div>
-        <h1>----------------------</h1>
-        <div>
-          <button onClick={() => this.props.history.push("/article/create")}>
-            +
-          </button>
-        </div> */}
+        <SomoimDetail
+          show={this.state.somoimDetailShow}
+          somoim={this.state.selectedSomoim}
+          closeHandler={this.somoimDetailCloseHandler}
+        />
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { somoims: state.somoim.somoims };
+  return {
+    somoims: state.somoim.somoims,
+    categories: state.category.categories
+  };
 };
 
 const mapDispatchToProps = dispatch => {

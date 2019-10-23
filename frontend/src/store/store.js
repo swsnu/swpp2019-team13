@@ -6,12 +6,14 @@ import { createBrowserHistory } from "history";
 import ClubReducer from "./reducers/club";
 import SomoimReducer from "./reducers/somoim";
 import UserReducer from "./reducers/user";
+import CategoryReducer from "./reducers/category";
 
 export const history = createBrowserHistory();
 const rootReducer = combineReducers({
   cl: ClubReducer,
   somoim: SomoimReducer,
   us: UserReducer,
+  category: CategoryReducer,
   router: connectRouter(history)
 });
 

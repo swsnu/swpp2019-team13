@@ -1,31 +1,25 @@
 import React from "react";
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button,
-  Container,
-  Row,
-  Col
-} from "reactstrap";
+import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 class SomoimCard extends React.Component {
   render() {
-    let percentage = (this.props.current / this.props.goal) * 100;
-    let tagList = this.props.tag.map(item => (
-      <Button key={item.id} outline>
+    let somoim = this.props.somoim;
+    let percentage = (somoim.current / somoim.goal) * 100;
+    let tagList = somoim.tag.map(item => (
+      <Button key={item.id} variant="outline-primary">
         {"#" + item.name}
       </Button>
     ));
 
     return (
-      <Card>
-        <CardBody>
+      <Card
+        onClick={() => {
+          this.props.clickHandler(somoim.id);
+        }}
+      >
+        <Card.Body>
           <Container>
             <Row>
               <Col sm="5">
@@ -36,17 +30,18 @@ class SomoimCard extends React.Component {
               </Col>
               <Col>
                 <Row>
-                  <h2>{this.props.title}</h2>
+                  <h2>{somoim.title}</h2>
+                  <Col md={{ offset: 1 }}>
+                    <h4>{"👍 " + somoim.likes}</h4>
+                  </Col>
                 </Row>
                 <Row>{tagList}</Row>
-                <Row>
-                  <br />
-                </Row>
-                <Row>{this.props.content}</Row>
+                <br />
+                <Row>{somoim.content}</Row>
               </Col>
             </Row>
           </Container>
-        </CardBody>
+        </Card.Body>
       </Card>
     );
   }
