@@ -4,15 +4,21 @@ const initialState = {
   clubs: [
     {
       id: 1,
-      title: "SNUStone",
+      name: "SNUStone",
       content: "SNU Best HearthStone Club",
-      tag: ["Game", "Friendship"]
+      clubmanager: "김지훈",
+      selected_category: 0,
+      auth_img_file: null,
+      isRegistered: true
     },
     {
       id: 2,
-      title: "SnuWOD",
+      name: "SnuWOD",
       content: "SNU Best Training Club",
-      tag: ["Training", "Non-Alcohol"]
+      clubmanager: "김동우",
+      selected_category: 6,
+      auth_img_file: null,
+      isRegistered: true
     }
   ]
 };

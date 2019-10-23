@@ -125,7 +125,18 @@ class SomoimCreate extends React.Component {
                 </Form.Control>
               </Col>
             </Form.Group>
-            <Button variant="primary">Confirm</Button>
+            <Button
+              variant="primary"
+              onClick={this.props.postSomoim(
+                this.state.title,
+                this.state.description,
+                this.state.goal_number,
+                this.state.selected_dept,
+                this.state.available_sem
+              )}
+            >
+              Confirm
+            </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
@@ -139,7 +150,24 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    postSomoim: (
+      title,
+      description,
+      goal_number,
+      selected_dept,
+      available_sem
+    ) =>
+      dispatch(
+        actionCreaters.postSomoim({
+          title: title,
+          description: description,
+          goal_number: goal_number,
+          selected_dept: selected_dept,
+          available_sem: available_sem
+        })
+      )
+  };
 };
 
 export default connect(

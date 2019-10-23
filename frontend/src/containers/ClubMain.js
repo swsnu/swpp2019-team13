@@ -14,10 +14,6 @@ class ClubMain extends React.Component {
     showClubRegisterModal: true
   };
 
-  handleModal = modalState => {
-    this.state[modalState] = !this.state[modalState];
-  };
-
   render() {
     return (
       <div>

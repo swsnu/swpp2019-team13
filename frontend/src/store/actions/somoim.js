@@ -1,18 +1,20 @@
 import * as actionTypes from "./actionTypes";
 
-export const postSomoim_ = at => {
+export const postSomoim_ = sm => {
   return {
     type: actionTypes.POST_SOMOIM,
-    id: at.id,
-    title: at.title,
-    content: at.content,
-    tag: at.tag
+    id: sm.id,
+    title: sm.title,
+    description: sm.description,
+    goal_number: sm.goal_number,
+    selected_dept: sm.selected_dept,
+    available_sem: sm.available_sem
   };
 };
 
-export const postSomoim = at => {
+export const postSomoim = sm => {
   return dispatch => {
-    dispatch(postSomoim_(at));
+    dispatch(postSomoim_(sm));
   };
 };
 
