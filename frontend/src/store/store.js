@@ -10,7 +10,7 @@ import UserReducer from "./reducers/user";
 export const history = createBrowserHistory();
 const rootReducer = combineReducers({
   cl: ClubReducer,
-  sm: SomoimReducer,
+  somoim: SomoimReducer,
   us: UserReducer,
   router: connectRouter(history)
 });
