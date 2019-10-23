@@ -6,7 +6,7 @@ const initialState = {
       id: 0,
       title: "Let's LoL!",
       content: "Playing LoL together!! :D",
-      tag: [{ id: 0, name: "Game" }, { id: 1, name: "Friendship" }],
+      tag: [0, 1],
       goal: 20,
       current: 7,
       likes: 10
@@ -15,9 +15,27 @@ const initialState = {
       id: 1,
       title: "Book lovers",
       content: "We read books until we fall asleep..",
-      tag: [{ id: 0, name: "Book" }, { id: 1, name: "Silence" }],
+      tag: [2, 3],
       goal: 10,
       current: 3,
+      likes: 5
+    },
+    {
+      id: 2,
+      title: "test somoim",
+      content: "i am testing the somoim list",
+      tag: [4, 5],
+      goal: 10,
+      current: 9,
+      likes: 5
+    },
+    {
+      id: 3,
+      title: "301 assa somoim",
+      content: "We are assa in 301",
+      tag: [6, 7],
+      goal: 10,
+      current: 1,
       likes: 5
     }
   ]

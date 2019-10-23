@@ -12,3 +12,4 @@ export const SIGN_UP = "SIGN_UP";
 export const GET_USER_BY_ID = "GET_USER_BY_ID";
 
 export const GET_CATEGORY_LIST = "GET_CATEGORY_LIST";
+export const GET_TAG_LIST = "GET_TAG_LIST";

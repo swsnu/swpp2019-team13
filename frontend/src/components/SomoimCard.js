@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -8,8 +10,8 @@ class SomoimCard extends React.Component {
     let somoim = this.props.somoim;
     let percentage = (somoim.current / somoim.goal) * 100;
     let tagList = somoim.tag.map(item => (
-      <Button key={item.id} variant="outline-primary">
-        {"#" + item.name}
+      <Button key={item} variant="outline-primary">
+        {"#" + this.props.tags[item].name}
       </Button>
     ));
 
@@ -22,7 +24,7 @@ class SomoimCard extends React.Component {
         <Card.Body>
           <Container>
             <Row>
-              <Col sm="5">
+              <Col xs="5">
                 <CircularProgressbar
                   value={percentage}
                   text={percentage + "%"}
@@ -47,4 +49,17 @@ class SomoimCard extends React.Component {
   }
 }
 
-export default SomoimCard;
+const mapStateToProps = state => {
+  return {
+    tags: state.tag.tags
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(SomoimCard));

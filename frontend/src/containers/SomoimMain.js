@@ -39,7 +39,7 @@ class SomoimMain extends React.Component {
     let recommendedList, allList;
     if (this.props.somoims) {
       recommendedList = this.props.somoims.map(item => (
-        <Col sm="4" key={item.id}>
+        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
           <SomoimCard
             clickHandler={this.somoimCardClickHandler}
             somoim={item}
@@ -48,7 +48,7 @@ class SomoimMain extends React.Component {
       ));
 
       allList = this.props.somoims.map(item => (
-        <Col sm="4" key={item.id}>
+        <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
           <SomoimCard
             clickHandler={this.somoimCardClickHandler}
             somoim={item}
@@ -66,7 +66,16 @@ class SomoimMain extends React.Component {
           <Row>
             <h2>Recommended Somoims</h2>
           </Row>
-          <Row>{recommendedList}</Row>
+          <Row>
+            <div
+              style={{
+                display: "flex",
+                overflowX: "scroll"
+              }}
+            >
+              {recommendedList}
+            </div>
+          </Row>
           <br />
           <br />
           <Row>
@@ -74,7 +83,23 @@ class SomoimMain extends React.Component {
           </Row>
           <Row>{categoryList}</Row>
           <br />
-          <Row>{allList}</Row>
+          <Row>
+            <Col xs="10" style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  overflowX: "scroll",
+                  marginLeft: 0,
+                  marginRight: 0
+                }}
+              >
+                {allList}
+              </div>
+            </Col>
+            <Col>
+              <h3>+</h3>
+            </Col>
+          </Row>
         </Container>
 
         <SomoimDetail
