@@ -27,9 +27,7 @@ class ClubCard extends React.Component {
       <div>
         <h2>{this.props.title}</h2>
         {this.props.content}
-        <Button bsStyle="primary" bsSize="large" onClick={this.open}>
-          Show Detail
-        </Button>
+        <Button onClick={this.open}>Show Detail</Button>
 
         <Modal
           show={this.state.showModal}

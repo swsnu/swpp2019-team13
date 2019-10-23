@@ -3,22 +3,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
-import {
-  Modal,
-  Button,
-  Form,
-  Dropdown,
-  DropdownButton,
-  SplitButton
-} from "react-bootstrap";
+import { Modal, Button, Form } from "react-bootstrap";
 
 import * as actionCreaters from "../store/actions/index";
 
 class ClubRegister extends React.Component {
   state = {
-    title: "",
+    name: "",
     clubmanager: "",
-    selected_category: null,
+    selected_category: 0,
     auth_img_file: null
   };
 
@@ -102,12 +95,28 @@ class ClubRegister extends React.Component {
           <Form>
             <Form.Group>
               <Form.Label>Club Name</Form.Label>
-              <Form.Control type="clubname" placeholder="Enter club name" />
+              <Form.Control
+                type="clubname"
+                placeholder="Enter club name"
+                value={this.state.name}
+                onChange={event => this.setState({ name: event.target.value })}
+              />
             </Form.Group>
             <Form.Label>분야</Form.Label>
-            <Form.Control as="select">
-              {this.category_list.map(a => {
-                return <option>{a}</option>;
+            <Form.Control
+              as="select"
+              onChange={event =>
+                this.setState({
+                  selected_category: Number(event.target.value)
+                })
+              }
+            >
+              {this.category_list.map((a, i) => {
+                return (
+                  <option key={a} value={i}>
+                    {a}
+                  </option>
+                );
               })}
             </Form.Control>
             <Form.Group controlId="formClubManager">
@@ -115,13 +124,17 @@ class ClubRegister extends React.Component {
               <Form.Control
                 type="manager"
                 placeholder="Enter Club Manger Name"
+                value={this.state.clubmanager}
+                onChange={event =>
+                  this.setState({ clubmanager: event.target.value })
+                }
               />
             </Form.Group>
-            <div class="form-group files">
+            <div className="form-group files">
               <label>동아리 인증사진 첨부</label>
               <input
                 type="file"
-                class="form-control"
+                className="form-control"
                 multiple
                 onChange={this.onChangeHandler}
               />

@@ -25,8 +25,8 @@ class ClubMain extends React.Component {
         <h1>Main Page</h1>
         <h1>--- Recommend Club ---</h1>
         {/* TODO : List up card form of recommend club */}
-        {this.props.clubs.map(c => {
-          return <ClubCard title={c.title} content={c.content} />;
+        {this.props.clubs.map((c, i) => {
+          return <ClubCard key={i} title={c.title} content={c.content} />;
         })}
         <h1>--- All Club ---</h1>
         <div>
@@ -39,8 +39,8 @@ class ClubMain extends React.Component {
           <button>Category 7</button>
         </div>
         {/* TODO : List up card form of all club categorized by category */}
-        {this.props.clubs.map(c => {
-          return <ClubCard title={c.title} content={c.content} />;
+        {this.props.clubs.map((c, i) => {
+          return <ClubCard key={i} title={c.title} content={c.content} />;
         })}
         {/* TODO : change showClubRegisterModal with state and toggle with link */}
         <ClubRegister

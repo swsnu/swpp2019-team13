@@ -3,7 +3,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 
-import { Modal, Button, Form, InputGroup, Col, Row } from "react-bootstrap";
+import { Modal, Button, Form, Col, Row } from "react-bootstrap";
+import NumericInput from "react-numeric-input";
 
 import * as actionCreaters from "../store/actions/index";
 
@@ -12,8 +13,8 @@ class SomoimCreate extends React.Component {
     title: "",
     description: "",
     goal_number: 0,
-    selected_dept: [],
-    available_sem: 0
+    selected_dept: [false, false, false, false, false, false, false],
+    available_sem: 1
   };
 
   dept_name_list = [
@@ -44,25 +45,61 @@ class SomoimCreate extends React.Component {
                 이름
               </Form.Label>
               <Col sm="8">
-                <Form.Control />
+                <Form.Control
+                  value={this.state.title}
+                  onChange={event =>
+                    this.setState({ title: event.target.value })
+                  }
+                />
               </Col>
             </Form.Group>
             <Form.Group>
               <Form.Label>설명</Form.Label>
-              <Form.Control as="textarea" rows="10" />
+              <Form.Control
+                as="textarea"
+                rows="10"
+                type="number"
+                value={this.state.description}
+                onChange={event =>
+                  this.setState({ description: event.target.value })
+                }
+              />
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column sm="4">
                 목표 인원 수
               </Form.Label>
               <Col sm="8">
-                <Form.Control />
+                <NumericInput
+                  min={0}
+                  max={100}
+                  value={this.state.goal_number}
+                  onChange={event => {
+                    if (event < 0) this.setState({ goal_number: 0 });
+                    else if (event > 100) this.setState({ goal_number: 100 });
+                    else this.setState({ goal_number: event });
+                  }}
+                />
               </Col>
             </Form.Group>
             <Form.Group>
               <Form.Label>가능 단과대학</Form.Label>
-              {this.dept_name_list.map(a => {
-                return <Form.Check inline type={"checkbox"} label={a} />;
+              {this.dept_name_list.map((a, i) => {
+                return (
+                  <Form.Check
+                    key={a}
+                    inline
+                    type={"checkbox"}
+                    label={a}
+                    checked={this.state.selected_dept[i]}
+                    value={a}
+                    onChange={event => {
+                      let new_selected_dept = this.state.selected_dept;
+                      new_selected_dept[i] = event.target.checked;
+                      this.setState({ selected_dept: new_selected_dept });
+                    }}
+                  />
+                );
               })}
             </Form.Group>
             <Form.Group as={Row}>
@@ -70,7 +107,22 @@ class SomoimCreate extends React.Component {
                 최소 활동 학기 수
               </Form.Label>
               <Col sm="8">
-                <Form.Control />
+                <Form.Control
+                  as="select"
+                  onChange={event =>
+                    this.setState({
+                      available_sem: Number(event.target.value)
+                    })
+                  }
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map(a => {
+                    return (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    );
+                  })}
+                </Form.Control>
               </Col>
             </Form.Group>
             <Button variant="primary">Confirm</Button>
