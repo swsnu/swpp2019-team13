@@ -3,20 +3,52 @@ import * as actionTypes from "../actions/actionTypes";
 const initialState = {
   somoims: [
     {
-      id: 1,
-      title: "수면 소모임",
-      description: "잠을 잘 자기 위한 소모임",
-      goal_number: 10,
+      id: 0,
+      title: "Let's LoL!",
+      summary: "Playing LoL together!! :D",
+      description: "LoL\nLoL\nLol",
       selected_dept: [true, false, false, false, false, false, false],
-      available_sem: 1
+      available_sem: 1,
+      tag: [0, 1],
+      goalJoiner: 20,
+      currentJoiner: 7,
+      likes: 10
+    },
+    {
+      id: 1,
+      title: "Book lovers",
+      content: "We read books until we fall asleep..",
+      description: "Actually, it's sleep somoim :)",
+      selected_dept: [false, false, true, false, false, true, false],
+      available_sem: 1,
+      tag: [2, 3],
+      goalJoiner: 10,
+      currentJoiner: 3,
+      likes: 5
     },
     {
       id: 2,
-      title: "소모임 2",
-      description: "설명\n설명\n설명",
-      goal_number: 5,
-      selected_dept: [false, false, true, false, true, false, false],
-      available_sem: 3
+      title: "test somoim",
+      content: "i am testing the somoim list",
+      description: "Me too bro",
+      selected_dept: [false, false, true, false, false, true, false],
+      available_sem: 3,
+      tag: [4, 5],
+      goalJoiner: 10,
+      currentJoiner: 9,
+      likes: 5
+    },
+    {
+      id: 3,
+      title: "301 assa somoim",
+      content: "We are assa in 301",
+      description: "Sad..",
+      selected_dept: [false, false, true, false, false, true, false],
+      available_sem: 5,
+      tag: [6, 7],
+      goalJoiner: 10,
+      currentJoiner: 1,
+      likes: 5
     }
   ]
 };
