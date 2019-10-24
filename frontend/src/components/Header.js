@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 // import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Dropdown, DropdownButton } from "react-bootstrap";
 
 import "./Header.css";
 
