@@ -90,3 +90,7 @@
   position: relative;
   bottom: 0.3rem;
 }
+
+.btn-success {
+  font-weight: bold;
+}
