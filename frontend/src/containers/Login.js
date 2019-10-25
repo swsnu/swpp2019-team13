@@ -9,10 +9,12 @@ class Login extends Component {
     wrongInput: false
   };
 
+  /* 로그인 버튼을 클릭했을 때 동작 */
   onClick_LoginButton_Handler = () => {
     this.setState({ ...this.state, wrongInput: true });
   };
 
+  /* Modal에서 나갔을 때 동작 */
   onExit_LoginModal_Handler = () => {
     this.setState({
       ...this.state,
@@ -22,9 +24,11 @@ class Login extends Component {
     });
   };
 
+  /* Render */
   render() {
     return (
       <div className="Login">
+        {/* CSS for React-Bootstrap */}
         <style type="text/css">
           {`
               .btn-dark {
@@ -38,6 +42,8 @@ class Login extends Component {
               }
               `}
         </style>
+
+        {/* 로그인 Modal */}
         <Modal
           show={this.props.show}
           onHide={this.props.onHide}
@@ -46,11 +52,16 @@ class Login extends Component {
           size="sm"
           centered
         >
+          {/* 로그인 Modal Header */}
           <Modal.Header variant="login-modal-header">
             <Modal.Title style={{ fontSize: "1.5em" }}>로그인</Modal.Title>
           </Modal.Header>
+
+          {/* 로그인 Modal Body */}
           <Modal.Body>
             <Form>
+              {/* 유저 정보를 입력받는다 */}
+              {/* 이메일 입력 칸 */}
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
@@ -62,6 +73,7 @@ class Login extends Component {
                   }
                 />
               </Form.Group>
+              {/* 비밀번호 입력 칸 */}
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
@@ -74,6 +86,7 @@ class Login extends Component {
                 />
               </Form.Group>
             </Form>
+            {/* 유저 정보가 잘못되었을 때 오류 메시지를 보여준다. */}
             {this.state.wrongInput ? (
               <div style={{ color: "red" }}>
                 Email or Password is wrong, try again
@@ -82,6 +95,8 @@ class Login extends Component {
               <div></div>
             )}
           </Modal.Body>
+
+          {/* 로그인 Modal Footer */}
           <Modal.Footer>
             <Button
               variant="dark"

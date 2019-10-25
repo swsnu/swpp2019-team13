@@ -9,8 +9,10 @@ import "./Header.css";
 
 class Header extends Component {
   state = {
-    isLoggedIn: false, // isLoggedIn == false : 로그인, 회원가입 | isLoggedIn == true : 마이페이지, 로그아웃
-    isShowing_LoginModal: false // isShowing_LoginModal == true : Modal 보여줌.
+    // isLoggedIn == false : 로그인, 회원가입 | isLoggedIn == true : 마이페이지, 로그아웃
+    isLoggedIn: false,
+    // isShowing_LoginModal == true : Modal 보여줌.
+    isShowing_LoginModal: false
   };
 
   /* Control Function for Login Modal */
@@ -20,6 +22,16 @@ class Header extends Component {
 
   handleClose_LoginModal = () => {
     this.setState({ ...this.state, isShowing_LoginModal: false });
+  };
+
+  /* Do when click Logout Button */
+  onClick_LogoutButton = () => {
+    this.setState({ ...this.state, isLoggedIn: false });
+    // 다시 홈으로 돌아가게 하고 싶은데, 작동하지 않는다. 무엇이 문제일까?
+    // if (this.state.isLoggedIn === false) {
+    //   console.log("loggout");
+    //   this.props.history.push("/");
+    // }
   };
 
   /* Render */
@@ -34,8 +46,26 @@ class Header extends Component {
     if (this.state.isLoggedIn) {
       login_button = null;
       signup_button = null;
-      mypage_button = <div className="user-item">마이페이지</div>;
-      logout_button = <div className="user-item">로그아웃</div>;
+      mypage_button = (
+        <div
+          className="user-item"
+          onClick={() => {
+            this.props.history.push("/mypage");
+          }}
+        >
+          마이페이지
+        </div>
+      );
+      logout_button = (
+        <div
+          className="user-item"
+          onClick={() => {
+            this.onClick_LogoutButton();
+          }}
+        >
+          로그아웃
+        </div>
+      );
     } else {
       login_button = (
         <div
