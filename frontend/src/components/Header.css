@@ -14,6 +14,7 @@
   width: 9%;
   min-width: 100px;
   text-align: left;
+  cursor: pointer;
 }
 
 .menu-item {
@@ -39,7 +40,7 @@
   border-bottom: 3px solid #8f84b8;
 }
 
-.search {
+/* .search {
   display: inline-block;
   width: 61%;
   height: 4rem;
@@ -62,7 +63,7 @@
   color: white;
   font-size: 17px;
   border: 1px solid grey;
-  border-left: none; /* Prevent double borders */
+  border-left: none;
   cursor: pointer;
   position: relative;
   top: 1rem;
@@ -75,13 +76,13 @@
 .fa-search {
   position: relative;
   bottom: 1rem;
-}
+} */
 
 .user-item {
   display: inline-block;
   color: white;
   font-size: 0.9em;
-  line-height: 4rem;
+  line-height: 3rem;
   width: 7%;
   min-width: 60px;
   text-align: center;
@@ -89,8 +90,9 @@
   text-decoration: none;
   position: relative;
   bottom: 0.3rem;
+  left: 61%;
 }
 
-.btn-success {
-  font-weight: bold;
+.first-item {
+  border: 0.5px solid white;
 }

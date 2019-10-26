@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
+import { connect } from "react-redux";
+import * as actionCreators from "../store/actions/index";
+
 class Login extends Component {
   state = {
     email: "",
@@ -11,7 +14,18 @@ class Login extends Component {
 
   /* 로그인 버튼을 클릭했을 때 동작 */
   onClick_LoginButton_Handler = () => {
-    this.setState({ ...this.state, wrongInput: true });
+    let loggedUser = this.props.storedUsers.filter(user => {
+      return (
+        user.email === this.state.email && user.password === this.state.password
+      );
+    });
+
+    if (loggedUser.length !== 0) {
+      this.props.signIn(loggedUser[0]);
+      this.props.onHide();
+    } else {
+      this.setState({ ...this.state, wrongInput: true });
+    }
   };
 
   /* Modal에서 나갔을 때 동작 */
@@ -112,4 +126,19 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    storedUsers: state.user.users
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signIn: user => dispatch(actionCreators.signIn(user))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

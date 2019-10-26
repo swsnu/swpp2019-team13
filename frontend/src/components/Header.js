@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import * as actionCreators from "../store/actions/index";
 
 import Login from "../containers/Login";
 
@@ -9,8 +10,6 @@ import "./Header.css";
 
 class Header extends Component {
   state = {
-    // isLoggedIn == false : 로그인, 회원가입 | isLoggedIn == true : 마이페이지, 로그아웃
-    isLoggedIn: false,
     // isShowing_LoginModal == true : Modal 보여줌.
     isShowing_LoginModal: false
   };
@@ -26,12 +25,8 @@ class Header extends Component {
 
   /* Do when click Logout Button */
   onClick_LogoutButton = () => {
-    this.setState({ ...this.state, isLoggedIn: false });
-    // 다시 홈으로 돌아가게 하고 싶은데, 작동하지 않는다. 무엇이 문제일까?
-    // if (this.state.isLoggedIn === false) {
-    //   console.log("loggout");
-    //   this.props.history.push("/");
-    // }
+    this.props.signOut();
+    this.props.history.push("/club");
   };
 
   /* Render */
@@ -42,13 +37,13 @@ class Header extends Component {
     let mypage_button = null;
     let logout_button = null;
 
-    /* isLoggedIn의 값에 따라 User 관련 버튼을 설정해준다. */
-    if (this.state.isLoggedIn) {
+    /* 로그인이 되어있는지에 따라 User 관련 버튼을 설정해준다. */
+    if (this.props.loggedUser !== null) {
       login_button = null;
       signup_button = null;
       mypage_button = (
         <div
-          className="user-item"
+          className="user-item first-item"
           onClick={() => {
             this.props.history.push("/mypage");
           }}
@@ -69,7 +64,7 @@ class Header extends Component {
     } else {
       login_button = (
         <div
-          className="user-item"
+          className="user-item first-item"
           onClick={() => {
             this.handleShow_LoginModal();
           }}
@@ -95,7 +90,14 @@ class Header extends Component {
     return (
       <div className="Header">
         {/* Home 로고 */}
-        <div className="home">Club4u</div>
+        <div
+          className="home"
+          onClick={() => {
+            this.props.history.push("/club");
+          }}
+        >
+          Club4u
+        </div>
 
         {/* 동아리 / 소모임 전환 탭 */}
         <div
@@ -119,8 +121,8 @@ class Header extends Component {
           소모임
         </div>
 
-        {/* 검색 바 */}
-        <div className="search">
+        {/* 검색 바 - 제거 됨 */}
+        {/* <div className="search">
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -133,7 +135,7 @@ class Header extends Component {
           <button id="search-button" type="submit">
             <i className="fa fa-search"></i>
           </button>
-        </div>
+        </div> */}
 
         {/* 유저 관련 버튼 */}
         {login_button}
@@ -151,4 +153,19 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header);
+const mapStateToProps = state => {
+  return {
+    loggedUser: state.user.loggedUser
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signOut: user => dispatch(actionCreators.signOut(user))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(Header));

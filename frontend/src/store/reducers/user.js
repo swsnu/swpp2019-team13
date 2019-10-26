@@ -1,17 +1,23 @@
 import * as actionTypes from "../actions/actionTypes";
 
-const initialState = {};
+const initialState = {
+  users: [
+    {
+      id: 0,
+      email: "test@test.com",
+      password: "test"
+    }
+  ],
+  loggedUser: null
+};
 
-// TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.SIGN_IN:
-      return { ...state };
+      return { ...state, loggedUser: action.loggedUser };
     case actionTypes.SIGN_OUT:
-      return { ...state };
+      return { ...state, loggedUser: null };
     case actionTypes.SIGN_UP:
-      return { ...state };
-    case actionTypes.GET_USER_BY_ID:
       return { ...state };
     default:
       break;
