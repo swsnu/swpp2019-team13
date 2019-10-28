@@ -39,7 +39,7 @@ class SomoimDetail extends React.Component {
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.summary}</Row>
+                  <Row>{somoim.description}</Row>
                 </Col>
               </Row>
               <br />
