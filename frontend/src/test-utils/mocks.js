@@ -33,14 +33,50 @@ const getMockUserReducer = jest.fn(
   }
 );
 
+const getMockCategoryReducer = jest.fn(
+  initialState => (state = initialState, action) => {
+    switch (action.type) {
+      default:
+        break;
+    }
+    return state;
+  }
+);
+
+const getMockTagReducer = jest.fn(
+  initialState => (state = initialState, action) => {
+    switch (action.type) {
+      default:
+        break;
+    }
+    return state;
+  }
+);
+
+const getMockDeptNameReducer = jest.fn(
+  initialState => (state = initialState, action) => {
+    switch (action.type) {
+      default:
+        break;
+    }
+    return state;
+  }
+);
+
 export const getMockStore = initialState => {
   const mockClubReducer = getMockClubReducer(initialState);
   const mockSomoimReducer = getMockSomoimReducer(initialState);
   const mockUserReducer = getMockUserReducer(initialState);
+  const mockCategoryReducer = getMockCategoryReducer(initialState);
+  const mockTagReducer = getMockTagReducer(initialState);
+  const mockDeptNameReducer = getMockDeptNameReducer(initialState);
   const rootReducer = combineReducers({
-    cl: mockClubReducer,
-    sm: mockSomoimReducer,
-    us: mockUserReducer,
+    club: mockClubReducer,
+    somoim: mockSomoimReducer,
+    user: mockUserReducer,
+    category: mockCategoryReducer,
+    tag: mockTagReducer,
+    deptname: mockDeptNameReducer,
     router: connectRouter(history)
   });
   const composeEnhancers =

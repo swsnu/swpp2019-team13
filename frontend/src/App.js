@@ -9,7 +9,7 @@ import SomoimMain from "./containers/SomoimMain";
 function App(props) {
   return (
     <ConnectedRouter history={props.history}>
-      <div>
+      <div className="App">
         <Switch>
           <Route path="/club" exact component={ClubMain} />
           <Route path="/somoim" exact component={SomoimMain} />
