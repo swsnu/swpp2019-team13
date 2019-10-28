@@ -3,7 +3,7 @@ import React from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
 
-import SignUp from "./components/SignUp";
+import SignUp from "./containers/SignUp";
 import ClubMain from "./containers/ClubMain";
 import SomoimMain from "./containers/SomoimMain";
 import MyPage from "./containers/MyPage";

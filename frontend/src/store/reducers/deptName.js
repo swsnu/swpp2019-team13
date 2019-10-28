@@ -24,11 +24,11 @@ const initialState = {
     },
     {
       id: 5,
-      name: "농생대"
+      name: "농업생명과학대학"
     },
     {
       id: 6,
-      name: "사범대"
+      name: "사범대학"
     },
     {
       id: 7,
@@ -52,19 +52,15 @@ const initialState = {
     },
     {
       id: 12,
-      name: "음대"
+      name: "음학대학"
     },
     {
       id: 13,
-      name: "미대"
+      name: "미술대학"
     },
     {
       id: 14,
       name: "자유전공학부"
-    },
-    {
-      id: 15,
-      name: "약대"
     }
   ]
 };
@@ -72,7 +68,7 @@ const initialState = {
 // TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.GET_DEPTNAME_LIST:
+    case actionTypes.GET_DEPT_LIST:
       return { ...state };
     default:
       break;

@@ -73,8 +73,8 @@ class Login extends Component {
 
           {/* 로그인 Modal Body */}
           <Modal.Body>
+            {/* 유저 정보를 입력받는다 */}
             <Form>
-              {/* 유저 정보를 입력받는다 */}
               {/* 이메일 입력 칸 */}
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
