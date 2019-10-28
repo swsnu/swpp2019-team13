@@ -78,10 +78,8 @@ class SomoimMain extends React.Component {
 
     return (
       <div>
+        <Header />
         <Container>
-          <Row>
-            <Header />
-          </Row>
           <Row>
             <h2>Recommended Somoims</h2>
           </Row>

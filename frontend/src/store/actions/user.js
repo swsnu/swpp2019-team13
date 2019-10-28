@@ -1,15 +1,16 @@
 import * as actionTypes from "./actionTypes";
 
 // TODO : implement actions
-export const signIn_ = () => {
+export const signIn_ = user => {
   return {
-    type: actionTypes.SIGN_IN
+    type: actionTypes.SIGN_IN,
+    loggedUser: user
   };
 };
 
-export const signIn = () => {
+export const signIn = user => {
   return dispatch => {
-    dispatch(signIn_());
+    dispatch(signIn_(user));
   };
 };
 
@@ -34,17 +35,5 @@ export const signUp_ = () => {
 export const signUp = () => {
   return dispatch => {
     dispatch(signUp_());
-  };
-};
-
-export const getUserByID_ = id => {
-  return {
-    type: actionTypes.GET_USER_BY_ID
-  };
-};
-
-export const getUserByID = id => {
-  return dispatch => {
-    dispatch(getUserByID_(id));
   };
 };
