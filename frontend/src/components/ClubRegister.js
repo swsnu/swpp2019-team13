@@ -15,7 +15,7 @@ class ClubRegister extends React.Component {
     auth_img_file: null
   };
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       name: "",
       clubmanager: "",
