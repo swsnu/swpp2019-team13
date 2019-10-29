@@ -1,0 +1,98 @@
+.Header {
+  height: 4rem;
+  background-color: #343a40;
+  margin-bottom: 40px;
+}
+
+.home {
+  color: #8f84b8;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-left: 1%;
+  display: inline-block;
+  line-height: 4rem;
+  width: 9%;
+  min-width: 100px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item {
+  display: inline-block;
+  color: white;
+  font-size: 0.9em;
+  line-height: 4rem;
+  width: 7%;
+  min-width: 60px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  position: relative;
+  bottom: 0.3rem;
+}
+
+.menu-item:hover {
+  background-color: #484d52;
+}
+
+.menu-item.active {
+  border-bottom: 3px solid #8f84b8;
+}
+
+/* .search {
+  display: inline-block;
+  width: 61%;
+  height: 4rem;
+  text-align: right;
+  position: relative;
+  bottom: 0.4rem;
+  line-height: 4rem;
+  padding-right: 3%;
+}
+
+#search-bar {
+  width: 500px;
+  height: 2.5rem;
+}
+
+#search-button {
+  width: 5%;
+  height: 2.5rem;
+  background: #824ca7;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+  position: relative;
+  top: 1rem;
+}
+
+#search-button:hover {
+  background: #834ca7bd;
+}
+
+.fa-search {
+  position: relative;
+  bottom: 1rem;
+} */
+
+.user-item {
+  display: inline-block;
+  color: white;
+  font-size: 0.9em;
+  line-height: 3rem;
+  width: 7%;
+  min-width: 60px;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  bottom: 0.3rem;
+  left: 61%;
+}
+
+.first-item {
+  border: 0.5px solid white;
+}
