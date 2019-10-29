@@ -4,7 +4,7 @@ export const postSomoim_ = sm => {
   return {
     type: actionTypes.POST_SOMOIM,
     title: sm.title,
-    summary: "",
+    summary: sm.summary,
     description: sm.description,
     selected_dept: sm.selected_dept,
     available_sem: sm.available_sem,

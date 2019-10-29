@@ -158,6 +158,7 @@ class SomoimCreate extends React.Component {
                 onClick={() => {
                   this.props.postSomoim(
                     this.state.title,
+                    this.state.summary,
                     this.state.description,
                     this.state.goal_number,
                     this.state.selected_dept,
@@ -187,6 +188,7 @@ const mapDispatchToProps = dispatch => {
   return {
     postSomoim: (
       title,
+      summary,
       description,
       goal_number,
       selected_dept,
@@ -195,6 +197,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(
         actionCreaters.postSomoim({
           title: title,
+          summary: summary,
           description: description,
           goal_number: goal_number,
           selected_dept: selected_dept,
