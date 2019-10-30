@@ -15,8 +15,8 @@ class SignUp extends React.Component {
     passwordAgain: "",
     dept: "",
     major: "",
-    grade: 0,
-    availableSemester: 0
+    grade: 1,
+    availableSemester: 1
   };
 
   /* 회원가입 버튼을 클릭했을 때 동작 */
