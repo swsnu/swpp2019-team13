@@ -66,7 +66,7 @@ class ClubRegister extends React.Component {
   };
 
   onChangeHandler = event => {
-    var files = event.target.files;
+    var files = URL.createObjectURL(event.target.files[0]);
     if (
       this.maxSelectFile(event) &&
       this.checkMimeType(event) &&
@@ -82,8 +82,8 @@ class ClubRegister extends React.Component {
   render() {
     return (
       <Modal
-        show={this.props.showClubRegisterModal}
-        onHide={this.props.handleModal}
+        show={this.props.show}
+        onHide={this.props.closeHandler}
         animation={false}
         backdrop={false}
       >
@@ -138,7 +138,21 @@ class ClubRegister extends React.Component {
                 onChange={this.onChangeHandler}
               />
             </div>
-            <Button variant="primary">Register</Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                this.props.postClub(
+                  this.state.name,
+                  this.state.clubmanager,
+                  this.state.auth_img_file,
+                  this.state.selected_category
+                );
+                alert("Create Club Success!");
+                this.props.closeHandler();
+              }}
+            >
+              Register
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
@@ -154,12 +168,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    postClub: (title, content, tag) =>
+    postClub: (name, clubmanager, auth_img_file, selected_category) =>
       dispatch(
         actionCreaters.postClub({
-          title: title,
-          content: content,
-          tag: tag
+          name: name,
+          clubmanager: clubmanager,
+          auth_img_file: auth_img_file,
+          selected_category: selected_category
         })
       )
   };

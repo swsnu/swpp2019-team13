@@ -1,60 +1,67 @@
 import React from "react";
-
+import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Modal, Button } from "react-bootstrap";
-
-// TODO
-// 1. Implement Like Button and save in server
-// 2. Get ID for club
-
+import { Card, Button, Container, Row, Col } from "react-bootstrap";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import img1 from "../components/1.jpg";
+import img2 from "../components/2.png";
+import img3 from "../components/3.png";
 class ClubCard extends React.Component {
-  state = {
-    showModal: false
-  };
-
-  close = () => {
-    this.setState({ showModal: false });
-  };
-
-  open = () => {
-    this.setState({ showModal: true });
-  };
-
   render() {
-    let id = 0;
-
+    let club = this.props.club;
+    let image = <img src={club.auth_img_file} width="100" height="100" />;
+    if (club.auth_img_file == "1")
+      image = <img src={img1} width="100" height="100" />;
+    if (club.auth_img_file == "2")
+      image = <img src={img2} width="100" height="100" />;
+    if (club.auth_img_file == "3")
+      image = <img src={img3} width="100" height="100" />;
+    let tagList = club.tag.map(item => (
+      <Button key={item} variant="outline-primary">
+        {"#" + this.props.tags[item].name}
+      </Button>
+    ));
     return (
-      <div>
-        <h2>{this.props.title}</h2>
-        {this.props.content}
-        <Button onClick={this.open}>Show Detail</Button>
-
-        <Modal
-          show={this.state.showModal}
-          onHide={this.close}
-          animation={false}
-          backdrop={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>{this.props.title}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <h3>{this.props.content}</h3>
-            <hr />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={this.close}>Close</Button>
-            <Button>Like</Button>
-            <Button
-              onClick={() => this.props.history.push("/club/apply/" + id)}
-            >
-              Apply
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+      <Card
+        onClick={() => {
+          this.props.clickHandler(club.id);
+        }}
+      >
+        <Card.Body>
+          <Container>
+            <Row>
+              <Col xs="5">{image}</Col>
+              <Col>
+                <Row>
+                  <h2>{club.name}</h2>
+                  <Col md={{ offset: 1 }}>
+                    <h4>{"👍 " + club.likes}</h4>
+                  </Col>
+                </Row>
+                <Row>{tagList}</Row>
+                <br />
+                <Row>{club.content}</Row>
+              </Col>
+            </Row>
+          </Container>
+        </Card.Body>
+      </Card>
     );
   }
 }
 
-export default withRouter(ClubCard);
+const mapStateToProps = state => {
+  return {
+    tags: state.tag.tags
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {};
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(ClubCard));
