@@ -26,14 +26,15 @@ export const signOut = () => {
   };
 };
 
-export const signUp_ = () => {
+export const signUp_ = user => {
   return {
-    type: actionTypes.SIGN_UP
+    type: actionTypes.SIGN_UP,
+    user: user
   };
 };
 
-export const signUp = () => {
+export const signUp = user => {
   return dispatch => {
-    dispatch(signUp_());
+    dispatch(signUp_(user));
   };
 };

@@ -43,7 +43,7 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<ClubRegister />", () => {
   let clubRegister;
-  let spyPostClub, spyWindowAlert;
+  let spyPostClub, spyWindowAlert, spyCreateObjectURL;
 
   let spyCloseHandler = () => {};
 
@@ -67,6 +67,11 @@ describe("<ClubRegister />", () => {
     );
 
     spyWindowAlert = jest.spyOn(window, "alert").mockImplementation(path => {});
+    spyCreateObjectURL = jest
+      .spyOn(window.URL, "createObjectURL")
+      .mockImplementation(path => {
+        return "mockFile";
+      });
 
     spyPostClub = jest
       .spyOn(clubActionCreators, "postClub")
@@ -129,7 +134,7 @@ describe("<ClubRegister />", () => {
     const ClubRegisterInstance = component
       .find(ClubRegister.WrappedComponent)
       .instance();
-    expect(ClubRegisterInstance.state.auth_img_file).toEqual(filelist);
+    expect(ClubRegisterInstance.state.auth_img_file).toEqual(["mockFile"]);
   });
 
   it(`should alert err message when file is not image file`, () => {

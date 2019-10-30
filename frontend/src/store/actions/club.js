@@ -4,10 +4,10 @@ import * as actionTypes from "./actionTypes";
 export const postClub_ = at => {
   return {
     type: actionTypes.POST_CLUB,
-    id: at.id,
-    title: at.title,
-    content: at.content,
-    tag: at.tag
+    name: at.name,
+    clubmanager: at.clubmanager,
+    auth_img_file: at.auth_img_file,
+    selected_category: at.selected_category
   };
 };
 

@@ -66,14 +66,17 @@ class ClubRegister extends React.Component {
   };
 
   onChangeHandler = event => {
-    var files = event.target.files;
     if (
       this.maxSelectFile(event) &&
       this.checkMimeType(event) &&
       this.checkFileSize(event)
     ) {
+      let file_urls = [];
+      for (var x = 0; x < event.target.files.length; x++) {
+        file_urls.push(URL.createObjectURL(event.target.files[x]));
+      }
       this.setState({
-        auth_img_file: files,
+        auth_img_file: file_urls,
         loaded: 0
       });
     }
@@ -141,7 +144,21 @@ class ClubRegister extends React.Component {
                 onChange={this.onChangeHandler}
               />
             </div>
-            <Button variant="primary">Register</Button>
+            <Button
+              variant="primary"
+              // onClick={() => {
+              //   this.props.postClub(
+              //     this.state.name,
+              //     this.state.clubmanager,
+              //     this.state.auth_img_file,
+              //     this.state.selected_category
+              //   );
+              //   alert("Create Club Success!");
+              //   this.props.closeHandler();
+              // }}
+            >
+              Register
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
@@ -157,12 +174,13 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    // postClub: (title, content, tag) =>
+    // postClub: (name, clubmanager, auth_img_file, selected_category) =>
     //   dispatch(
     //     actionCreaters.postClub({
-    //       title: title,
-    //       content: content,
-    //       tag: tag
+    //       name: name,
+    //       clubmanager: clubmanager,
+    //       auth_img_file: auth_img_file,
+    //       selected_category: selected_category
     //     })
     //   )
   };
