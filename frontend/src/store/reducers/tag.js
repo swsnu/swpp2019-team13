@@ -17,7 +17,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_TAG_LIST:
-      return { ...state };
+      return { ...state, tags: action.tags };
     default:
       break;
   }
