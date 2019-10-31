@@ -18,7 +18,8 @@ class SomoimCreate extends React.Component {
     available_sem: 1
   };
 
-  componentWillReceiveProps() {
+  // componentWillReceiveProps renamed into below name
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       title: "",
       summary: "",
@@ -32,6 +33,7 @@ class SomoimCreate extends React.Component {
   render() {
     return (
       <Modal
+        className="SomoimCreate"
         show={this.props.show}
         onHide={this.props.closeHandler}
         animation={false}
@@ -48,6 +50,7 @@ class SomoimCreate extends React.Component {
               </Form.Label>
               <Col sm="8">
                 <Form.Control
+                  id="somoim-title-input"
                   value={this.state.title}
                   onChange={event =>
                     this.setState({ title: event.target.value })
@@ -62,6 +65,7 @@ class SomoimCreate extends React.Component {
               <Form.Control
                 as="textarea"
                 rows="3"
+                id="somoim-summary-input"
                 value={this.state.summary}
                 onChange={event =>
                   this.setState({ summary: event.target.value })
@@ -75,6 +79,7 @@ class SomoimCreate extends React.Component {
               <Form.Control
                 as="textarea"
                 rows="10"
+                id="somoim-description-input"
                 value={this.state.description}
                 onChange={event =>
                   this.setState({ description: event.target.value })
@@ -87,6 +92,7 @@ class SomoimCreate extends React.Component {
               </Form.Label>
               <Col sm="8">
                 <NumericInput
+                  id="somoim-goalnumber-input"
                   min={1}
                   max={100}
                   value={this.state.goal_number}
@@ -106,6 +112,7 @@ class SomoimCreate extends React.Component {
                 return (
                   <Form.Check
                     key={a.id}
+                    id="somoim-deptname-checkbox"
                     inline
                     type={"checkbox"}
                     label={a.name}
@@ -135,6 +142,7 @@ class SomoimCreate extends React.Component {
               </Form.Label>
               <Col sm="8">
                 <Form.Control
+                  id="somoim-available-semester-input"
                   as="select"
                   onChange={event =>
                     this.setState({
@@ -154,6 +162,7 @@ class SomoimCreate extends React.Component {
             </Row>
             <Row>
               <Button
+                id="confirm-create-somoim-button"
                 variant="primary"
                 onClick={() => {
                   this.props.postSomoim(

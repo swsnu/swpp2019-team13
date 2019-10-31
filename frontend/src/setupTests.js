@@ -5,3 +5,5 @@ Enzyme.configure({
   adapter: new EnzymeAdapter(),
   disableLifecycleMethods: true
 });
+
+window.URL.createObjectURL = function() {};

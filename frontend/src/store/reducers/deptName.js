@@ -69,7 +69,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_DEPT_LIST:
-      return { ...state };
+      return { ...state, deptnames: action.deptnames };
     default:
       break;
   }

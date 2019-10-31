@@ -15,7 +15,7 @@ class ClubRegister extends React.Component {
     auth_img_file: null
   };
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       name: "",
       clubmanager: "",
@@ -55,7 +55,7 @@ class ClubRegister extends React.Component {
     let err = [];
     for (var x = 0; x < files.length; x++) {
       if (files[x].size > size) {
-        err[x] = files[x].type + "is too large, please pick a smaller file\n";
+        err[x] = files[x].name + " is too large, please pick a smaller file\n";
       }
     }
     for (var z = 0; z < err.length; z++) {
@@ -66,14 +66,17 @@ class ClubRegister extends React.Component {
   };
 
   onChangeHandler = event => {
-    var files = URL.createObjectURL(event.target.files[0]);
     if (
       this.maxSelectFile(event) &&
       this.checkMimeType(event) &&
       this.checkFileSize(event)
     ) {
+      let file_urls = [];
+      for (var x = 0; x < event.target.files.length; x++) {
+        file_urls.push(URL.createObjectURL(event.target.files[x]));
+      }
       this.setState({
-        auth_img_file: files,
+        auth_img_file: file_urls,
         loaded: 0
       });
     }
@@ -97,6 +100,7 @@ class ClubRegister extends React.Component {
               <Form.Control
                 type="clubname"
                 placeholder="Enter club name"
+                id="club-name-input"
                 value={this.state.name}
                 onChange={event => this.setState({ name: event.target.value })}
               />
@@ -104,6 +108,7 @@ class ClubRegister extends React.Component {
             <Form.Label>분야</Form.Label>
             <Form.Control
               as="select"
+              id="club-category-input"
               onChange={event =>
                 this.setState({
                   selected_category: Number(event.target.value)
@@ -123,33 +128,34 @@ class ClubRegister extends React.Component {
               <Form.Control
                 type="manager"
                 placeholder="Enter Club Manger Name"
+                className="club-manager-input"
                 value={this.state.clubmanager}
                 onChange={event =>
                   this.setState({ clubmanager: event.target.value })
                 }
               />
             </Form.Group>
-            <div className="form-group files">
+            <div>
               <label>동아리 인증사진 첨부</label>
               <input
                 type="file"
-                className="form-control"
+                id="club-auth-file-input"
                 multiple
                 onChange={this.onChangeHandler}
               />
             </div>
             <Button
               variant="primary"
-              onClick={() => {
-                this.props.postClub(
-                  this.state.name,
-                  this.state.clubmanager,
-                  this.state.auth_img_file,
-                  this.state.selected_category
-                );
-                alert("Create Club Success!");
-                this.props.closeHandler();
-              }}
+              // onClick={() => {
+              //   this.props.postClub(
+              //     this.state.name,
+              //     this.state.clubmanager,
+              //     this.state.auth_img_file,
+              //     this.state.selected_category
+              //   );
+              //   alert("Create Club Success!");
+              //   this.props.closeHandler();
+              // }}
             >
               Register
             </Button>
@@ -168,15 +174,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    postClub: (name, clubmanager, auth_img_file, selected_category) =>
-      dispatch(
-        actionCreaters.postClub({
-          name: name,
-          clubmanager: clubmanager,
-          auth_img_file: auth_img_file,
-          selected_category: selected_category
-        })
-      )
+    // postClub: (name, clubmanager, auth_img_file, selected_category) =>
+    //   dispatch(
+    //     actionCreaters.postClub({
+    //       name: name,
+    //       clubmanager: clubmanager,
+    //       auth_img_file: auth_img_file,
+    //       selected_category: selected_category
+    //     })
+    //   )
   };
 };
 
