@@ -12,15 +12,35 @@ class Department(models.Model):
 class Category(models.Model):
   name = models.CharField(max_length=64)
 
+class Major(models.Model):
+  name = models.CharField(max_length=64)
+
 class UserProfile(models.Model):
   user = models.OneToOneField(User, on_delete=models.CASCADE)
-  dept_name = models.ForeignKey(
+  dept = models.ForeignKey(
     Department,
     on_delete=models.CASCADE,
-    related_name='user_dept_name'
+    related_name='user_dept',
+    null=True
   )
-  grade = models.IntegerField()
-  available_semester = models.IntegerField()
+  major = models.ForeignKey(
+    Department,
+    on_delete=models.CASCADE,
+    related_name='user_major',
+    null=True
+  )
+  grade = models.IntegerField(default = 1)
+  available_semester = models.IntegerField(default = 1)
+
+class PreClub(models.Model):
+  name = models.CharField(max_length=64)
+  manager = models.CharField(max_length=64)
+  category = models.ForeignKey(
+    Category,
+    on_delete=models.CASCADE,
+    related_name='preclub_category'
+  )
+  auth_img = models.ImageField(blank=True)
 
 class Club(models.Model):
   name = models.CharField(max_length=64)
@@ -28,19 +48,19 @@ class Club(models.Model):
   description = models.TextField(default = "")
   category = models.ForeignKey(
     Category,
-    on_delete=models.CASCADE,
-    related_name='club_category'
+    on_delete=models.CASCADE
   )
-  isRegistered = models.BooleanField(default = False)
+  poster_img = models.ImageField(blank=True)
   likes = models.IntegerField(default=0)
 
 class Somoim(models.Model):
   title = models.CharField(max_length=64)
   summary = models.TextField(default = "")
-  author = user_id = models.ForeignKey(
+  author = models.ForeignKey(
     UserProfile,
     on_delete=models.CASCADE,
-    related_name='somoim_author'
+    related_name='somoim_author',
+    null=True
   )
   description = models.TextField(default = "")
   category = models.ForeignKey(
