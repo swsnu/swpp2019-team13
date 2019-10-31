@@ -13,6 +13,12 @@ class Category(models.Model):
   name = models.CharField(max_length=64)
 
 class Major(models.Model):
+  dept = models.ForeignKey(
+    Department,
+    on_delete=models.CASCADE,
+    related_name='major_dept',
+    null=True
+  )
   name = models.CharField(max_length=64)
 
 class UserProfile(models.Model):
@@ -55,66 +61,66 @@ class Club(models.Model):
 
 class Somoim(models.Model):
   title = models.CharField(max_length=64)
-  summary = models.TextField(default = "")
   author = models.ForeignKey(
     UserProfile,
     on_delete=models.CASCADE,
     related_name='somoim_author',
     null=True
   )
-  description = models.TextField(default = "")
   category = models.ForeignKey(
     Category,
     on_delete=models.CASCADE,
     related_name='somoim_category'
   )
+  summary = models.TextField(default = "")
+  description = models.TextField(default = "")
   goalJoiner = models.IntegerField(default=0)
   currentJoiner = models.IntegerField(default=0)
   likes = models.IntegerField(default=0)
 
 class UserLikeClub(models.Model):
-  user_id = models.ForeignKey(
+  user = models.ForeignKey(
     UserProfile,
     on_delete=models.CASCADE,
     related_name='userlikeclub_user_id'
   )
-  club_id = models.ForeignKey(
+  club = models.ForeignKey(
     Club,
     on_delete=models.CASCADE,
     related_name='userlikeclub_club_id'
   )
 
 class UserApplyClub(models.Model):
-  user_id = models.ForeignKey(
+  user = models.ForeignKey(
     UserProfile,
     on_delete=models.CASCADE,
     related_name='userapplyclub_user_id'
   )
-  club_id = models.ForeignKey(
+  club = models.ForeignKey(
     Club,
     on_delete=models.CASCADE,
     related_name='userapplyclub_club_id'
   )
 
 class UserLikeSomoim(models.Model):
-  user_id = models.ForeignKey(
+  user = models.ForeignKey(
     UserProfile,
     on_delete=models.CASCADE,
     related_name='userlikesomoim_user_id'
   )
-  somoim_id = models.ForeignKey(
+  somoim = models.ForeignKey(
     Somoim,
     on_delete=models.CASCADE,
     related_name='userlikesomoim_somoim_id'
   )
 
 class UserJoinSomoim(models.Model):
-  user_id = models.ForeignKey(
+  user = models.ForeignKey(
     UserProfile,
     on_delete=models.CASCADE,
     related_name='userjoinsomoim_user_id'
   )
-  somoim_id = models.ForeignKey(
+  somoim = models.ForeignKey(
     Somoim,
     on_delete=models.CASCADE,
     related_name='userjoinsomoim_somoim_id'

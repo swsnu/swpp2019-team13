@@ -15,7 +15,15 @@ should setting mysql with this [link](https://bscnote.tistory.com/77) at first
 
 should setting default charset with this [link](https://nesoy.github.io/articles/2017-05/mysql-UTF8) to use korean
 
-You should install belows by pip in your virtualenv
+### create and load initial sql data
+
+```
+mysql -u root club4u < [FILE NAME]
+```
+
+- should do after access root with no password and create 'club4u' DB
+
+### PIP requirement
 
 ```
 pip install django
