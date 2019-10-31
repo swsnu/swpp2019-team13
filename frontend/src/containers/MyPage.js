@@ -32,7 +32,7 @@ class MyPage extends Component {
       // this.props.loggedUser.dept에는 ID가 저장되어 있으므로, 다음과 같이 단과대 명을 불러올 수 있습니다 */
       if (this.props.depts) {
         const selectedDept = this.props.depts.filter(dept => {
-          return dept.id == loggedUserDeptID;
+          return dept.id === loggedUserDeptID;
         });
         if (selectedDept.length !== 0)
           loggedUserDeptName = selectedDept[0].name;
@@ -41,7 +41,7 @@ class MyPage extends Component {
       // this.props.loggedUser.major에는 ID가 저장되어 있으므로, 다음과 같이 전공 명을 불러올 수 있습니다 */
       if (this.props.majors) {
         const selectedMajor = this.props.majors.filter(major => {
-          return major.id == loggedUserMajorID;
+          return major.id === loggedUserMajorID;
         });
         if (selectedMajor.length !== 0)
           loggedUserMajorName = selectedMajor[0].name;
