@@ -41,7 +41,7 @@ describe("<Header />", () => {
     );
   });
 
-  it("should render Todos", () => {
+  it("should render Header", () => {
     const component = mount(header);
     const wrapper = component.find(".Header");
     expect(wrapper.length).toBe(1);

@@ -63,6 +63,16 @@ const getMockDeptNameReducer = jest.fn(
   }
 );
 
+const getMockMajorReducer = jest.fn(
+  initialState => (state = initialState, action) => {
+    switch (action.type) {
+      default:
+        break;
+    }
+    return state;
+  }
+);
+
 export const getMockStore = initialState => {
   const mockClubReducer = getMockClubReducer(initialState);
   const mockSomoimReducer = getMockSomoimReducer(initialState);
@@ -70,6 +80,7 @@ export const getMockStore = initialState => {
   const mockCategoryReducer = getMockCategoryReducer(initialState);
   const mockTagReducer = getMockTagReducer(initialState);
   const mockDeptNameReducer = getMockDeptNameReducer(initialState);
+  const mockMajorReducer = getMockMajorReducer(initialState);
   const rootReducer = combineReducers({
     club: mockClubReducer,
     somoim: mockSomoimReducer,
@@ -77,6 +88,7 @@ export const getMockStore = initialState => {
     category: mockCategoryReducer,
     tag: mockTagReducer,
     deptname: mockDeptNameReducer,
+    major: mockMajorReducer,
     router: connectRouter(history)
   });
   const composeEnhancers =
