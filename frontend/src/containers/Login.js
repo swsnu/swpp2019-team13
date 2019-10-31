@@ -29,7 +29,8 @@ class Login extends Component {
   };
 
   /* Modal에서 나갔을 때 동작 */
-  onExit_LoginModal_Handler = () => {
+  onHide_LoginModal_Handler = () => {
+    this.props.onHide();
     this.setState({
       ...this.state,
       email: "",
@@ -60,8 +61,8 @@ class Login extends Component {
         {/* 로그인 Modal */}
         <Modal
           show={this.props.show}
-          onHide={this.props.onHide}
-          onExited={this.onExit_LoginModal_Handler}
+          onHide={this.onHide_LoginModal_Handler}
+          // onExited={this.onExit_LoginModal_Handler}
           style={{ opacity: 1 }}
           size="sm"
           centered
@@ -102,7 +103,7 @@ class Login extends Component {
             </Form>
             {/* 유저 정보가 잘못되었을 때 오류 메시지를 보여준다. */}
             {this.state.wrongInput ? (
-              <div style={{ color: "red" }}>
+              <div id="wrong-input" style={{ color: "red" }}>
                 Email or Password is wrong, try again
               </div>
             ) : (
