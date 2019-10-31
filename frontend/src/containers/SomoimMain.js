@@ -49,7 +49,11 @@ class SomoimMain extends React.Component {
     let categoryList;
     if (this.props.categories) {
       categoryList = this.props.categories.map(item => (
-        <Button key={item.id} variant="outline-secondary">
+        <Button
+          className="category-button"
+          key={item.id}
+          variant="outline-secondary"
+        >
           {item.name}
         </Button>
       ));
@@ -78,10 +82,8 @@ class SomoimMain extends React.Component {
 
     return (
       <div>
+        <Header />
         <Container>
-          <Row>
-            <Header />
-          </Row>
           <Row>
             <h2>Recommended Somoims</h2>
           </Row>
@@ -117,6 +119,7 @@ class SomoimMain extends React.Component {
             </Col>
             <Col>
               <Button
+                className="somoim-create-button"
                 variant="outline-primary"
                 size="lg"
                 onClick={this.somoimCreateClickHandler}

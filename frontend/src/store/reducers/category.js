@@ -37,7 +37,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_CATEGORY_LIST:
-      return { ...state };
+      return { ...state, categories: action.categories };
     default:
       break;
   }

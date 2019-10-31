@@ -2,45 +2,134 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 import Header from "../components/Header";
 import ClubCard from "../components/ClubCard";
-
-import * as actionCreaters from "../store/actions/index";
+import ClubDetail from "../components/ClubDetail";
 import ClubRegister from "../components/ClubRegister";
 
 class ClubMain extends React.Component {
   state = {
-    showClubRegisterModal: false
+    ClubDetailShow: false,
+    ClubRegisterShow: false,
+    selectedClub: null
+  };
+
+  ClubCardClickHandler = id => {
+    this.setState({
+      ...this.state,
+      ClubDetailShow: true,
+      selectedClub: this.props.Clubs[id]
+    });
+  };
+
+  ClubDetailCloseHandler = () => {
+    this.setState({
+      ...this.state,
+      ClubDetailShow: false
+    });
+  };
+
+  ClubRegisterClickHandler = () => {
+    this.setState({
+      ...this.state,
+      ClubRegisterShow: true
+    });
+  };
+
+  ClubRegisterCloseHandler = () => {
+    this.setState({
+      ...this.state,
+      ClubRegisterShow: false
+    });
   };
 
   render() {
+    let categoryList;
+    if (this.props.categories) {
+      categoryList = this.props.categories.map(item => (
+        <Button key={item.id} variant="outline-secondary">
+          {item.name}
+        </Button>
+      ));
+    }
+
+    let recommendedList, allList;
+    if (this.props.Clubs) {
+      recommendedList = this.props.Clubs.map(item => (
+        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+          <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+        </Col>
+      ));
+
+      allList = this.props.Clubs.map(item => (
+        <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+          <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+        </Col>
+      ));
+    }
+
     return (
       <div>
         <Header />
-        <h1>Main Page</h1>
-        <h1>--- Recommend Club ---</h1>
-        {/* TODO : List up card form of recommend club */}
-        {this.props.clubs.map((c, i) => {
-          return <ClubCard key={i} title={c.title} content={c.content} />;
-        })}
-        <h1>--- All Club ---</h1>
-        <div>
-          <button>Category 1</button>
-          <button>Category 2</button>
-          <button>Category 3</button>
-          <button>Category 4</button>
-          <button>Category 5</button>
-          <button>Category 6</button>
-          <button>Category 7</button>
-        </div>
-        {/* TODO : List up card form of all club categorized by category */}
-        {this.props.clubs.map((c, i) => {
-          return <ClubCard key={i} title={c.title} content={c.content} />;
-        })}
-        {/* TODO : change showClubRegisterModal with state and toggle with link */}
+        <Container>
+          <Row>
+            <h2>Recommended Clubs</h2>
+          </Row>
+          <Row>
+            <div
+              style={{
+                display: "flex",
+                overflowX: "scroll"
+              }}
+            >
+              {recommendedList}
+            </div>
+          </Row>
+          <br />
+          <br />
+          <Row>
+            <h2>All Clubs</h2>
+          </Row>
+          <Row>
+            {categoryList}
+            <Col>
+              <Button
+                variant="outline-primary"
+                size="lg"
+                onClick={this.ClubRegisterClickHandler}
+              >
+                I can't find my club
+              </Button>
+            </Col>
+          </Row>
+          <br />
+          <Row>
+            <Col xs="10" style={{ paddingLeft: 0, paddingRight: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  overflowX: "scroll",
+                  marginLeft: 0,
+                  marginRight: 0
+                }}
+              >
+                {allList}
+              </div>
+            </Col>
+          </Row>
+        </Container>
+
+        <ClubDetail
+          show={this.state.ClubDetailShow}
+          club={this.state.selectedClub}
+          closeHandler={this.ClubDetailCloseHandler}
+        />
+
         <ClubRegister
-          showClubRegisterModal={this.state.showClubRegisterModal}
+          show={this.state.ClubRegisterShow}
+          closeHandler={this.ClubRegisterCloseHandler}
         />
       </div>
     );
@@ -49,7 +138,8 @@ class ClubMain extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    clubs: state.club.clubs
+    Clubs: state.club.clubs,
+    categories: state.category.categories
   };
 };
 

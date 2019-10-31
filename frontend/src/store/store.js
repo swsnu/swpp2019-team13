@@ -9,6 +9,7 @@ import UserReducer from "./reducers/user";
 import CategoryReducer from "./reducers/category";
 import TagReducer from "./reducers/tag";
 import DeptNameReducer from "./reducers/deptName";
+import MajorReducer from "./reducers/major";
 
 export const history = createBrowserHistory();
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   category: CategoryReducer,
   tag: TagReducer,
   deptname: DeptNameReducer,
+  major: MajorReducer,
   router: connectRouter(history)
 });
 
