@@ -2,10 +2,25 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Card,
+  Collapse,
+  Accordion
+} from "react-bootstrap";
 
 import Header from "../components/Header";
 
 class MyPage extends Component {
+  state = {
+    infoButtonOpen: false,
+    clubButtonOpen: false,
+    somoimButtonOpen: false
+  };
+
   render() {
     let loggedUserName = null;
     let loggedUserEmail = null;
@@ -51,19 +66,142 @@ class MyPage extends Component {
     return (
       <div>
         <Header />
-        <h1 style={{ textAlign: "center" }}>#My Page#</h1>
-        <p style={{ textAlign: "center" }}>
-          어서 오시게나. 아래는 당신의 정보일세.
-        </p>
-        <div style={{ textAlign: "center" }}>
-          <p>유저 이름 : {loggedUserName}</p>
-          <p>이메일 : {loggedUserEmail}</p>
-          <p>비밀번호 : {loggedUserPassword}</p>
-          <p>소속 단과대 : {loggedUserDeptName}</p>
-          <p>전공 : {loggedUserMajorName}</p>
-          <p>학년 : {loggedUserGrade}학년</p>
-          <p>활동 가능 학기 수 : {loggedUserAvailableSemester}학기</p>
-        </div>
+        <Container style={{ marginLeft: "16%" }}>
+          <Row>
+            <Col sm="2">
+              <Accordion>
+                <Accordion.Toggle
+                  style={{ marginBottom: "5px", marginTop: "13px" }}
+                  as={Button}
+                  variant="outline-dark"
+                  size="lg"
+                  block
+                  eventKey="0"
+                >
+                  내 정보
+                </Accordion.Toggle>
+                {/* <Accordion.Collapse eventKey="0">
+                  <Button></Button>
+                </Accordion.Collapse> */}
+
+                <Accordion.Toggle
+                  style={{ marginBottom: "5px", marginTop: "13px" }}
+                  as={Button}
+                  variant="outline-dark"
+                  size="lg"
+                  block
+                  eventKey="1"
+                >
+                  내 동아리
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="1">
+                  <div>
+                    <Button
+                      style={{
+                        width: "95%",
+                        marginLeft: "5px"
+                      }}
+                      variant="outline-secondary"
+                      size="md"
+                      block
+                    >
+                      동아리 관리
+                    </Button>
+                    <Button
+                      style={{
+                        width: "95%",
+                        marginLeft: "5px"
+                      }}
+                      variant="outline-secondary"
+                      size="md"
+                      block
+                    >
+                      좋아요한 동아리
+                    </Button>
+
+                    <Button
+                      style={{
+                        width: "95%",
+                        marginLeft: "5px"
+                      }}
+                      variant="outline-secondary"
+                      size="md"
+                      block
+                    >
+                      지원한 동아리
+                    </Button>
+                  </div>
+                </Accordion.Collapse>
+
+                <Accordion.Toggle
+                  style={{ marginBottom: "5px", marginTop: "13px" }}
+                  as={Button}
+                  variant="outline-dark"
+                  size="lg"
+                  block
+                  eventKey="2"
+                >
+                  내 소모임
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="2">
+                  <div>
+                    <Button
+                      style={{
+                        width: "95%",
+                        marginLeft: "5px"
+                      }}
+                      variant="outline-secondary"
+                      size="md"
+                      block
+                    >
+                      소모임 관리
+                    </Button>
+                    <Button
+                      style={{
+                        width: "95%",
+                        marginLeft: "5px"
+                      }}
+                      variant="outline-secondary"
+                      size="md"
+                      block
+                    >
+                      좋아요한 소모임
+                    </Button>
+
+                    <Button
+                      style={{
+                        width: "95%",
+                        marginLeft: "5px"
+                      }}
+                      variant="outline-secondary"
+                      size="md"
+                      block
+                    >
+                      지원한 소모임
+                    </Button>
+                  </div>
+                </Accordion.Collapse>
+              </Accordion>
+            </Col>
+            <Col>
+              <Card>
+                <h1 style={{ textAlign: "center" }}>#My Page#</h1>
+                <p style={{ textAlign: "center" }}>
+                  어서 오시게나. 아래는 당신의 정보일세.
+                </p>
+                <div style={{ textAlign: "center" }}>
+                  <p>유저 이름 : {loggedUserName}</p>
+                  <p>이메일 : {loggedUserEmail}</p>
+                  <p>비밀번호 : {loggedUserPassword}</p>
+                  <p>소속 단과대 : {loggedUserDeptName}</p>
+                  <p>전공 : {loggedUserMajorName}</p>
+                  <p>학년 : {loggedUserGrade}학년</p>
+                  <p>활동 가능 학기 수 : {loggedUserAvailableSemester}학기</p>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
