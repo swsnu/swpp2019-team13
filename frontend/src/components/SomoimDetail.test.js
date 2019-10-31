@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
 
-import SomoimCard from "./SomoimCard";
+import SomoimDetail from "./SomoimDetail";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 
@@ -74,11 +74,14 @@ const stubInitialState = {
 
 const mockStore = getMockStore(stubInitialState);
 
-describe("<SomoimCard />", () => {
-  let somoimCard;
-  let spyClickHandler;
+describe("<SomoimDetail />", () => {
+  let somoimDetail;
+  let spyCloseHandler;
+
   beforeEach(() => {
-    somoimCard = (
+    spyCloseHandler = jest.fn();
+
+    somoimDetail = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
@@ -87,9 +90,10 @@ describe("<SomoimCard />", () => {
               exact
               render={() => {
                 return (
-                  <SomoimCard
+                  <SomoimDetail
+                    show={true}
                     somoim={stubInitialState.somoims[0]}
-                    clickHandler={spyClickHandler}
+                    closeHandler={spyCloseHandler}
                   />
                 );
               }}
@@ -98,20 +102,35 @@ describe("<SomoimCard />", () => {
         </ConnectedRouter>
       </Provider>
     );
-
-    spyClickHandler = jest.fn();
   });
 
-  it("should render without errors", () => {
-    const component = mount(somoimCard);
-    const wrapper = component.find("SomoimCard");
+  it("should render modal", () => {
+    const component = mount(somoimDetail);
+
+    const wrapper = component.find("Bootstrap(Modal)");
     expect(wrapper.length).toBe(1);
   });
 
-  it("should handle clicks", () => {
-    const component = mount(somoimCard);
-    const wrapper = component.find("Card");
-    wrapper.simulate("click");
-    expect(spyClickHandler).toHaveBeenCalledTimes(1);
+  it("should not render modal when somoim info is invalid", () => {
+    const component = mount(
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <SomoimDetail show={true} closeHandler={spyCloseHandler} />
+                );
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const wrapper = component.find("Bootstrap(Modal)");
+    expect(wrapper.length).toBe(0);
   });
 });
