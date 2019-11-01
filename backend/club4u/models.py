@@ -30,7 +30,7 @@ class UserProfile(models.Model):
     null=True
   )
   major = models.ForeignKey(
-    Department,
+    Major,
     on_delete=models.CASCADE,
     related_name='user_major',
     null=True
@@ -46,17 +46,23 @@ class PreClub(models.Model):
     on_delete=models.CASCADE,
     related_name='preclub_category'
   )
-  auth_img = models.ImageField(blank=True)
+  auth_img = models.ImageField(null=True)
 
 class Club(models.Model):
   name = models.CharField(max_length=64)
+  author = models.ForeignKey(
+    UserProfile,
+    on_delete=models.CASCADE,
+    related_name='club_author',
+    null=True
+  )
   summary = models.TextField(default = "")
   description = models.TextField(default = "")
   category = models.ForeignKey(
     Category,
     on_delete=models.CASCADE
   )
-  poster_img = models.ImageField(blank=True)
+  poster_img = models.ImageField(null=True)
   likes = models.IntegerField(default=0)
 
 class Somoim(models.Model):

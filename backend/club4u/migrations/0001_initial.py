@@ -22,15 +22,10 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Club',
+            name='Tag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=64)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='club4u.Category')),
-                ('summary', models.TextField(default='')),
-                ('description', models.TextField(default='')),
-                ('poster_img', models.ImageField(blank=True, upload_to='')),
-                ('likes', models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
@@ -54,9 +49,32 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('dept', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_dept', to='club4u.Department')),
-                ('major', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_major', to='club4u.Department')),
+                ('major', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='user_major', to='club4u.Major')),
                 ('grade', models.IntegerField(default=1)),
                 ('available_semester', models.IntegerField(default=1)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='PreClub',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=64)),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='preclub_category', to='club4u.Category')),
+                ('manager', models.CharField(max_length=64)),
+                ('auth_img', models.ImageField(blank=True, upload_to='')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Club',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=64)),
+                ('author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='club_author', to='club4u.UserProfile')),
+                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='club4u.Category')),
+                ('summary', models.TextField(default='')),
+                ('description', models.TextField(default='')),
+                ('poster_img', models.ImageField(blank=True, upload_to='')),
+                ('likes', models.IntegerField(default=0)),
             ],
         ),
         migrations.CreateModel(
@@ -71,13 +89,6 @@ class Migration(migrations.Migration):
                 ('goalJoiner', models.IntegerField(default=0)),
                 ('currentJoiner', models.IntegerField(default=0)),
                 ('likes', models.IntegerField(default=0)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Tag',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64)),
             ],
         ),
         migrations.CreateModel(
@@ -110,16 +121,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('club', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='userapplyclub_club_id', to='club4u.Club')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='userapplyclub_user_id', to='club4u.UserProfile')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='PreClub',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='preclub_category', to='club4u.Category')),
-                ('manager', models.CharField(max_length=64)),
-                ('auth_img', models.ImageField(blank=True, upload_to='')),
             ],
         ),
     ]
