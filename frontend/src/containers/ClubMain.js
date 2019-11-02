@@ -110,7 +110,7 @@ class ClubMain extends React.Component {
                 size="lg"
                 onClick={this.ClubRegisterClickHandler}
               >
-                I can't find my club
+                Cannot find your club?
               </Button>
             </Col>
           </Row>
