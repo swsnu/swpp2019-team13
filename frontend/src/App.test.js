@@ -9,7 +9,7 @@ import { history } from "./store/store";
 const mockStore = getMockStore({});
 
 jest.mock("./containers/ClubMain", () => {
-  return jest.fn(props => {
+  return jest.fn(() => {
     return <div className="spyClubMain" />;
   });
 });

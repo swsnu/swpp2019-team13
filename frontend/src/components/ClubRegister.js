@@ -1,8 +1,6 @@
 import React from "react";
-
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-
 import { Modal, Button, Form } from "react-bootstrap";
 
 class ClubRegister extends React.Component {
@@ -170,21 +168,21 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    // postClub: (name, clubmanager, auth_img_file, selected_category) =>
-    //   dispatch(
-    //     actionCreaters.postClub({
-    //       name: name,
-    //       clubmanager: clubmanager,
-    //       auth_img_file: auth_img_file,
-    //       selected_category: selected_category
-    //     })
-    //   )
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     postClub: (name, clubmanager, auth_img_file, selected_category) =>
+//       dispatch(
+//         actionCreaters.postClub({
+//           name: name,
+//           clubmanager: clubmanager,
+//           auth_img_file: auth_img_file,
+//           selected_category: selected_category
+//         })
+//       )
+//   };
+// };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(withRouter(ClubRegister));

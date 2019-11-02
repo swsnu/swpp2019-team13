@@ -6,6 +6,7 @@ module.exports = {
     jest: true
   },
   extends: ["eslint:recommended", "plugin:react/recommended"],
+  parser: "babel-eslint",
   globals: {
     Atomics: "readonly",
     SharedArrayBuffer: "readonly"
@@ -19,6 +20,8 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "no-unused-vars": 0,
+    "no-case-declarations": 0
   }
 };
