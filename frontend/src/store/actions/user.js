@@ -10,7 +10,7 @@ export const signIn_ = user => {
 
 export const signIn = user => {
   return dispatch => {
-    dispatch(signIn_(user));
+    return new Promise(() => dispatch(signIn_(user)));
   };
 };
 
@@ -22,7 +22,7 @@ export const signOut_ = () => {
 
 export const signOut = () => {
   return dispatch => {
-    dispatch(signOut_());
+    return new Promise(() => dispatch(signOut_()));
   };
 };
 
@@ -35,6 +35,6 @@ export const signUp_ = user => {
 
 export const signUp = user => {
   return dispatch => {
-    dispatch(signUp_(user));
+    return new Promise(() => dispatch(signUp_(user)));
   };
 };

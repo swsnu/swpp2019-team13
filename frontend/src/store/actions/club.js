@@ -13,7 +13,7 @@ export const postClub_ = at => {
 
 export const postClub = at => {
   return dispatch => {
-    dispatch(postClub_(at));
+    return new Promise(() => dispatch(postClub_(at)));
   };
 };
 
@@ -25,7 +25,7 @@ export const getClubList_ = () => {
 
 export const getClubList = () => {
   return dispatch => {
-    dispatch(getClubList_());
+    return new Promise(() => dispatch(getClubList_()));
   };
 };
 
@@ -37,6 +37,6 @@ export const getClubByID_ = id => {
 
 export const getClubByID = id => {
   return dispatch => {
-    dispatch(getClubByID_(id));
+    return new Promise(() => dispatch(getClubByID_(id)));
   };
 };
