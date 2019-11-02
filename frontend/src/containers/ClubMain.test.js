@@ -4,36 +4,46 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
 
-import SomoimMain from "./SomoimMain";
+import ClubMain from "./ClubMain";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
-import * as somoimActionCreators from "../store/actions/somoim";
+import * as clubActionCreators from "../store/actions/club";
 
 let stubInitialState = {
-  somoims: [
+  clubs: [
     {
       id: 0,
-      title: "TEST_SOMOIM_1",
-      summary: "TEST_SUMMARY_1",
-      description: "TEST_DESCRIPTION_1",
-      selected_dept: [0],
-      available_sem: 1,
-      tag: [0],
-      goalJoiner: 10,
-      currentJoiner: 7,
+      name: "SNUStone",
+      content: "SNU Best HearthStone Club",
+      clubmanager: "김지훈",
+      selected_category: 0,
+      auth_img_file: "1",
+      isRegistered: true,
+      tag: [0, 1],
       likes: 10
     },
     {
       id: 1,
-      title: "TEST_SOMOIM_2",
-      summary: "TEST_SUMMARY_2",
-      description: "TEST_DESCRIPTION_2",
-      selected_dept: [0, 1],
-      available_sem: 3,
-      tag: [1],
-      goalJoiner: 1,
-      currentJoiner: 0,
-      likes: 0
+      name: "SnuWOD",
+      content: "SNU Best Training Club",
+      clubmanager: "김동우",
+      selected_category: 6,
+      auth_img_file: "2",
+      isRegistered: true,
+      tag: [2, 3],
+      likes: 15
+    },
+
+    {
+      id: 2,
+      name: "SnuLoL",
+      content: "SNU Best LoL Club",
+      clubmanager: "김도현",
+      selected_category: 6,
+      auth_img_file: "3",
+      isRegistered: true,
+      tag: [2, 3],
+      likes: 20
     }
   ],
   categories: [
@@ -142,11 +152,11 @@ let stubInitialState = {
 
 let mockStore = getMockStore(stubInitialState);
 
-describe("<SomoimMain />", () => {
-  let somoimMain;
+describe("<ClubMain />", () => {
+  let clubMain;
 
   beforeEach(() => {
-    somoimMain = (
+    clubMain = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
@@ -154,7 +164,7 @@ describe("<SomoimMain />", () => {
               path="/"
               exact
               render={() => {
-                return <SomoimMain />;
+                return <ClubMain />;
               }}
             />
           </Switch>
@@ -164,50 +174,49 @@ describe("<SomoimMain />", () => {
   });
 
   it("should render Page", () => {
-    const component = mount(somoimMain);
-    const wrapper = component.find("SomoimMain");
+    const component = mount(clubMain);
+    const wrapper = component.find("ClubMain");
     expect(wrapper.length).toBe(1);
   });
 
-  it("somoim card click event handling", () => {
-    const component = mount(somoimMain);
-    const mainInstance = component.find("SomoimMain").instance();
-    const wrapper = component.find("SomoimCard");
+  it("club card click event handling", () => {
+    const component = mount(clubMain);
+    const mainInstance = component.find("ClubMain").instance();
+    const wrapper = component.find("ClubCard");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimDetailShow).toBe(true);
+    expect(mainInstance.state.ClubDetailShow).toBe(true);
   });
 
-  it("somoim card click event handling", () => {
-    const component = mount(somoimMain);
-    const mainInstance = component.find("SomoimMain").instance();
-    let wrapper = component.find("SomoimCard");
+  it("club card click event handling", () => {
+    const component = mount(clubMain);
+    const mainInstance = component.find("ClubMain").instance();
+    let wrapper = component.find("ClubCard");
     wrapper.at(0).simulate("click");
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimDetailShow).toBe(true);
+    expect(mainInstance.state.ClubDetailShow).toBe(true);
 
     wrapper = component.find("CloseButton");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimDetailShow).toBe(false);
+    expect(mainInstance.state.ClubDetailShow).toBe(false);
   });
 
-  it("somoim create button click event handling", () => {
-    const component = mount(somoimMain);
-    const mainInstance = component.find("SomoimMain").instance();
-    let wrapper = component.find(".somoim-create-button");
+  it("club create button click event handling", () => {
+    const component = mount(clubMain);
+    const mainInstance = component.find("ClubMain").instance();
+    let wrapper = component.find(".club-create-button");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimCreateShow).toBe(true);
+    expect(mainInstance.state.ClubRegisterShow).toBe(true);
 
     wrapper = component.find("CloseButton");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimCreateShow).toBe(false);
+    expect(mainInstance.state.ClubRegisterShow).toBe(false);
   });
 
-  it("when somoim list info does not loaded yet", () => {
-    let savedSomoims = stubInitialState.somoims;
-    stubInitialState.somoims = null;
+  it("when club list info does not loaded yet", () => {
+    stubInitialState.clubs = null;
     mockStore = getMockStore(stubInitialState);
-    somoimMain = (
+    clubMain = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
@@ -215,7 +224,7 @@ describe("<SomoimMain />", () => {
               path="/"
               exact
               render={() => {
-                return <SomoimMain />;
+                return <ClubMain />;
               }}
             />
           </Switch>
@@ -223,19 +232,15 @@ describe("<SomoimMain />", () => {
       </Provider>
     );
 
-    const component = mount(somoimMain);
-    const wrapper = component.find("SomoimCard");
+    const component = mount(clubMain);
+    const wrapper = component.find("ClubCard");
     expect(wrapper.length).toBe(0);
-
-    stubInitialState.somoims = savedSomoims;
-    mockStore = getMockStore(stubInitialState);
   });
 
   it("when category list info does not loaded yet", () => {
-    let savedCategories = stubInitialState.categories;
     stubInitialState.categories = null;
     mockStore = getMockStore(stubInitialState);
-    somoimMain = (
+    clubMain = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
@@ -243,7 +248,7 @@ describe("<SomoimMain />", () => {
               path="/"
               exact
               render={() => {
-                return <SomoimMain />;
+                return <ClubMain />;
               }}
             />
           </Switch>
@@ -251,11 +256,8 @@ describe("<SomoimMain />", () => {
       </Provider>
     );
 
-    const component = mount(somoimMain);
+    const component = mount(clubMain);
     const wrapper = component.find("category-button");
     expect(wrapper.length).toBe(0);
-
-    stubInitialState.categories = savedCategories;
-    mockStore = getMockStore(stubInitialState);
   });
 });

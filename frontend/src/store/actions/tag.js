@@ -8,6 +8,6 @@ export const getTagList_ = () => {
 
 export const getTagList = () => {
   return dispatch => {
-    dispatch(getTagList_());
+    return new Promise(() => dispatch(getTagList_()));
   };
 };

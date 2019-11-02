@@ -14,7 +14,7 @@ export const postSomoim_ = sm => {
 
 export const postSomoim = sm => {
   return dispatch => {
-    dispatch(postSomoim_(sm));
+    return new Promise(() => dispatch(postSomoim_(sm)));
   };
 };
 
@@ -27,7 +27,7 @@ export const getSomoimList_ = () => {
 
 export const getSomoimList = () => {
   return dispatch => {
-    dispatch(getSomoimList_());
+    return new Promise(() => dispatch(getSomoimList_()));
   };
 };
 
@@ -39,6 +39,6 @@ export const getSomoimByID_ = id => {
 
 export const getSomoimByID = id => {
   return dispatch => {
-    dispatch(getSomoimByID_(id));
+    return new Promise(() => dispatch(getSomoimByID_(id)));
   };
 };
