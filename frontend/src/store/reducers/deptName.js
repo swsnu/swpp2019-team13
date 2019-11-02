@@ -52,7 +52,7 @@ const initialState = {
     },
     {
       id: 12,
-      name: "음학대학"
+      name: "음악대학"
     },
     {
       id: 13,

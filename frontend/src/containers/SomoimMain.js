@@ -46,7 +46,7 @@ class SomoimMain extends React.Component {
   };
 
   render() {
-    let categoryList;
+    let categoryList, somoim_create;
     if (this.props.categories) {
       categoryList = this.props.categories.map(item => (
         <Button
@@ -57,6 +57,12 @@ class SomoimMain extends React.Component {
           {item.name}
         </Button>
       ));
+      somoim_create = (
+        <SomoimCreate
+          show={this.state.somoimCreateShow}
+          closeHandler={this.somoimCreateCloseHandler}
+        />
+      );
     }
 
     let recommendedList, allList;
@@ -135,11 +141,7 @@ class SomoimMain extends React.Component {
           somoim={this.state.selectedSomoim}
           closeHandler={this.somoimDetailCloseHandler}
         />
-
-        <SomoimCreate
-          show={this.state.somoimCreateShow}
-          closeHandler={this.somoimCreateCloseHandler}
-        />
+        {somoim_create}
       </div>
     );
   }

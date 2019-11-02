@@ -105,6 +105,26 @@ class SomoimCreate extends React.Component {
               </Col>
             </Row>
             <Row>
+              <Form.Label>분야</Form.Label>
+              <Form.Control
+                as="select"
+                id="somoim-category-input"
+                onChange={event =>
+                  this.setState({
+                    selected_category: Number(event.target.value)
+                  })
+                }
+              >
+                {this.props.categories.map(a => {
+                  return (
+                    <option key={a.id} value={a.name}>
+                      {a.name}
+                    </option>
+                  );
+                })}
+              </Form.Control>
+            </Row>
+            <Row>
               <Form.Label>가능 단과대학</Form.Label>
             </Row>
             <Row>
@@ -189,7 +209,8 @@ class SomoimCreate extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    deptNames: state.deptname.deptnames
+    deptNames: state.deptname.deptnames,
+    categories: state.category.categories
   };
 };
 
