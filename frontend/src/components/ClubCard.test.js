@@ -1,5 +1,5 @@
 import React from "react";
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
