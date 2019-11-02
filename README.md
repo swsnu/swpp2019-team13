@@ -14,3 +14,7 @@ npm start
 ```
 npm test -- --coverage --watchAll=False
 ```
+### ESLint
+```
+./node_modules/.bin/eslint src
+```
