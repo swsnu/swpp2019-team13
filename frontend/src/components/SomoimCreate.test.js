@@ -36,7 +36,8 @@ const stubInitialState = {
       likes: 0
     }
   ],
-  deptnames: [{ id: 0, name: "DEPT_1" }, { id: 1, name: "DEPT_2" }]
+  deptnames: [{ id: 0, name: "DEPT_1" }, { id: 1, name: "DEPT_2" }],
+  categories: [{ id: 0, name: "CATEGORY_1" }, { id: 1, name: "CATEGORY_2" }]
 };
 
 const mockStore = getMockStore(stubInitialState);
@@ -216,5 +217,16 @@ describe("<SomoimCreate />", () => {
     wrapper.simulate("click");
     expect(spyPostSomoim).toHaveBeenCalledTimes(1);
     expect(spyWindowAlert).toBeCalledWith("Create Somoim Success!");
+  });
+  it(`should set state properly on category select input`, () => {
+    const component = mount(somoimCreate);
+
+    // Form.Control made two inputs with same id
+    const wrapper = component.find("#somoim-category-input").at(1);
+    wrapper.simulate("change", { target: { value: 2 } });
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.selected_category).toEqual(2);
   });
 });

@@ -15,8 +15,8 @@ class SignUp extends React.Component {
     passwordAgain: "",
     dept: "",
     major: "",
-    grade: 0,
-    availableSemester: 0
+    grade: 1,
+    availableSemester: 1
   };
 
   /* 회원가입 버튼을 클릭했을 때 동작 */
@@ -24,7 +24,7 @@ class SignUp extends React.Component {
     let deptID = -1;
     if (this.props.depts) {
       const dept = this.props.depts.filter(dept => {
-        return dept.name == this.state.dept;
+        return dept.name === this.state.dept;
       });
       if (dept.length !== 0) deptID = dept[0].id;
     }
@@ -32,10 +32,11 @@ class SignUp extends React.Component {
     let majorID = -1;
     if (this.props.majors) {
       const major = this.props.majors.filter(major => {
-        return major.dept_id == deptID && major.name == this.state.major;
+        return major.dept_id === deptID && major.name === this.state.major;
       });
       if (major.length !== 0) majorID = major[0].id;
     }
+
     const newUser = {
       username: this.state.username,
       email: this.state.email,
@@ -67,14 +68,14 @@ class SignUp extends React.Component {
     let selectedDeptID = null;
     if (this.props.depts) {
       const selectedDept = this.props.depts.filter(dept => {
-        return dept.name == this.state.dept;
+        return dept.name === this.state.dept;
       });
       if (selectedDept.length !== 0) selectedDeptID = selectedDept[0].id;
     }
     let majorOptionList = null;
     if (this.props.majors) {
       const selectedMajorList = this.props.majors.filter(major => {
-        return major.dept_id == selectedDeptID;
+        return major.dept_id === selectedDeptID;
       });
       majorOptionList = selectedMajorList.map(major => (
         <option key={major.id}>{major.name}</option>
@@ -179,7 +180,7 @@ class SignUp extends React.Component {
 
             {/* 학년 및 활동 가능 학기 수 입력 칸*/}
             <Form.Row>
-              <Form.Group as={Col} controlId="formDept">
+              <Form.Group as={Col} controlId="formGrade">
                 {/* 학년 입력 칸*/}
                 <Form.Label>학년</Form.Label>
                 <Form.Control
@@ -198,14 +199,14 @@ class SignUp extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formMajor">
+              <Form.Group as={Col} controlId="formAvailableSemester">
                 {/* 활동 가능 학기 수 입력 칸*/}
                 <Form.Label>활동 가능 학기 수</Form.Label>
                 <Form.Control
                   as="select"
                   size="lg"
                   onChange={event => {
-                    this.setState({ major: event.target.value });
+                    this.setState({ availableSemester: event.target.value });
                   }}
                 >
                   <option>1</option>
