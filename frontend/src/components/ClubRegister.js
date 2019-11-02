@@ -168,21 +168,21 @@ const mapStateToProps = state => {
   };
 };
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     postClub: (name, clubmanager, auth_img_file, selected_category) =>
-//       dispatch(
-//         actionCreaters.postClub({
-//           name: name,
-//           clubmanager: clubmanager,
-//           auth_img_file: auth_img_file,
-//           selected_category: selected_category
-//         })
-//       )
-//   };
-// };
+const mapDispatchToProps = dispatch => {
+  return {
+    // postClub: (name, clubmanager, auth_img_file, selected_category) =>
+    //   dispatch(
+    //     actionCreaters.postClub({
+    //       name: name,
+    //       clubmanager: clubmanager,
+    //       auth_img_file: auth_img_file,
+    //       selected_category: selected_category
+    //     })
+    //   )
+  };
+};
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(withRouter(ClubRegister));

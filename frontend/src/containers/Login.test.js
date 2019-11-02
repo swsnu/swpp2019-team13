@@ -81,9 +81,7 @@ describe("<Login />", () => {
     const spySignIn = jest
       .spyOn(actionCreators, "signIn")
       .mockImplementation(() => {
-        return dispatch => {
-          dispatch();
-        };
+        return dispatch => {};
       });
 
     const component = mount(login);

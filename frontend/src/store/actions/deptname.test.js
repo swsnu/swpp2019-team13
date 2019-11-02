@@ -5,7 +5,7 @@ import * as actionCreators from "./dept";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("getDeptNameList", done => {
+  it("getDeptNameList", () => {
     store.dispatch(actionCreators.getDeptNameList()).then(() => {
       done();
     });

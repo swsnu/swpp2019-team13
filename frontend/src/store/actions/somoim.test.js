@@ -5,7 +5,7 @@ import * as actionCreators from "./somoim";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("postSomoim", done => {
+  it("postSomoim", () => {
     let input = {
       title: null,
       summary: null,
@@ -19,13 +19,13 @@ describe("Category Actions", () => {
     });
   });
 
-  it("getSomoimList", done => {
+  it("getSomoimList", () => {
     store.dispatch(actionCreators.getSomoimList()).then(() => {
       done();
     });
   });
 
-  it("getSomoimByID", done => {
+  it("getSomoimByID", () => {
     store.dispatch(actionCreators.getSomoimByID()).then(() => {
       done();
     });
