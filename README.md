@@ -51,7 +51,5 @@ mysql -u root club4u < [FILE NAME]
 #### PIP requirement
 
 ```
-pip install django
-pip install mysqlclient
-pip install pillow
+pip install -r backend/requirements.txt
 ```
