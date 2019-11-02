@@ -5,7 +5,7 @@ import * as actionCreators from "./tag";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("getTagList", () => {
+  it("getTagList", done => {
     actionCreators.getTagList();
     store.dispatch(actionCreators.getTagList()).then(() => {
       done();

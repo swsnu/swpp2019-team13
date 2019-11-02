@@ -15,19 +15,19 @@ let loggedUser = {
 };
 
 describe("Category Actions", () => {
-  it("signUp", () => {
+  it("signUp", done => {
     store.dispatch(actionCreators.signUp(loggedUser)).then(() => {
       done();
     });
   });
 
-  it("signIn", () => {
+  it("signIn", done => {
     store.dispatch(actionCreators.signIn(loggedUser)).then(() => {
       done();
     });
   });
 
-  it("signOut", () => {
+  it("signOut", done => {
     store.dispatch(actionCreators.signOut()).then(() => {
       done();
     });

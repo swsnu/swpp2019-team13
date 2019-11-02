@@ -5,7 +5,7 @@ import * as actionCreators from "./club";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("postClub", () => {
+  it("postClub", done => {
     let input = {
       name: null,
       clubmanager: null,
@@ -17,13 +17,13 @@ describe("Category Actions", () => {
     });
   });
 
-  it("getClubList", () => {
+  it("getClubList", done => {
     store.dispatch(actionCreators.getClubList()).then(() => {
       done();
     });
   });
 
-  it("getClubByID", () => {
+  it("getClubByID", done => {
     store.dispatch(actionCreators.getClubByID()).then(() => {
       done();
     });
