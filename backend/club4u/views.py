@@ -27,26 +27,78 @@ def dept_list(request):
     else:
         return HttpResponse(status=405)
 
+# api/user/list/
+
+
+def user_list(request):
+    if request.method == 'GET':
+        response_dict = [user for user in UserProfile.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
 # api/user/signup/
 
 
 def signup(request):
     if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        username = req_data['username']
-        password = req_data['password']
-        dept = Department.objects.get(id=req_data['dept'])
-        major = Major.objects.get(id=req_data['major'])
-        grade = req_data['grade']
-        available_semester = req_data['available_semester']
-        user = User.objects.create_user(username=username, password=password)
-        user.save()
-        userprofile = UserProfile(
-            user=user, dept=dept, major=major, grade=grade, available_semester=available_semester)
-        userprofile.save()
-        return HttpResponse(status=201)
+        try:
+            req_data = json.loads(request.body.decode())
+            email = req_data['email']
+            password = req_data['password']
+            # use last name to save whole name
+            name = req_data['name']
+            dept = Department.objects.get(id=req_data['dept'])
+            major = Major.objects.get(id=req_data['major'])
+            grade = req_data['grade']
+            available_semester = req_data['available_semester']
+            user = User.objects.create_user(
+                username=email, password=password, last_name=name)
+            user.save()
+            userprofile = UserProfile(user=user, dept=dept,
+                                      major=major, grade=grade, available_semester=available_semester)
+            userprofile.save()
+            return HttpResponse(status=201)
+        except (KeyError, JSONDecodeError):
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=405)
+
+# api/user/signin/
+
+
+def signin(request):
+    if request.method == 'POST':
+        try:
+            body = request.body.decode()
+            email = json.loads(body)['email']
+            user_pw = json.loads(body)['password']
+            user = authenticate(request, username=email, password=user_pw)
+            if user is not None:
+                login(request, user)
+                userprofile = UserProfile.objects.get(user_id=user)
+                response_dict = {'id': userprofile.id, 'name': user.last_name, 'email': user.username,
+                                 'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
+                                 'available_semester': userprofile.available_semester}
+                return JsonResponse(response_dict, safe=False)
+            else:
+                return HttpResponse(status=401)
+        except (KeyError, JSONDecodeError):
+            return HttpResponse(status=400)
+    else:
+        return HttpResponse(status=405)
+
+# api/user/signout/
+
+
+def signout(request):
+    if request.method == 'GET':
+        if not request.user.is_anonymous:
+            logout(request)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=401)
+
 
 # api/club/list/
 

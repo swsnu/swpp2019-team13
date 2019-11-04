@@ -7,8 +7,8 @@ import * as actionCreators from "../store/actions/index";
 
 class SelfInfoTab extends Component {
   state = {
-    username: "",
     email: "",
+    name: "",
     password: "",
     passwordAgain: "",
     dept: "",
@@ -23,7 +23,7 @@ class SelfInfoTab extends Component {
     if (this.props.loggedUser) {
       this.setState({
         ...this.state,
-        username: this.props.loggedUser.username,
+        name: this.props.loggedUser.name,
         email: this.props.email
       });
     }
@@ -44,7 +44,7 @@ class SelfInfoTab extends Component {
     // ㄴ Store 중 user Store에, loggedUser 라는 이름으로 저장되어 있는 것을 가져오게 됩니다.
     // ㄴ 로그인 되어 있지 않은 경우, null 이 저장되어 있습니다.
     if (this.props.loggedUser) {
-      loggedUserName = this.props.loggedUser.username;
+      loggedUserName = this.props.loggedUser.name;
       loggedUserEmail = this.props.loggedUser.email;
       loggedUserPassword = this.props.loggedUser.password;
       loggedUserDeptID = this.props.loggedUser.dept;
@@ -54,22 +54,21 @@ class SelfInfoTab extends Component {
 
       // this.props.loggedUser.dept에는 ID가 저장되어 있으므로, 다음과 같이 단과대 명을 불러올 수 있습니다 */
       if (this.props.depts) {
-        loggedUserDept = this.props.depts[loggedUserDeptID].name;
-        // const selectedDept = this.props.depts.filter(dept => {
-        //   return dept.id === loggedUserDeptID;
-        // });
-        // if (selectedDept.length !== 0)
-        //   loggedUserDept = selectedDept[0].name;
+        // loggedUserDept = this.props.depts[loggedUserDeptID].name;
+        const selectedDept = this.props.depts.filter(dept => {
+          return dept.id === loggedUserDeptID;
+        });
+        if (selectedDept.length !== 0) loggedUserDept = selectedDept[0].name;
       }
 
       // this.props.loggedUser.major에는 ID가 저장되어 있으므로, 다음과 같이 전공 명을 불러올 수 있습니다 */
       if (this.props.majors) {
-        loggedUserMajorName = this.props.majors[loggedUserMajorID].name;
-        // const selectedMajor = this.props.majors.filter(major => {
-        //   return major.id === loggedUserMajorID;
-        // });
-        // if (selectedMajor.length !== 0)
-        //   loggedUserMajorName = selectedMajor[0].name;
+        // loggedUserMajorName = this.props.majors[loggedUserMajorID].name;
+        const selectedMajor = this.props.majors.filter(major => {
+          return major.id === loggedUserMajorID;
+        });
+        if (selectedMajor.length !== 0)
+          loggedUserMajorName = selectedMajor[0].name;
       }
     }
 
@@ -89,7 +88,7 @@ class SelfInfoTab extends Component {
     let selectedDeptID = null;
     if (this.props.depts) {
       const selectedDept = this.props.depts.filter(dept => {
-        return dept.name === this.state.dept;
+        return dept.id === loggedUserDeptID;
       });
       if (selectedDept.length !== 0) selectedDeptID = selectedDept[0].id;
     }
@@ -131,7 +130,7 @@ class SelfInfoTab extends Component {
               size="lg"
               type="email"
               onChange={event => {
-                this.setState({ username: event.target.value });
+                this.setState({ name: event.target.value });
               }}
               defaultValue={loggedUserName}
             />
@@ -234,7 +233,7 @@ class SelfInfoTab extends Component {
           // ㄴ 모든 칸이 입력되어야 합니다.
           // ㄴ 비밀번호와, 비밀번호 확인이 같아야 합니다.
           disabled={
-            this.state.username === "" ||
+            this.state.name === "" ||
             this.state.email === "" ||
             this.state.password === "" ||
             this.state.password !== this.state.passwordAgain ||
