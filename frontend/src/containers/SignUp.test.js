@@ -10,7 +10,7 @@ import { history } from "../store/store";
 import * as actionCreators from "../store/actions/user";
 
 const stubInitialState = {
-  deptnames: [
+  depts: [
     {
       id: 0,
       name: "TEST_DEPT"
@@ -251,7 +251,7 @@ describe("<SignUp />", () => {
 
   it(`test : if there is no depts & majors`, () => {
     const mockInitialStore = getMockStore({
-      deptnames: null,
+      depts: null,
       majors: null
     });
     const component = mount(

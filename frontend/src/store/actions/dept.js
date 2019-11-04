@@ -1,13 +1,14 @@
 import * as actionTypes from "./actionTypes";
+import axios from "axios";
 
-export const getDeptNameList_ = () => {
-  return {
-    type: actionTypes.GET_DEPT_LIST
-  };
+export const getDeptList_ = depts => {
+  return { type: actionTypes.GET_DEPT_LIST, depts: depts };
 };
 
-export const getDeptNameList = () => {
+export const getDeptList = () => {
   return dispatch => {
-    return new Promise(() => dispatch(getDeptNameList_()));
+    return axios
+      .get("api/dept/list/")
+      .then(res => dispatch(getDeptList_(res.data)));
   };
 };

@@ -128,11 +128,11 @@ class SomoimCreate extends React.Component {
               <Form.Label>가능 단과대학</Form.Label>
             </Row>
             <Row>
-              {this.props.deptNames.map(a => {
+              {this.props.depts.map(a => {
                 return (
                   <Form.Check
                     key={a.id}
-                    id="somoim-deptname-checkbox"
+                    id="somoim-dept-checkbox"
                     inline
                     type={"checkbox"}
                     label={a.name}
@@ -209,7 +209,7 @@ class SomoimCreate extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    deptNames: state.deptname.deptnames,
+    depts: state.dept.depts,
     categories: state.category.categories
   };
 };

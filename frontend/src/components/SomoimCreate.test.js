@@ -36,7 +36,7 @@ const stubInitialState = {
       likes: 0
     }
   ],
-  deptnames: [{ id: 0, name: "DEPT_1" }, { id: 1, name: "DEPT_2" }],
+  depts: [{ id: 0, name: "DEPT_1" }, { id: 1, name: "DEPT_2" }],
   categories: [{ id: 0, name: "CATEGORY_1" }, { id: 1, name: "CATEGORY_2" }]
 };
 
@@ -173,8 +173,8 @@ describe("<SomoimCreate />", () => {
     const component = mount(somoimCreate);
 
     // Form.Check made two inputs with same id, so it will have 4 in this case
-    // (deptnames have 2 elements in mockstate)
-    const wrapper = component.find("#somoim-deptname-checkbox").at(1);
+    // (depts have 2 elements in mockstate)
+    const wrapper = component.find("#somoim-dept-checkbox").at(1);
     wrapper.simulate("change", { target: { checked: true } });
     const SomoimCreateInstance = component
       .find(SomoimCreate.WrappedComponent)
@@ -186,8 +186,8 @@ describe("<SomoimCreate />", () => {
     const component = mount(somoimCreate);
 
     // Form.Check made two inputs with same id, so it will have 4 in this case
-    // (deptnames have 2 elements in mockstate)
-    const wrapper = component.find("#somoim-deptname-checkbox").at(1);
+    // (depts have 2 elements in mockstate)
+    const wrapper = component.find("#somoim-dept-checkbox").at(1);
     wrapper.simulate("change", { target: { checked: true } });
     wrapper.simulate("change", { target: { checked: false } });
     const SomoimCreateInstance = component

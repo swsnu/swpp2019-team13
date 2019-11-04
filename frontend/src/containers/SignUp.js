@@ -19,6 +19,11 @@ class SignUp extends React.Component {
     availableSemester: 1
   };
 
+  componentDidMount() {
+    this.props.getMajorList();
+    this.props.getDeptList();
+  }
+
   /* 회원가입 버튼을 클릭했을 때 동작 */
   onClick_SignupButton_Handler = () => {
     let deptID = -1;
@@ -47,7 +52,7 @@ class SignUp extends React.Component {
       availableSemester: this.state.availableSemester
     };
     this.props.signUp(newUser);
-    alert("어서 오시게나");
+    alert("회원가입 완료");
     this.props.signIn(newUser);
     this.props.history.push("/club");
   };
@@ -55,7 +60,7 @@ class SignUp extends React.Component {
   /* Render */
   render() {
     /* deptOptionList */
-    // ㄴ Redux 에서 deptNames를 받아와서, option list를 만들어줍니다.
+    // ㄴ Redux 에서 depts를 받아와서, option list를 만들어줍니다.
     let deptOptionList = null;
     if (this.props.depts) {
       deptOptionList = this.props.depts.map(dept => (
@@ -64,7 +69,7 @@ class SignUp extends React.Component {
     }
 
     /* majorOptionList */
-    // ㄴ Redux 에서 선택한 deptname에 따른 majorList를 받아와서, option list를 만들어줍니다.
+    // ㄴ Redux 에서 선택한 dept에 따른 majorList를 받아와서, option list를 만들어줍니다.
     let selectedDeptID = null;
     if (this.props.depts) {
       const selectedDept = this.props.depts.filter(dept => {
@@ -252,13 +257,15 @@ class SignUp extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    depts: state.deptname.deptnames,
+    depts: state.dept.depts,
     majors: state.major.majors
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
     signUp: user => dispatch(actionCreators.signUp(user)),
     signIn: user => dispatch(actionCreators.signIn(user))
   };

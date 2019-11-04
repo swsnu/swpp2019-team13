@@ -9,7 +9,7 @@ import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 
 let stubInitialState = {
-  deptnames: [
+  depts: [
     {
       id: 0,
       name: "공과대학"
@@ -116,8 +116,8 @@ describe("<MyPage />", () => {
   });
 
   it("when dept info does not loaded yet", () => {
-    let savedInfo = stubInitialState.deptnames;
-    stubInitialState.deptnames = null;
+    let savedInfo = stubInitialState.depts;
+    stubInitialState.depts = null;
     mockStore = getMockStore(stubInitialState);
     myPage = (
       <Provider store={mockStore}>
@@ -136,7 +136,7 @@ describe("<MyPage />", () => {
     );
     const component = mount(myPage);
 
-    stubInitialState.deptnames = savedInfo;
+    stubInitialState.depts = savedInfo;
     mockStore = getMockStore(stubInitialState);
   });
 
