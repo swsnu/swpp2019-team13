@@ -49,6 +49,22 @@ def signup(request):
         return HttpResponse(status=405)
 
 
+def manage_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        clubs = [
+            club for club in user.manage_clubs.values()]
+        return JsonResponse(clubs, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+
 def like_club(request, id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
@@ -74,6 +90,23 @@ def like_club(request, id=0):
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
+
+
+def apply_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        clubs = [
+            club for club in user.apply_clubs.values()]
+        return JsonResponse(clubs, safe=False)
+    else:
+        return HttpResponse(status=405)
+
 
 # api/club/list/
 
