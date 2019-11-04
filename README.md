@@ -31,6 +31,8 @@ npm test -- --coverage --watchAll=False
 
 #### MySQL
 
+**<u>Linux</u>**
+
 Since we use mysql, you should install belows by apt-get
 
 ```
@@ -47,6 +49,17 @@ mysql -u root club4u < [FILE NAME]
 ```
 
 - should do after access root with no password and create 'club4u' DB
+
+<u>**Window**</u>
+
+1. install mysql server manually in  https://dev.mysql.com/downloads/installer/ 
+2. install l mysql client using whl (ref : https://hyunyikim.tistory.com/9 )
+3. install mysql workbench in  https://dev.mysql.com/downloads/workbench/ 
+4. create new schema "club4u"
+5. open sql file, and double click club4u schema, then execute sql
+6. `python manage.py makemigrations`
+7. `python manage.py migrate`
+8. done!
 
 #### PIP requirement
 
