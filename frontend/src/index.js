@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Provider } from "react-redux";
 
 import store, { history } from "./store/store";
+import axios from "axios";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -20,3 +21,6 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
