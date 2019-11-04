@@ -2,26 +2,16 @@ import reducer from "./user";
 import * as actionTypes from "../actions/actionTypes";
 
 const stubUser = {
-  username: "test2",
+  name: "test2",
   email: "test2@test2.com",
   password: "test2",
   dept: 0,
   major: 4,
   grade: 3,
-  availableSemester: 2
+  available_semester: 2
 };
 
-const initialusers = [
-  {
-    username: "test",
-    email: "test@test.com",
-    password: "test",
-    dept: 0,
-    major: 4,
-    grade: 3,
-    availableSemester: 2
-  }
-];
+const initialusers = [];
 
 describe("User Reducer", () => {
   it("should return default state", () => {

@@ -57,22 +57,18 @@ describe("<SignUp />", () => {
     expect(wrapper4.length).toBe(1);
     expect(wrapper4.text()).toBe("헤더");
 
-    const wrapper2 = component.find("p");
-    expect(wrapper2.length).toBe(1);
-    expect(wrapper2.text()).toBe("어서 오시게나");
-
     const wrapper3 = component.find("h1");
     expect(wrapper3.length).toBe(1);
     expect(wrapper3.text()).toBe("회원 가입");
   });
 
-  it(`should set state properly on username input`, () => {
-    const username = "TEST_USERNAME";
+  it(`should set state properly on name input`, () => {
+    const name = "TEST_USERNAME";
     const component = mount(signup);
     const wrapper = component.find("#formBasicUsername");
-    wrapper.simulate("change", { target: { value: username } });
+    wrapper.simulate("change", { target: { value: name } });
     const signUpInstance = component.find(SignUp.WrappedComponent).instance();
-    expect(signUpInstance.state.username).toEqual(username);
+    expect(signUpInstance.state.name).toEqual(name);
   });
 
   it(`should set state properly on email input`, () => {
