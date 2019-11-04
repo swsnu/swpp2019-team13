@@ -3,4 +3,5 @@ export { getSomoimList, getSomoimByID, postSomoim } from "./somoim";
 export { signIn, signOut, signUp, getLikedClubs } from "./user";
 export { getCategoryList } from "./category";
 export { getTagList } from "./tag";
-export { getDeptNameList } from "./dept";
+export { getDeptList } from "./dept";
+export { getMajorList } from "./major";

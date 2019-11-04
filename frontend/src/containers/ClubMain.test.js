@@ -86,7 +86,7 @@ let stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
-  deptnames: [
+  depts: [
     {
       id: 0,
       name: "공과대학"

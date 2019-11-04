@@ -8,7 +8,7 @@ import SomoimReducer from "./reducers/somoim";
 import UserReducer from "./reducers/user";
 import CategoryReducer from "./reducers/category";
 import TagReducer from "./reducers/tag";
-import DeptNameReducer from "./reducers/deptName";
+import DeptReducer from "./reducers/dept";
 import MajorReducer from "./reducers/major";
 
 export const history = createBrowserHistory();
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   user: UserReducer,
   category: CategoryReducer,
   tag: TagReducer,
-  deptname: DeptNameReducer,
+  dept: DeptReducer,
   major: MajorReducer,
   router: connectRouter(history)
 });

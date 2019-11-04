@@ -10,7 +10,7 @@ class SelfInfoTab extends Component {
     let loggedUserEmail = null;
     let loggedUserPassword = null;
     let loggedUserDeptID = null;
-    let loggedUserDeptName = null;
+    let loggedUserDept = null;
     let loggedUserMajorID = null;
     let loggedUserMajorName = null;
     let loggedUserGrade = null;
@@ -30,12 +30,12 @@ class SelfInfoTab extends Component {
 
       // this.props.loggedUser.dept에는 ID가 저장되어 있으므로, 다음과 같이 단과대 명을 불러올 수 있습니다 */
       if (this.props.depts) {
-        loggedUserDeptName = this.props.depts[loggedUserDeptID].name;
+        loggedUserDept = this.props.depts[loggedUserDeptID].name;
         // const selectedDept = this.props.depts.filter(dept => {
         //   return dept.id === loggedUserDeptID;
         // });
         // if (selectedDept.length !== 0)
-        //   loggedUserDeptName = selectedDept[0].name;
+        //   loggedUserDept = selectedDept[0].name;
       }
 
       // this.props.loggedUser.major에는 ID가 저장되어 있으므로, 다음과 같이 전공 명을 불러올 수 있습니다 */
@@ -58,7 +58,7 @@ class SelfInfoTab extends Component {
           <p>유저 이름 : {loggedUserName}</p>
           <p>이메일 : {loggedUserEmail}</p>
           <p>비밀번호 : {loggedUserPassword}</p>
-          <p>소속 단과대 : {loggedUserDeptName}</p>
+          <p>소속 단과대 : {loggedUserDept}</p>
           <p>전공 : {loggedUserMajorName}</p>
           <p>학년 : {loggedUserGrade}학년</p>
           <p>활동 가능 학기 수 : {loggedUserAvailableSemester}학기</p>
@@ -70,7 +70,8 @@ class SelfInfoTab extends Component {
 
 const mapStateToProps = state => {
   return {
-    depts: state.deptname.deptnames,
+    loggedUser: state.user.loggedUser,
+    depts: state.dept.depts,
     majors: state.major.majors
   };
 };

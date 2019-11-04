@@ -7,6 +7,22 @@ from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Categor
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 
+# api/major/list/
+def major_list(request):
+    if request.method == 'GET':
+        response_dict = [major for major in Major.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+# api/dept/list/
+def dept_list(request):
+    if request.method == 'GET':
+        response_dict = [dept for dept in Department.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
 # api/user/signup/
 def signup(request):
     if request.method == 'POST':
