@@ -24,6 +24,10 @@ const reducer = (state = initialState, action) => {
         available_semester: action.user.available_semester
       };
       return { ...state, users: state.users.concat(newUser) };
+
+    case actionTypes.GET_LIKED_CLUBS:
+      return { ...state, likedClubs: action.clubs };
+
     default:
       break;
   }

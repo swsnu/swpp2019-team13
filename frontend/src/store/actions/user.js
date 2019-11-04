@@ -56,3 +56,18 @@ export const signUp = user => {
     });
   };
 };
+
+export const getLikedClubs_ = clubs => {
+  return {
+    type: actionTypes.GET_LIKED_CLUBS,
+    clubs: clubs
+  };
+};
+
+export const getLikedClubs = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/club/liked/" + user.id + "/")
+      .then(res => dispatch(getLikedClubs_(res.data)));
+  };
+};

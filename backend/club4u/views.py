@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 from json import JSONDecodeError
-from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major, UserLikeClub, UserApplyClub, UserLikeSomoim, UserJoinSomoim
+from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -52,9 +52,10 @@ def signup(request):
             major = Major.objects.get(id=req_data['major'])
             grade = req_data['grade']
             available_semester = req_data['available_semester']
-            user = User.objects.create_user(username=email, password=password)
+            user = User.objects.create_user(
+                username=email, password=password, last_name=name)
             user.save()
-            userprofile = UserProfile(user=user, name=name, dept=dept,
+            userprofile = UserProfile(user=user, dept=dept,
                                       major=major, grade=grade, available_semester=available_semester)
             userprofile.save()
             return HttpResponse(status=201)
@@ -76,7 +77,7 @@ def signin(request):
             if user is not None:
                 login(request, user)
                 userprofile = UserProfile.objects.get(user_id=user)
-                response_dict = {'id': userprofile.id, 'name': userprofile.name, 'email': user.username,
+                response_dict = {'id': userprofile.id, 'name': user.last_name, 'email': user.username,
                                  'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
                                  'available_semester': userprofile.available_semester}
                 return JsonResponse(response_dict, safe=False)
@@ -97,8 +98,7 @@ def signout(request):
             return HttpResponse(status=204)
         else:
             return HttpResponse(status=401)
-    else:
-        return HttpResponse(status=405)
+
 
 # api/club/list/
 
