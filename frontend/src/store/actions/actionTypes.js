@@ -6,6 +6,7 @@ export const GET_SOMOIM_LIST = "GET_SOMOIM_LIST";
 export const GET_SOMOIM_BY_ID = "GET_SOMOIM_BY_ID";
 export const POST_SOMOIM = "POST_SOMOIM";
 
+export const GET_USER_LIST = "GET_USER_LIST";
 export const SIGN_IN = "SIGN_IN";
 export const SIGN_OUT = "SIGN_OUT";
 export const SIGN_UP = "SIGN_UP";

@@ -1,4 +1,17 @@
 import * as actionTypes from "./actionTypes";
+import axios from "axios";
+
+export const getUserList_ = users => {
+  return { type: actionTypes.GET_USER_LIST, users: users };
+};
+
+export const getUserList = () => {
+  return dispatch => {
+    return axios
+      .get("api/user/list")
+      .then(res => dispatch(getUserList_(res.data)));
+  };
+};
 
 // TODO : implement actions
 export const signIn_ = user => {
@@ -35,6 +48,9 @@ export const signUp_ = user => {
 
 export const signUp = user => {
   return dispatch => {
-    return new Promise(() => dispatch(signUp_(user)));
+    return axios.post("/api/user/signup/", user).then(res => {
+      dispatch(signUp_(user));
+      return res.data;
+    });
   };
 };

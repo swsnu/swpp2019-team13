@@ -23,19 +23,29 @@ def dept_list(request):
     else:
         return HttpResponse(status=405)
 
+# api/user/list/
+def user_list(request):
+    if request.method == 'GET':
+        response_dict = [user for user in UserProfile.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
 # api/user/signup/
 def signup(request):
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
-        username = req_data['username']
+        email = req_data['email']
         password = req_data['password']
+        # use last name to save whole name
+        name = req_data['name']
         dept = Department.objects.get(id=req_data['dept'])
         major = Major.objects.get(id=req_data['major'])
         grade = req_data['grade']
         available_semester = req_data['available_semester']
-        user = User.objects.create_user(username=username, password=password)
+        user = User.objects.create_user(username=email, password=password)
         user.save()
-        userprofile = UserProfile(user=user, dept=dept, major=major, grade=grade, available_semester=available_semester)
+        userprofile = UserProfile(user=user, name=name, dept=dept, major=major, grade=grade, available_semester=available_semester)
         userprofile.save()
         return HttpResponse(status=201)
     else:
