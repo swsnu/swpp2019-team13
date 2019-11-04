@@ -8,6 +8,6 @@ export const getDeptNameList_ = () => {
 
 export const getDeptNameList = () => {
   return dispatch => {
-    dispatch(getDeptNameList_());
+    return new Promise(() => dispatch(getDeptNameList_()));
   };
 };

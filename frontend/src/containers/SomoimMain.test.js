@@ -204,6 +204,7 @@ describe("<SomoimMain />", () => {
   });
 
   it("when somoim list info does not loaded yet", () => {
+    let savedSomoims = stubInitialState.somoims;
     stubInitialState.somoims = null;
     mockStore = getMockStore(stubInitialState);
     somoimMain = (
@@ -225,9 +226,13 @@ describe("<SomoimMain />", () => {
     const component = mount(somoimMain);
     const wrapper = component.find("SomoimCard");
     expect(wrapper.length).toBe(0);
+
+    stubInitialState.somoims = savedSomoims;
+    mockStore = getMockStore(stubInitialState);
   });
 
   it("when category list info does not loaded yet", () => {
+    let savedCategories = stubInitialState.categories;
     stubInitialState.categories = null;
     mockStore = getMockStore(stubInitialState);
     somoimMain = (
@@ -249,5 +254,8 @@ describe("<SomoimMain />", () => {
     const component = mount(somoimMain);
     const wrapper = component.find("category-button");
     expect(wrapper.length).toBe(0);
+
+    stubInitialState.categories = savedCategories;
+    mockStore = getMockStore(stubInitialState);
   });
 });

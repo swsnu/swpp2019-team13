@@ -1,4 +1,4 @@
-import * as actionTypes from "../actions/actionTypes";
+// import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   majors: [
@@ -53,22 +53,22 @@ const initialState = {
       name: "원자핵공학과"
     },
     {
-      id: 9,
+      id: 10,
       dept_id: 0,
       name: "조선해양공학과"
     },
     {
-      id: 10,
+      id: 11,
       dept_id: 1,
       name: "국어국문학과"
     },
     {
-      id: 11,
+      id: 12,
       dept_id: 1,
       name: "중어국문학과"
     },
     {
-      id: 12,
+      id: 13,
       dept_id: 1,
       name: "영어영문학과"
     },
@@ -163,72 +163,72 @@ const initialState = {
       name: "의학과"
     },
     {
-      id: 73,
+      id: 74,
       dept_id: 9,
       name: "수의예과"
     },
     {
-      id: 74,
+      id: 75,
       dept_id: 9,
       name: "수의학과"
     },
     {
-      id: 75,
+      id: 76,
       dept_id: 10,
       name: "약학과"
     },
     {
-      id: 76,
+      id: 77,
       dept_id: 10,
       name: "제약학과"
     },
     {
-      id: 77,
+      id: 78,
       dept_id: 11,
       name: "간호학과"
     },
     {
-      id: 78,
+      id: 79,
       dept_id: 12,
       name: "성악과"
     },
     {
-      id: 79,
+      id: 80,
       dept_id: 12,
       name: "작곡과"
     },
     {
-      id: 80,
+      id: 81,
       dept_id: 12,
       name: "기악과"
     },
     {
-      id: 81,
+      id: 82,
       dept_id: 12,
       name: "국악과"
     },
     {
-      id: 82,
+      id: 83,
       dept_id: 13,
       name: "디자인학부"
     },
     {
-      id: 83,
+      id: 84,
       dept_id: 13,
       name: "동양화과"
     },
     {
-      id: 84,
+      id: 85,
       dept_id: 13,
       name: "서양화과"
     },
     {
-      id: 85,
+      id: 86,
       dept_id: 13,
       name: "조소과"
     },
     {
-      id: 86,
+      id: 87,
       dept_id: 14,
       name: "자유전공학부"
     }

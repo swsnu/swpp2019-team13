@@ -1,0 +1,57 @@
+# project_root/.travis.yml
+matrix:
+  include:
+    - language: node_js # Your language e.g. node_js, python
+      node_js:
+        - "10" # node_js version
+      dist: trusty
+      env:
+        - COVERALLS_PARALLEL=true
+      addons:
+        sonarcloud:
+          organization: "swsnu"
+          token:
+            secure: "J60TSPUi8FY37NcYj7T/V+t7dhPN92qjPIb9TE44YzeBcV8Gea3v8TjdqEARowyy15uOLQHsivrV/6WRiVLyF4J0en8KwOg5CrxT1IR5icNRU06bSoCLBe84+33YFHfyIs53CcE128UEVNYCrv2NqTyvkI0CVyIFC2OJCQ6B56AGvLJCpInYGlGJXVJReqROgUAm0q5LH6iy4s2TDbfFdUut5ITlf6mPoMm51WikwppNIACgIveH+l0gKbAfx+wYCW6aST/yEplsXzF61RmygsNvfjTXh642Od9erlNFJUwU0twh+N+O1HkZjXz2PVYnKDLgEk8WtyxtAm03qySBIwSDZDtDfEUZFGUZz+dN9uVnsUL/6ob5laKU/d3kYSOkaVu32wuIcMfa4qYCGNevbr/a9MimAmwaW0T/rBS/TQoILNt7s6MROuQEaAWOe6SxuNLKzYX5sqCibcnpLVQedEE+DDoQKa5YdeQlfY/W/eBpa1Hx7Vu0TtfVv0TVxmzogfo/hVqAR1W25H/eGBCUlzXl5T0ZarHZySgCXO0+zV7WmhYYOFXcbPzP1hjwbgYxfzdhwR7E6Kj642MGTWULn7/k6uGJqjWLWqy3vXpRMfflmTrC2MZ+IlYj5rqW3rE9MO5IXCMgyGG6qsU6weMHrwpBcekWJM4ywNPW2NNWeWM="
+      before_install: # Script to run before install
+        - cd frontend
+      install: # Script to install required packages
+        - npm install
+        - npm install coveralls
+      script: # Script to test your build
+        - ./node_modules/.bin/eslint src
+        - yarn test --coverage --watchAll=false
+        - sonar-scanner
+      after_success:
+        - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    # - language: python
+    #   cache:
+    #     pip: true
+    #   python:
+    #     - "3.6"
+    #   dist: trusty
+    #   services:
+    #     - mysql
+    #   env:
+    #     - COVERALLS_PARALLEL=true
+    #   addons:
+    #     sonarcloud:
+    #       organization: "swsnu"
+    #       token:
+    #         secure: "J60TSPUi8FY37NcYj7T/V+t7dhPN92qjPIb9TE44YzeBcV8Gea3v8TjdqEARowyy15uOLQHsivrV/6WRiVLyF4J0en8KwOg5CrxT1IR5icNRU06bSoCLBe84+33YFHfyIs53CcE128UEVNYCrv2NqTyvkI0CVyIFC2OJCQ6B56AGvLJCpInYGlGJXVJReqROgUAm0q5LH6iy4s2TDbfFdUut5ITlf6mPoMm51WikwppNIACgIveH+l0gKbAfx+wYCW6aST/yEplsXzF61RmygsNvfjTXh642Od9erlNFJUwU0twh+N+O1HkZjXz2PVYnKDLgEk8WtyxtAm03qySBIwSDZDtDfEUZFGUZz+dN9uVnsUL/6ob5laKU/d3kYSOkaVu32wuIcMfa4qYCGNevbr/a9MimAmwaW0T/rBS/TQoILNt7s6MROuQEaAWOe6SxuNLKzYX5sqCibcnpLVQedEE+DDoQKa5YdeQlfY/W/eBpa1Hx7Vu0TtfVv0TVxmzogfo/hVqAR1W25H/eGBCUlzXl5T0ZarHZySgCXO0+zV7WmhYYOFXcbPzP1hjwbgYxfzdhwR7E6Kj642MGTWULn7/k6uGJqjWLWqy3vXpRMfflmTrC2MZ+IlYj5rqW3rE9MO5IXCMgyGG6qsU6weMHrwpBcekWJM4ywNPW2NNWeWM="
+    #   before_install:
+    #     - mysql -e "CREATE DATABASE club4u;"
+    #   install:
+    #     - pip install -r backend/requirements.txt
+    #   before_script:
+    #     - cd backend
+    #     - python3 manage.py migrate
+    #   script:
+    #     - pylint --rcfile=./.pylintrc backend --disable='fixme, duplicate-code'
+    #     - coverage run --source='.' ./manage.py test
+    #     - coverage report --fail-under=90
+    #     - coverage xml
+    #     - sonar-scanner
+    #   after_success:
+    #     - coveralls
+    #   after_script:
+    #     - cd ..

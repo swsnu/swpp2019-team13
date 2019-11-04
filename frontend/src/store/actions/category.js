@@ -8,6 +8,6 @@ export const getCategoryList_ = () => {
 
 export const getCategoryList = () => {
   return dispatch => {
-    dispatch(getCategoryList_());
+    return new Promise(() => dispatch(getCategoryList_()));
   };
 };

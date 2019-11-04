@@ -46,15 +46,24 @@ class ClubMain extends React.Component {
   };
 
   render() {
-    let categoryList;
+    let categoryList, RegisterButton;
     if (this.props.categories) {
+      RegisterButton = (
+        <ClubRegister
+          show={this.state.ClubRegisterShow}
+          closeHandler={this.ClubRegisterCloseHandler}
+        />
+      );
       categoryList = this.props.categories.map(item => (
-        <Button key={item.id} variant="outline-secondary">
+        <Button
+          className="category-button"
+          key={item.id}
+          variant="outline-secondary"
+        >
           {item.name}
         </Button>
       ));
     }
-
     let recommendedList, allList;
     if (this.props.Clubs) {
       recommendedList = this.props.Clubs.map(item => (
@@ -96,11 +105,12 @@ class ClubMain extends React.Component {
             {categoryList}
             <Col>
               <Button
+                className="club-create-button"
                 variant="outline-primary"
                 size="lg"
                 onClick={this.ClubRegisterClickHandler}
               >
-                I can't find my club
+                Cannot find your club?
               </Button>
             </Col>
           </Row>
@@ -127,10 +137,7 @@ class ClubMain extends React.Component {
           closeHandler={this.ClubDetailCloseHandler}
         />
 
-        <ClubRegister
-          show={this.state.ClubRegisterShow}
-          closeHandler={this.ClubRegisterCloseHandler}
-        />
+        {RegisterButton}
       </div>
     );
   }

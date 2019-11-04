@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Card, Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -35,7 +35,12 @@ class SomoimDetail extends React.Component {
                   <Row>
                     <h2>{somoim.title}</h2>
                     <Col md={{ offset: 1 }}>
-                      <h4>{"👍 " + somoim.likes}</h4>
+                      <h4>
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                        {somoim.likes}
+                      </h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>
@@ -48,7 +53,12 @@ class SomoimDetail extends React.Component {
               <Row>
                 <Col></Col>
                 <Col>
-                  <Button size="lg">👍 Like!</Button>
+                  <Button size="lg">
+                    <span role="img" aria-label="thumb">
+                      👍
+                    </span>{" "}
+                    Like!
+                  </Button>
                 </Col>
                 <Col></Col>
                 <Col>

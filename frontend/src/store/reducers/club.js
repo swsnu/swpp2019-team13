@@ -36,15 +36,16 @@ const initialState = {
       tag: [2, 3],
       likes: 20
     }
-  ]
+  ],
+  selectedClub: null
 };
 // TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_CLUB_LIST:
-      return { ...state };
+      return { ...state, clubs: action.clubs };
     case actionTypes.GET_CLUB_BY_ID:
-      return { ...state };
+      return { ...state, selectedClub: action.club };
     case actionTypes.POST_CLUB:
       const newClub = {
         id: state.clubs.length,

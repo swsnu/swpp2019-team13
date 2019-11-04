@@ -1,11 +1,7 @@
 import React from "react";
-
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-
 import { Modal, Button, Form } from "react-bootstrap";
-
-import * as actionCreaters from "../store/actions/index";
 
 class ClubRegister extends React.Component {
   state = {
@@ -28,12 +24,12 @@ class ClubRegister extends React.Component {
     let files = event.target.files;
     let err = [];
     const types = ["image/png", "image/jpeg", "image/gif"];
-    for (var x = 0; x < files.length; x++) {
+    for (let x = 0; x < files.length; x++) {
       if (types.every(type => files[x].type !== type)) {
         err[x] = files[x].type + " is not a supported format\n";
       }
     }
-    for (var z = 0; z < err.length; z++) {
+    for (let z = 0; z < err.length; z++) {
       alert(err[z]);
       event.target.value = null;
     }
@@ -53,12 +49,12 @@ class ClubRegister extends React.Component {
     let files = event.target.files;
     let size = 2000000;
     let err = [];
-    for (var x = 0; x < files.length; x++) {
+    for (let x = 0; x < files.length; x++) {
       if (files[x].size > size) {
         err[x] = files[x].name + " is too large, please pick a smaller file\n";
       }
     }
-    for (var z = 0; z < err.length; z++) {
+    for (let z = 0; z < err.length; z++) {
       alert(err[z]);
       event.target.value = null;
     }
@@ -72,7 +68,7 @@ class ClubRegister extends React.Component {
       this.checkFileSize(event)
     ) {
       let file_urls = [];
-      for (var x = 0; x < event.target.files.length; x++) {
+      for (let x = 0; x < event.target.files.length; x++) {
         file_urls.push(URL.createObjectURL(event.target.files[x]));
       }
       this.setState({
@@ -145,7 +141,7 @@ class ClubRegister extends React.Component {
               />
             </div>
             <Button
-              variant="primary"
+              letiant="primary"
               // onClick={() => {
               //   this.props.postClub(
               //     this.state.name,
