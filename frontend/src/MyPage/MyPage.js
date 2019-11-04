@@ -2,23 +2,14 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Card,
-  Collapse,
-  Accordion
-} from "react-bootstrap";
+import { Container, Row, Col, Button, Card, Accordion } from "react-bootstrap";
 
 import Header from "../components/Header";
+import SelfInfoTab from "./SelfInfoTab";
 
 class MyPage extends Component {
   state = {
-    infoButtonOpen: false,
-    clubButtonOpen: false,
-    somoimButtonOpen: false
+    tab: 0
   };
 
   render() {
@@ -65,6 +56,12 @@ class MyPage extends Component {
       }
     }
 
+    let tab = null;
+    switch (this.state.tab) {
+      case 0:
+        tab = <SelfInfoTab />;
+    }
+
     return (
       <div>
         <Header />
@@ -79,6 +76,9 @@ class MyPage extends Component {
                   size="lg"
                   block
                   eventKey="0"
+                  onClick={() => {
+                    this.setState({ ...this.state, tab: 0 });
+                  }}
                 >
                   내 정보
                 </Accordion.Toggle>
@@ -106,6 +106,9 @@ class MyPage extends Component {
                       variant="outline-secondary"
                       size="md"
                       block
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 1 });
+                      }}
                     >
                       동아리 관리
                     </Button>
@@ -117,6 +120,9 @@ class MyPage extends Component {
                       variant="outline-secondary"
                       size="md"
                       block
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 2 });
+                      }}
                     >
                       좋아요한 동아리
                     </Button>
@@ -129,6 +135,9 @@ class MyPage extends Component {
                       variant="outline-secondary"
                       size="md"
                       block
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 3 });
+                      }}
                     >
                       지원한 동아리
                     </Button>
@@ -155,6 +164,9 @@ class MyPage extends Component {
                       variant="outline-secondary"
                       size="md"
                       block
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 4 });
+                      }}
                     >
                       소모임 관리
                     </Button>
@@ -166,6 +178,9 @@ class MyPage extends Component {
                       variant="outline-secondary"
                       size="md"
                       block
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 5 });
+                      }}
                     >
                       좋아요한 소모임
                     </Button>
@@ -178,6 +193,9 @@ class MyPage extends Component {
                       variant="outline-secondary"
                       size="md"
                       block
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 6 });
+                      }}
                     >
                       지원한 소모임
                     </Button>
@@ -186,20 +204,8 @@ class MyPage extends Component {
               </Accordion>
             </Col>
             <Col>
-              <Card>
-                <h1 style={{ textAlign: "center" }}>#My Page#</h1>
-                <p style={{ textAlign: "center" }}>
-                  어서 오시게나. 아래는 당신의 정보일세.
-                </p>
-                <div style={{ textAlign: "center" }}>
-                  <p>유저 이름 : {loggedUserName}</p>
-                  <p>이메일 : {loggedUserEmail}</p>
-                  <p>비밀번호 : {loggedUserPassword}</p>
-                  <p>소속 단과대 : {loggedUserDeptName}</p>
-                  <p>전공 : {loggedUserMajorName}</p>
-                  <p>학년 : {loggedUserGrade}학년</p>
-                  <p>활동 가능 학기 수 : {loggedUserAvailableSemester}학기</p>
-                </div>
+              <Card style={{ marginBottom: "5px", marginTop: "13px" }}>
+                {tab}
               </Card>
             </Col>
           </Row>
