@@ -6,7 +6,7 @@ import { ConnectedRouter } from "connected-react-router";
 import SignUp from "./containers/SignUp";
 import ClubMain from "./containers/ClubMain";
 import SomoimMain from "./containers/SomoimMain";
-import MyPage from "./containers/MyPage";
+import MyPage from "./MyPage/MyPage";
 
 import "./App.css";
 
