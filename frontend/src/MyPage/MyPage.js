@@ -169,7 +169,7 @@ class MyPage extends Component {
             </Col>
             <Col>
               <Card style={{ marginBottom: "5px", marginTop: "13px" }}>
-                {tab}
+                <div style={{ margin: "10px" }}>{tab}</div>
               </Card>
             </Col>
           </Row>

@@ -5,6 +5,6 @@ from club4u.models import *
 
 admin.site.register(Club)
 admin.site.register(Somoim)
-# admin.site.register(Somoim)
+admin.site.register(UserLikeClub)
 # admin.site.register(Somoim)
 # admin.site.register(Somoim)

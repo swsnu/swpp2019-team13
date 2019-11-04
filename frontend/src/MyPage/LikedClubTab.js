@@ -48,7 +48,7 @@ class LikedClubTab extends Component {
       });
     }
     return (
-      <div style={{ margin: "10px" }}>
+      <div>
         {list}
         <ClubDetail
           show={this.state.clubDetailShow}
