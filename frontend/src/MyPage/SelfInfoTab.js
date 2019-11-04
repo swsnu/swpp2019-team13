@@ -70,7 +70,6 @@ class SelfInfoTab extends Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.user.loggedUser,
     depts: state.deptname.deptnames,
     majors: state.major.majors
   };
