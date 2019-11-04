@@ -52,7 +52,6 @@ def signup(request):
 def like_club(request, id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
-
     try:
         user = UserProfile.objects.get(id=id)
     except (ObjectDoesNotExist):
@@ -63,7 +62,7 @@ def like_club(request, id=0):
             club for club in user.like_clubs.values()]
         return JsonResponse(clubs, safe=False)
 
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         # toggle user's like status for requested club
         body = request.body.decode()
         club_id = json.loads(body)['club_id']
@@ -73,6 +72,8 @@ def like_club(request, id=0):
         else:
             user.like_clubs.remove(user.like_clubs.get(id=club_id))
         return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
 
 # api/club/list/
 
@@ -91,19 +92,20 @@ def somoim_list(request):
         response_dict = [somoim for somoim in Somoim.objects.all().values()]
         return JsonResponse(response_dict, safe=False)
     elif request.method == 'POST':
-        try:
-            body = request.body.decode()
-            article_title = json.loads(body)['title']
-            article_content = json.loads(body)['content']
-            acc_user = User.objects.get(username=request.user)
-            article = Article(title=article_title,
-                              content=article_content, author=acc_user)
-            article.save()
-            response_dict = {'id': article.id, 'title': article.title,
-                             'content': article.content, 'author': article.author_id}
-            return JsonResponse(response_dict, status=201)
-        except (KeyError, JSONDecodeError):
-            return HttpResponse(status=400)
+        # try:
+        #     body = request.body.decode()
+        #     article_title = json.loads(body)['title']
+        #     article_content = json.loads(body)['content']
+        #     acc_user = User.objects.get(username=request.user)
+        #     article = Article(title=article_title,
+        #                       content=article_content, author=acc_user)
+        #     article.save()
+        #     response_dict = {'id': article.id, 'title': article.title,
+        #                      'content': article.content, 'author': article.author_id}
+        #     return JsonResponse(response_dict, status=201)
+        # except (KeyError, JSONDecodeError):
+        #     return HttpResponse(status=400)
+        return HttpResponse(status=400)
     else:
         return HttpResponse(status=405)
 
