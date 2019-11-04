@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
@@ -47,6 +47,32 @@ def signup(request):
         return HttpResponse(status=201)
     else:
         return HttpResponse(status=405)
+
+
+def like_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        clubs = [
+            club for club in user.like_clubs.values()]
+        return JsonResponse(clubs, safe=False)
+
+    if request.method == 'PUT':
+        # toggle user's like status for requested club
+        body = request.body.decode()
+        club_id = json.loads(body)['club_id']
+
+        if user.like_clubs.get(id=club_id) == None:
+            user.like_clubs.add(Club.objects.get(id=club_id))
+        else:
+            user.like_clubs.remove(user.like_clubs.get(id=club_id))
+        return HttpResponse(status=204)
 
 # api/club/list/
 

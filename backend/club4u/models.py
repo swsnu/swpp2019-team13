@@ -82,26 +82,32 @@ class UserProfile(models.Model):
 
     manage_clubs = models.ManyToManyField(
         Club,
-        related_name="manager"
+        related_name="manager",
+        blank=True
     )
     like_clubs = models.ManyToManyField(
         Club,
-        related_name="likers"
+        related_name="likers",
+        blank=True
     )
     apply_clubs = models.ManyToManyField(
         Club,
-        related_name="appliers"
+        related_name="appliers",
+        blank=True
     )
 
     manage_somoims = models.ManyToManyField(
         Somoim,
-        related_name="manager"
+        related_name="manager",
+        blank=True
     )
     like_somoims = models.ManyToManyField(
         Somoim,
-        related_name="likers"
+        related_name="likers",
+        blank=True
     )
     join_somoims = models.ManyToManyField(
         Somoim,
-        related_name="joiners"
+        related_name="joiners",
+        blank=True
     )
