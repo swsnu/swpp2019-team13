@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
@@ -6,8 +6,6 @@ from json import JSONDecodeError
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-
-# api/major/list/
 
 
 def major_list(request):
@@ -17,8 +15,6 @@ def major_list(request):
     else:
         return HttpResponse(status=405)
 
-# api/dept/list/
-
 
 def dept_list(request):
     if request.method == 'GET':
@@ -27,8 +23,6 @@ def dept_list(request):
     else:
         return HttpResponse(status=405)
 
-# api/user/list/
-
 
 def user_list(request):
     if request.method == 'GET':
@@ -36,8 +30,6 @@ def user_list(request):
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
-
-# api/user/signup/
 
 
 def signup(request):
@@ -64,8 +56,6 @@ def signup(request):
     else:
         return HttpResponse(status=405)
 
-# api/user/signin/
-
 
 def signin(request):
     if request.method == 'POST':
@@ -88,8 +78,6 @@ def signin(request):
     else:
         return HttpResponse(status=405)
 
-# api/user/signout/
-
 
 def signout(request):
     if request.method == 'GET':
@@ -100,7 +88,63 @@ def signout(request):
             return HttpResponse(status=401)
 
 
-# api/club/list/
+def manage_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        clubs = [
+            club for club in user.manage_clubs.values()]
+        return JsonResponse(clubs, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+
+def like_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        clubs = [
+            club for club in user.like_clubs.values()]
+        return JsonResponse(clubs, safe=False)
+
+    elif request.method == 'PUT':
+        # toggle user's like status for requested club
+        body = request.body.decode()
+        club_id = json.loads(body)['club_id']
+
+        if user.like_clubs.get(id=club_id) == None:
+            user.like_clubs.add(Club.objects.get(id=club_id))
+        else:
+            user.like_clubs.remove(user.like_clubs.get(id=club_id))
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def apply_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        clubs = [
+            club for club in user.apply_clubs.values()]
+        return JsonResponse(clubs, safe=False)
+    else:
+        return HttpResponse(status=405)
 
 
 def club_list(request):
@@ -111,25 +155,12 @@ def club_list(request):
         return HttpResponse(status=405)
 
 
-# api/somoim/list/
 def somoim_list(request):
     if request.method == 'GET':
         response_dict = [somoim for somoim in Somoim.objects.all().values()]
         return JsonResponse(response_dict, safe=False)
     elif request.method == 'POST':
-        try:
-            body = request.body.decode()
-            article_title = json.loads(body)['title']
-            article_content = json.loads(body)['content']
-            acc_user = User.objects.get(username=request.user)
-            article = Article(title=article_title,
-                              content=article_content, author=acc_user)
-            article.save()
-            response_dict = {'id': article.id, 'title': article.title,
-                             'content': article.content, 'author': article.author_id}
-            return JsonResponse(response_dict, status=201)
-        except (KeyError, JSONDecodeError):
-            return HttpResponse(status=400)
+        return HttpResponse(status=400)
     else:
         return HttpResponse(status=405)
 

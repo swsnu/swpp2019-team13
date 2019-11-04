@@ -82,78 +82,32 @@ class UserProfile(models.Model):
 
     manage_clubs = models.ManyToManyField(
         Club,
-        related_name="manager"
+        related_name="manager",
+        blank=True
     )
     like_clubs = models.ManyToManyField(
         Club,
-        related_name="likers"
+        related_name="likers",
+        blank=True
     )
     apply_clubs = models.ManyToManyField(
         Club,
-        related_name="appliers"
+        related_name="appliers",
+        blank=True
     )
 
     manage_somoims = models.ManyToManyField(
         Somoim,
-        related_name="manager"
+        related_name="manager",
+        blank=True
     )
     like_somoims = models.ManyToManyField(
         Somoim,
-        related_name="likers"
+        related_name="likers",
+        blank=True
     )
     join_somoims = models.ManyToManyField(
         Somoim,
-        related_name="joiners"
+        related_name="joiners",
+        blank=True
     )
-
-
-# class UserLikeClub(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userlikeclub_user_id'
-#     )
-#     club = models.ForeignKey(
-#         Club,
-#         on_delete=models.CASCADE,
-#         related_name='userlikeclub_club_id'
-#     )
-
-
-# class UserApplyClub(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userapplyclub_user_id'
-#     )
-#     club = models.ForeignKey(
-#         Club,
-#         on_delete=models.CASCADE,
-#         related_name='userapplyclub_club_id'
-#     )
-
-
-# class UserLikeSomoim(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userlikesomoim_user_id'
-#     )
-#     somoim = models.ForeignKey(
-#         Somoim,
-#         on_delete=models.CASCADE,
-#         related_name='userlikesomoim_somoim_id'
-#     )
-
-
-# class UserJoinSomoim(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userjoinsomoim_user_id'
-#     )
-#     somoim = models.ForeignKey(
-#         Somoim,
-#         on_delete=models.CASCADE,
-#         related_name='userjoinsomoim_somoim_id'
-#     )
