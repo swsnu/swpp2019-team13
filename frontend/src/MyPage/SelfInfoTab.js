@@ -6,11 +6,27 @@ import { Form, Col, Button } from "react-bootstrap";
 import * as actionCreators from "../store/actions/index";
 
 class SelfInfoTab extends Component {
-  state = {};
+  state = {
+    username: "",
+    email: "",
+    password: "",
+    passwordAgain: "",
+    dept: "",
+    major: "",
+    grade: 1,
+    availableSemester: 1
+  };
 
   componentDidMount() {
     this.props.getMajorList();
     this.props.getDeptList();
+    if (this.props.loggedUser) {
+      this.setState({
+        ...this.state,
+        username: this.props.loggedUser.username,
+        email: this.props.email
+      });
+    }
   }
 
   render() {
