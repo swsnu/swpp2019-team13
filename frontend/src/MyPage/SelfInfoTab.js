@@ -54,22 +54,21 @@ class SelfInfoTab extends Component {
 
       // this.props.loggedUser.dept에는 ID가 저장되어 있으므로, 다음과 같이 단과대 명을 불러올 수 있습니다 */
       if (this.props.depts) {
-        loggedUserDept = this.props.depts[loggedUserDeptID].name;
-        // const selectedDept = this.props.depts.filter(dept => {
-        //   return dept.id === loggedUserDeptID;
-        // });
-        // if (selectedDept.length !== 0)
-        //   loggedUserDept = selectedDept[0].name;
+        // loggedUserDept = this.props.depts[loggedUserDeptID].name;
+        const selectedDept = this.props.depts.filter(dept => {
+          return dept.id === loggedUserDeptID;
+        });
+        if (selectedDept.length !== 0) loggedUserDept = selectedDept[0].name;
       }
 
       // this.props.loggedUser.major에는 ID가 저장되어 있으므로, 다음과 같이 전공 명을 불러올 수 있습니다 */
       if (this.props.majors) {
-        loggedUserMajorName = this.props.majors[loggedUserMajorID].name;
-        // const selectedMajor = this.props.majors.filter(major => {
-        //   return major.id === loggedUserMajorID;
-        // });
-        // if (selectedMajor.length !== 0)
-        //   loggedUserMajorName = selectedMajor[0].name;
+        // loggedUserMajorName = this.props.majors[loggedUserMajorID].name;
+        const selectedMajor = this.props.majors.filter(major => {
+          return major.id === loggedUserMajorID;
+        });
+        if (selectedMajor.length !== 0)
+          loggedUserMajorName = selectedMajor[0].name;
       }
     }
 
@@ -89,7 +88,7 @@ class SelfInfoTab extends Component {
     let selectedDeptID = null;
     if (this.props.depts) {
       const selectedDept = this.props.depts.filter(dept => {
-        return dept.name === this.state.dept;
+        return dept.id === loggedUserDeptID;
       });
       if (selectedDept.length !== 0) selectedDeptID = selectedDept[0].id;
     }
