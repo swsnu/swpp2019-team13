@@ -87,6 +87,19 @@ def signin(request):
     else:
         return HttpResponse(status=405)
 
+# api/user/signout/
+
+
+def signout(request):
+    if request.method == 'GET':
+        if not request.user.is_anonymous:
+            logout(request)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=405)
+
 # api/club/list/
 
 

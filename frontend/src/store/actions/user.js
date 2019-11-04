@@ -37,7 +37,7 @@ export const signOut_ = () => {
 
 export const signOut = () => {
   return dispatch => {
-    return new Promise(() => dispatch(signOut_()));
+    return axios.get("api/user/signout/").then(res => dispatch(signOut_()));
   };
 };
 
