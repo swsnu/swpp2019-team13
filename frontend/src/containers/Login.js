@@ -18,7 +18,7 @@ class Login extends Component {
   };
 
   /* 로그인 버튼을 클릭했을 때 동작 */
-  onClick_LoginButton_Handler = () => {
+  loginButtonHandler = () => {
     this.props
       .signIn({
         email: this.state.email,
@@ -116,11 +116,7 @@ class Login extends Component {
 
           {/* 로그인 Modal Footer */}
           <Modal.Footer>
-            <Button
-              variant="dark"
-              size="lg"
-              onClick={this.onClick_LoginButton_Handler}
-            >
+            <Button variant="dark" size="lg" onClick={this.loginButtonHandler}>
               로그인 &#x2713;
             </Button>
           </Modal.Footer>

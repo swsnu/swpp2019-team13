@@ -10,21 +10,21 @@ import "./Header.css";
 
 class Header extends Component {
   state = {
-    // isShowing_LoginModal == true : Modal 보여줌.
-    isShowing_LoginModal: false
+    // showLoginModal === true : Modal 보여줌.
+    showLoginModal: false
   };
 
   /* Control Function for Login Modal */
-  handleShow_LoginModal = () => {
-    this.setState({ ...this.state, isShowing_LoginModal: true });
+  loginModalShowHandler = () => {
+    this.setState({ ...this.state, showLoginModal: true });
   };
 
-  handleClose_LoginModal = () => {
-    this.setState({ ...this.state, isShowing_LoginModal: false });
+  loginModalCloseHandler = () => {
+    this.setState({ ...this.state, showLoginModal: false });
   };
 
   /* Do when click Logout Button */
-  onClick_LogoutButton = () => {
+  logoutButtonHandler = () => {
     this.props.signOut();
     this.props.history.push("/club");
   };
@@ -36,16 +36,16 @@ class Header extends Component {
   /* Render */
   render() {
     /* User 관련 버튼 : 로그인, 회원가입, 마이페이지, 로그아웃 */
-    let login_button = null;
-    let signup_button = null;
-    let mypage_button = null;
-    let logout_button = null;
+    let loginButton = null;
+    let signupButton = null;
+    let mypageButton = null;
+    let logoutButton = null;
 
     /* 로그인이 되어있는지에 따라 User 관련 버튼을 설정해준다. */
     if (this.props.loggedUser !== null && this.props.loggedUser !== undefined) {
-      login_button = null;
-      signup_button = null;
-      mypage_button = (
+      loginButton = null;
+      signupButton = null;
+      mypageButton = (
         <div
           className="user-item first-item"
           onClick={() => {
@@ -55,28 +55,28 @@ class Header extends Component {
           마이페이지
         </div>
       );
-      logout_button = (
+      logoutButton = (
         <div
           className="user-item"
           onClick={() => {
-            this.onClick_LogoutButton();
+            this.logoutButtonHandler();
           }}
         >
           로그아웃
         </div>
       );
     } else {
-      login_button = (
+      loginButton = (
         <div
           className="user-item first-item"
           onClick={() => {
-            this.handleShow_LoginModal();
+            this.loginModalShowHandler();
           }}
         >
           로그인
         </div>
       );
-      signup_button = (
+      signupButton = (
         <div
           className="user-item"
           onClick={() => {
@@ -86,8 +86,8 @@ class Header extends Component {
           회원가입
         </div>
       );
-      mypage_button = null;
-      logout_button = null;
+      mypageButton = null;
+      logoutButton = null;
     }
 
     /* Render */
@@ -142,15 +142,15 @@ class Header extends Component {
         </div> */}
 
         {/* 유저 관련 버튼 */}
-        {login_button}
-        {signup_button}
-        {mypage_button}
-        {logout_button}
+        {loginButton}
+        {signupButton}
+        {mypageButton}
+        {logoutButton}
 
         {/* 로그인 Modal */}
         <Login
-          show={this.state.isShowing_LoginModal}
-          onHide={this.handleClose_LoginModal}
+          show={this.state.showLoginModal}
+          onHide={this.loginModalCloseHandler}
         ></Login>
       </div>
     );

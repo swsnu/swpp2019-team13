@@ -109,8 +109,6 @@ def signout(request):
         else:
             return HttpResponse(status=401)
 
-# api/user/logininfo/
-
 
 def logininfo(request):
     if request.method == 'GET':
@@ -123,6 +121,36 @@ def logininfo(request):
             return JsonResponse(response_dict, safe=False)
         else:
             return JsonResponse(None, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+
+def information(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    if request.method == 'PUT':
+        body = request.body.decode()
+        name = json.loads(body)['name']
+        email = json.loads(body)['email']
+        dept = json.loads(body)['dept']
+        major = json.loads(body)['major']
+        grade = json.loads(body)['grade']
+        available_semester = json.loads(body)['available_semester']
+
+        user_profile = UserProfile.objects.get(user_id=request.user)
+        user_profile.user.last_name = name
+        user_profile.user.save()
+        user_profile.dept = Department.objects.get(id=dept)
+        user_profile.major = Major.objects.get(id=major)
+        user_profile.grade = grade
+        user_profile.available_semester = available_semester
+        user_profile.save()
+
+        response_dict = {'id': request.user.id, 'name': name, 'email': email,
+                         'dept': dept, 'major': major, 'grade': grade,
+                         'available_semester': available_semester}
+        return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
 
