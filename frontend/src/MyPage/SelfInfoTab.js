@@ -20,8 +20,8 @@ class SelfInfoTab extends Component {
   };
 
   componentDidMount = () => {
-    this.props.getMajorList();
-    this.props.getDeptList();
+    this.props.onGetMajorList();
+    this.props.onGetDeptList();
   };
 
   componentDidUpdate = () => {
@@ -43,7 +43,16 @@ class SelfInfoTab extends Component {
     }
   };
 
-  modifyInfoHandler = () => {};
+  modifyInfoButtonHandler = () => {
+    this.props.onPutUserInformation({
+      name: this.state.name,
+      email: this.state.email,
+      dept: this.state.dept,
+      major: this.state.major,
+      grade: this.state.grade,
+      available_semester: this.state.available_semester
+    });
+  };
 
   render() {
     let loggedUserName = null;
@@ -73,7 +82,7 @@ class SelfInfoTab extends Component {
       }
       if (this.props.depts && this.props.majors) {
         majorOptionList = this.props.majors
-          .filter(major => major.dept_id === this.props.loggedUser.dept)
+          .filter(major => String(major.dept_id) === String(this.state.dept))
           .map(major => (
             <option key={major.id} value={major.id}>
               {major.name}
@@ -85,6 +94,18 @@ class SelfInfoTab extends Component {
     return (
       <div>
         <Form>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>이메일</Form.Label>
+            <Form.Control
+              size="lg"
+              onChange={event => {
+                this.setState({ email: event.target.value });
+              }}
+              defaultValue={loggedUserEmail}
+              disabled={true}
+            />
+          </Form.Group>
+
           <Form.Group controlId="formBasicUsername">
             <Form.Label>유저 이름</Form.Label>
             <Form.Control
@@ -94,16 +115,6 @@ class SelfInfoTab extends Component {
                 this.setState({ name: event.target.value });
               }}
               defaultValue={loggedUserName}
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>이메일</Form.Label>
-            <Form.Control
-              size="lg"
-              onChange={event => {
-                this.setState({ email: event.target.value });
-              }}
-              defaultValue={loggedUserEmail}
             />
           </Form.Group>
 
@@ -188,7 +199,7 @@ class SelfInfoTab extends Component {
           variant="dark"
           size="lg"
           block
-          onClick={this.modifyInfoHandler}
+          onClick={this.modifyInfoButtonHandler}
           disabled={
             this.state.name === "" ||
             this.state.email === "" ||
@@ -218,8 +229,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getMajorList: () => dispatch(actionCreators.getMajorList()),
-    getDeptList: () => dispatch(actionCreators.getDeptList())
+    onGetMajorList: () => dispatch(actionCreators.getMajorList()),
+    onGetDeptList: () => dispatch(actionCreators.getDeptList()),
+    onPutUserInformation: userInfo =>
+      dispatch(actionCreators.putUserInformation(userInfo))
   };
 };
 

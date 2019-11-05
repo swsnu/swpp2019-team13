@@ -74,6 +74,21 @@ export const getLoginInfo = loginInfo => {
   };
 };
 
+export const putUserInformation_ = user => {
+  return {
+    type: actionTypes.PUT_USER_INFORMATION,
+    loggedUser: user
+  };
+};
+
+export const putUserInformation = userInfo => {
+  return dispatch => {
+    return axios
+      .put("/api/user/information/", userInfo)
+      .then(res => dispatch(putUserInformation_(res.data)));
+  };
+};
+
 export const getManagingClubs_ = clubs => {
   return {
     type: actionTypes.GET_MANAGING_CLUBS,

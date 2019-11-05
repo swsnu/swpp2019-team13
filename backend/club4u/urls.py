@@ -15,6 +15,8 @@ urlpatterns = [
     path('user/list/', views.user_list, name='user_list'),
     path('user/logininfo/', views.logininfo, name='logininfo'),
 
+    path('user/information/', views.information, name='information'),
+
     path('user/<int:id>/club/manage/', views.manage_club, name='manage_club'),
     path('user/<int:id>/club/like/', views.like_club, name='like_club'),
     path('user/<int:id>/club/apply/', views.apply_club, name='apply_club'),
