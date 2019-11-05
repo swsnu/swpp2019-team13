@@ -28,6 +28,7 @@ jest.mock("../containers/Login", () => {
 
 describe("<Header />", () => {
   let header;
+  let spyGetLoginInfo;
 
   beforeEach(() => {
     header = (
@@ -39,12 +40,19 @@ describe("<Header />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyGetLoginInfo = jest
+      .spyOn(actionCreators, "getLoginInfo")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render Header", () => {
     const component = mount(header);
     const wrapper = component.find(".Header");
     expect(wrapper.length).toBe(1);
+    expect(spyGetLoginInfo).toBeCalledTimes(1);
   });
 
   it("should render Logo", () => {

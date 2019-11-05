@@ -28,6 +28,7 @@ const mockStore = getMockStore(stubInitialState);
 describe("<Login />", () => {
   let login;
   let spyOnHide = () => {};
+  let spySignIn;
 
   beforeEach(() => {
     login = (
@@ -45,6 +46,14 @@ describe("<Login />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spySignIn = jest.spyOn(actionCreators, "signIn").mockImplementation(() => {
+      return dispatch => {
+        return new Promise(() => {
+          then: () => {};
+        });
+      };
+    });
   });
 
   it("should render Login", () => {
@@ -87,16 +96,6 @@ describe("<Login />", () => {
   });
 
   it(`should sign in`, () => {
-    const spySignIn = jest
-      .spyOn(actionCreators, "signIn")
-      .mockImplementation(() => {
-        return dispatch => {
-          return new Promise(() => {
-            then: () => {};
-          });
-        };
-      });
-
     const component = mount(login);
 
     const email = "TEST_EMAIL";

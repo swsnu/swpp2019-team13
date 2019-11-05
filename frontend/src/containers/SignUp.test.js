@@ -8,6 +8,8 @@ import SignUp from "./SignUp";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as actionCreators from "../store/actions/user";
+import * as DeptactionCreators from "../store/actions/dept";
+import * as MajoractionCreators from "../store/actions/major";
 
 const stubInitialState = {
   depts: [
@@ -35,6 +37,7 @@ jest.mock("../components/Header", () => {
 
 describe("<SignUp />", () => {
   let signup;
+  let spyGetMajorList, spyGetDeptList;
 
   beforeEach(() => {
     signup = (
@@ -46,6 +49,18 @@ describe("<SignUp />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyGetMajorList = jest
+      .spyOn(MajoractionCreators, "getMajorList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetDeptList = jest
+      .spyOn(DeptactionCreators, "getDeptList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render SignUp", () => {
@@ -60,6 +75,9 @@ describe("<SignUp />", () => {
     const wrapper3 = component.find("h1");
     expect(wrapper3.length).toBe(1);
     expect(wrapper3.text()).toBe("회원 가입");
+
+    expect(spyGetMajorList).toBeCalledTimes(1);
+    expect(spyGetDeptList).toBeCalledTimes(1);
   });
 
   it(`should set state properly on name input`, () => {
