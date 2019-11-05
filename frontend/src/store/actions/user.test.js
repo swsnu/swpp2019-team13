@@ -14,6 +14,9 @@ let stubUser = {
   available_semester: 2
 };
 
+let stubClubs = [{ fields: {} }, { fields: {} }];
+let stubSomoims = [{ fields: {} }, { fields: {} }];
+
 describe("User Actions", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -58,19 +61,6 @@ describe("User Actions", () => {
       done();
     });
   });
-
-  // it("Sign In Fail case", () => {
-  //   const spySignIn = jest.spyOn(axios, "post").mockImplementation(url => {
-  //     return new Promise((resolve, reject) => {
-  //       reject();
-  //     });
-  //   });
-
-  //   store.dispatch(actionCreators.signIn()).then(() => {
-  //     expect(spySignIn).toHaveBeenCalledTimes(1);
-  //     done();
-  //   });
-  // });
 
   it("Sign Out", () => {
     const spySignOut = jest.spyOn(axios, "get").mockImplementation(url => {
@@ -124,13 +114,33 @@ describe("User Actions", () => {
     });
   });
 
+  it("Get Managing Club", () => {
+    const spyGetManagingClubs = jest
+      .spyOn(axios, "get")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: stubClubs
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.getManagingClubs(stubUser)).then(() => {
+      expect(spyGetManagingClubs).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
   it("Get Liked Club", () => {
     const spyGetLikedClubs = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
         return new Promise((resolve, reject) => {
           const result = {
-            status: 200
+            status: 200,
+            data: stubClubs
           };
           resolve(result);
         });
@@ -138,6 +148,82 @@ describe("User Actions", () => {
 
     store.dispatch(actionCreators.getLikedClubs(stubUser)).then(() => {
       expect(spyGetLikedClubs).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it("Get Applied Club", () => {
+    const spyGetAppliedClubs = jest
+      .spyOn(axios, "get")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: stubClubs
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.getAppliedClubs(stubUser)).then(() => {
+      expect(spyGetAppliedClubs).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it("Get Managing Somoim", () => {
+    const spyGetManagingSomoims = jest
+      .spyOn(axios, "get")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: stubSomoims
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.getManagingSomoims(stubUser)).then(() => {
+      expect(spyGetManagingSomoims).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it("Get Liked Somoim", () => {
+    const spyGetLikedSomoims = jest
+      .spyOn(axios, "get")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: stubSomoims
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.getLikedSomoims(stubUser)).then(() => {
+      expect(spyGetLikedSomoims).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it("Get Joined Somoim", () => {
+    const spyGetJoinedSomoims = jest
+      .spyOn(axios, "get")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: stubSomoims
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.getJoinedSomoims(stubUser)).then(() => {
+      expect(spyGetJoinedSomoims).toHaveBeenCalledTimes(1);
       done();
     });
   });

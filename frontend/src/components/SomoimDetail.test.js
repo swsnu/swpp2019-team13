@@ -28,7 +28,7 @@ const stubInitialState = {
       description: "LoL\nLoL\nLol",
       selected_dept: [0, 1],
       available_sem: 1,
-      tag: [0, 1],
+      tags: [0, 1],
       goalJoiner: 20,
       currentJoiner: 7,
       likes: 10
@@ -40,7 +40,7 @@ const stubInitialState = {
       description: "Actually, it's sleep somoim :)",
       selected_dept: [0, 1, 3, 4, 5],
       available_sem: 1,
-      tag: [2, 3],
+      tags: [2, 3],
       goalJoiner: 10,
       currentJoiner: 3,
       likes: 5
@@ -52,7 +52,7 @@ const stubInitialState = {
       description: "Me too bro",
       selected_dept: [0, 1, 3, 4, 5],
       available_sem: 3,
-      tag: [4, 5],
+      tags: [4, 5],
       goalJoiner: 10,
       currentJoiner: 9,
       likes: 5
@@ -64,7 +64,7 @@ const stubInitialState = {
       description: "Sad..",
       selected_dept: [0, 1, 3, 4, 5],
       available_sem: 5,
-      tag: [6, 7],
+      tags: [6, 7],
       goalJoiner: 10,
       currentJoiner: 1,
       likes: 5

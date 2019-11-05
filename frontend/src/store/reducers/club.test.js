@@ -8,7 +8,7 @@ const stubClub = {
   clubmanager: "김지훈",
   selected_category: 0,
   auth_img_file: "1",
-  tag: [],
+  tags: [],
   likes: 0
 };
 
@@ -21,7 +21,7 @@ const initialclubs = [
     selected_category: 0,
     auth_img_file: "1",
     isRegistered: true,
-    tag: [0, 1],
+    tags: [0, 1],
     likes: 10
   },
   {
@@ -32,7 +32,7 @@ const initialclubs = [
     selected_category: 6,
     auth_img_file: "2",
     isRegistered: true,
-    tag: [2, 3],
+    tags: [2, 3],
     likes: 15
   },
 
@@ -44,7 +44,7 @@ const initialclubs = [
     selected_category: 6,
     auth_img_file: "3",
     isRegistered: true,
-    tag: [2, 3],
+    tags: [2, 3],
     likes: 20
   }
 ];
@@ -68,7 +68,7 @@ describe("Club Reducer", () => {
         selected_category: 0,
         auth_img_file: "1",
         isRegistered: true,
-        tag: [0, 1],
+        tags: [0, 1],
         likes: 10
       }
     ];

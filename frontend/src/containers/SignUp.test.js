@@ -37,7 +37,7 @@ jest.mock("../components/Header", () => {
 
 describe("<SignUp />", () => {
   let signup;
-  let spyGetMajorList, spyGetDeptList;
+  let spyGetMajorList, spyGetDeptList, spySignIn, spySignUp;
 
   beforeEach(() => {
     signup = (
@@ -61,6 +61,14 @@ describe("<SignUp />", () => {
       .mockImplementation(() => {
         return dispatch => {};
       });
+
+    spySignUp = jest.spyOn(actionCreators, "signUp").mockImplementation(() => {
+      return dispatch => {};
+    });
+
+    spySignIn = jest.spyOn(actionCreators, "signIn").mockImplementation(() => {
+      return dispatch => {};
+    });
   });
 
   it("should render SignUp", () => {
@@ -156,18 +164,6 @@ describe("<SignUp />", () => {
     const spyHistoryPush = jest
       .spyOn(history, "push")
       .mockImplementation(path => {});
-
-    const spySignUp = jest
-      .spyOn(actionCreators, "signUp")
-      .mockImplementation(() => {
-        return dispatch => {};
-      });
-
-    const spySignIn = jest
-      .spyOn(actionCreators, "signIn")
-      .mockImplementation(() => {
-        return dispatch => {};
-      });
 
     const spyAlert = jest.spyOn(window, "alert").mockImplementation(() => {});
 
