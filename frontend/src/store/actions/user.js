@@ -58,7 +58,6 @@ export const signUp = user => {
 };
 
 export const getManagingClubs_ = clubs => {
-  console.log(clubs);
   return {
     type: actionTypes.GET_MANAGING_CLUBS,
     clubs: clubs.map(item => item.fields)
@@ -100,5 +99,50 @@ export const getAppliedClubs = user => {
     return axios
       .get("/api/user/" + user.id + "/club/apply/")
       .then(res => dispatch(getAppliedClubs_(res.data)));
+  };
+};
+
+export const getManagingSomoims_ = somoims => {
+  return {
+    type: actionTypes.GET_MANAGING_SOMOIMS,
+    somoims: somoims.map(item => item.fields)
+  };
+};
+
+export const getManagingSomoims = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/somoim/manage/")
+      .then(res => dispatch(getManagingSomoims_(res.data)));
+  };
+};
+
+export const getLikedSomoims_ = somoims => {
+  return {
+    type: actionTypes.GET_LIKED_SOMOIMS,
+    somoims: somoims.map(item => item.fields)
+  };
+};
+
+export const getLikedSomoims = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/somoim/like/")
+      .then(res => dispatch(getLikedSomoims_(res.data)));
+  };
+};
+
+export const getJoinedSomoims_ = somoims => {
+  return {
+    type: actionTypes.GET_JOINED_SOMOIMS,
+    somoims: somoims.map(item => item.fields)
+  };
+};
+
+export const getJoinedSomoims = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/somoim/apply/")
+      .then(res => dispatch(getJoinedSomoims_(res.data)));
   };
 };

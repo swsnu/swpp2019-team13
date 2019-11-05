@@ -32,6 +32,13 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_APPLIED_CLUBS:
       return { ...state, appliedClubs: action.clubs };
 
+    case actionTypes.GET_MANAGING_SOMOIMS:
+      return { ...state, managingSomoims: action.somoims };
+    case actionTypes.GET_LIKED_SOMOIMS:
+      return { ...state, likedSomoims: action.somoims };
+    case actionTypes.GET_JOINED_SOMOIMS:
+      return { ...state, joinedSomoims: action.somoims };
+
     default:
       break;
   }

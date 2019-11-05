@@ -176,9 +176,9 @@ def manage_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        somoims = [
-            somoim for somoim in user.manage_somoims.values()]
-        return JsonResponse(somoims, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.manage_somoims.all())
+        return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -192,9 +192,9 @@ def like_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        somoims = [
-            somoim for somoim in user.like_somoims.values()]
-        return JsonResponse(somoims, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.like_somoims.all())
+        return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
         # toggle user's like status for requested somoim
@@ -219,9 +219,10 @@ def join_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        somoims = [
-            somoim for somoim in user.join_somoims.values()]
-        return JsonResponse(somoims, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.join_somoims.all())
+        return HttpResponse(serialized_data)
+
     else:
         return HttpResponse(status=405)
 
