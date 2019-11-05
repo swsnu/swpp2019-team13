@@ -67,7 +67,7 @@ export const getLikedClubs_ = clubs => {
 export const getLikedClubs = user => {
   return dispatch => {
     return axios
-      .get("/api/user/club/liked/" + user.id + "/")
+      .get("/api/user/" + user.id + "/club/like/")
       .then(res => dispatch(getLikedClubs_(res.data)));
   };
 };
