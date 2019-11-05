@@ -6,3 +6,8 @@ from club4u.models import *
 admin.site.register(Club)
 admin.site.register(Somoim)
 admin.site.register(UserProfile)
+admin.site.register(Tag)
+admin.site.register(Category)
+admin.site.register(Department)
+admin.site.register(Major)
+admin.site.register(PreClub)

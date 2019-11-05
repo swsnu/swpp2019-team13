@@ -18,15 +18,18 @@ export const postClub = at => {
   };
 };
 
-export const getClubList_ = () => {
+export const getClubList_ = clubs => {
   return {
-    type: actionTypes.GET_CLUB_LIST
+    type: actionTypes.GET_CLUB_LIST,
+    clubs: clubs
   };
 };
 
 export const getClubList = () => {
   return dispatch => {
-    return new Promise(() => dispatch(getClubList_()));
+    return axios
+      .get("api/club/list/")
+      .then(res => dispatch(getClubList_(res.data)));
   };
 };
 

@@ -9,26 +9,31 @@ export const postSomoim_ = sm => {
     description: sm.description,
     selected_dept: sm.selected_dept,
     available_sem: sm.available_sem,
-    goalJoiner: sm.goal_number
+    goalJoiner: sm.goalJoiner
   };
 };
 
-export const postSomoim = sm => {
+export const postSomoim = at => {
   return dispatch => {
-    return new Promise(() => dispatch(postSomoim_(sm)));
+    return axios
+      .post("api/somoim/list/", at)
+      .then(res => dispatch(postSomoim_(at)));
   };
 };
 
 // TODO : implement actions
-export const getSomoimList_ = () => {
+export const getSomoimList_ = somoims => {
   return {
-    type: actionTypes.GET_SOMOIM_LIST
+    type: actionTypes.GET_SOMOIM_LIST,
+    somoims: somoims
   };
 };
 
 export const getSomoimList = () => {
   return dispatch => {
-    return new Promise(() => dispatch(getSomoimList_()));
+    return axios
+      .get("api/somoim/list/")
+      .then(res => dispatch(getSomoimList_(res.data)));
   };
 };
 

@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
 import SomoimCreate from "../components/SomoimCreate";
+import * as actionCreators from "../store/actions/index";
 
 class SomoimMain extends React.Component {
   state = {
@@ -16,11 +17,15 @@ class SomoimMain extends React.Component {
     selectedSomoim: null
   };
 
+  componentDidMount() {
+    this.props.getSomoimList();
+    this.props.getCategoryList();
+  }
   somoimCardClickHandler = id => {
     this.setState({
       ...this.state,
       somoimDetailShow: true,
-      selectedSomoim: this.props.somoims[id]
+      selectedSomoim: this.props.somoims[id - 1]
     });
   };
 
@@ -155,9 +160,11 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    getSomoimList: () => dispatch(actionCreators.getSomoimList()),
+    getCategoryList: () => dispatch(actionCreators.getCategoryList())
+  };
 };
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps

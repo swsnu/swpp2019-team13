@@ -73,7 +73,12 @@ class Somoim(models.Model):
     goalJoiner = models.IntegerField(default=0)
     currentJoiner = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
-
+    available_semester = models.IntegerField(default=0)
+    selected_dept = models.ManyToManyField(
+        Department,
+        related_name="somoim_dept",
+        blank=True
+    )
     tags = models.ManyToManyField(
         Tag,
         related_name="somoims",
