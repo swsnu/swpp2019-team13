@@ -13,18 +13,15 @@ class Login extends Component {
 
   /* 로그인 버튼을 클릭했을 때 동작 */
   onClick_LoginButton_Handler = () => {
-    this.props
-      .signIn({
-        email: this.state.email,
-        password: this.state.password
-      })
-      .then(res => {
-        this.setState({
-          ...this.state,
-          password: "",
-          wrongInput: true
-        });
-      });
+    this.props.signIn({
+      email: this.state.email,
+      password: this.state.password
+    });
+    this.setState({
+      ...this.state,
+      password: "",
+      wrongInput: true
+    });
   };
 
   UNSAFE_componentWillReceiveProps = () => {
@@ -34,11 +31,6 @@ class Login extends Component {
       password: "",
       wrongInput: false
     });
-  };
-
-  /* Modal에서 나갔을 때 동작 */
-  onHide_LoginModal_Handler = () => {
-    this.props.onHide();
   };
 
   /* Render */
@@ -67,7 +59,7 @@ class Login extends Component {
         {/* 로그인 Modal */}
         <Modal
           show={this.props.show}
-          onHide={this.onHide_LoginModal_Handler}
+          onHide={this.props.onHide}
           // onExited={this.onExit_LoginModal_Handler}
           style={{ opacity: 1 }}
           size="sm"

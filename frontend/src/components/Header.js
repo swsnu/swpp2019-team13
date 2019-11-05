@@ -29,6 +29,10 @@ class Header extends Component {
     this.props.history.push("/club");
   };
 
+  componentDidMount() {
+    this.props.getLoginInfo();
+  }
+
   /* Render */
   render() {
     /* User 관련 버튼 : 로그인, 회원가입, 마이페이지, 로그아웃 */
@@ -161,6 +165,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getLoginInfo: () => dispatch(actionCreators.getLoginInfo()),
     signOut: user => dispatch(actionCreators.signOut(user))
   };
 };

@@ -10,6 +10,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_USER_LIST:
       return { ...state, users: action.users };
     case actionTypes.SIGN_IN:
+    case actionTypes.GET_LOGIN_INFO:
       return { ...state, loggedUser: action.loggedUser };
     case actionTypes.SIGN_OUT:
       return { ...state, loggedUser: null };
@@ -24,7 +25,6 @@ const reducer = (state = initialState, action) => {
         available_semester: action.user.available_semester
       };
       return { ...state, users: state.users.concat(newUser) };
-
     case actionTypes.GET_MANAGING_CLUBS:
       return { ...state, managingClubs: action.clubs };
     case actionTypes.GET_LIKED_CLUBS:
