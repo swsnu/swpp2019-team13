@@ -163,12 +163,13 @@ def apply_club(request, id=0):
         return HttpResponse(serialized_data)
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())
-        club_id = req_data['club_id']
 
-        if user.apply_clubs.get(id=club_id) is None:
-            user.apply_clubs.add(Club.objects.get(id=club_id))
-        else:
-            user.apply_clubs.remove(user.apply_clubs.get(id=club_id))
+        club_id = req_data['id']
+        club = Club.objects.filter(id=club_id+1)
+
+        user.apply_clubs.add(club[0])
+        user.save()
+
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
