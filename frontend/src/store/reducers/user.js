@@ -25,8 +25,19 @@ const reducer = (state = initialState, action) => {
       };
       return { ...state, users: state.users.concat(newUser) };
 
+    case actionTypes.GET_MANAGING_CLUBS:
+      return { ...state, managingClubs: action.clubs };
     case actionTypes.GET_LIKED_CLUBS:
       return { ...state, likedClubs: action.clubs };
+    case actionTypes.GET_APPLIED_CLUBS:
+      return { ...state, appliedClubs: action.clubs };
+
+    case actionTypes.GET_MANAGING_SOMOIMS:
+      return { ...state, managingSomoims: action.somoims };
+    case actionTypes.GET_LIKED_SOMOIMS:
+      return { ...state, likedSomoims: action.somoims };
+    case actionTypes.GET_JOINED_SOMOIMS:
+      return { ...state, joinedSomoims: action.somoims };
 
     default:
       break;

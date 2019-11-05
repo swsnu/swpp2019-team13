@@ -10,7 +10,7 @@ const initialState = {
       selected_category: 0,
       auth_img_file: "1",
       isRegistered: true,
-      tag: [0, 1],
+      tags: [0, 1],
       likes: 10
     },
     {
@@ -21,7 +21,7 @@ const initialState = {
       selected_category: 6,
       auth_img_file: "2",
       isRegistered: true,
-      tag: [2, 3],
+      tags: [2, 3],
       likes: 15
     },
 
@@ -33,7 +33,7 @@ const initialState = {
       selected_category: 6,
       auth_img_file: "3",
       isRegistered: true,
-      tag: [2, 3],
+      tags: [2, 3],
       likes: 20
     }
   ],
@@ -54,7 +54,7 @@ const reducer = (state = initialState, action) => {
         clubmanager: action.clubmanager,
         auth_img_file: action.auth_img_file,
         selected_category: action.selected_category,
-        tag: [],
+        tags: [],
         likes: 0
       };
       return { ...state, clubs: state.clubs.concat(newClub) };

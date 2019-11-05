@@ -6,6 +6,7 @@ from json import JSONDecodeError
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.core import serializers
 
 
 def major_list(request):
@@ -34,16 +35,19 @@ def user_list(request):
 
 def club_list(request):
     if request.method == 'GET':
-        response_dict = [club for club in Club.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        response_dict = [club for club in Club.objects.all()]
+        # print(response_dict[2].poster_img.path)
+        serialized_data = serializers.serialize("json", response_dict)
+        return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
 
 def somoim_list(request):
     if request.method == 'GET':
-        response_dict = [somoim for somoim in Somoim.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        response_dict = [somoim for somoim in Somoim.objects.all()]
+        serialized_data = serializers.serialize("json", response_dict)
+        return HttpResponse(serialized_data)
     elif request.method == 'POST':
         return HttpResponse(status=400)
     else:
@@ -115,9 +119,9 @@ def manage_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        clubs = [
-            club for club in user.manage_clubs.values()]
-        return JsonResponse(clubs, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.manage_clubs.all())
+        return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -131,9 +135,8 @@ def like_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        clubs = [
-            club for club in user.like_clubs.values()]
-        return JsonResponse(clubs, safe=False)
+        serialized_data = serializers.serialize("json", user.like_clubs.all())
+        return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
         # toggle user's like status for requested club
@@ -158,9 +161,8 @@ def apply_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        clubs = [
-            club for club in user.apply_clubs.values()]
-        return JsonResponse(clubs, safe=False)
+        serialized_data = serializers.serialize("json", user.apply_clubs.all())
+        return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -174,9 +176,9 @@ def manage_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        somoims = [
-            somoim for somoim in user.manage_somoims.values()]
-        return JsonResponse(somoims, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.manage_somoims.all())
+        return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -190,9 +192,9 @@ def like_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        somoims = [
-            somoim for somoim in user.like_somoims.values()]
-        return JsonResponse(somoims, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.like_somoims.all())
+        return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
         # toggle user's like status for requested somoim
@@ -217,9 +219,10 @@ def join_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        somoims = [
-            somoim for somoim in user.join_somoims.values()]
-        return JsonResponse(somoims, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.join_somoims.all())
+        return HttpResponse(serialized_data)
+
     else:
         return HttpResponse(status=405)
 

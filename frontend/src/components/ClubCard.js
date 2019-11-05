@@ -18,7 +18,7 @@ class ClubCard extends React.Component {
       image = <img src={img2} width="100" height="100" alt="" />;
     if (club.auth_img_file === "3")
       image = <img src={img3} width="100" height="100" alt="" />;
-    let tagList = club.tag.map(item => (
+    let tagList = club.tags.map(item => (
       <Button key={item} variant="outline-primary">
         {"#" + this.props.tags[item].name}
       </Button>
