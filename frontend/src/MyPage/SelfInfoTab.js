@@ -7,12 +7,14 @@ import * as actionCreators from "../store/actions/index";
 
 class SelfInfoTab extends Component {
   state = {
+    firstLoaded: false,
+
     email: "",
     name: "",
     password: "",
     passwordAgain: "",
-    dept: "",
-    major: "",
+    dept: 0,
+    major: 0,
     grade: 1,
     available_semester: 1
   };
@@ -20,17 +22,23 @@ class SelfInfoTab extends Component {
   componentDidMount = () => {
     this.props.getMajorList();
     this.props.getDeptList();
-    if (this.props.loggedUser) {
-      this.setState({
-        ...this.state,
-        name: this.props.loggedUser.name,
-        email: this.props.email
-      });
-    }
   };
 
   componentDidUpdate = () => {
-    if (!this.props.loggedUser) {
+    if (this.props.loggedUser) {
+      if (!this.state.firstLoaded) {
+        this.setState({
+          ...this.state,
+          firstLoaded: true,
+          name: this.props.loggedUser.name,
+          email: this.props.email,
+          dept: this.props.loggedUser.dept,
+          major: this.props.loggedUser.major,
+          grade: this.props.loggedUser.grade,
+          available_semester: this.props.loggedUser.available_semester
+        });
+      }
+    } else {
       this.props.history.push("/club");
     }
   };
@@ -38,20 +46,13 @@ class SelfInfoTab extends Component {
   render() {
     let loggedUserName = null;
     let loggedUserEmail = null;
-    let loggedUserDeptID = null;
-    let loggedUserMajorID = null;
-    let loggedUserGrade = null;
-    let loggedUserAvailableSemester = null;
+
     let deptOptionList = null;
     let majorOptionList = null;
 
     if (this.props.loggedUser) {
       loggedUserName = this.props.loggedUser.name;
       loggedUserEmail = this.props.loggedUser.email;
-      loggedUserDeptID = this.props.loggedUser.dept;
-      loggedUserMajorID = this.props.loggedUser.major;
-      loggedUserGrade = this.props.loggedUser.grade;
-      loggedUserAvailableSemester = this.props.loggedUser.available_semester;
 
       if (this.props.depts) {
         deptOptionList = this.props.depts.map(dept => (
@@ -105,7 +106,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ dept: event.target.value });
                 }}
-                defaultValue={loggedUserDeptID}
+                value={this.state.dept}
               >
                 {deptOptionList}
               </Form.Control>
@@ -119,7 +120,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ major: event.target.value });
                 }}
-                defaultValue={loggedUserMajorID}
+                value={this.state.major}
               >
                 {majorOptionList}
               </Form.Control>
@@ -135,7 +136,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ grade: event.target.value });
                 }}
-                defaultValue={loggedUserGrade}
+                value={this.state.grade}
               >
                 <option value={1}>1</option>
                 <option value={2}>2</option>
@@ -154,7 +155,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ available_semester: event.target.value });
                 }}
-                defaultValue={loggedUserAvailableSemester}
+                value={this.state.available_semester}
               >
                 <option value={1}>1</option>
                 <option value={2}>2</option>
