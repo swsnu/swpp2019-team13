@@ -38,7 +38,7 @@ class Header extends Component {
     let logout_button = null;
 
     /* 로그인이 되어있는지에 따라 User 관련 버튼을 설정해준다. */
-    if (this.props.loggedUser !== null) {
+    if (this.props.loggedUser !== null && this.props.loggedUser !== undefined) {
       login_button = null;
       signup_button = null;
       mypage_button = (

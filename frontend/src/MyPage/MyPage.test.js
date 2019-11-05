@@ -57,7 +57,7 @@ let stubInitialState = {
     dept: 0,
     major: 3,
     grade: 3,
-    availableSemester: 2
+    available_semester: 2
   }
 };
 

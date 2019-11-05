@@ -10,7 +10,7 @@ class SomoimDetail extends React.Component {
     let somoim = this.props.somoim;
     if (somoim) {
       let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
-      let tagList = somoim.tag.map(item => (
+      let tagList = somoim.tags.map(item => (
         <Button key={item} variant="outline-primary">
           {"#" + this.props.tags[item].name}
         </Button>

@@ -9,14 +9,14 @@ import Header from "../components/Header";
 
 class SignUp extends React.Component {
   state = {
-    username: "",
     email: "",
+    name: "",
     password: "",
     passwordAgain: "",
     dept: "",
     major: "",
     grade: 1,
-    availableSemester: 1
+    available_semester: 1
   };
 
   componentDidMount() {
@@ -43,13 +43,14 @@ class SignUp extends React.Component {
     }
 
     const newUser = {
-      username: this.state.username,
+      loginID: this.state.loginID,
       email: this.state.email,
+      name: this.state.name,
       password: this.state.password,
       dept: deptID,
       major: majorID,
       grade: this.state.grade,
-      availableSemester: this.state.availableSemester
+      available_semester: this.state.available_semester
     };
     this.props.signUp(newUser);
     alert("회원가입 완료");
@@ -90,7 +91,6 @@ class SignUp extends React.Component {
     return (
       <div className="SignUp">
         <Header />
-        <p style={{ textAlign: "center" }}>어서 오시게나</p>
         <h1
           style={{
             textAlign: "center",
@@ -104,17 +104,6 @@ class SignUp extends React.Component {
         <div style={{ width: "40%", position: "relative", left: "30%" }}>
           {/* 유저 정보를 입력받는다 */}
           <Form>
-            {/* 유저 이름 입력 칸 */}
-            <Form.Group controlId="formBasicUsername">
-              <Form.Label>유저 이름</Form.Label>
-              <Form.Control
-                size="lg"
-                type="email"
-                onChange={event => {
-                  this.setState({ username: event.target.value });
-                }}
-              />
-            </Form.Group>
             {/* 이메일 입력 칸 */}
             <Form.Group controlId="formBasicEmail">
               <Form.Label>이메일</Form.Label>
@@ -149,7 +138,17 @@ class SignUp extends React.Component {
                 />
               </Form.Group>
             </Form.Row>
-
+            {/* 유저 이름 입력 칸 */}
+            <Form.Group controlId="formBasicUsername">
+              <Form.Label>이름</Form.Label>
+              <Form.Control
+                size="lg"
+                type="email"
+                onChange={event => {
+                  this.setState({ name: event.target.value });
+                }}
+              />
+            </Form.Group>
             {/* 소속 단과대, 전공 입력 칸*/}
             <Form.Row>
               <Form.Group as={Col} controlId="formDept">
@@ -204,14 +203,14 @@ class SignUp extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formAvailableSemester">
+              <Form.Group as={Col} controlId="formavailable_semester">
                 {/* 활동 가능 학기 수 입력 칸*/}
                 <Form.Label>활동 가능 학기 수</Form.Label>
                 <Form.Control
                   as="select"
                   size="lg"
                   onChange={event => {
-                    this.setState({ availableSemester: event.target.value });
+                    this.setState({ available_semester: event.target.value });
                   }}
                 >
                   <option>1</option>
@@ -238,7 +237,7 @@ class SignUp extends React.Component {
               // ㄴ 모든 칸이 입력되어야 합니다.
               // ㄴ 비밀번호와, 비밀번호 확인이 같아야 합니다.
               disabled={
-                this.state.username === "" ||
+                this.state.name === "" ||
                 this.state.email === "" ||
                 this.state.password === "" ||
                 this.state.password !== this.state.passwordAgain ||

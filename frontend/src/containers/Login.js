@@ -8,29 +8,26 @@ class Login extends Component {
   state = {
     email: "",
     password: "",
-    isLoggedIn: false,
     wrongInput: false
   };
 
   /* 로그인 버튼을 클릭했을 때 동작 */
   onClick_LoginButton_Handler = () => {
-    let loggedUser = this.props.storedUsers.filter(user => {
-      return (
-        user.email === this.state.email && user.password === this.state.password
-      );
-    });
-
-    if (loggedUser.length !== 0) {
-      this.props.signIn(loggedUser[0]);
-      this.props.onHide();
-    } else {
-      this.setState({ ...this.state, wrongInput: true });
-    }
+    this.props
+      .signIn({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .then(res => {
+        this.setState({
+          ...this.state,
+          password: "",
+          wrongInput: true
+        });
+      });
   };
 
-  /* Modal에서 나갔을 때 동작 */
-  onHide_LoginModal_Handler = () => {
-    this.props.onHide();
+  UNSAFE_componentWillReceiveProps = () => {
     this.setState({
       ...this.state,
       email: "",
@@ -39,8 +36,17 @@ class Login extends Component {
     });
   };
 
+  /* Modal에서 나갔을 때 동작 */
+  onHide_LoginModal_Handler = () => {
+    this.props.onHide();
+  };
+
   /* Render */
   render() {
+    if (this.props.loggedUser) {
+      this.props.onHide();
+    }
+
     return (
       <div className="Login">
         {/* CSS for React-Bootstrap */}
@@ -129,13 +135,13 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    storedUsers: state.user.users
+    loggedUser: state.user.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    signIn: user => dispatch(actionCreators.signIn(user))
+    signIn: loginInfo => dispatch(actionCreators.signIn(loginInfo))
   };
 };
 
