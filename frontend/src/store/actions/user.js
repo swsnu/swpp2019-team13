@@ -22,12 +22,9 @@ export const signIn_ = user => {
 
 export const signIn = loginInfo => {
   return dispatch => {
-    return (
-      axios
-        .post("/api/user/signin/", loginInfo)
-        // .catch(e => "fail")
-        .then(res => dispatch(signIn_(res.data)))
-    );
+    return axios
+      .post("/api/user/signin/", loginInfo)
+      .then(res => dispatch(signIn_(res.data)));
   };
 };
 
