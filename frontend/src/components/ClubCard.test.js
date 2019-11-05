@@ -28,7 +28,7 @@ const stubInitialState = {
       selected_category: 0,
       auth_img_file: "1",
       isRegistered: true,
-      tag: [0, 1],
+      tags: [0, 1],
       likes: 10
     },
     {
@@ -39,7 +39,7 @@ const stubInitialState = {
       selected_category: 6,
       auth_img_file: "2",
       isRegistered: true,
-      tag: [2, 3],
+      tags: [2, 3],
       likes: 15
     },
 
@@ -51,7 +51,7 @@ const stubInitialState = {
       selected_category: 6,
       auth_img_file: "3",
       isRegistered: true,
-      tag: [2, 3],
+      tags: [2, 3],
       likes: 20
     }
   ]

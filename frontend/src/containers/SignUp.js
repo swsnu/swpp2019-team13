@@ -25,7 +25,7 @@ class SignUp extends React.Component {
   }
 
   /* 회원가입 버튼을 클릭했을 때 동작 */
-  onClick_SignupButton_Handler = () => {
+  signUpButtonHandler = () => {
     let deptID = -1;
     if (this.props.depts) {
       const dept = this.props.depts.filter(dept => {
@@ -52,10 +52,11 @@ class SignUp extends React.Component {
       grade: this.state.grade,
       available_semester: this.state.available_semester
     };
-    this.props.signUp(newUser);
-    alert("회원가입 완료");
-    this.props.signIn(newUser);
-    this.props.history.push("/club");
+    this.props
+      .signUp(newUser)
+      .then(() => alert("회원가입 완료"))
+      .then(() => this.props.signIn(newUser))
+      .then(() => this.props.history.push("/club"));
   };
 
   /* Render */
@@ -232,7 +233,7 @@ class SignUp extends React.Component {
               variant="dark"
               size="lg"
               block
-              onClick={this.onClick_SignupButton_Handler}
+              onClick={this.signUpButtonHandler}
               /* 조건을 충족시켜야 회원가입 버튼을 클릭할 수 있다 */
               // ㄴ 모든 칸이 입력되어야 합니다.
               // ㄴ 비밀번호와, 비밀번호 확인이 같아야 합니다.

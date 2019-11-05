@@ -18,7 +18,7 @@ let stubInitialState = {
       description: "TEST_DESCRIPTION_1",
       selected_dept: [0],
       available_sem: 1,
-      tag: [0],
+      tags: [0],
       goalJoiner: 10,
       currentJoiner: 7,
       likes: 10
@@ -30,7 +30,7 @@ let stubInitialState = {
       description: "TEST_DESCRIPTION_2",
       selected_dept: [0, 1],
       available_sem: 3,
-      tag: [1],
+      tags: [1],
       goalJoiner: 1,
       currentJoiner: 0,
       likes: 0

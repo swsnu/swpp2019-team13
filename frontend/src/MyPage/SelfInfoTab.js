@@ -7,49 +7,69 @@ import * as actionCreators from "../store/actions/index";
 
 class SelfInfoTab extends Component {
   state = {
+    firstLoaded: false,
+
     email: "",
     name: "",
     password: "",
     passwordAgain: "",
-    dept: "",
-    major: "",
+    dept: 0,
+    major: 0,
     grade: 1,
     available_semester: 1
   };
 
   componentDidMount = () => {
-    this.props.getMajorList();
-    this.props.getDeptList();
-    if (this.props.loggedUser) {
-      this.setState({
-        ...this.state,
-        name: this.props.loggedUser.name,
-        email: this.props.email
-      });
-    }
+    this.props.onGetMajorList();
+    this.props.onGetDeptList();
   };
 
   componentDidUpdate = () => {
-    if (!this.props.loggedUser) {
+    if (this.props.loggedUser) {
+      if (!this.state.firstLoaded) {
+        this.setState({
+          ...this.state,
+          firstLoaded: true,
+          name: this.props.loggedUser.name,
+          email: this.props.loggedUser.email,
+          dept: this.props.loggedUser.dept,
+          major: this.props.loggedUser.major,
+          grade: this.props.loggedUser.grade,
+          available_semester: this.props.loggedUser.available_semester
+        });
+      }
+    } else {
       this.props.history.push("/club");
     }
+  };
+
+  modifyInfoButtonHandler = () => {
+    this.props.onPutUserInformation({
+      name: this.state.name,
+      email: this.state.email,
+      dept: this.state.dept,
+      major: this.state.major,
+      grade: this.state.grade,
+      available_semester: this.state.available_semester
+    });
   };
 
   render() {
     let loggedUserName = null;
     let loggedUserEmail = null;
-    let loggedUserDeptID = null;
-    let loggedUserMajorID = null;
+    let loggedUserDept = null;
+    let loggedUserMajor = null;
     let loggedUserGrade = null;
     let loggedUserAvailableSemester = null;
+
     let deptOptionList = null;
     let majorOptionList = null;
 
     if (this.props.loggedUser) {
       loggedUserName = this.props.loggedUser.name;
       loggedUserEmail = this.props.loggedUser.email;
-      loggedUserDeptID = this.props.loggedUser.dept;
-      loggedUserMajorID = this.props.loggedUser.major;
+      loggedUserDept = this.props.loggedUser.dept;
+      loggedUserMajor = this.props.loggedUser.major;
       loggedUserGrade = this.props.loggedUser.grade;
       loggedUserAvailableSemester = this.props.loggedUser.available_semester;
 
@@ -62,7 +82,7 @@ class SelfInfoTab extends Component {
       }
       if (this.props.depts && this.props.majors) {
         majorOptionList = this.props.majors
-          .filter(major => major.dept_id === this.props.loggedUser.dept)
+          .filter(major => String(major.dept_id) === String(this.state.dept))
           .map(major => (
             <option key={major.id} value={major.id}>
               {major.name}
@@ -74,6 +94,18 @@ class SelfInfoTab extends Component {
     return (
       <div>
         <Form>
+          <Form.Group controlId="formBasicEmail">
+            <Form.Label>이메일</Form.Label>
+            <Form.Control
+              size="lg"
+              onChange={event => {
+                this.setState({ email: event.target.value });
+              }}
+              defaultValue={loggedUserEmail}
+              disabled={true}
+            />
+          </Form.Group>
+
           <Form.Group controlId="formBasicUsername">
             <Form.Label>유저 이름</Form.Label>
             <Form.Control
@@ -83,16 +115,6 @@ class SelfInfoTab extends Component {
                 this.setState({ name: event.target.value });
               }}
               defaultValue={loggedUserName}
-            />
-          </Form.Group>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>이메일</Form.Label>
-            <Form.Control
-              size="lg"
-              onChange={event => {
-                this.setState({ email: event.target.value });
-              }}
-              defaultValue={loggedUserEmail}
             />
           </Form.Group>
 
@@ -105,7 +127,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ dept: event.target.value });
                 }}
-                defaultValue={loggedUserDeptID}
+                value={this.state.dept}
               >
                 {deptOptionList}
               </Form.Control>
@@ -119,7 +141,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ major: event.target.value });
                 }}
-                defaultValue={loggedUserMajorID}
+                value={this.state.major}
               >
                 {majorOptionList}
               </Form.Control>
@@ -135,7 +157,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ grade: event.target.value });
                 }}
-                defaultValue={loggedUserGrade}
+                value={this.state.grade}
               >
                 <option value={1}>1</option>
                 <option value={2}>2</option>
@@ -154,7 +176,7 @@ class SelfInfoTab extends Component {
                 onChange={event => {
                   this.setState({ available_semester: event.target.value });
                 }}
-                defaultValue={loggedUserAvailableSemester}
+                value={this.state.available_semester}
               >
                 <option value={1}>1</option>
                 <option value={2}>2</option>
@@ -177,8 +199,18 @@ class SelfInfoTab extends Component {
           variant="dark"
           size="lg"
           block
-          onClick={this.onClick_SignupButton_Handler}
-          disabled={true}
+          onClick={this.modifyInfoButtonHandler}
+          disabled={
+            this.state.name === "" ||
+            this.state.email === "" ||
+            (String(this.state.name) === String(loggedUserName) &&
+              String(this.state.email) === String(loggedUserEmail) &&
+              String(this.state.dept) === String(loggedUserDept) &&
+              String(this.state.major) === String(loggedUserMajor) &&
+              String(this.state.grade) === String(loggedUserGrade) &&
+              String(this.state.available_semester) ===
+                String(loggedUserAvailableSemester))
+          }
         >
           정보 수정
         </Button>
@@ -197,8 +229,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getMajorList: () => dispatch(actionCreators.getMajorList()),
-    getDeptList: () => dispatch(actionCreators.getDeptList())
+    onGetMajorList: () => dispatch(actionCreators.getMajorList()),
+    onGetDeptList: () => dispatch(actionCreators.getDeptList()),
+    onPutUserInformation: userInfo =>
+      dispatch(actionCreators.putUserInformation(userInfo))
   };
 };
 

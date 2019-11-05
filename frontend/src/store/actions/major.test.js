@@ -1,34 +1,35 @@
 import axios from "axios";
 
-import * as actionCreators from "./dept";
+import * as actionCreators from "./major";
 import store from "../store";
 
-const stubDept = {
+const stubMajor = {
   id: 0,
-  name: "dept 1"
+  dept_id: 1,
+  name: "major 1"
 };
 
-describe("Dept Actions", () => {
+describe("Major Actions", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("getDeptList", () => {
-    const stubDeptList = [stubDept];
+  it("getMajorList", () => {
+    const stubMajorList = [stubMajor];
 
     const spyGetDeptList = jest.spyOn(axios, "get").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
           status: 200,
-          data: stubDeptList
+          data: stubMajorList
         };
         resolve(result);
       });
     });
 
-    store.dispatch(actionCreators.getDeptList()).then(() => {
+    store.dispatch(actionCreators.getMajorList()).then(() => {
       const newState = store.getState();
-      expect(newState.dept.depts).toBe(stubDeptList);
+      expect(newState.major.majors).toBe(stubMajorList);
       expect(spyGetDeptList).toHaveBeenCalledTimes(1);
       done();
     });

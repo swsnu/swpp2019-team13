@@ -196,6 +196,11 @@ class SomoimCreate extends React.Component {
                   alert("Create Somoim Success!");
                   this.props.closeHandler();
                 }}
+                disabled={
+                  this.state.title === "" ||
+                  this.state.summary === "" ||
+                  this.state.description === ""
+                }
               >
                 Confirm
               </Button>

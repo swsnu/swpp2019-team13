@@ -11,20 +11,26 @@ class Login extends Component {
     wrongInput: false
   };
 
+  componentDidUpdate = () => {
+    if (this.props.loggedUser) {
+      this.props.onHide();
+    }
+  };
+
   /* 로그인 버튼을 클릭했을 때 동작 */
-  onClick_LoginButton_Handler = () => {
+  loginButtonHandler = () => {
     this.props
       .signIn({
         email: this.state.email,
         password: this.state.password
       })
-      .then(res => {
+      .catch(e =>
         this.setState({
           ...this.state,
           password: "",
           wrongInput: true
-        });
-      });
+        })
+      );
   };
 
   UNSAFE_componentWillReceiveProps = () => {
@@ -36,19 +42,15 @@ class Login extends Component {
     });
   };
 
-  /* Modal에서 나갔을 때 동작 */
-  onHide_LoginModal_Handler = () => {
-    this.props.onHide();
-  };
-
   /* Render */
   render() {
-    if (this.props.loggedUser) {
-      this.props.onHide();
-    }
-
     return (
-      <div className="Login">
+      <div
+        className="Login"
+        onKeyPress={e => {
+          if (e.key === "Enter") this.loginButtonHandler();
+        }}
+      >
         {/* CSS for React-Bootstrap */}
         <style type="text/css">
           {`
@@ -67,7 +69,7 @@ class Login extends Component {
         {/* 로그인 Modal */}
         <Modal
           show={this.props.show}
-          onHide={this.onHide_LoginModal_Handler}
+          onHide={this.props.onHide}
           // onExited={this.onExit_LoginModal_Handler}
           style={{ opacity: 1 }}
           size="sm"
@@ -122,7 +124,8 @@ class Login extends Component {
             <Button
               variant="dark"
               size="lg"
-              onClick={this.onClick_LoginButton_Handler}
+              onClick={this.loginButtonHandler}
+              disabled={this.state.email === "" || this.state.password === ""}
             >
               로그인 &#x2713;
             </Button>

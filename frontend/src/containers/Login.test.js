@@ -27,8 +27,8 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<Login />", () => {
   let login;
-
-  let spyOnHide = () => {};
+  let spyOnHide = jest.fn();
+  let spySignIn;
 
   beforeEach(() => {
     login = (
@@ -46,6 +46,12 @@ describe("<Login />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spySignIn = jest.spyOn(actionCreators, "signIn").mockImplementation(() => {
+      return dispatch => {
+        return new Promise(() => {});
+      };
+    });
   });
 
   it("should render Login", () => {
@@ -57,6 +63,51 @@ describe("<Login />", () => {
     const wrapper2 = component.find(".modal-header");
     expect(wrapper2.length).toBe(1);
     expect(wrapper2.text()).toBe("로그인");
+  });
+
+  it("should hide Modal when loggedUser exists", () => {
+    let tempState = {
+      loggedUser: {
+        username: "test",
+        email: "TEST_EMAIL",
+        password: "TEST_PASSWORD",
+        dept: 1,
+        major: 1,
+        grade: 1,
+        available_semester: 1
+      }
+    };
+
+    let login_withloggedUser = (
+      <Provider store={getMockStore(tempState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <Login show={true} onHide={spyOnHide} />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(login_withloggedUser);
+
+    const wrapper = component.find("Login");
+
+    expect(spyOnHide).toHaveBeenCalledTimes(1);
+  });
+
+  it("should clear inputs when modal reopen", () => {
+    const component = mount(login);
+
+    const wrapper = component.find("#formBasicEmail");
+    wrapper.simulate("change", { target: { value: "TEST_EMAIL" } });
+    const loginInstance = component.find(Login.WrappedComponent).instance();
+    loginInstance.UNSAFE_componentWillReceiveProps();
+    expect(loginInstance.state.email).toEqual("");
   });
 
   it(`should set state properly on email input`, () => {
@@ -77,13 +128,7 @@ describe("<Login />", () => {
     expect(loginInstance.state.password).toEqual(password);
   });
 
-  it(`should signin`, () => {
-    const spySignIn = jest
-      .spyOn(actionCreators, "signIn")
-      .mockImplementation(() => {
-        return dispatch => {};
-      });
-
+  it(`should sign in`, () => {
     const component = mount(login);
 
     const email = "TEST_EMAIL";
@@ -102,31 +147,23 @@ describe("<Login />", () => {
     jest.clearAllMocks();
   });
 
-  it(`should not signin`, () => {
-    const spySignIn = jest
+  it(`should render message when sign in fail`, () => {
+    let spySignIn = jest
       .spyOn(actionCreators, "signIn")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => {
+          return new Promise((resolve, reject) => {
+            reject();
+          });
+        };
       });
-
     const component = mount(login);
 
-    const email = "WRONG_EMAIL";
-    component
-      .find("#formBasicEmail")
-      .simulate("change", { target: { value: email } });
-    const password = "WRONG_PASSWORD";
-    component
-      .find("#formBasicPassword")
-      .simulate("change", { target: { value: password } });
-
-    const wrapper = component.find(".btn-dark");
+    let wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
-    expect(spySignIn).toBeCalledTimes(0);
+    expect(spySignIn).toBeCalledTimes(1);
 
-    const wrapper2 = component.find("#wrong-input");
-    expect(wrapper2.length).toBe(1);
-    expect(wrapper2.text()).toBe("Email or Password is wrong, try again");
+    jest.clearAllMocks();
   });
 
   it(`should close modal`, () => {

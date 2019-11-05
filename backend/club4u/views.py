@@ -168,6 +168,51 @@ def signout(request):
             return HttpResponse(status=401)
 
 
+def logininfo(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            current_user = request.user
+            userprofile = UserProfile.objects.get(user_id=current_user)
+            response_dict = {'id': userprofile.id, 'name': current_user.last_name, 'email': current_user.username,
+                             'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
+                             'available_semester': userprofile.available_semester}
+            return JsonResponse(response_dict, safe=False)
+        else:
+            return JsonResponse(None, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+
+def information(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+
+    if request.method == 'PUT':
+        body = request.body.decode()
+        name = json.loads(body)['name']
+        email = json.loads(body)['email']
+        dept = json.loads(body)['dept']
+        major = json.loads(body)['major']
+        grade = json.loads(body)['grade']
+        available_semester = json.loads(body)['available_semester']
+
+        user_profile = UserProfile.objects.get(user_id=request.user)
+        user_profile.user.last_name = name
+        user_profile.user.save()
+        user_profile.dept = Department.objects.get(id=dept)
+        user_profile.major = Major.objects.get(id=major)
+        user_profile.grade = grade
+        user_profile.available_semester = available_semester
+        user_profile.save()
+
+        response_dict = {'id': request.user.id, 'name': name, 'email': email,
+                         'dept': dept, 'major': major, 'grade': grade,
+                         'available_semester': available_semester}
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+
 def manage_club(request, id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)

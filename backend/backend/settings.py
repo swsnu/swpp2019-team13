@@ -85,7 +85,7 @@ DATABASES = {
     }
 }
 
-DATABASE_OPTIONS = {'charset' : 'utf8'}
+DATABASE_OPTIONS = {'charset': 'utf8'}
 
 
 # Password validation
@@ -128,3 +128,6 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# drop session when browser close
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -152,6 +152,7 @@ class ClubRegister extends React.Component {
               //   alert("Create Club Success!");
               //   this.props.closeHandler();
               // }}
+              disabled={this.state.name === "" || this.state.clubmanager === ""}
             >
               Register
             </Button>

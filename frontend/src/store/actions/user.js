@@ -24,7 +24,6 @@ export const signIn = loginInfo => {
   return dispatch => {
     return axios
       .post("/api/user/signin/", loginInfo)
-      .catch(e => "fail")
       .then(res => dispatch(signIn_(res.data)));
   };
 };
@@ -54,6 +53,36 @@ export const signUp = user => {
       dispatch(signUp_(user));
       return res.data;
     });
+  };
+};
+
+export const getLoginInfo_ = user => {
+  return {
+    type: actionTypes.GET_LOGIN_INFO,
+    loggedUser: user
+  };
+};
+
+export const getLoginInfo = loginInfo => {
+  return dispatch => {
+    return axios
+      .get("/api/user/logininfo/")
+      .then(res => dispatch(getLoginInfo_(res.data)));
+  };
+};
+
+export const putUserInformation_ = user => {
+  return {
+    type: actionTypes.PUT_USER_INFORMATION,
+    loggedUser: user
+  };
+};
+
+export const putUserInformation = userInfo => {
+  return dispatch => {
+    return axios
+      .put("/api/user/information/", userInfo)
+      .then(res => dispatch(putUserInformation_(res.data)));
   };
 };
 
