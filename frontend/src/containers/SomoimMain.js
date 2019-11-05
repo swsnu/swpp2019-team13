@@ -8,19 +8,24 @@ import Header from "../components/Header";
 import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
 import SomoimCreate from "../components/SomoimCreate";
+import axios from "axios";
 
 class SomoimMain extends React.Component {
   state = {
     somoimDetailShow: false,
     somoimCreateShow: false,
-    selectedSomoim: null
+    selectedSomoim: null,
+    recommendedList: [],
+    allList: [],
+    somoimList: [],
+    categoryList: null
   };
 
   somoimCardClickHandler = id => {
     this.setState({
       ...this.state,
       somoimDetailShow: true,
-      selectedSomoim: this.props.somoims[id]
+      selectedSomoim: this.state.somoimList[id - 1]
     });
   };
 
@@ -44,47 +49,82 @@ class SomoimMain extends React.Component {
       somoimCreateShow: false
     });
   };
+  componentDidMount() {
+    axios.get("/api/somoim/list/").then(
+      response => {
+        console.log(response.data[0]);
+        this.setState({
+          ...this.state,
+          recommendedList: response.data.map(item => (
+            <Col
+              sm="5"
+              key={item.pk}
+              style={{ paddingLeft: 1, paddingRight: 1 }}
+            >
+              <SomoimCard
+                clickHandler={this.somoimCardClickHandler}
+                somoim={item}
+              />
+            </Col>
+          )),
+          allList: response.data.map(item => (
+            <Col
+              sm="5"
+              key={item.pk}
+              style={{ paddingLeft: 1, paddingRight: 1 }}
+            >
+              <SomoimCard
+                clickHandler={this.somoimCardClickHandler}
+                somoim={item}
+              />
+            </Col>
+          )),
+          somoimList: response.data
+          /*
+          categoryList = response.data..map(item => (
+            <Button
+              className="category-button"
+              key={item.id}
+              variant="outline-secondary"
+            >
+              {item.name}
+            </Button>
+          ));*/
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    axios.get("/api/category/list/").then(
+      response => {
+        console.log(response.data[0]);
+        this.setState({
+          ...this.state,
+          categoryList: response.data.map(item => (
+            <Button
+              className="category-button"
+              key={item.id}
+              variant="outline-secondary"
+            >
+              {item.name}
+            </Button>
+          ))
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
 
   render() {
-    let categoryList, somoim_create;
-    if (this.props.categories) {
-      categoryList = this.props.categories.map(item => (
-        <Button
-          className="category-button"
-          key={item.id}
-          variant="outline-secondary"
-        >
-          {item.name}
-        </Button>
-      ));
-      somoim_create = (
-        <SomoimCreate
-          show={this.state.somoimCreateShow}
-          closeHandler={this.somoimCreateCloseHandler}
-        />
-      );
-    }
-
-    let recommendedList, allList;
-    if (this.props.somoims) {
-      recommendedList = this.props.somoims.map(item => (
-        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <SomoimCard
-            clickHandler={this.somoimCardClickHandler}
-            somoim={item}
-          />
-        </Col>
-      ));
-
-      allList = this.props.somoims.map(item => (
-        <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <SomoimCard
-            clickHandler={this.somoimCardClickHandler}
-            somoim={item}
-          />
-        </Col>
-      ));
-    }
+    let somoim_create = (
+      <SomoimCreate
+        show={this.state.somoimCreateShow}
+        closeHandler={this.somoimCreateCloseHandler}
+      />
+    );
 
     return (
       <div>
@@ -100,7 +140,7 @@ class SomoimMain extends React.Component {
                 overflowX: "scroll"
               }}
             >
-              {recommendedList}
+              {this.state.recommendedList}
             </div>
           </Row>
           <br />
@@ -108,7 +148,7 @@ class SomoimMain extends React.Component {
           <Row>
             <h2>All Somoims</h2>
           </Row>
-          <Row>{categoryList}</Row>
+          <Row>{this.state.categoryList}</Row>
           <br />
           <Row>
             <Col xs="10" style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -120,7 +160,7 @@ class SomoimMain extends React.Component {
                   marginRight: 0
                 }}
               >
-                {allList}
+                {this.state.allList}
               </div>
             </Col>
             <Col>

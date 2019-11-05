@@ -8,19 +8,85 @@ import Header from "../components/Header";
 import ClubCard from "../components/ClubCard";
 import ClubDetail from "../components/ClubDetail";
 import ClubRegister from "../components/ClubRegister";
+import axios from "axios";
 
 class ClubMain extends React.Component {
   state = {
     ClubDetailShow: false,
     ClubRegisterShow: false,
-    selectedClub: null
+    selectedClub: null,
+    recommendedList: [],
+    allList: [],
+    clubList: [],
+    categoryList: null
   };
-
+  componentDidMount() {
+    axios.get("/api/club/list/").then(
+      response => {
+        console.log(response.data[0]);
+        this.setState({
+          ...this.state,
+          recommendedList: response.data.map(item => (
+            <Col
+              sm="5"
+              key={item.pk}
+              style={{ paddingLeft: 1, paddingRight: 1 }}
+            >
+              <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+            </Col>
+          )),
+          allList: response.data.map(item => (
+            <Col
+              sm="5"
+              key={item.pk}
+              style={{ paddingLeft: 1, paddingRight: 1 }}
+            >
+              <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+            </Col>
+          )),
+          clubList: response.data
+          /*
+          categoryList = response.data..map(item => (
+            <Button
+              className="category-button"
+              key={item.id}
+              variant="outline-secondary"
+            >
+              {item.name}
+            </Button>
+          ));*/
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+    axios.get("/api/category/list/").then(
+      response => {
+        console.log(response.data[0]);
+        this.setState({
+          ...this.state,
+          categoryList: response.data.map(item => (
+            <Button
+              className="category-button"
+              key={item.id}
+              variant="outline-secondary"
+            >
+              {item.name}
+            </Button>
+          ))
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
   ClubCardClickHandler = id => {
     this.setState({
       ...this.state,
       ClubDetailShow: true,
-      selectedClub: this.props.Clubs[id]
+      selectedClub: this.state.clubList[id - 1]
     });
   };
 
@@ -44,40 +110,27 @@ class ClubMain extends React.Component {
       ClubRegisterShow: false
     });
   };
-
   render() {
-    let categoryList, RegisterButton;
-    if (this.props.categories) {
-      RegisterButton = (
-        <ClubRegister
-          show={this.state.ClubRegisterShow}
-          closeHandler={this.ClubRegisterCloseHandler}
-        />
-      );
-      categoryList = this.props.categories.map(item => (
-        <Button
-          className="category-button"
-          key={item.id}
-          variant="outline-secondary"
-        >
-          {item.name}
-        </Button>
-      ));
-    }
-    let recommendedList, allList;
-    if (this.props.Clubs) {
-      recommendedList = this.props.Clubs.map(item => (
-        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
-        </Col>
-      ));
-
-      allList = this.props.Clubs.map(item => (
-        <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
-        </Col>
-      ));
-    }
+    let RegisterButton;
+    RegisterButton = (
+      <ClubRegister
+        show={this.state.ClubRegisterShow}
+        closeHandler={this.ClubRegisterCloseHandler}
+      />
+    );
+    /*
+    const getclublist = async () => {
+      try {
+        return await axios.get("/api/club/list/");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const clublist = async () => {
+      const clubs = await getclublist();
+    };
+    clublist();
+    */
 
     return (
       <div>
@@ -93,7 +146,7 @@ class ClubMain extends React.Component {
                 overflowX: "scroll"
               }}
             >
-              {recommendedList}
+              {this.state.recommendedList}
             </div>
           </Row>
           <br />
@@ -102,7 +155,7 @@ class ClubMain extends React.Component {
             <h2>All Clubs</h2>
           </Row>
           <Row>
-            {categoryList}
+            {this.state.categoryList}
             <Col>
               <Button
                 className="club-create-button"
@@ -125,7 +178,7 @@ class ClubMain extends React.Component {
                   marginRight: 0
                 }}
               >
-                {allList}
+                {this.state.allList}
               </div>
             </Col>
           </Row>

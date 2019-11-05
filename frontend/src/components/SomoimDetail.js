@@ -4,17 +4,39 @@ import { withRouter } from "react-router";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-
+import axios from "axios";
 class SomoimDetail extends React.Component {
+  state = {
+    tagnameList: null
+  };
+  componentDidMount() {
+    axios.get("/api/tag/list/").then(
+      response => {
+        console.log(response.data);
+        this.setState({
+          ...this.state,
+          tagnameList: response.data
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
-      let tagList = somoim.tags.map(item => (
-        <Button key={item} variant="outline-primary">
-          {"#" + this.props.tags[item].name}
-        </Button>
-      ));
+      let tagList;
+      if (this.state.tagnameList) {
+        tagList = somoim.fields.tags.map(item => (
+          <Button key={item} variant="outline-primary">
+            {"#" + this.state.tagnameList[item - 1].name}
+          </Button>
+        ));
+      }
+      let percentage =
+        (somoim.fields.currentJoiner / somoim.fields.goalJoiner) * 100;
+
       return (
         <Modal
           show={this.props.show}
@@ -33,19 +55,19 @@ class SomoimDetail extends React.Component {
                 </Col>
                 <Col>
                   <Row>
-                    <h2>{somoim.title}</h2>
+                    <h2>{somoim.fields.title}</h2>
                     <Col md={{ offset: 1 }}>
                       <h4>
                         <span role="img" aria-label="thumb">
                           👍
                         </span>
-                        {somoim.likes}
+                        {somoim.fields.likes}
                       </h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.description}</Row>
+                  <Row>{somoim.fields.description}</Row>
                 </Col>
               </Row>
               <br />

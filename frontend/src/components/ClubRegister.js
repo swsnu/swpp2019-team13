@@ -2,13 +2,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Modal, Button, Form } from "react-bootstrap";
+import axios from "axios";
 
 class ClubRegister extends React.Component {
   state = {
     name: "",
     clubmanager: "",
     selected_category: 0,
-    auth_img_file: null
+    auth_img_file: null,
+    categoryList: null
   };
 
   UNSAFE_componentWillReceiveProps() {
@@ -78,7 +80,30 @@ class ClubRegister extends React.Component {
     }
   };
 
+  componentDidMount() {
+    axios.get("/api/category/list/").then(
+      response => {
+        this.setState({
+          ...this.state,
+          categoryList: response.data
+        });
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
   render() {
+    let category_select = null;
+    if (this.state.categoryList) {
+      category_select = this.state.categoryList.map(a => {
+        return (
+          <option key={a.id} value={a.name}>
+            {a.name}
+          </option>
+        );
+      });
+    }
     return (
       <Modal
         show={this.props.show}
@@ -111,13 +136,7 @@ class ClubRegister extends React.Component {
                 })
               }
             >
-              {this.props.categories.map(a => {
-                return (
-                  <option key={a.id} value={a.name}>
-                    {a.name}
-                  </option>
-                );
-              })}
+              {category_select}
             </Form.Control>
             <Form.Group controlId="formClubManager">
               <Form.Label>Club Manager</Form.Label>
@@ -142,16 +161,18 @@ class ClubRegister extends React.Component {
             </div>
             <Button
               letiant="primary"
-              // onClick={() => {
-              //   this.props.postClub(
-              //     this.state.name,
-              //     this.state.clubmanager,
-              //     this.state.auth_img_file,
-              //     this.state.selected_category
-              //   );
-              //   alert("Create Club Success!");
-              //   this.props.closeHandler();
-              // }}
+              onClick={() => {
+                var fd = new FormData();
+                fd.append("image", this.state.auth_img_file[0]);
+                axios.post("/api/preclub/", {
+                  name: this.state.name,
+                  manager: this.state.clubmanager,
+                  category: this.state.selected_category,
+                  auth_img: fd
+                });
+                alert("Create Club Success!");
+                this.props.closeHandler();
+              }}
             >
               Register
             </Button>

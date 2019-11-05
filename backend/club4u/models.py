@@ -73,7 +73,7 @@ class Somoim(models.Model):
     goalJoiner = models.IntegerField(default=0)
     currentJoiner = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
-
+    available_sem = models.IntegerField(default=0)
     tags = models.ManyToManyField(
         Tag,
         related_name="somoims",

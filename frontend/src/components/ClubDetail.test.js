@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import ClubDetail from "./ClubDetail";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
+import axios from "axios";
 
 const stubInitialState = {
   tags: [

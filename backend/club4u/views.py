@@ -9,6 +9,20 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 
 
+def pre_club(request):
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        manager = req_data['manager']
+        category = Category.objects.get(id=req_data['category'])
+        auth_img = req_data['auth_img'].FILES['image']
+        preclub = PreClub(
+            name=name, manager=manager, category=category, auth_img=auth_img)
+        preclub.save()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=405)
+
 def major_list(request):
     if request.method == 'GET':
         response_dict = [major for major in Major.objects.all().values()]
@@ -20,6 +34,13 @@ def major_list(request):
 def dept_list(request):
     if request.method == 'GET':
         response_dict = [dept for dept in Department.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+def tag_list(request):
+    if request.method == 'GET':
+        response_dict = [tag for tag in Tag.objects.all().values()]
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
@@ -48,11 +69,41 @@ def somoim_list(request):
         response_dict = [somoim for somoim in Somoim.objects.all()]
         serialized_data = serializers.serialize("json", response_dict)
         return HttpResponse(serialized_data)
+        
     elif request.method == 'POST':
-        return HttpResponse(status=400)
+        req_data = json.loads(request.body.decode())
+        title = req_data['title']
+        summary = req_data['summary']
+        category = Category.objects.get(id=req_data['category'])
+        description = req_data['description']
+        goalJoiner = req_data['goalJoiner']
+        currentJoiner = req_data['currentJoiner']
+        likes = req_data['likes']
+        available_sem = req_data['available_sem']
+        somoim = Somoim(
+            title=title,
+            summary=summary,
+            category=category,
+            description=description,
+            goalJoiner=goalJoiner,
+            currentJoiner=CurrentJoiner,
+            available_sem=available_sem,
+            likes=likes
+        )
+        somoim.save()
+        return HttpResponse(status=201)
+
     else:
         return HttpResponse(status=405)
 
+
+# api/category/list/
+def category_list(request):
+    if request.method == 'GET':
+        response_dict = [category for category in Category.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
 
 def signup(request):
     if request.method == 'POST':

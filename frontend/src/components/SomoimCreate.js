@@ -7,6 +7,7 @@ import { Modal, Button, Form, Row, Col, Container } from "react-bootstrap";
 import NumericInput from "react-numeric-input";
 
 import * as actionCreaters from "../store/actions/index";
+import axios from "axios";
 
 class SomoimCreate extends React.Component {
   state = {
@@ -185,14 +186,15 @@ class SomoimCreate extends React.Component {
                 id="confirm-create-somoim-button"
                 variant="primary"
                 onClick={() => {
-                  this.props.postSomoim(
-                    this.state.title,
-                    this.state.summary,
-                    this.state.description,
-                    this.state.goal_number,
-                    this.state.selected_dept,
-                    this.state.available_sem
-                  );
+                  axios.post("/api/somoim/", {
+                    title: this.state.title,
+                    summary: this.state.summary,
+                    description: this.state.description,
+                    goalJoiner: this.state.goal_number,
+                    currentJoiner: this.state.goal_number,
+                    selected_dept: this.state.selected_dept,
+                    available_sem: this.state.available_sem
+                  });
                   alert("Create Somoim Success!");
                   this.props.closeHandler();
                 }}
