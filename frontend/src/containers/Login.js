@@ -19,15 +19,18 @@ class Login extends Component {
 
   /* 로그인 버튼을 클릭했을 때 동작 */
   loginButtonHandler = () => {
-    this.props.signIn({
-      email: this.state.email,
-      password: this.state.password
-    });
-    this.setState({
-      ...this.state,
-      password: "",
-      wrongInput: true
-    });
+    this.props
+      .signIn({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .catch(e =>
+        this.setState({
+          ...this.state,
+          password: "",
+          wrongInput: true
+        })
+      );
   };
 
   UNSAFE_componentWillReceiveProps = () => {

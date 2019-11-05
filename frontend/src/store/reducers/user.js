@@ -10,6 +10,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_USER_LIST:
       return { ...state, users: action.users };
     case actionTypes.SIGN_IN:
+      return { ...state, loggedUser: action.loggedUser };
     case actionTypes.SIGN_OUT:
       return { ...state, loggedUser: null };
     case actionTypes.SIGN_UP:
