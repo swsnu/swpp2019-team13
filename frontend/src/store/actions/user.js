@@ -58,9 +58,10 @@ export const signUp = user => {
 };
 
 export const getManagingClubs_ = clubs => {
+  console.log(clubs);
   return {
     type: actionTypes.GET_MANAGING_CLUBS,
-    clubs: clubs
+    clubs: clubs.map(item => item.fields)
   };
 };
 
@@ -75,7 +76,7 @@ export const getManagingClubs = user => {
 export const getLikedClubs_ = clubs => {
   return {
     type: actionTypes.GET_LIKED_CLUBS,
-    clubs: clubs
+    clubs: clubs.map(item => item.fields)
   };
 };
 
@@ -90,7 +91,7 @@ export const getLikedClubs = user => {
 export const getAppliedClubs_ = clubs => {
   return {
     type: actionTypes.GET_APPLIED_CLUBS,
-    clubs: clubs
+    clubs: clubs.map(item => item.fields)
   };
 };
 

@@ -36,6 +36,12 @@ class PreClub(models.Model):
     )
     auth_img = models.ImageField(null=True)
 
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="pre_clubs",
+        blank=True
+    )
+
 
 class Club(models.Model):
     name = models.CharField(max_length=64)
@@ -47,6 +53,12 @@ class Club(models.Model):
     )
     poster_img = models.ImageField(null=True)
     likes = models.IntegerField(default=0)
+
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="clubs",
+        blank=True
+    )
 
 
 class Somoim(models.Model):
@@ -61,6 +73,12 @@ class Somoim(models.Model):
     goalJoiner = models.IntegerField(default=0)
     currentJoiner = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
+
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="somoims",
+        blank=True
+    )
 
 
 class UserProfile(models.Model):
