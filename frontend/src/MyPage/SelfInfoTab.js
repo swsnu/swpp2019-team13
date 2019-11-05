@@ -31,7 +31,7 @@ class SelfInfoTab extends Component {
           ...this.state,
           firstLoaded: true,
           name: this.props.loggedUser.name,
-          email: this.props.email,
+          email: this.props.loggedUser.email,
           dept: this.props.loggedUser.dept,
           major: this.props.loggedUser.major,
           grade: this.props.loggedUser.grade,
@@ -43,9 +43,15 @@ class SelfInfoTab extends Component {
     }
   };
 
+  modifyInfoHandler = () => {};
+
   render() {
     let loggedUserName = null;
     let loggedUserEmail = null;
+    let loggedUserDept = null;
+    let loggedUserMajor = null;
+    let loggedUserGrade = null;
+    let loggedUserAvailableSemester = null;
 
     let deptOptionList = null;
     let majorOptionList = null;
@@ -53,6 +59,10 @@ class SelfInfoTab extends Component {
     if (this.props.loggedUser) {
       loggedUserName = this.props.loggedUser.name;
       loggedUserEmail = this.props.loggedUser.email;
+      loggedUserDept = this.props.loggedUser.dept;
+      loggedUserMajor = this.props.loggedUser.major;
+      loggedUserGrade = this.props.loggedUser.grade;
+      loggedUserAvailableSemester = this.props.loggedUser.available_semester;
 
       if (this.props.depts) {
         deptOptionList = this.props.depts.map(dept => (
@@ -178,8 +188,18 @@ class SelfInfoTab extends Component {
           variant="dark"
           size="lg"
           block
-          onClick={this.onClick_SignupButton_Handler}
-          disabled={true}
+          onClick={this.modifyInfoHandler}
+          disabled={
+            this.state.name === "" ||
+            this.state.email === "" ||
+            (String(this.state.name) === String(loggedUserName) &&
+              String(this.state.email) === String(loggedUserEmail) &&
+              String(this.state.dept) === String(loggedUserDept) &&
+              String(this.state.major) === String(loggedUserMajor) &&
+              String(this.state.grade) === String(loggedUserGrade) &&
+              String(this.state.available_semester) ===
+                String(loggedUserAvailableSemester))
+          }
         >
           정보 수정
         </Button>
