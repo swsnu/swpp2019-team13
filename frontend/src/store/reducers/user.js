@@ -2,7 +2,11 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   users: [],
-  loggedUser: null
+  loggedUser: null,
+  likedClubs: [],
+  likedSomoims: [],
+  appliedClubs: [],
+  joinedSomoims: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -41,6 +45,28 @@ const reducer = (state = initialState, action) => {
       return { ...state, likedSomoims: action.somoims };
     case actionTypes.GET_JOINED_SOMOIMS:
       return { ...state, joinedSomoims: action.somoims };
+
+    case actionTypes.ADD_LIKED_CLUB:
+      return {
+        ...state,
+        likedClubs: state.likedClubs.concat(action.newLikedClub)
+      };
+    case actionTypes.ADD_LIKED_SOMOIM:
+      return {
+        ...state,
+        likedSomoims: state.likedSomoims.concat(action.newLikedSomoim)
+      };
+
+    case actionTypes.ADD_APPLIED_CLUB:
+      return {
+        ...state,
+        appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
+      };
+    case actionTypes.ADD_JOINED_SOMOIM:
+      return {
+        ...state,
+        joinedSomoims: state.joinedSomoims.concat(action.newJoinedSomoim)
+      };
 
     default:
       break;

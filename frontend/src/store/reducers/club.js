@@ -24,7 +24,6 @@ const initialState = {
       tags: [2, 3],
       likes: 15
     },
-
     {
       id: 2,
       name: "SnuLoL",
@@ -45,7 +44,10 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_CLUB_LIST:
       return { ...state, clubs: action.clubs };
     case actionTypes.GET_CLUB_BY_ID:
-      return { ...state, selectedClub: action.club };
+      let clubTargettedByID = state.clubs.filter(club => {
+        return club.id === action.id;
+      });
+      return { ...state, selectedClub: clubTargettedByID[0] };
     case actionTypes.POST_CLUB:
       const newClub = {
         id: state.clubs.length,
@@ -58,6 +60,19 @@ const reducer = (state = initialState, action) => {
         likes: 0
       };
       return { ...state, clubs: state.clubs.concat(newClub) };
+    case actionTypes.INCREASE_LIKES_OF_CLUB:
+      const clubsModifiedByClickingLike = state.clubs.map(club => {
+        if (club.id === action.newLikedClub.id) {
+          return action.newLikedClub;
+        } else {
+          return club;
+        }
+      });
+
+      return {
+        ...state,
+        clubs: clubsModifiedByClickingLike
+      };
     default:
       break;
   }
