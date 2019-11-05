@@ -52,10 +52,11 @@ class SignUp extends React.Component {
       grade: this.state.grade,
       available_semester: this.state.available_semester
     };
-    this.props.signUp(newUser);
-    alert("회원가입 완료");
-    this.props.signIn(newUser);
-    this.props.history.push("/club");
+    this.props
+      .signUp(newUser)
+      .then(() => alert("회원가입 완료"))
+      .then(() => this.props.signIn(newUser))
+      .then(() => this.props.history.push("/club"));
   };
 
   /* Render */

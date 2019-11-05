@@ -11,6 +11,12 @@ class Login extends Component {
     wrongInput: false
   };
 
+  componentDidUpdate = () => {
+    if (this.props.loggedUser) {
+      this.props.onHide();
+    }
+  };
+
   /* 로그인 버튼을 클릭했을 때 동작 */
   loginButtonHandler = () => {
     this.props.signIn({
@@ -35,10 +41,6 @@ class Login extends Component {
 
   /* Render */
   render() {
-    if (this.props.loggedUser) {
-      this.props.onHide();
-    }
-
     return (
       <div className="Login">
         {/* CSS for React-Bootstrap */}
