@@ -45,7 +45,12 @@ class Login extends Component {
   /* Render */
   render() {
     return (
-      <div className="Login">
+      <div
+        className="Login"
+        onKeyPress={e => {
+          if (e.key === "Enter") this.loginButtonHandler();
+        }}
+      >
         {/* CSS for React-Bootstrap */}
         <style type="text/css">
           {`
@@ -116,7 +121,12 @@ class Login extends Component {
 
           {/* 로그인 Modal Footer */}
           <Modal.Footer>
-            <Button variant="dark" size="lg" onClick={this.loginButtonHandler}>
+            <Button
+              variant="dark"
+              size="lg"
+              onClick={this.loginButtonHandler}
+              disabled={this.state.email === "" || this.state.password === ""}
+            >
               로그인 &#x2713;
             </Button>
           </Modal.Footer>
