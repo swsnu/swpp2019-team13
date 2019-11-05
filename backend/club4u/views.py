@@ -68,6 +68,7 @@ def club_edit(request, id=0):
 
             return JsonResponse(response_dict)
 
+
 def somoim_list(request):
     if request.method == 'GET':
         response_dict = [somoim for somoim in Somoim.objects.all()]
@@ -83,6 +84,7 @@ def somoim_list(request):
             return HttpResponseNotFound()
     else:
         return HttpResponse(status=405)
+
 
 def somoim_edit(request, id=0):
     if request.method == 'PUT':
@@ -100,7 +102,7 @@ def somoim_edit(request, id=0):
                 likes = req_data['likes']
             except (KeyError, json.decoder.JSONDecodeError):
                 return HttpResponseBadRequest()
-            
+
             selected_somoim.currentJoiner = currentJoiner
             selected_somoim.likes = likes
             selected_somoim.save()

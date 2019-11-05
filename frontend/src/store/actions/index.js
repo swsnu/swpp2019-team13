@@ -19,7 +19,7 @@ export {
   addLikedClub,
   addLikedSomoim,
   addAppliedClub,
-  addJoinedSomoim
+  addJoinedSomoim,
   getLoginInfo,
   putUserInformation,
   getManagingClubs,

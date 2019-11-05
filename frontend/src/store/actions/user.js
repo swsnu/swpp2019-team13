@@ -171,7 +171,7 @@ export const getJoinedSomoims_ = somoims => {
 export const getJoinedSomoims = user => {
   return dispatch => {
     return axios
-      .get("/api/user/" + user.id + "/somoim/apply/")
+      .get("/api/user/" + user.id + "/somoim/join/")
       .then(res => dispatch(getJoinedSomoims_(res.data)));
   };
 };
