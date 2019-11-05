@@ -50,8 +50,39 @@ def somoim_list(request):
         return HttpResponse(serialized_data)
     elif request.method == 'POST':
         return HttpResponse(status=400)
+    elif request.method == 'PUT':
+        req_data = json.loads(request.body.decode())
+        try:
+            selected_somoim = Somoim.objects.get(id=req_data['id'])
+        except Somoim.DoesNotExist:
+            return HttpResponseNotFound()
     else:
         return HttpResponse(status=405)
+
+def somoim_edit(request, id=0):
+    if request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return HttpResponse('Unauthorized', status=401)
+        else:
+            try:
+                selected_somoim = Somoim.objects.get(id=id)
+            except Somoim.DoesNotExist:
+                return HttpResponseNotFound()
+
+            try:
+                req_data = json.loads(request.body.decode())
+                currentJoiner = req_data['currentJoiner']
+            except (KeyError, json.decoder.JSONDecodeError):
+                return HttpResponseBadRequest()
+            
+            selected_somoim.currentJoiner = currentJoiner
+            selected_somoim.save()
+
+            response_dict = {
+                'id': selected_somoim.id
+            }
+
+            return JsonResponse(response_dict)
 
 
 def signup(request):

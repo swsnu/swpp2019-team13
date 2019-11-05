@@ -1,4 +1,5 @@
 import * as actionTypes from "./actionTypes";
+import axios from "axios";
 
 export const postSomoim_ = sm => {
   return {
@@ -65,6 +66,8 @@ export const increaseNumOfCurrentJoiner_ = newJoinedSomoim => {
 
 export const increaseNumOfCurrentJoiner = newJoinedSomoim => {
   return dispatch => {
-    dispatch(increaseNumOfCurrentJoiner_(newJoinedSomoim));
+    return axios
+      .put("/api/somoim/edit/" + newJoinedSomoim.id + "/", newJoinedSomoim)
+      .then(res => dispatch(increaseNumOfCurrentJoiner_(newJoinedSomoim)));
   };
 };

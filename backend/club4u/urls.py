@@ -10,6 +10,8 @@ urlpatterns = [
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
 
+    path('somoim/edit/<int:id>/', views.somoim_edit, name='somoim_edit'),
+
     path('user/signin/', views.signin, name='signin'),
     path('user/signup/', views.signup, name='signup'),
     path('user/signout/', views.signout, name='signout'),
