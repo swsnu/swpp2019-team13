@@ -36,6 +36,12 @@ class PreClub(models.Model):
     )
     auth_img = models.ImageField(null=True)
 
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="pre_clubs",
+        blank=True
+    )
+
 
 class Club(models.Model):
     name = models.CharField(max_length=64)
@@ -47,6 +53,12 @@ class Club(models.Model):
     )
     poster_img = models.ImageField(null=True)
     likes = models.IntegerField(default=0)
+
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="clubs",
+        blank=True
+    )
 
 
 class Somoim(models.Model):
@@ -61,6 +73,12 @@ class Somoim(models.Model):
     goalJoiner = models.IntegerField(default=0)
     currentJoiner = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
+
+    tags = models.ManyToManyField(
+        Tag,
+        related_name="somoims",
+        blank=True
+    )
 
 
 class UserProfile(models.Model):
@@ -82,78 +100,32 @@ class UserProfile(models.Model):
 
     manage_clubs = models.ManyToManyField(
         Club,
-        related_name="manager"
+        related_name="manager",
+        blank=True
     )
     like_clubs = models.ManyToManyField(
         Club,
-        related_name="likers"
+        related_name="likers",
+        blank=True
     )
     apply_clubs = models.ManyToManyField(
         Club,
-        related_name="appliers"
+        related_name="appliers",
+        blank=True
     )
 
     manage_somoims = models.ManyToManyField(
         Somoim,
-        related_name="manager"
+        related_name="manager",
+        blank=True
     )
     like_somoims = models.ManyToManyField(
         Somoim,
-        related_name="likers"
+        related_name="likers",
+        blank=True
     )
     join_somoims = models.ManyToManyField(
         Somoim,
-        related_name="joiners"
+        related_name="joiners",
+        blank=True
     )
-
-
-# class UserLikeClub(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userlikeclub_user_id'
-#     )
-#     club = models.ForeignKey(
-#         Club,
-#         on_delete=models.CASCADE,
-#         related_name='userlikeclub_club_id'
-#     )
-
-
-# class UserApplyClub(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userapplyclub_user_id'
-#     )
-#     club = models.ForeignKey(
-#         Club,
-#         on_delete=models.CASCADE,
-#         related_name='userapplyclub_club_id'
-#     )
-
-
-# class UserLikeSomoim(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userlikesomoim_user_id'
-#     )
-#     somoim = models.ForeignKey(
-#         Somoim,
-#         on_delete=models.CASCADE,
-#         related_name='userlikesomoim_somoim_id'
-#     )
-
-
-# class UserJoinSomoim(models.Model):
-#     user = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='userjoinsomoim_user_id'
-#     )
-#     somoim = models.ForeignKey(
-#         Somoim,
-#         on_delete=models.CASCADE,
-#         related_name='userjoinsomoim_somoim_id'
-#     )

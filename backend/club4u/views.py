@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
 import json
@@ -6,8 +6,7 @@ from json import JSONDecodeError
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-
-# api/major/list/
+from django.core import serializers
 
 
 def major_list(request):
@@ -17,8 +16,6 @@ def major_list(request):
     else:
         return HttpResponse(status=405)
 
-# api/dept/list/
-
 
 def dept_list(request):
     if request.method == 'GET':
@@ -26,8 +23,6 @@ def dept_list(request):
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
-
-# api/user/list/
 
 
 def user_list(request):
@@ -37,7 +32,26 @@ def user_list(request):
     else:
         return HttpResponse(status=405)
 
-# api/user/signup/
+
+def club_list(request):
+    if request.method == 'GET':
+        response_dict = [club for club in Club.objects.all()]
+        # print(response_dict[2].poster_img.path)
+        serialized_data = serializers.serialize("json", response_dict)
+        return HttpResponse(serialized_data)
+    else:
+        return HttpResponse(status=405)
+
+
+def somoim_list(request):
+    if request.method == 'GET':
+        response_dict = [somoim for somoim in Somoim.objects.all()]
+        serialized_data = serializers.serialize("json", response_dict)
+        return HttpResponse(serialized_data)
+    elif request.method == 'POST':
+        return HttpResponse(status=400)
+    else:
+        return HttpResponse(status=405)
 
 
 def signup(request):
@@ -64,8 +78,6 @@ def signup(request):
     else:
         return HttpResponse(status=405)
 
-# api/user/signin/
-
 
 def signin(request):
     if request.method == 'POST':
@@ -87,8 +99,6 @@ def signin(request):
             return HttpResponse(status=400)
     else:
         return HttpResponse(status=405)
-
-# api/user/signout/
 
 
 def signout(request):
@@ -117,36 +127,119 @@ def logininfo(request):
         return HttpResponse(status=405)
 
 
-# api/club/list/
+def manage_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
 
-
-def club_list(request):
     if request.method == 'GET':
-        response_dict = [club for club in Club.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        serialized_data = serializers.serialize(
+            "json", user.manage_clubs.all())
+        return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
 
-# api/somoim/list/
-def somoim_list(request):
+def like_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
     if request.method == 'GET':
-        response_dict = [somoim for somoim in Somoim.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
-    elif request.method == 'POST':
-        try:
-            body = request.body.decode()
-            article_title = json.loads(body)['title']
-            article_content = json.loads(body)['content']
-            acc_user = User.objects.get(username=request.user)
-            article = Article(title=article_title,
-                              content=article_content, author=acc_user)
-            article.save()
-            response_dict = {'id': article.id, 'title': article.title,
-                             'content': article.content, 'author': article.author_id}
-            return JsonResponse(response_dict, status=201)
-        except (KeyError, JSONDecodeError):
-            return HttpResponse(status=400)
+        serialized_data = serializers.serialize("json", user.like_clubs.all())
+        return HttpResponse(serialized_data)
+
+    elif request.method == 'PUT':
+        # toggle user's like status for requested club
+        body = request.body.decode()
+        club_id = json.loads(body)['club_id']
+
+        if user.like_clubs.get(id=club_id) is None:
+            user.like_clubs.add(Club.objects.get(id=club_id))
+        else:
+            user.like_clubs.remove(user.like_clubs.get(id=club_id))
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def apply_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serialized_data = serializers.serialize("json", user.apply_clubs.all())
+        return HttpResponse(serialized_data)
+    else:
+        return HttpResponse(status=405)
+
+
+def manage_somoim(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serialized_data = serializers.serialize(
+            "json", user.manage_somoims.all())
+        return HttpResponse(serialized_data)
+    else:
+        return HttpResponse(status=405)
+
+
+def like_somoim(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serialized_data = serializers.serialize(
+            "json", user.like_somoims.all())
+        return HttpResponse(serialized_data)
+
+    elif request.method == 'PUT':
+        # toggle user's like status for requested somoim
+        body = request.body.decode()
+        somoim_id = json.loads(body)['somoim_id']
+
+        if user.like_somoims.get(id=somoim_id) is None:
+            user.like_somoims.add(Club.objects.get(id=somoim_id))
+        else:
+            user.like_somoims.remove(user.like_somoims.get(id=somoim_id))
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def join_somoim(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serialized_data = serializers.serialize(
+            "json", user.join_somoims.all())
+        return HttpResponse(serialized_data)
+
     else:
         return HttpResponse(status=405)
 

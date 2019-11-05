@@ -143,13 +143,13 @@ describe("<SignUp />", () => {
     expect(signUpInstance.state.grade).toEqual(grade);
   });
 
-  it(`should set state properly on availableSemester input`, () => {
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+  it(`should set state properly on available_semester input`, () => {
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     const component = mount(signup);
-    const wrapper = component.find("#formAvailableSemester");
-    wrapper.simulate("change", { target: { value: availableSemester } });
+    const wrapper = component.find("#formavailable_semester");
+    wrapper.simulate("change", { target: { value: available_semester } });
     const signUpInstance = component.find(SignUp.WrappedComponent).instance();
-    expect(signUpInstance.state.availableSemester).toEqual(availableSemester);
+    expect(signUpInstance.state.available_semester).toEqual(available_semester);
   });
 
   it(`should signup`, () => {
@@ -199,10 +199,10 @@ describe("<SignUp />", () => {
     component
       .find("#formGrade")
       .simulate("change", { target: { value: grade } });
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     component
-      .find("#formAvailableSemester")
-      .simulate("change", { target: { value: availableSemester } });
+      .find("#formavailable_semester")
+      .simulate("change", { target: { value: available_semester } });
 
     const wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
@@ -241,10 +241,10 @@ describe("<SignUp />", () => {
     component
       .find("#formGrade")
       .simulate("change", { target: { value: grade } });
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     component
-      .find("#formAvailableSemester")
-      .simulate("change", { target: { value: availableSemester } });
+      .find("#formavailable_semester")
+      .simulate("change", { target: { value: available_semester } });
 
     const wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
@@ -312,10 +312,10 @@ describe("<SignUp />", () => {
     component
       .find("#formGrade")
       .simulate("change", { target: { value: grade } });
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     component
-      .find("#formAvailableSemester")
-      .simulate("change", { target: { value: availableSemester } });
+      .find("#formavailable_semester")
+      .simulate("change", { target: { value: available_semester } });
 
     const wrapper3 = component.find(".btn-dark");
     wrapper3.simulate("click");

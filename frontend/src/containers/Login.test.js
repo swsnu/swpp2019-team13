@@ -18,7 +18,7 @@ const stubInitialState = {
       dept: 1,
       major: 1,
       grade: 1,
-      availableSemester: 1
+      available_semester: 1
     }
   ]
 };

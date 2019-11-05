@@ -6,7 +6,14 @@ import { Container, Row, Col, Button, Card, Accordion } from "react-bootstrap";
 
 import Header from "../components/Header";
 import SelfInfoTab from "./SelfInfoTab";
+
+import ManagingClubTab from "./ManagingClubTab";
 import LikedClubTab from "./LikedClubTab";
+import AppliedClubTab from "./AppliedClubTab";
+
+import ManagingSomoimTab from "./ManagingSomoimTab";
+import LikedSomoimTab from "./LikedSomoimTab";
+import JoinedSomoimTab from "./JoinedSomoimTab";
 
 class MyPage extends Component {
   state = {
@@ -19,8 +26,23 @@ class MyPage extends Component {
       case 0:
         tab = <SelfInfoTab loggedUser={this.props.loggedUser} />;
         break;
+      case 1:
+        tab = <ManagingClubTab loggedUser={this.props.loggedUser} />;
+        break;
       case 2:
         tab = <LikedClubTab loggedUser={this.props.loggedUser} />;
+        break;
+      case 3:
+        tab = <AppliedClubTab loggedUser={this.props.loggedUser} />;
+        break;
+      case 4:
+        tab = <ManagingSomoimTab loggedUser={this.props.loggedUser} />;
+        break;
+      case 5:
+        tab = <LikedSomoimTab loggedUser={this.props.loggedUser} />;
+        break;
+      case 6:
+        tab = <JoinedSomoimTab loggedUser={this.props.loggedUser} />;
         break;
       default:
         tab = null;
@@ -161,7 +183,7 @@ class MyPage extends Component {
                         this.setState({ ...this.state, tab: 6 });
                       }}
                     >
-                      지원한 소모임
+                      참여한 소모임
                     </Button>
                   </div>
                 </Accordion.Collapse>

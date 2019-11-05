@@ -11,7 +11,7 @@ let stubUser = {
   dept: 0,
   major: 3,
   grade: 3,
-  availableSemester: 2
+  available_semester: 2
 };
 
 describe("User Actions", () => {

@@ -53,3 +53,11 @@ mysql -u root club4u < [FILE NAME]
 ```
 pip install -r backend/requirements.txt
 ```
+
+### Run
+
+```
+python manage.py runserver
+```
+
+should be done when the virtual-env is activated
