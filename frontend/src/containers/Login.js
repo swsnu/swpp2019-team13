@@ -45,7 +45,12 @@ class Login extends Component {
   /* Render */
   render() {
     return (
-      <div className="Login">
+      <div
+        className="Login"
+        onKeyPress={e => {
+          if (e.key === "Enter") this.loginButtonHandler();
+        }}
+      >
         {/* CSS for React-Bootstrap */}
         <style type="text/css">
           {`
