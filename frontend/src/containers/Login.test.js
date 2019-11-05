@@ -49,9 +49,7 @@ describe("<Login />", () => {
 
     spySignIn = jest.spyOn(actionCreators, "signIn").mockImplementation(() => {
       return dispatch => {
-        return new Promise(() => {
-          then: () => {};
-        });
+        return new Promise(() => {});
       };
     });
   });
@@ -113,36 +111,6 @@ describe("<Login />", () => {
 
     jest.clearAllMocks();
   });
-
-  // it(`should not sign in`, () => {
-  //   const spySignIn = jest
-  //     .spyOn(actionCreators, "signIn")
-  //     .mockImplementation(() => {
-  //       return dispatch => {
-  //         return new Promise(() => {
-  //           then: () => {};
-  //         });
-  //       };
-  //     });
-
-  //   const component = mount(login);
-
-  //   const email = "WRONG_EMAIL";
-  //   component
-  //     .find("#formBasicEmail")
-  //     .simulate("change", { target: { value: email } });
-  //   const password = "WRONG_PASSWORD";
-  //   component
-  //     .find("#formBasicPassword")
-  //     .simulate("change", { target: { value: password } });
-
-  //   let wrapper = component.find(".btn-dark");
-  //   wrapper.simulate("click");
-
-  //   wrapper = component.find("#wrong-input");
-  //   expect(wrapper.length).toBe(1);
-  //   expect(wrapper.text()).toBe("Email or Password is wrong, try again");
-  // });
 
   it(`should close modal`, () => {
     const component = mount(login);
