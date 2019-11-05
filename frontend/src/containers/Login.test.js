@@ -58,6 +58,16 @@ describe("<Login />", () => {
     expect(wrapper2.text()).toBe("로그인");
   });
 
+  it("should clear inputs when modal reopen", () => {
+    const component = mount(login);
+
+    const wrapper = component.find("#formBasicEmail");
+    wrapper.simulate("change", { target: { value: "TEST_EMAIL" } });
+    const loginInstance = component.find(Login.WrappedComponent).instance();
+    loginInstance.UNSAFE_componentWillReceiveProps();
+    expect(loginInstance.state.email).toEqual("");
+  });
+
   it(`should set state properly on email input`, () => {
     const email = "TEST_EMAIL";
     const component = mount(login);

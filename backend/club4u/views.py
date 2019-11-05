@@ -79,7 +79,7 @@ def signin(request):
                 userprofile = UserProfile.objects.get(user_id=user)
                 response_dict = {'id': userprofile.id, 'name': user.last_name, 'email': user.username,
                                  'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
-                                 'available_semester': userprofile.available_semester}
+                                 'availableSemester': userprofile.available_semester}
                 return JsonResponse(response_dict, safe=False)
             else:
                 return HttpResponse(status=401)
@@ -98,6 +98,23 @@ def signout(request):
             return HttpResponse(status=204)
         else:
             return HttpResponse(status=401)
+
+# api/user/logininfo/
+
+
+def logininfo(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            current_user = request.user
+            userprofile = UserProfile.objects.get(user_id=current_user)
+            response_dict = {'id': userprofile.id, 'name': current_user.last_name, 'email': current_user.username,
+                             'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
+                             'availableSemester': userprofile.available_semester}
+            return JsonResponse(response_dict, safe=False)
+        else:
+            return JsonResponse(None, safe=False)
+    else:
+        return HttpResponse(status=405)
 
 
 # api/club/list/

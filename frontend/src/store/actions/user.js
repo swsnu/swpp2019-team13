@@ -57,6 +57,21 @@ export const signUp = user => {
   };
 };
 
+export const getLoginInfo_ = user => {
+  return {
+    type: actionTypes.GET_LOGIN_INFO,
+    loggedUser: user
+  };
+};
+
+export const getLoginInfo = loginInfo => {
+  return dispatch => {
+    return axios
+      .get("/api/user/logininfo/")
+      .then(res => dispatch(getLoginInfo_(res.data)));
+  };
+};
+
 export const getLikedClubs_ = clubs => {
   return {
     type: actionTypes.GET_LIKED_CLUBS,

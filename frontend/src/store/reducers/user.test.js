@@ -8,7 +8,7 @@ const stubUser = {
   dept: 0,
   major: 4,
   grade: 3,
-  available_semester: 2
+  availableSemester: 2
 };
 
 const initialusers = [];

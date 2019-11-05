@@ -36,11 +36,6 @@ class Login extends Component {
     });
   };
 
-  /* Modal에서 나갔을 때 동작 */
-  onHide_LoginModal_Handler = () => {
-    this.props.onHide();
-  };
-
   /* Render */
   render() {
     if (this.props.loggedUser) {
@@ -67,7 +62,7 @@ class Login extends Component {
         {/* 로그인 Modal */}
         <Modal
           show={this.props.show}
-          onHide={this.onHide_LoginModal_Handler}
+          onHide={this.props.onHide}
           // onExited={this.onExit_LoginModal_Handler}
           style={{ opacity: 1 }}
           size="sm"
