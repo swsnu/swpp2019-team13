@@ -180,9 +180,11 @@ export const addAppliedClub_ = newAppliedClub => {
   };
 };
 
-export const addAppliedClub = newAppliedClub => {
+export const addAppliedClub = (newAppliedClub, user) => {
   return dispatch => {
-    dispatch(addAppliedClub_(newAppliedClub));
+    return axios
+      .put("/api/user/" + user.id + "/club/apply/", newAppliedClub)
+      .then(res => dispatch(addAppliedClub_(newAppliedClub)));
   };
 };
 
@@ -193,8 +195,10 @@ export const addJoinedSomoim_ = newJoinedSomoim => {
   };
 };
 
-export const addJoinedSomoim = newJoinedSomoim => {
+export const addJoinedSomoim = (newJoinedSomoim, user) => {
   return dispatch => {
-    dispatch(addJoinedSomoim_(newJoinedSomoim));
+    return axios
+      .put("/api/user/" + user.id + "/somoim/join/", newJoinedSomoim)
+      .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)));
   };
 };

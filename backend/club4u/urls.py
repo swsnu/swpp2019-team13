@@ -21,5 +21,5 @@ urlpatterns = [
     path('user/<int:id>/somoim/manage/',
          views.manage_somoim, name='manage_somoim'),
     path('user/<int:id>/somoim/like/', views.like_somoim, name='like_somoim'),
-    path('user/<int:id>/somoim/apply/', views.join_somoim, name='join_somoim'),
+    path('user/<int:id>/somoim/join/', views.join_somoim, name='join_somoim'),
 ]

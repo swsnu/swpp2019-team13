@@ -145,8 +145,6 @@ def like_club(request, id=0):
 
         if user.like_clubs.get(id=club_id) is None:
             user.like_clubs.add(Club.objects.get(id=club_id))
-        else:
-            user.like_clubs.remove(user.like_clubs.get(id=club_id))
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
@@ -163,6 +161,15 @@ def apply_club(request, id=0):
     if request.method == 'GET':
         serialized_data = serializers.serialize("json", user.apply_clubs.all())
         return HttpResponse(serialized_data)
+    elif request.method == 'PUT':
+        req_data = json.loads(request.body.decode())
+        club_id = req_data['club_id']
+
+        if user.apply_clubs.get(id=club_id) is None:
+            user.apply_clubs.add(Club.objects.get(id=club_id))
+        else:
+            user.apply_clubs.remove(user.apply_clubs.get(id=club_id))
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
@@ -222,7 +229,16 @@ def join_somoim(request, id=0):
         serialized_data = serializers.serialize(
             "json", user.join_somoims.all())
         return HttpResponse(serialized_data)
+    elif request.method == 'PUT':
+        req_data = json.loads(request.body.decode())
 
+        somoim_id = req_data['id']
+        somoim = Somoim.objects.filter(id=somoim_id+1)
+
+        user.join_somoims.add(somoim[0])
+        user.save()
+
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 

@@ -21,7 +21,7 @@ class SomoimDetail extends React.Component {
     newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
 
     this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
-    this.props.addJoinedSomoim(newJoinedSomoim);
+    this.props.addJoinedSomoim(newJoinedSomoim, this.props.loggedUser);
   };
 
   render() {
@@ -95,6 +95,7 @@ class SomoimDetail extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     tags: state.tag.tags
   };
 };
@@ -107,8 +108,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(actionCreators.addLikedSomoim(newLikedSomoim)),
     increaseNumOfCurrentJoiner: newJoinedSomoim =>
       dispatch(actionCreators.increaseNumOfCurrentJoiner(newJoinedSomoim)),
-    addJoinedSomoim: newJoinedSomoim =>
-      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim))
+    addJoinedSomoim: (newJoinedSomoim, user) =>
+      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim, user))
   };
 };
 

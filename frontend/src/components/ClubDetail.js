@@ -20,7 +20,7 @@ class ClubDetail extends React.Component {
 
   onClickApplyButton = () => {
     let newAppliedClub = this.props.club;
-    this.props.addAppliedClub(newAppliedClub);
+    this.props.addAppliedClub(newAppliedClub, this.props.loggedUser);
   };
 
   render() {
@@ -97,6 +97,7 @@ class ClubDetail extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     tags: state.tag.tags
   };
 };
@@ -107,8 +108,8 @@ const mapDispatchToProps = dispatch => {
       dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
     addLikedClub: newLikedClub =>
       dispatch(actionCreators.addLikedClub(newLikedClub)),
-    addAppliedClub: newAppliedClub =>
-      dispatch(actionCreators.addAppliedClub(newAppliedClub))
+    addAppliedClub: (newAppliedClub, user) =>
+      dispatch(actionCreators.addAppliedClub(newAppliedClub, user))
   };
 };
 
