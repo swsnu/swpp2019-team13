@@ -16,7 +16,7 @@ class SignUp extends React.Component {
     dept: "",
     major: "",
     grade: 1,
-    availableSemester: 1
+    available_semester: 1
   };
 
   componentDidMount() {
@@ -50,7 +50,7 @@ class SignUp extends React.Component {
       dept: deptID,
       major: majorID,
       grade: this.state.grade,
-      available_semester: this.state.availableSemester
+      available_semester: this.state.available_semester
     };
     this.props.signUp(newUser);
     alert("회원가입 완료");
@@ -203,14 +203,14 @@ class SignUp extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formAvailableSemester">
+              <Form.Group as={Col} controlId="formavailable_semester">
                 {/* 활동 가능 학기 수 입력 칸*/}
                 <Form.Label>활동 가능 학기 수</Form.Label>
                 <Form.Control
                   as="select"
                   size="lg"
                   onChange={event => {
-                    this.setState({ availableSemester: event.target.value });
+                    this.setState({ available_semester: event.target.value });
                   }}
                 >
                   <option>1</option>
