@@ -1,4 +1,5 @@
 import * as actionTypes from "./actionTypes";
+import axios from "axios";
 
 // TODO : implement actions
 export const postClub_ = at => {
@@ -51,6 +52,8 @@ export const increaseLikesOfClub_ = newLikedClub => {
 
 export const increaseLikesOfClub = newLikedClub => {
   return dispatch => {
-    dispatch(increaseLikesOfClub_(newLikedClub));
+    return axios
+      .put("/api/club/edit/" + newLikedClub.id + "/", newLikedClub)
+      .then(res => dispatch(increaseLikesOfClub_(newLikedClub)));
   };
 };

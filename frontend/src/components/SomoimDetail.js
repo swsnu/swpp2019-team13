@@ -13,7 +13,7 @@ class SomoimDetail extends React.Component {
     newLikedSomoim.likes = newLikedSomoim.likes + 1;
 
     this.props.increaseLikesOfSomoim(newLikedSomoim);
-    this.props.addLikedSomoim(newLikedSomoim);
+    this.props.addLikedSomoim(newLikedSomoim, this.props.loggedUser);
   };
 
   onClickJoinButton = () => {
@@ -104,8 +104,8 @@ const mapDispatchToProps = dispatch => {
   return {
     increaseLikesOfSomoim: newLikedSomoim =>
       dispatch(actionCreators.increaseLikesOfSomoim(newLikedSomoim)),
-    addLikedSomoim: newLikedSomoim =>
-      dispatch(actionCreators.addLikedSomoim(newLikedSomoim)),
+    addLikedSomoim: (newLikedSomoim, user) =>
+      dispatch(actionCreators.addLikedSomoim(newLikedSomoim, user)),
     increaseNumOfCurrentJoiner: newJoinedSomoim =>
       dispatch(actionCreators.increaseNumOfCurrentJoiner(newJoinedSomoim)),
     addJoinedSomoim: (newJoinedSomoim, user) =>

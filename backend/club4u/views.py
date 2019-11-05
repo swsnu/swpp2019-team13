@@ -43,6 +43,31 @@ def club_list(request):
         return HttpResponse(status=405)
 
 
+def club_edit(request, id=0):
+    if request.method == 'PUT':
+        if not request.user.is_authenticated:
+            return HttpResponse('Unauthorized', status=401)
+        else:
+            try:
+                selected_club = Club.objects.get(id=id)
+            except Club.DoesNotExist:
+                return HttpResponseNotFound()
+
+            try:
+                req_data = json.loads(request.body.decode())
+                likes = req_data['likes']
+            except (KeyError, json.decoder.JSONDecodeError):
+                return HttpResponseBadRequest()
+
+            selected_club.likes = likes
+            selected_club.save()
+
+            response_dict = {
+                'id': selected_club.id
+            }
+
+            return JsonResponse(response_dict)
+
 def somoim_list(request):
     if request.method == 'GET':
         response_dict = [somoim for somoim in Somoim.objects.all()]
@@ -72,10 +97,12 @@ def somoim_edit(request, id=0):
             try:
                 req_data = json.loads(request.body.decode())
                 currentJoiner = req_data['currentJoiner']
+                likes = req_data['likes']
             except (KeyError, json.decoder.JSONDecodeError):
                 return HttpResponseBadRequest()
             
             selected_somoim.currentJoiner = currentJoiner
+            selected_somoim.likes = likes
             selected_somoim.save()
 
             response_dict = {
@@ -170,13 +197,16 @@ def like_club(request, id=0):
         return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
-        # toggle user's like status for requested club
-        body = request.body.decode()
-        club_id = json.loads(body)['club_id']
+        req_data = json.loads(request.body.decode())
 
-        if user.like_clubs.get(id=club_id) is None:
-            user.like_clubs.add(Club.objects.get(id=club_id))
+        club_id = req_data['id']
+        club = Club.objects.filter(id=club_id)
+
+        user.like_clubs.add(club[0])
+        user.save()
+
         return HttpResponse(status=204)
+
     else:
         return HttpResponse(status=405)
 
@@ -196,7 +226,7 @@ def apply_club(request, id=0):
         req_data = json.loads(request.body.decode())
 
         club_id = req_data['id']
-        club = Club.objects.filter(id=club_id+1)
+        club = Club.objects.filter(id=club_id)
 
         user.apply_clubs.add(club[0])
         user.save()
@@ -236,15 +266,16 @@ def like_somoim(request, id=0):
         return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
-        # toggle user's like status for requested somoim
-        body = request.body.decode()
-        somoim_id = json.loads(body)['somoim_id']
+        req_data = json.loads(request.body.decode())
 
-        if user.like_somoims.get(id=somoim_id) is None:
-            user.like_somoims.add(Club.objects.get(id=somoim_id))
-        else:
-            user.like_somoims.remove(user.like_somoims.get(id=somoim_id))
+        somoim_id = req_data['id']
+        somoim = Somoim.objects.filter(id=somoim_id)
+
+        user.like_somoims.add(somoim[0])
+        user.save()
+
         return HttpResponse(status=204)
+
     else:
         return HttpResponse(status=405)
 
@@ -265,7 +296,7 @@ def join_somoim(request, id=0):
         req_data = json.loads(request.body.decode())
 
         somoim_id = req_data['id']
-        somoim = Somoim.objects.filter(id=somoim_id+1)
+        somoim = Somoim.objects.filter(id=somoim_id)
 
         user.join_somoims.add(somoim[0])
         user.save()

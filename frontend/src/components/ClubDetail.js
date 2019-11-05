@@ -15,7 +15,7 @@ class ClubDetail extends React.Component {
     newLikedClub.likes = newLikedClub.likes + 1;
 
     this.props.increaseLikesOfClub(newLikedClub);
-    this.props.addLikedClub(newLikedClub);
+    this.props.addLikedClub(newLikedClub, this.props.loggedUser);
   };
 
   onClickApplyButton = () => {
@@ -106,8 +106,8 @@ const mapDispatchToProps = dispatch => {
   return {
     increaseLikesOfClub: newLikedClub =>
       dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
-    addLikedClub: newLikedClub =>
-      dispatch(actionCreators.addLikedClub(newLikedClub)),
+    addLikedClub: (newLikedClub, user) =>
+      dispatch(actionCreators.addLikedClub(newLikedClub, user)),
     addAppliedClub: (newAppliedClub, user) =>
       dispatch(actionCreators.addAppliedClub(newAppliedClub, user))
   };

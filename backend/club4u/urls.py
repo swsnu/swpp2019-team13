@@ -10,6 +10,7 @@ urlpatterns = [
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
 
+    path('club/edit/<int:id>/', views.club_edit, name='club_edit'),
     path('somoim/edit/<int:id>/', views.somoim_edit, name='somoim_edit'),
 
     path('user/signin/', views.signin, name='signin'),

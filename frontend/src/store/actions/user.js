@@ -154,9 +154,11 @@ export const addLikedClub_ = newLikedClub => {
   };
 };
 
-export const addLikedClub = newLikedClub => {
+export const addLikedClub = (newLikedClub, user) => {
   return dispatch => {
-    dispatch(addLikedClub_(newLikedClub));
+    return axios
+      .put("/api/user/" + user.id + "/club/like/", newLikedClub)
+      .then(res => dispatch(addLikedClub_(newLikedClub)));
   };
 };
 
@@ -167,9 +169,11 @@ export const addLikedSomoim_ = newLikedSomoim => {
   };
 };
 
-export const addLikedSomoim = newLikedSomoim => {
+export const addLikedSomoim = (newLikedSomoim, user) => {
   return dispatch => {
-    dispatch(addLikedSomoim_(newLikedSomoim));
+    return axios
+      .put("/api/user/" + user.id + "/somoim/like/", newLikedSomoim)
+      .then(res => dispatch(addLikedSomoim_(newLikedSomoim)));
   };
 };
 

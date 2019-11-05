@@ -53,7 +53,9 @@ export const increaseLikesOfSomoim_ = newLikedSomoim => {
 
 export const increaseLikesOfSomoim = newLikedSomoim => {
   return dispatch => {
-    dispatch(increaseLikesOfSomoim_(newLikedSomoim));
+    return axios
+      .put("/api/somoim/edit/" + newLikedSomoim.id + "/", newLikedSomoim)
+      .then(res => dispatch(increaseLikesOfSomoim_(newLikedSomoim)));
   };
 };
 
