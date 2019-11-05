@@ -7,6 +7,7 @@ import { Container, Row, Col, Button, Card, Accordion } from "react-bootstrap";
 import Header from "../components/Header";
 import SelfInfoTab from "./SelfInfoTab";
 import LikedClubTab from "./LikedClubTab";
+import AppliedClubTab from "./AppliedClubTab";
 
 class MyPage extends Component {
   state = {
@@ -19,8 +20,14 @@ class MyPage extends Component {
       case 0:
         tab = <SelfInfoTab loggedUser={this.props.loggedUser} />;
         break;
+      case 1:
+        tab = <LikedClubTab loggedUser={this.props.loggedUser} />;
+        break;
       case 2:
         tab = <LikedClubTab loggedUser={this.props.loggedUser} />;
+        break;
+      case 3:
+        tab = <AppliedClubTab loggedUser={this.props.loggedUser} />;
         break;
       default:
         tab = null;

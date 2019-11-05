@@ -57,6 +57,21 @@ export const signUp = user => {
   };
 };
 
+export const getManagingClubs_ = clubs => {
+  return {
+    type: actionTypes.GET_MANAGING_CLUBS,
+    clubs: clubs
+  };
+};
+
+export const getManagingClubs = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/club/manage/")
+      .then(res => dispatch(getManagingClubs_(res.data)));
+  };
+};
+
 export const getLikedClubs_ = clubs => {
   return {
     type: actionTypes.GET_LIKED_CLUBS,
@@ -69,5 +84,20 @@ export const getLikedClubs = user => {
     return axios
       .get("/api/user/" + user.id + "/club/like/")
       .then(res => dispatch(getLikedClubs_(res.data)));
+  };
+};
+
+export const getAppliedClubs_ = clubs => {
+  return {
+    type: actionTypes.GET_APPLIED_CLUBS,
+    clubs: clubs
+  };
+};
+
+export const getAppliedClubs = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/club/apply/")
+      .then(res => dispatch(getAppliedClubs_(res.data)));
   };
 };

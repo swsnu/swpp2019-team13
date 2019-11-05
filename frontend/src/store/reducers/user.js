@@ -25,8 +25,12 @@ const reducer = (state = initialState, action) => {
       };
       return { ...state, users: state.users.concat(newUser) };
 
+    case actionTypes.GET_MANAGING_CLUBS:
+      return { ...state, managingClubs: action.clubs };
     case actionTypes.GET_LIKED_CLUBS:
       return { ...state, likedClubs: action.clubs };
+    case actionTypes.GET_APPLIED_CLUBS:
+      return { ...state, appliedClubs: action.clubs };
 
     default:
       break;
