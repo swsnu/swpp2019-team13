@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+// eslint-disable-next-line
 import { Button, Card } from "react-bootstrap";
 import SomoimDetail from "../components/SomoimDetail";
 import * as userActions from "../store/actions/user";

@@ -146,3 +146,55 @@ export const getJoinedSomoims = user => {
       .then(res => dispatch(getJoinedSomoims_(res.data)));
   };
 };
+
+export const addLikedClub_ = newLikedClub => {
+  return {
+    type: actionTypes.ADD_LIKED_CLUB,
+    newLikedClub: newLikedClub
+  };
+};
+
+export const addLikedClub = newLikedClub => {
+  return dispatch => {
+    dispatch(addLikedClub_(newLikedClub));
+  };
+};
+
+export const addLikedSomoim_ = newLikedSomoim => {
+  return {
+    type: actionTypes.ADD_LIKED_SOMOIM,
+    newLikedSomoim: newLikedSomoim
+  };
+};
+
+export const addLikedSomoim = newLikedSomoim => {
+  return dispatch => {
+    dispatch(addLikedSomoim_(newLikedSomoim));
+  };
+};
+
+export const addAppliedClub_ = newAppliedClub => {
+  return {
+    type: actionTypes.ADD_APPLIED_CLUB,
+    newAppliedClub: newAppliedClub
+  };
+};
+
+export const addAppliedClub = newAppliedClub => {
+  return dispatch => {
+    dispatch(addAppliedClub_(newAppliedClub));
+  };
+};
+
+export const addJoinedSomoim_ = newJoinedSomoim => {
+  return {
+    type: actionTypes.ADD_JOINED_SOMOIM,
+    newJoinedSomoim: newJoinedSomoim
+  };
+};
+
+export const addJoinedSomoim = newJoinedSomoim => {
+  return dispatch => {
+    dispatch(addJoinedSomoim_(newJoinedSomoim));
+  };
+};

@@ -42,3 +42,29 @@ export const getSomoimByID = id => {
     return new Promise(() => dispatch(getSomoimByID_(id)));
   };
 };
+
+export const increaseLikesOfSomoim_ = newLikedSomoim => {
+  return {
+    type: actionTypes.INCREASE_LIKES_OF_SOMOIM,
+    newLikedSomoim: newLikedSomoim
+  };
+};
+
+export const increaseLikesOfSomoim = newLikedSomoim => {
+  return dispatch => {
+    dispatch(increaseLikesOfSomoim_(newLikedSomoim));
+  };
+};
+
+export const increaseNumOfCurrentJoiner_ = newJoinedSomoim => {
+  return {
+    type: actionTypes.INCREASE_NUM_OF_CURRENT_JOINER,
+    newJoinedSomoim: newJoinedSomoim
+  };
+};
+
+export const increaseNumOfCurrentJoiner = newJoinedSomoim => {
+  return dispatch => {
+    dispatch(increaseNumOfCurrentJoiner_(newJoinedSomoim));
+  };
+};

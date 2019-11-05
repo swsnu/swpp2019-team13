@@ -1,11 +1,29 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import * as actionCreators from "../store/actions/index";
+
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 class SomoimDetail extends React.Component {
+  onClickLikeButton = () => {
+    let newLikedSomoim = this.props.somoim;
+    newLikedSomoim.likes = newLikedSomoim.likes + 1;
+
+    this.props.increaseLikesOfSomoim(newLikedSomoim);
+    this.props.addLikedSomoim(newLikedSomoim);
+  };
+
+  onClickJoinButton = () => {
+    let newJoinedSomoim = this.props.somoim;
+    newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
+
+    this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
+    this.props.addJoinedSomoim(newJoinedSomoim);
+  };
+
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
@@ -53,16 +71,18 @@ class SomoimDetail extends React.Component {
               <Row>
                 <Col></Col>
                 <Col>
-                  <Button size="lg">
+                  <Button size="lg" onClick={this.onClickLikeButton}>
+                    좋아요!{" "}
                     <span role="img" aria-label="thumb">
                       👍
-                    </span>{" "}
-                    Like!
+                    </span>
                   </Button>
                 </Col>
                 <Col></Col>
                 <Col>
-                  <Button size="lg">Join!</Button>
+                  <Button size="lg" onClick={this.onClickJoinButton}>
+                    함께하기
+                  </Button>
                 </Col>
               </Row>
             </Container>
@@ -80,7 +100,16 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    increaseLikesOfSomoim: newLikedSomoim =>
+      dispatch(actionCreators.increaseLikesOfSomoim(newLikedSomoim)),
+    addLikedSomoim: newLikedSomoim =>
+      dispatch(actionCreators.addLikedSomoim(newLikedSomoim)),
+    increaseNumOfCurrentJoiner: newJoinedSomoim =>
+      dispatch(actionCreators.increaseNumOfCurrentJoiner(newJoinedSomoim)),
+    addJoinedSomoim: newJoinedSomoim =>
+      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim))
+  };
 };
 
 export default connect(

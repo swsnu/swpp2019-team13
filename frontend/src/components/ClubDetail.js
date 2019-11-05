@@ -1,13 +1,28 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import * as actionCreators from "../store/actions/index";
+
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
-import "react-circular-progressbar/dist/styles.css";
 
 import img1 from "../components/1.jpg";
 import img2 from "../components/2.png";
 import img3 from "../components/3.png";
+
 class ClubDetail extends React.Component {
+  onClickLikeButton = () => {
+    let newLikedClub = this.props.club;
+    newLikedClub.likes = newLikedClub.likes + 1;
+
+    this.props.increaseLikesOfClub(newLikedClub);
+    this.props.addLikedClub(newLikedClub);
+  };
+
+  onClickApplyButton = () => {
+    let newAppliedClub = this.props.club;
+    this.props.addAppliedClub(newAppliedClub);
+  };
+
   render() {
     let club = this.props.club;
     if (club) {
@@ -58,16 +73,18 @@ class ClubDetail extends React.Component {
               <Row>
                 <Col></Col>
                 <Col>
-                  <Button size="lg">
+                  <Button onClick={this.onClickLikeButton} size="lg">
+                    좋아요!{" "}
                     <span role="img" aria-label="thumb">
                       👍
                     </span>
-                    Like!
                   </Button>
                 </Col>
                 <Col></Col>
                 <Col>
-                  <Button size="lg">Join!</Button>
+                  <Button onClick={this.onClickApplyButton} size="lg">
+                    지원하기
+                  </Button>
                 </Col>
               </Row>
             </Container>
@@ -85,7 +102,14 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    increaseLikesOfClub: newLikedClub =>
+      dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
+    addLikedClub: newLikedClub =>
+      dispatch(actionCreators.addLikedClub(newLikedClub)),
+    addAppliedClub: newAppliedClub =>
+      dispatch(actionCreators.addAppliedClub(newAppliedClub))
+  };
 };
 
 export default connect(
