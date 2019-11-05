@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import SelfInfoTab from "./SelfInfoTab";
 import LikedClubTab from "./LikedClubTab";
 import AppliedClubTab from "./AppliedClubTab";
+import ManagingClubTab from "./ManagingClubTab";
 
 class MyPage extends Component {
   state = {
@@ -21,7 +22,7 @@ class MyPage extends Component {
         tab = <SelfInfoTab loggedUser={this.props.loggedUser} />;
         break;
       case 1:
-        tab = <LikedClubTab loggedUser={this.props.loggedUser} />;
+        tab = <ManagingClubTab loggedUser={this.props.loggedUser} />;
         break;
       case 2:
         tab = <LikedClubTab loggedUser={this.props.loggedUser} />;
