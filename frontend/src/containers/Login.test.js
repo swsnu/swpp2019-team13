@@ -27,7 +27,7 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<Login />", () => {
   let login;
-  let spyOnHide = () => {};
+  let spyOnHide = jest.fn();
   let spySignIn;
 
   beforeEach(() => {
@@ -63,6 +63,41 @@ describe("<Login />", () => {
     const wrapper2 = component.find(".modal-header");
     expect(wrapper2.length).toBe(1);
     expect(wrapper2.text()).toBe("로그인");
+  });
+
+  it("should hide Modal when loggedUser exists", () => {
+    let tempState = {
+      loggedUser: {
+        username: "test",
+        email: "TEST_EMAIL",
+        password: "TEST_PASSWORD",
+        dept: 1,
+        major: 1,
+        grade: 1,
+        available_semester: 1
+      }
+    };
+
+    let login_withloggedUser = (
+      <Provider store={getMockStore(tempState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <Login show={true} onHide={spyOnHide} />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(login_withloggedUser);
+
+    const wrapper = component.find("Login");
+
+    expect(spyOnHide).toHaveBeenCalledTimes(1);
   });
 
   it("should clear inputs when modal reopen", () => {
@@ -106,6 +141,25 @@ describe("<Login />", () => {
       .simulate("change", { target: { value: password } });
 
     const wrapper = component.find(".btn-dark");
+    wrapper.simulate("click");
+    expect(spySignIn).toBeCalledTimes(1);
+
+    jest.clearAllMocks();
+  });
+
+  it(`should render message when sign in fail`, () => {
+    let spySignIn = jest
+      .spyOn(actionCreators, "signIn")
+      .mockImplementation(() => {
+        return dispatch => {
+          return new Promise((resolve, reject) => {
+            reject();
+          });
+        };
+      });
+    const component = mount(login);
+
+    let wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
     expect(spySignIn).toBeCalledTimes(1);
 
