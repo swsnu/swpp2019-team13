@@ -165,6 +165,7 @@ class ClubMain extends React.Component {
               style={{
                 display: "flex",
                 overflowX: "scroll",
+                width: "1500px",
                 marginLeft: 0,
                 marginRight: 0
               }}

@@ -46,7 +46,8 @@ class SomoimDetail extends React.Component {
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
+      let percentage = 
+        Math.round((somoim.currentJoiner / somoim.goalJoiner) * 1000) / 10;
 
       let tagList;
       if (this.props.tags.length != 0) {
