@@ -96,6 +96,7 @@ const reducer = (state = initialState, action) => {
           ...state,
           appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
         };
+
     case actionTypes.ADD_JOINED_SOMOIM:
       if (
         state.joinedSomoims.filter(

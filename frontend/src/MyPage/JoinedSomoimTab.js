@@ -7,7 +7,7 @@ import SomoimDetail from "../components/SomoimDetail";
 import * as userActions from "../store/actions/user";
 
 class JoinedSomoimTab extends Component {
-  state = { somoimDetailShow: false, selectedSomoim: null };
+  state = { somoimDetailShow: false, selectedSomoimID: null };
 
   componentDidMount() {
     if (this.props.loggedUser) {
@@ -36,7 +36,7 @@ class JoinedSomoimTab extends Component {
                   this.setState({
                     ...this.state,
                     somoimDetailShow: true,
-                    selectedSomoim: item
+                    selectedSomoimID: item.id
                   });
                 }
               }}
@@ -52,7 +52,7 @@ class JoinedSomoimTab extends Component {
         {list}
         <SomoimDetail
           show={this.state.somoimDetailShow}
-          somoim={this.state.selectedSomoim}
+          somoim={this.props.somoims[this.state.selectedSomoimID - 1]}
           closeHandler={() => {
             this.setState({
               ...this.state,
@@ -68,6 +68,7 @@ class JoinedSomoimTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    somoims: state.somoim.somoims,
     joinedSomoims: state.user.joinedSomoims
   };
 };

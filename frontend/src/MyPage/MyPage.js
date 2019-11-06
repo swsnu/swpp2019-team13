@@ -23,6 +23,7 @@ class MyPage extends Component {
 
   componentDidMount() {
     this.props.getClubList();
+    this.props.getSomoimList();
   }
 
   render() {
@@ -214,7 +215,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getClubList: () => dispatch(actionCreators.getClubList())
+    getClubList: () => dispatch(actionCreators.getClubList()),
+    getSomoimList: () => dispatch(actionCreators.getSomoimList())
   };
 };
 

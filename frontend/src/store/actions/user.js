@@ -134,9 +134,7 @@ export const getAppliedClubs = user => {
 export const getManagingSomoims_ = somoims => {
   return {
     type: actionTypes.GET_MANAGING_SOMOIMS,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
@@ -151,9 +149,7 @@ export const getManagingSomoims = user => {
 export const getLikedSomoims_ = somoims => {
   return {
     type: actionTypes.GET_LIKED_SOMOIMS,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
@@ -168,9 +164,7 @@ export const getLikedSomoims = user => {
 export const getJoinedSomoims_ = somoims => {
   return {
     type: actionTypes.GET_JOINED_SOMOIMS,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
