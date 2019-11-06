@@ -23,7 +23,8 @@ class ClubMain extends React.Component {
     clubRegisterShow: false,
     selectedClub: null,
     selected_category: 0,
-    recommendedListPageNum: 0
+    recommendedListPageNum: 0,
+    allListPageNum: 0
   };
 
   clubCardClickHandler = id => {
@@ -69,6 +70,7 @@ class ClubMain extends React.Component {
           className="category-button"
           key={item.id}
           variant="outline-secondary"
+          style={{ display: "inline-block", marginLeft: "5px" }}
           onClick={() =>
             this.setState({ ...this.state, selected_category: item.id })
           }
@@ -102,17 +104,12 @@ class ClubMain extends React.Component {
         allList = this.props.clubs
           .filter(item => item.category === this.state.selected_category)
           .map(item => (
-            <Col
-              sm="4"
+            <ClubCard
               key={item.id}
-              style={{ paddingLeft: 1, paddingRight: 1 }}
-            >
-              <ClubCard
-                clickHandler={this.clubCardClickHandler}
-                club={item}
-                forceRender={Math.random()}
-              />
-            </Col>
+              clickHandler={this.clubCardClickHandler}
+              club={item}
+              forceRender={Math.random()}
+            />
           ));
       }
     }
@@ -121,16 +118,14 @@ class ClubMain extends React.Component {
       <div className="ClubMain">
         <Header />
         <div className="ClubList">
+          <h2
+            style={{
+              fontWeight: "bold"
+            }}
+          >
+            추천 동아리
+          </h2>
           <div>
-            <h2
-              style={{
-                fontWeight: "bold",
-                display: "inline-block",
-                marginRight: "1%"
-              }}
-            >
-              추천 동아리
-            </h2>
             <div>
               <div className="ClubCard">
                 {this.state.recommendedListPageNum * 4 + 0 <
@@ -194,16 +189,34 @@ class ClubMain extends React.Component {
             </div>
           </div>
         </div>
-        <Container>
-          <br />
-          <br />
-          <Row>
-            <h2>All Clubs</h2>
-          </Row>
-          <Row>
+        <br />
+        <div className="ClubList" style={{ marginBottom: "25px" }}>
+          <div>
+            <h2
+              style={{
+                fontWeight: "bold",
+                display: "inline-block"
+              }}
+            >
+              모든 동아리
+            </h2>
+            {this.props.loggedUser && (
+              <Button
+                className="club-create-button"
+                variant="outline-primary"
+                size="lg"
+                style={{ display: "inline-block", float: "right" }}
+                onClick={this.clubRegisterClickHandler}
+              >
+                Can&apos;t find your club?
+              </Button>
+            )}
+          </div>
+          <div>
             <Button
               className="all-club-button"
               variant="outline-secondary"
+              style={{ display: "inline-block" }}
               onClick={() =>
                 this.setState({ ...this.state, selected_category: 0 })
               }
@@ -211,33 +224,66 @@ class ClubMain extends React.Component {
               전체
             </Button>
             {categoryList}
-            <Col>
-              {this.props.loggedUser && (
-                <Button
-                  className="club-create-button"
-                  variant="outline-primary"
-                  size="lg"
-                  onClick={this.clubRegisterClickHandler}
-                >
-                  Can't find your club?
-                </Button>
-              )}
-            </Col>
-          </Row>
+          </div>
           <br />
-          <Row>
-            <div
-              style={{
-                display: "flex",
-                overflowX: "scroll",
-                marginLeft: 0,
-                marginRight: 0
-              }}
-            >
-              {allList}
+          <div>
+            <div>
+              <div className="ClubCard">
+                {this.state.allListPageNum * 4 + 0 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 0]
+                  : ""}
+              </div>
+              <div className="ClubCard">
+                {this.state.allListPageNum * 4 + 1 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 1]
+                  : ""}
+              </div>
             </div>
-          </Row>
-        </Container>
+            <div>
+              <div className="ClubCard">
+                {this.state.allListPageNum * 4 + 2 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 2]
+                  : ""}
+              </div>
+              <div className="ClubCard">
+                {this.state.allListPageNum * 4 + 3 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 3]
+                  : ""}
+              </div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (this.state.allListPageNum > 0)
+                    this.setState({
+                      ...this.state,
+                      allListPageNum: this.state.allListPageNum - 1
+                    });
+                }}
+              >
+                &laquo; 이전
+              </div>
+              <div className="bar">|</div>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (
+                    this.state.allListPageNum <
+                    Math.ceil(allList.length / 4) - 1
+                  )
+                    this.setState({
+                      ...this.state,
+                      allListPageNum: this.state.allListPageNum + 1
+                    });
+                  console.log(allList.length);
+                }}
+              >
+                다음 &raquo;
+              </div>
+            </div>
+          </div>
+        </div>
 
         <ClubDetail
           show={this.state.clubDetailShow}
