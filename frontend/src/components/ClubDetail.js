@@ -2,16 +2,25 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
+import * as userActions from "../store/actions/user";
 
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 
 class ClubDetail extends React.Component {
   componentDidMount() {
     this.props.getTagList();
+    if (this.props.loggedUser) {
+      this.props.onGetLikedClubs(this.props.loggedUser);
+    }
   }
   onClickLikeButton = () => {
     let newLikedClub = this.props.club;
-    newLikedClub.likes = newLikedClub.likes + 1;
+    if (
+      this.props.likedClubs.filter(item => item.id === this.props.club.id)
+        .length > 0
+    )
+      newLikedClub.likes = newLikedClub.likes - 1;
+    else newLikedClub.likes = newLikedClub.likes + 1;
 
     this.props.increaseLikesOfClub(newLikedClub);
     this.props.addLikedClub(newLikedClub, this.props.loggedUser);
@@ -102,7 +111,8 @@ class ClubDetail extends React.Component {
 const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
-    loggedUser: state.user.loggedUser
+    loggedUser: state.user.loggedUser,
+    likedClubs: state.user.likedClubs
   };
 };
 
@@ -114,7 +124,9 @@ const mapDispatchToProps = dispatch => {
     addLikedClub: (newLikedClub, user) =>
       dispatch(actionCreators.addLikedClub(newLikedClub, user)),
     addAppliedClub: (newAppliedClub, user) =>
-      dispatch(actionCreators.addAppliedClub(newAppliedClub, user))
+      dispatch(actionCreators.addAppliedClub(newAppliedClub, user)),
+
+    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
   };
 };
 
