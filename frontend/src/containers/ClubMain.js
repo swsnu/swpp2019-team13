@@ -82,7 +82,7 @@ class ClubMain extends React.Component {
 
       if (this.state.selected_category === 0) {
         allList = this.props.Clubs.map(item => (
-          <Col sm="5" key={item.pk} style={{ paddingLeft: 1, paddingRight: 1 }}>
+          <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
             <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
           </Col>
         ));
@@ -90,7 +90,7 @@ class ClubMain extends React.Component {
         allList = this.props.Clubs.filter(
           item => item.category === this.state.selected_category
         ).map(item => (
-          <Col sm="5" key={item.pk} style={{ paddingLeft: 1, paddingRight: 1 }}>
+          <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
             <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
           </Col>
         ));
@@ -145,18 +145,16 @@ class ClubMain extends React.Component {
           </Row>
           <br />
           <Row>
-            <Col xs="10" style={{ paddingLeft: 0, paddingRight: 0 }}>
-              <div
-                style={{
-                  display: "flex",
-                  overflowX: "scroll",
-                  marginLeft: 0,
-                  marginRight: 0
-                }}
-              >
-                {allList}
-              </div>
-            </Col>
+            <div
+              style={{
+                display: "flex",
+                overflowX: "scroll",
+                marginLeft: 0,
+                marginRight: 0
+              }}
+            >
+              {allList}
+            </div>
           </Row>
         </Container>
 
