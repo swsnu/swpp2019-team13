@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 
+
 def pre_club(request):
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
@@ -22,6 +23,7 @@ def pre_club(request):
     else:
         return HttpResponse(status=405)
 
+
 def tag_list(request):
     if request.method == 'GET':
         response_dict = [tag for tag in Tag.objects.all().values()]
@@ -29,12 +31,15 @@ def tag_list(request):
     else:
         return HttpResponse(status=405)
 
+
 def category_list(request):
     if request.method == 'GET':
-        response_dict = [category for category in Category.objects.all().values()]
+        response_dict = [
+            category for category in Category.objects.all().values()]
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
+
 
 def major_list(request):
     if request.method == 'GET':
@@ -112,18 +117,18 @@ def somoim_list(request):
         selected_dept = Department.objects.get(id=1)
         tags = Tag.objects.get(id=1)
         somoim = Somoim()
-      
-        somoim.category=category
+
+        somoim.category = category
         somoim.title = title
         somoim.summary = summary
         somoim. goalJoiner = goalJoiner
         somoim.available_semester = available_semester
-        somoim.currentJoiner=0
-        somoim.likes=0
-        somoim.description=description
+        somoim.currentJoiner = 0
+        somoim.likes = 0
+        somoim.description = description
         somoim.save()
-        somoim.tags.add(1,2)
-        somoim.selected_dept.add(1,2)
+        somoim.tags.add(1, 2)
+        somoim.selected_dept.add(1, 2)
         return HttpResponse(status=201)
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())
@@ -293,14 +298,13 @@ def like_club(request, id=0):
         return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
-        req_data = json.loads(request.body.decode())
-
-        club_id = req_data['id']
-        club = Club.objects.filter(id=club_id)
-
-        user.like_clubs.add(club[0])
-        user.save()
-
+        body = request.body.decode()
+        somoim_id = json.loads(body)['id']
+        try:
+            user.like_clubs.get(id=somoim_id)
+            user.like_clubs.remove(user.like_clubs.get(id=somoim_id))
+        except (ObjectDoesNotExist):
+            user.like_clubs.add(Club.objects.get(id=somoim_id))
         return HttpResponse(status=204)
 
     else:
@@ -319,13 +323,13 @@ def apply_club(request, id=0):
         serialized_data = serializers.serialize("json", user.apply_clubs.all())
         return HttpResponse(serialized_data)
     elif request.method == 'PUT':
-        req_data = json.loads(request.body.decode())
-
-        club_id = req_data['id']
-        club = Club.objects.filter(id=club_id)
-
-        user.apply_clubs.add(club[0])
-        user.save()
+        body = request.body.decode()
+        somoim_id = json.loads(body)['id']
+        try:
+            user.apply_clubs.get(id=somoim_id)
+            user.apply_clubs.remove(user.apply_clubs.get(id=somoim_id))
+        except (ObjectDoesNotExist):
+            user.apply_clubs.add(Club.objects.get(id=somoim_id))
 
         return HttpResponse(status=204)
     else:
@@ -362,14 +366,14 @@ def like_somoim(request, id=0):
         return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
-        req_data = json.loads(request.body.decode())
-
-        somoim_id = req_data['id']
-        somoim = Somoim.objects.filter(id=somoim_id)
-
-        user.like_somoims.add(somoim[0])
-        user.save()
-
+           # toggle user's like status for requested somoim
+        body = request.body.decode()
+        somoim_id = json.loads(body)['id']
+        try:
+            user.like_somoims.get(id=somoim_id)
+            user.like_somoims.remove(user.like_somoims.get(id=somoim_id))
+        except (ObjectDoesNotExist):
+            user.like_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
 
     else:
@@ -389,14 +393,13 @@ def join_somoim(request, id=0):
             "json", user.join_somoims.all())
         return HttpResponse(serialized_data)
     elif request.method == 'PUT':
-        req_data = json.loads(request.body.decode())
-
-        somoim_id = req_data['id']
-        somoim = Somoim.objects.filter(id=somoim_id)
-
-        user.join_somoims.add(somoim[0])
-        user.save()
-
+        body = request.body.decode()
+        somoim_id = json.loads(body)['id']
+        try:
+            user.join_somoims.get(id=somoim_id)
+            user.join_somoims.remove(user.join_somoims.get(id=somoim_id))
+        except (ObjectDoesNotExist):
+            user.join_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
