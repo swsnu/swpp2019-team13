@@ -54,17 +54,21 @@ class ClubCard extends React.Component {
         <Card.Body>
           <Container>
             <Row>
-              <Col xs="5">{image}</Col>
+              <Row xs="5">&nbsp;&nbsp;{image}</Row>
               <Col>
                 <Row>
-                  <h2>{club.name}</h2>
+                  <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{club.name}</h2>
                   <Col md={{ offset: 1 }}>
                     <h4>{"👍 " + club.likes}</h4>
                   </Col>
                 </Row>
-                <Row>{tagList}</Row>
+                <Row>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{tagList}
+                </Row>
                 <br />
-                <Row>{club.summary}</Row>
+                <Row>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{club.summary}
+                </Row>
               </Col>
             </Row>
           </Container>
