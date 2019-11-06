@@ -2,11 +2,10 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import * as actionCreators from "../store/actions/index";
 
 import { Modal, Button, Form, Row, Col, Container } from "react-bootstrap";
 import NumericInput from "react-numeric-input";
-
-import * as actionCreaters from "../store/actions/index";
 
 class SomoimCreate extends React.Component {
   state = {
@@ -15,9 +14,12 @@ class SomoimCreate extends React.Component {
     description: "",
     goal_number: 1,
     selected_dept: [],
-    available_sem: 1
+    available_semester: 1
   };
 
+  componentDidMount() {
+    this.props.getDeptList();
+  }
   // componentWillReceiveProps renamed into below name
   UNSAFE_componentWillReceiveProps() {
     this.setState({
@@ -26,7 +28,7 @@ class SomoimCreate extends React.Component {
       description: "",
       goal_number: 1,
       selected_dept: [],
-      available_sem: 1
+      available_semester: 1
     });
   }
 
@@ -166,7 +168,7 @@ class SomoimCreate extends React.Component {
                   as="select"
                   onChange={event =>
                     this.setState({
-                      available_sem: Number(event.target.value)
+                      available_semester: Number(event.target.value)
                     })
                   }
                 >
@@ -190,8 +192,8 @@ class SomoimCreate extends React.Component {
                     this.state.summary,
                     this.state.description,
                     this.state.goal_number,
-                    this.state.selected_dept,
-                    this.state.available_sem
+                    //this.state.selected_dept,
+                    this.state.available_semester
                   );
                   alert("Create Somoim Success!");
                   this.props.closeHandler();
@@ -221,27 +223,29 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
     postSomoim: (
       title,
       summary,
       description,
       goal_number,
-      selected_dept,
-      available_sem
+      //selected_dept,
+      available_semester
+      //category,
     ) =>
       dispatch(
-        actionCreaters.postSomoim({
+        actionCreators.postSomoim({
           title: title,
           summary: summary,
           description: description,
-          goal_number: goal_number,
-          selected_dept: selected_dept,
-          available_sem: available_sem
+          goalJoiner: goal_number,
+          //selected_dept: selected_dept,
+          available_semester: available_semester
+          //category : category
         })
       )
   };
 };
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps

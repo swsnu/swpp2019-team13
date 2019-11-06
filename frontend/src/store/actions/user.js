@@ -171,7 +171,67 @@ export const getJoinedSomoims_ = somoims => {
 export const getJoinedSomoims = user => {
   return dispatch => {
     return axios
-      .get("/api/user/" + user.id + "/somoim/apply/")
+      .get("/api/user/" + user.id + "/somoim/join/")
       .then(res => dispatch(getJoinedSomoims_(res.data)));
+  };
+};
+
+export const addLikedClub_ = newLikedClub => {
+  return {
+    type: actionTypes.ADD_LIKED_CLUB,
+    newLikedClub: newLikedClub
+  };
+};
+
+export const addLikedClub = (newLikedClub, user) => {
+  return dispatch => {
+    return axios
+      .put("/api/user/" + user.id + "/club/like/", newLikedClub)
+      .then(res => dispatch(addLikedClub_(newLikedClub)));
+  };
+};
+
+export const addLikedSomoim_ = newLikedSomoim => {
+  return {
+    type: actionTypes.ADD_LIKED_SOMOIM,
+    newLikedSomoim: newLikedSomoim
+  };
+};
+
+export const addLikedSomoim = (newLikedSomoim, user) => {
+  return dispatch => {
+    return axios
+      .put("/api/user/" + user.id + "/somoim/like/", newLikedSomoim)
+      .then(res => dispatch(addLikedSomoim_(newLikedSomoim)));
+  };
+};
+
+export const addAppliedClub_ = newAppliedClub => {
+  return {
+    type: actionTypes.ADD_APPLIED_CLUB,
+    newAppliedClub: newAppliedClub
+  };
+};
+
+export const addAppliedClub = (newAppliedClub, user) => {
+  return dispatch => {
+    return axios
+      .put("/api/user/" + user.id + "/club/apply/", newAppliedClub)
+      .then(res => dispatch(addAppliedClub_(newAppliedClub)));
+  };
+};
+
+export const addJoinedSomoim_ = newJoinedSomoim => {
+  return {
+    type: actionTypes.ADD_JOINED_SOMOIM,
+    newJoinedSomoim: newJoinedSomoim
+  };
+};
+
+export const addJoinedSomoim = (newJoinedSomoim, user) => {
+  return dispatch => {
+    return axios
+      .put("/api/user/" + user.id + "/somoim/join/", newJoinedSomoim)
+      .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)));
   };
 };

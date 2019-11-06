@@ -1,10 +1,25 @@
-export { getClubList, getClubByID, postClub } from "./club";
-export { getSomoimList, getSomoimByID, postSomoim } from "./somoim";
+export {
+  getClubList,
+  getClubByID,
+  postClub,
+  increaseLikesOfClub
+} from "./club";
+export {
+  getSomoimList,
+  getSomoimByID,
+  postSomoim,
+  increaseLikesOfSomoim,
+  increaseNumOfCurrentJoiner
+} from "./somoim";
 export {
   getUserList,
   signIn,
   signOut,
   signUp,
+  addLikedClub,
+  addLikedSomoim,
+  addAppliedClub,
+  addJoinedSomoim,
   getLoginInfo,
   putUserInformation,
   getManagingClubs,

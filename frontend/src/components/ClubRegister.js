@@ -142,16 +142,16 @@ class ClubRegister extends React.Component {
             </div>
             <Button
               letiant="primary"
-              // onClick={() => {
-              //   this.props.postClub(
-              //     this.state.name,
-              //     this.state.clubmanager,
-              //     this.state.auth_img_file,
-              //     this.state.selected_category
-              //   );
-              //   alert("Create Club Success!");
-              //   this.props.closeHandler();
-              // }}
+              onClick={() => {
+                //   this.props.postClub(
+                //     this.state.name,
+                //     this.state.clubmanager,
+                //     this.state.auth_img_file,
+                //     this.state.selected_category
+                //   );
+                alert("Create Club Success!");
+                this.props.closeHandler();
+              }}
               disabled={this.state.name === "" || this.state.clubmanager === ""}
             >
               Register
