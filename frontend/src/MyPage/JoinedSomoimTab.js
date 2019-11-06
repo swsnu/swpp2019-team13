@@ -59,6 +59,7 @@ class JoinedSomoimTab extends Component {
               somoimDetailShow: false
             });
           }}
+          forceRender={Math.random()}
         />
       </div>
     );

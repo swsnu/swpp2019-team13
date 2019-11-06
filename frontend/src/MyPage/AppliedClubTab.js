@@ -59,6 +59,7 @@ class AppliedClubTab extends Component {
               clubDetailShow: false
             });
           }}
+          forceRender={Math.random()}
         />
       </div>
     );

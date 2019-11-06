@@ -59,6 +59,7 @@ class ManagingSomoimTab extends Component {
               somoimDetailShow: false
             });
           }}
+          forceRender={Math.random()}
         />
       </div>
     );

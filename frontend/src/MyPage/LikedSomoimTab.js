@@ -59,6 +59,7 @@ class LikedSomoimTab extends Component {
               somoimDetailShow: false
             });
           }}
+          forceRender={Math.random()}
         />
       </div>
     );
