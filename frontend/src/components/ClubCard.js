@@ -14,12 +14,7 @@ class ClubCard extends React.Component {
   render() {
     let club = this.props.club;
     let image = (
-      <img
-        src={"/media/" + club.fields.poster_img}
-        width="100"
-        height="100"
-        alt=""
-      />
+      <img src={"/media/" + club.poster_img} width="100" height="100" alt="" />
     );
     if (club.auth_img_file === "1")
       image = <img src={img1} width="100" height="100" alt="" />;
@@ -28,11 +23,9 @@ class ClubCard extends React.Component {
     if (club.auth_img_file === "3")
       image = <img src={img3} width="100" height="100" alt="" />;
 
-    console.log(club.fields.tags);
     let tagList;
     if (this.props.tags.length != 0) {
-      console.log(this.props.tags);
-      tagList = club.fields.tags.map(item => (
+      tagList = club.tags.map(item => (
         <Button key={item} variant="outline-primary">
           {"#" + this.props.tags[item - 1].name}
         </Button>
@@ -41,7 +34,7 @@ class ClubCard extends React.Component {
     return (
       <Card
         onClick={() => {
-          this.props.clickHandler(club.pk);
+          this.props.clickHandler(club.id);
         }}
       >
         <Card.Body>
@@ -50,14 +43,14 @@ class ClubCard extends React.Component {
               <Col xs="5">{image}</Col>
               <Col>
                 <Row>
-                  <h2>{club.fields.name}</h2>
+                  <h2>{club.name}</h2>
                   <Col md={{ offset: 1 }}>
-                    <h4>{"👍 " + club.fields.likes}</h4>
+                    <h4>{"👍 " + club.likes}</h4>
                   </Col>
                 </Row>
                 <Row>{tagList}</Row>
                 <br />
-                <Row>{club.fields.summary}</Row>
+                <Row>{club.summary}</Row>
               </Col>
             </Row>
           </Container>

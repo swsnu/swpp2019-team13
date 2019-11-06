@@ -12,13 +12,11 @@ class SomoimCard extends React.Component {
   }
   render() {
     let somoim = this.props.somoim;
-    if (somoim.fields) {
-      let percentage =
-        (somoim.fields.currentJoiner / somoim.fields.goalJoiner) * 100;
+    if (somoim) {
+      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
       let tagList;
       if (this.props.tags.length != 0) {
-        console.log(this.props.tags);
-        tagList = somoim.fields.tags.map(item => (
+        tagList = somoim.tags.map(item => (
           <Button key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
           </Button>
@@ -28,7 +26,7 @@ class SomoimCard extends React.Component {
       return (
         <Card
           onClick={() => {
-            this.props.clickHandler(somoim.pk);
+            this.props.clickHandler(somoim.id);
           }}
         >
           <Card.Body>
@@ -42,14 +40,14 @@ class SomoimCard extends React.Component {
                 </Col>
                 <Col>
                   <Row>
-                    <h2>{somoim.fields.title}</h2>
+                    <h2>{somoim.title}</h2>
                     <Col md={{ offset: 1 }}>
-                      <h4>{"👍 " + somoim.fields.likes}</h4>
+                      <h4>{"👍 " + somoim.likes}</h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.fields.summary}</Row>
+                  <Row>{somoim.summary}</Row>
                 </Col>
               </Row>
             </Container>
@@ -60,7 +58,6 @@ class SomoimCard extends React.Component {
       let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
       let tagList;
       if (this.props.tags.length != 0) {
-        console.log(this.props.tags);
         tagList = somoim.tags.map(item => (
           <Button key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
@@ -71,7 +68,7 @@ class SomoimCard extends React.Component {
       return (
         <Card
           onClick={() => {
-            this.props.clickHandler(somoim.pk);
+            this.props.clickHandler(somoim.id);
           }}
         >
           <Card.Body>
