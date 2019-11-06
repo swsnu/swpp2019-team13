@@ -89,7 +89,9 @@ export const putUserInformation = userInfo => {
 export const getManagingClubs_ = clubs => {
   return {
     type: actionTypes.GET_MANAGING_CLUBS,
-    clubs: clubs.map(item => item.fields)
+    clubs: clubs.map(item => {
+      return { ...item.fields, id: item.pk };
+    })
   };
 };
 
@@ -104,7 +106,9 @@ export const getManagingClubs = user => {
 export const getLikedClubs_ = clubs => {
   return {
     type: actionTypes.GET_LIKED_CLUBS,
-    clubs: clubs.map(item => item.fields)
+    clubs: clubs.map(item => {
+      return { ...item.fields, id: item.pk };
+    })
   };
 };
 
@@ -119,7 +123,9 @@ export const getLikedClubs = user => {
 export const getAppliedClubs_ = clubs => {
   return {
     type: actionTypes.GET_APPLIED_CLUBS,
-    clubs: clubs.map(item => item.fields)
+    clubs: clubs.map(item => {
+      return { ...item.fields, id: item.pk };
+    })
   };
 };
 
@@ -134,7 +140,9 @@ export const getAppliedClubs = user => {
 export const getManagingSomoims_ = somoims => {
   return {
     type: actionTypes.GET_MANAGING_SOMOIMS,
-    somoims: somoims.map(item => item.fields)
+    somoims: somoims.map(item => {
+      return { ...item.fields, id: item.pk };
+    })
   };
 };
 
@@ -149,7 +157,9 @@ export const getManagingSomoims = user => {
 export const getLikedSomoims_ = somoims => {
   return {
     type: actionTypes.GET_LIKED_SOMOIMS,
-    somoims: somoims.map(item => item.fields)
+    somoims: somoims.map(item => {
+      return { ...item.fields, id: item.pk };
+    })
   };
 };
 
@@ -164,7 +174,9 @@ export const getLikedSomoims = user => {
 export const getJoinedSomoims_ = somoims => {
   return {
     type: actionTypes.GET_JOINED_SOMOIMS,
-    somoims: somoims.map(item => item.fields)
+    somoims: somoims.map(item => {
+      return { ...item.fields, id: item.pk };
+    })
   };
 };
 
