@@ -32,8 +32,39 @@ class ClubDetail extends React.Component {
   };
 
   render() {
+    let acceptQualification = false;
+    let qualificationMessage = "";
     let club = this.props.club;
     if (club) {
+      if (this.props.loggedUser) {
+        // check qualification
+        // 1. check whether user can participate in session day
+        let qualification_1 =
+          (club.session_day & this.props.loggedUser.available_session_day) ===
+          club.session_day;
+
+        if (!qualification_1)
+          qualificationMessage += "활동 요일에 활동할 수 없습니다\n";
+
+        // 2. check whether user's major is available
+        let qualification_2 = club.available_major.includes(
+          this.props.loggedUser.major
+        );
+
+        if (!qualification_2)
+          qualificationMessage += "가입 가능 학과가 아닙니다\n";
+
+        // 3. check whether user can participate in next available semesters
+        let qualification_3 =
+          club.available_semester <= this.props.loggedUser.available_semester;
+
+        if (!qualification_3)
+          qualificationMessage += "활동 가능 학기가 충분하지 않습니다\n";
+
+        if (qualification_1 && qualification_2 && qualification_3)
+          acceptQualification = true;
+      }
+
       let image = (
         <img
           src={"/media/" + club.poster_img}
@@ -94,9 +125,15 @@ class ClubDetail extends React.Component {
                   </Col>
                   <Col></Col>
                   <Col>
-                    <Button onClick={this.onClickApplyButton} size="lg">
-                      지원하기
-                    </Button>
+                    {acceptQualification ? (
+                      <Button onClick={this.onClickApplyButton} size="lg">
+                        지원하기
+                      </Button>
+                    ) : (
+                      <Button disabled title={qualificationMessage} size="lg">
+                        지원하기
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               )}

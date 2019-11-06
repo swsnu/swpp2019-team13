@@ -10,9 +10,32 @@ class SomoimCard extends React.Component {
   componentDidMount() {
     this.props.getTagList();
   }
+
   render() {
+    let acceptQualification = false;
+
     let somoim = this.props.somoim;
     if (somoim) {
+      if (this.props.loggedUser) {
+        // check qualification
+        // 1. check whether user can participate in session day
+        let qualification_1 =
+          (somoim.session_day & this.props.loggedUser.available_session_day) ===
+          somoim.session_day;
+
+        // 2. check whether user's major is available
+        let qualification_2 = somoim.available_major.includes(
+          this.props.loggedUser.major
+        );
+
+        // 3. check whether user can participate in next available semesters
+        let qualification_3 =
+          somoim.available_semester <= this.props.loggedUser.available_semester;
+
+        if (qualification_1 && qualification_2 && qualification_3)
+          acceptQualification = true;
+      }
+
       let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
       let tagList;
       if (this.props.tags.length != 0) {
@@ -102,6 +125,7 @@ class SomoimCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     tags: state.tag.tags,
     somoims: state.somoim.somoims
   };
