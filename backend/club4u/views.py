@@ -111,24 +111,29 @@ def somoim_list(request):
         title = req_data['title']
         summary = req_data['summary']
         description = req_data['description']
+        category_id = req_data['category']
         goalJoiner = req_data['goalJoiner']
+        available_major_id_list = req_data['available_major']
         available_semester = req_data['available_semester']
-        category = Category.objects.get(id=1)
-        selected_dept = Department.objects.get(id=1)
-        tags = Tag.objects.get(id=1)
-        somoim = Somoim()
+        session_day = req_data['session_day']
 
-        somoim.category = category
+        category = Category.objects.get(id=category_id)
+
+        # TODO : Add Tag
+        somoim = Somoim()
         somoim.title = title
+        somoim.category = category
         somoim.summary = summary
-        somoim. goalJoiner = goalJoiner
-        somoim.available_semester = available_semester
-        somoim.currentJoiner = 0
-        somoim.likes = 0
         somoim.description = description
+        somoim.goalJoiner = goalJoiner
+        somoim.available_semester = available_semester
+        somoim.session_day = session_day
+
         somoim.save()
-        somoim.tags.add(1, 2)
-        somoim.selected_dept.add(1, 2)
+
+        for major_id in available_major_id_list:
+            somoim.available_major.add(Major.objects.get(id=major_id))
+
         return HttpResponse(status=201)
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())

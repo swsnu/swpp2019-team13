@@ -53,7 +53,13 @@ class Club(models.Model):
     )
     poster_img = models.ImageField(null=True)
     likes = models.IntegerField(default=0)
-
+    available_semester = models.IntegerField(default=0)
+    available_major = models.ManyToManyField(
+        Major,
+        related_name="club_available_major",
+        blank=True
+    )
+    session_day = models.IntegerField(default=0)
     tags = models.ManyToManyField(
         Tag,
         related_name="clubs",
@@ -74,11 +80,12 @@ class Somoim(models.Model):
     currentJoiner = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
     available_semester = models.IntegerField(default=0)
-    selected_dept = models.ManyToManyField(
-        Department,
-        related_name="somoim_dept",
+    available_major = models.ManyToManyField(
+        Major,
+        related_name="somoim_available_major",
         blank=True
     )
+    session_day = models.IntegerField(default=0)
     tags = models.ManyToManyField(
         Tag,
         related_name="somoims",
@@ -102,6 +109,7 @@ class UserProfile(models.Model):
     )
     grade = models.IntegerField(default=1)
     available_semester = models.IntegerField(default=1)
+    available_session_day = models.IntegerField(default=0)
 
     manage_clubs = models.ManyToManyField(
         Club,

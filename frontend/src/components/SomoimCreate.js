@@ -12,7 +12,7 @@ class SomoimCreate extends React.Component {
     title: "",
     summary: "",
     description: "",
-    category: null,
+    category: 1,
     goal_number: 1,
     available_major: [],
     available_semester: 1,
@@ -63,7 +63,7 @@ class SomoimCreate extends React.Component {
       title: "",
       summary: "",
       description: "",
-      category: null,
+      category: 1,
       goal_number: 1,
       available_major: [],
       available_semester: 1,
@@ -138,7 +138,9 @@ class SomoimCreate extends React.Component {
                 id="somoim-category-input"
                 onChange={event =>
                   this.setState({
-                    selected_category: Number(event.target.value)
+                    category: this.props.categories.filter(
+                      a => a.name === event.target.value
+                    )[0].id
                   })
                 }
               >
