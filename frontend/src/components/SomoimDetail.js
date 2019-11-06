@@ -47,9 +47,7 @@ class SomoimDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton>
-            <h2>{somoim.title}</h2>
-          </Modal.Header>
+          <Modal.Header closeButton></Modal.Header>
           <Modal.Body>
             <Container>
               <Row>
@@ -61,6 +59,7 @@ class SomoimDetail extends React.Component {
                 </Col>
                 <Col>
                   <Row>
+                    <h2>{somoim.fields.title}</h2>
                     <Col md={{ offset: 1 }}>
                       <h4>
                         <span role="img" aria-label="thumb">

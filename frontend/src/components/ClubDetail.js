@@ -48,9 +48,7 @@ class ClubDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton>
-            <h2>{club.name}</h2>
-          </Modal.Header>
+          <Modal.Header closeButton></Modal.Header>
           <Modal.Body>
             <Container>
               <Row>
