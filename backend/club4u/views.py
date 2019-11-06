@@ -6,7 +6,9 @@ from json import JSONDecodeError
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from django.core import serializers
+
+from rest_framework.renderers import JSONRenderer
+from .serializers import ClubSerializer, SomoimSerializer
 
 
 def pre_club(request):
@@ -67,10 +69,8 @@ def user_list(request):
 
 def club_list(request):
     if request.method == 'GET':
-        response_dict = [club for club in Club.objects.all()]
-        # print(response_dict[2].poster_img.path)
-        serialized_data = serializers.serialize("json", response_dict)
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(Club.objects.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
     else:
         return HttpResponse(status=405)
 
@@ -103,9 +103,8 @@ def club_edit(request, id=0):
 
 def somoim_list(request):
     if request.method == 'GET':
-        response_dict = [somoim for somoim in Somoim.objects.all()]
-        serialized_data = serializers.serialize("json", response_dict)
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(Somoim.objects.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'POST':
         req_data = json.loads(request.body.decode())
         title = req_data['title']
@@ -278,9 +277,11 @@ def manage_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.manage_clubs.all())
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(user.manage_clubs.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.manage_clubs.all())
+        # return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -294,8 +295,10 @@ def like_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize("json", user.like_clubs.all())
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(user.like_clubs.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize("json", user.like_clubs.all())
+        # return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
         body = request.body.decode()
@@ -320,8 +323,10 @@ def apply_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize("json", user.apply_clubs.all())
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(user.apply_clubs.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize("json", user.apply_clubs.all())
+        # return HttpResponse(serialized_data)
     elif request.method == 'PUT':
         body = request.body.decode()
         somoim_id = json.loads(body)['id']
@@ -345,9 +350,11 @@ def manage_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.manage_somoims.all())
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(user.manage_somoims.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.manage_somoims.all())
+        # return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -361,9 +368,11 @@ def like_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.like_somoims.all())
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(user.like_somoims.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.like_somoims.all())
+        # return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
            # toggle user's like status for requested somoim
@@ -389,9 +398,11 @@ def join_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.join_somoims.all())
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(user.join_somoims.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.join_somoims.all())
+        # return HttpResponse(serialized_data)
     elif request.method == 'PUT':
         body = request.body.decode()
         somoim_id = json.loads(body)['id']

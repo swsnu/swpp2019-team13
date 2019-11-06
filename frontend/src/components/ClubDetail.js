@@ -15,14 +15,14 @@ class ClubDetail extends React.Component {
   }
   onClickLikeButton = () => {
     let newLikedClub = this.props.club;
-    if (
-      this.props.likedClubs.filter(item => item.id === this.props.club.id)
-        .length > 0
-    )
-      newLikedClub.likes = newLikedClub.likes - 1;
-    else newLikedClub.likes = newLikedClub.likes + 1;
+    // if (
+    //   this.props.likedClubs.filter(item => item.id === this.props.club.id)
+    //     .length > 0
+    // )
+    //   newLikedClub.likes = newLikedClub.likes - 1;
+    // else newLikedClub.likes = newLikedClub.likes + 1;
 
-    this.props.increaseLikesOfClub(newLikedClub);
+    // this.props.increaseLikesOfClub(newLikedClub);
     this.props.addLikedClub(newLikedClub, this.props.loggedUser);
   };
 
