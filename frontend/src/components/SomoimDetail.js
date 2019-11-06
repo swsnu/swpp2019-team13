@@ -34,7 +34,7 @@ class SomoimDetail extends React.Component {
 
       let tagList;
       if (this.props.tags.length != 0) {
-        tagList = somoim.fields.tags.map(item => (
+        tagList = somoim.tags.map(item => (
           <Button key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
           </Button>

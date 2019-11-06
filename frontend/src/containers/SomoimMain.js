@@ -96,7 +96,7 @@ class SomoimMain extends React.Component {
         ));
       } else {
         allList = this.props.somoims
-          .filter(item => item.fields.category === this.state.selected_category)
+          .filter(item => item.category === this.state.selected_category)
           .map(item => (
             <Col
               sm="5"

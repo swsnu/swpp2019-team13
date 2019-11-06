@@ -88,7 +88,7 @@ class ClubMain extends React.Component {
         ));
       } else {
         allList = this.props.Clubs.filter(
-          item => item.fields.category === this.state.selected_category
+          item => item.category === this.state.selected_category
         ).map(item => (
           <Col sm="5" key={item.pk} style={{ paddingLeft: 1, paddingRight: 1 }}>
             <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
