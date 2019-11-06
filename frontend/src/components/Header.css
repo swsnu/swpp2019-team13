@@ -8,7 +8,7 @@
   color: #8f84b8;
   font-weight: bold;
   font-size: 1.5em;
-  padding-left: 1%;
+  padding-left: 3%;
   display: inline-block;
   line-height: 4rem;
   width: 9%;
@@ -19,10 +19,11 @@
 
 .menu-item {
   display: inline-block;
-  color: white;
-  font-size: 0.9em;
+  color: rgb(192, 192, 192);
+  font-weight: bold;
+  font-size: 1em;
   line-height: 4rem;
-  width: 7%;
+  width: 10%;
   min-width: 60px;
   text-align: center;
   cursor: pointer;
@@ -30,53 +31,18 @@
   text-decoration: none;
   position: relative;
   bottom: 0.3rem;
+  left: 31%;
 }
 
 .menu-item:hover {
   background-color: #484d52;
+  color: white;
 }
 
 .menu-item.active {
   border-bottom: 3px solid #8f84b8;
-}
-
-/* .search {
-  display: inline-block;
-  width: 61%;
-  height: 4rem;
-  text-align: right;
-  position: relative;
-  bottom: 0.4rem;
-  line-height: 4rem;
-  padding-right: 3%;
-}
-
-#search-bar {
-  width: 500px;
-  height: 2.5rem;
-}
-
-#search-button {
-  width: 5%;
-  height: 2.5rem;
-  background: #824ca7;
   color: white;
-  font-size: 17px;
-  border: 1px solid grey;
-  border-left: none;
-  cursor: pointer;
-  position: relative;
-  top: 1rem;
 }
-
-#search-button:hover {
-  background: #834ca7bd;
-}
-
-.fa-search {
-  position: relative;
-  bottom: 1rem;
-} */
 
 .user-item {
   display: inline-block;
@@ -90,7 +56,7 @@
   text-decoration: none;
   position: relative;
   bottom: 0.3rem;
-  left: 61%;
+  left: 55%;
 }
 
 .first-item {
