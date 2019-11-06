@@ -8,6 +8,33 @@ from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core import serializers
 
+def pre_club(request):
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        manager = req_data['manager']
+        category = Category.objects.get(id=req_data['category'])
+        auth_img = req_data['auth_img'].FILES['image']
+        preclub = PreClub(
+            name=name, manager=manager, category=category, auth_img=auth_img)
+        preclub.save()
+        return HttpResponse(status=201)
+    else:
+        return HttpResponse(status=405)
+
+def tag_list(request):
+    if request.method == 'GET':
+        response_dict = [tag for tag in Tag.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+def category_list(request):
+    if request.method == 'GET':
+        response_dict = [category for category in Category.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
 
 def major_list(request):
     if request.method == 'GET':
@@ -75,7 +102,29 @@ def somoim_list(request):
         serialized_data = serializers.serialize("json", response_dict)
         return HttpResponse(serialized_data)
     elif request.method == 'POST':
-        return HttpResponse(status=400)
+        req_data = json.loads(request.body.decode())
+        title = req_data['title']
+        summary = req_data['summary']
+        description = req_data['description']
+        goalJoiner = req_data['goalJoiner']
+        available_semester = req_data['available_semester']
+        category = Category.objects.get(id=1)
+        selected_dept = Department.objects.get(id=1)
+        tags = Tag.objects.get(id=1)
+        somoim = Somoim()
+      
+        somoim.category=category
+        somoim.title = title
+        somoim.summary = summary
+        somoim. goalJoiner = goalJoiner
+        somoim.available_semester = available_semester
+        somoim.currentJoiner=0
+        somoim.likes=0
+        somoim.description=description
+        somoim.save()
+        somoim.tags.add(1,2)
+        somoim.selected_dept.add(1,2)
+        return HttpResponse(status=201)
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())
         try:

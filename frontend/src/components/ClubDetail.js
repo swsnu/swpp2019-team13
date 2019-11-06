@@ -10,6 +10,9 @@ import img2 from "../components/2.png";
 import img3 from "../components/3.png";
 
 class ClubDetail extends React.Component {
+  componentDidMount() {
+    this.props.getTagList();
+  }
   onClickLikeButton = () => {
     let newLikedClub = this.props.club;
     newLikedClub.likes = newLikedClub.likes + 1;
@@ -27,7 +30,12 @@ class ClubDetail extends React.Component {
     let club = this.props.club;
     if (club) {
       let image = (
-        <img src={club.auth_img_file} width="100" height="100" alt="" />
+        <img
+          src={"/media/" + club.fields.poster_img}
+          width="100"
+          height="100"
+          alt=""
+        />
       );
       if (club.auth_img_file === "1")
         image = <img src={img1} width="100" height="100" alt="" />;
@@ -35,11 +43,16 @@ class ClubDetail extends React.Component {
         image = <img src={img2} width="100" height="100" alt="" />;
       if (club.auth_img_file === "3")
         image = <img src={img3} width="100" height="100" alt="" />;
-      let tagList = club.tags.map(item => (
-        <Button key={item} variant="outline-primary">
-          {"#" + this.props.tags[item].name}
-        </Button>
-      ));
+
+      let tagList;
+      if (this.props.tags.length != 0) {
+        console.log(this.props.tags);
+        tagList = club.fields.tags.map(item => (
+          <Button key={item} variant="outline-primary">
+            {"#" + this.props.tags[item - 1].name}
+          </Button>
+        ));
+      }
       return (
         <Modal
           show={this.props.show}
@@ -53,19 +66,19 @@ class ClubDetail extends React.Component {
                 <Col>{image}</Col>
                 <Col>
                   <Row>
-                    <h2>{club.name}</h2>
+                    <h2>{club.fields.name}</h2>
                     <Col md={{ offset: 1 }}>
                       <h4>
                         <span role="img" aria-label="thumb">
                           👍
                         </span>
-                        {club.likes}
+                        {club.fields.likes}
                       </h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{club.content}</Row>
+                  <Row>{club.fields.description}</Row>
                 </Col>
               </Row>
               <br />
@@ -104,6 +117,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTagList: () => dispatch(actionCreators.getTagList()),
     increaseLikesOfClub: newLikedClub =>
       dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
     addLikedClub: (newLikedClub, user) =>

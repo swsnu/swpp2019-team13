@@ -1,16 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-  tags: [
-    { id: 0, name: "friendship" },
-    { id: 1, name: "love" },
-    { id: 2, name: "sport" },
-    { id: 3, name: "game" },
-    { id: 4, name: "study" },
-    { id: 5, name: "music" },
-    { id: 6, name: "art" },
-    { id: 7, name: "nothing" }
-  ]
+  tags: []
 };
 
 // TODO : implement reducer actions
