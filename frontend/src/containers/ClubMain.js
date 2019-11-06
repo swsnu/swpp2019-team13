@@ -127,14 +127,16 @@ class ClubMain extends React.Component {
             </Button>
             {categoryList}
             <Col>
-              <Button
-                className="club-create-button"
-                variant="outline-primary"
-                size="lg"
-                onClick={this.ClubRegisterClickHandler}
-              >
-                Cannot find your club?
-              </Button>
+              {this.props.loggedUser && (
+                <Button
+                  className="club-create-button"
+                  variant="outline-primary"
+                  size="lg"
+                  onClick={this.ClubRegisterClickHandler}
+                >
+                  Can't find your club?
+                </Button>
+              )}
             </Col>
           </Row>
           <br />
@@ -169,7 +171,8 @@ class ClubMain extends React.Component {
 const mapStateToProps = state => {
   return {
     Clubs: state.club.clubs,
-    categories: state.category.categories
+    categories: state.category.categories,
+    loggedUser: state.user.loggedUser
   };
 };
 

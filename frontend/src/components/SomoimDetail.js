@@ -21,7 +21,7 @@ class SomoimDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton></Modal.Header>
+          <Modal.Header closeButton>{somoim.title}</Modal.Header>
           <Modal.Body>
             <Container>
               <Row>
@@ -33,7 +33,6 @@ class SomoimDetail extends React.Component {
                 </Col>
                 <Col>
                   <Row>
-                    <h2>{somoim.title}</h2>
                     <Col md={{ offset: 1 }}>
                       <h4>
                         <span role="img" aria-label="thumb">
@@ -50,21 +49,23 @@ class SomoimDetail extends React.Component {
               </Row>
               <br />
               <br />
-              <Row>
-                <Col></Col>
-                <Col>
-                  <Button size="lg">
-                    <span role="img" aria-label="thumb">
-                      👍
-                    </span>{" "}
-                    Like!
-                  </Button>
-                </Col>
-                <Col></Col>
-                <Col>
-                  <Button size="lg">Join!</Button>
-                </Col>
-              </Row>
+              {this.props.loggedUser && (
+                <Row>
+                  <Col></Col>
+                  <Col>
+                    <Button size="lg">
+                      <span role="img" aria-label="thumb">
+                        👍
+                      </span>{" "}
+                      Like!
+                    </Button>
+                  </Col>
+                  <Col></Col>
+                  <Col>
+                    <Button size="lg">Join!</Button>
+                  </Col>
+                </Row>
+              )}
             </Container>
           </Modal.Body>
         </Modal>
@@ -75,7 +76,8 @@ class SomoimDetail extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    tags: state.tag.tags
+    tags: state.tag.tags,
+    loggedUser: state.user.loggedUser
   };
 };
 

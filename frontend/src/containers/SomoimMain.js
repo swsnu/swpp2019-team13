@@ -158,14 +158,16 @@ class SomoimMain extends React.Component {
               </div>
             </Col>
             <Col>
-              <Button
-                className="somoim-create-button"
-                variant="outline-primary"
-                size="lg"
-                onClick={this.somoimCreateClickHandler}
-              >
-                +
-              </Button>
+              {this.props.loggedUser && (
+                <Button
+                  className="somoim-create-button"
+                  variant="outline-primary"
+                  size="lg"
+                  onClick={this.somoimCreateClickHandler}
+                >
+                  +
+                </Button>
+              )}
             </Col>
           </Row>
         </Container>
@@ -184,7 +186,8 @@ class SomoimMain extends React.Component {
 const mapStateToProps = state => {
   return {
     somoims: state.somoim.somoims,
-    categories: state.category.categories
+    categories: state.category.categories,
+    loggedUser: state.user.loggedUser
   };
 };
 
