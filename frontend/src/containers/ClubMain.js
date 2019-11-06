@@ -14,7 +14,7 @@ class ClubMain extends React.Component {
   state = {
     clubDetailShow: false,
     clubRegisterShow: false,
-    selectedClub: null,
+    selectedClubID: null,
     selected_category: 0
   };
   componentDidMount() {
@@ -25,7 +25,7 @@ class ClubMain extends React.Component {
     this.setState({
       ...this.state,
       clubDetailShow: true,
-      selectedClub: this.props.clubs[id - 1]
+      selectedClubID: id
     });
   };
 
@@ -177,7 +177,7 @@ class ClubMain extends React.Component {
 
         <ClubDetail
           show={this.state.clubDetailShow}
-          club={this.state.selectedClub}
+          club={this.props.clubs[this.state.selectedClubID - 1]}
           closeHandler={this.clubDetailCloseHandler}
           forceRender={Math.random()}
         />

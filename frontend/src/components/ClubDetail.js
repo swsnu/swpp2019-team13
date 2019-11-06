@@ -14,7 +14,7 @@ class ClubDetail extends React.Component {
     }
   }
   onClickLikeButton = () => {
-    let newLikedClub = this.props.club;
+    // let newLikedClub = this.props.club;
     // if (
     //   this.props.likedClubs.filter(item => item.id === this.props.club.id)
     //     .length > 0
@@ -23,7 +23,10 @@ class ClubDetail extends React.Component {
     // else newLikedClub.likes = newLikedClub.likes + 1;
 
     // this.props.increaseLikesOfClub(newLikedClub);
-    this.props.addLikedClub(newLikedClub, this.props.loggedUser);
+    this.props
+      .addLikedClub(this.props.club, this.props.loggedUser)
+      .then(this.props.getClubList());
+    //TODO: change to get club by id
   };
 
   onClickApplyButton = () => {
@@ -34,15 +37,7 @@ class ClubDetail extends React.Component {
   render() {
     let club = this.props.club;
     if (club) {
-      let image = (
-        <img
-          src={"/media/" + club.poster_img}
-          width="100"
-          height="100"
-          alt=""
-        />
-      );
-
+      let image = <img src={club.poster_img} width="100" height="100" alt="" />;
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = club.tags.map(item => (
@@ -70,7 +65,7 @@ class ClubDetail extends React.Component {
                         <span role="img" aria-label="thumb">
                           👍
                         </span>
-                        {club.likes}
+                        {club.likers.length}
                       </h4>
                     </Col>
                   </Row>
@@ -119,8 +114,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getTagList: () => dispatch(actionCreators.getTagList()),
-    increaseLikesOfClub: newLikedClub =>
-      dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
+
+    getClubList: () => dispatch(actionCreators.getClubList()),
+
+    // increaseLikesOfClub: newLikedClub =>
+    //   dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
     addLikedClub: (newLikedClub, user) =>
       dispatch(actionCreators.addLikedClub(newLikedClub, user)),
     addAppliedClub: (newAppliedClub, user) =>

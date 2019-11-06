@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
-
 import * as userActions from "../store/actions/user";
 
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
@@ -18,36 +17,40 @@ class SomoimDetail extends React.Component {
     }
   }
   onClickLikeButton = () => {
-    let newLikedSomoim = this.props.somoim;
-    if (
-      this.props.likedSomoims.filter(item => item.id === this.props.somoim.id)
-        .length > 0
-    )
-      newLikedSomoim.likes = newLikedSomoim.likes - 1;
-    else newLikedSomoim.likes = newLikedSomoim.likes + 1;
+    // let newLikedSomoim = this.props.somoim;
+    // if (
+    //   this.props.likedSomoims.filter(item => item.id === this.props.somoim.id)
+    //     .length > 0
+    // )
+    //   newLikedSomoim.likes = newLikedSomoim.likes - 1;
+    // else newLikedSomoim.likes = newLikedSomoim.likes + 1;
 
-    this.props.increaseLikesOfSomoim(newLikedSomoim);
-    this.props.addLikedSomoim(newLikedSomoim, this.props.loggedUser);
+    // this.props.increaseLikesOfSomoim(newLikedSomoim);
+    this.props
+      .addLikedSomoim(this.props.somoim, this.props.loggedUser)
+      .then(this.props.getSomoimList());
   };
 
   onClickJoinButton = () => {
-    let newJoinedSomoim = this.props.somoim;
-    if (
-      this.props.joinedSomoims.filter(item => item.id === this.props.somoim.id)
-        .length > 0
-    )
-      newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner - 1;
-    else newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
+    // let newJoinedSomoim = this.props.somoim;
+    // if (
+    //   this.props.joinedSomoims.filter(item => item.id === this.props.somoim.id)
+    //     .length > 0
+    // )
+    //   newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner - 1;
+    // else newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
 
-    this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
-    this.props.addJoinedSomoim(newJoinedSomoim, this.props.loggedUser);
+    // this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
+    this.props
+      .addJoinedSomoim(this.props.somoim, this.props.loggedUser)
+      .then(this.props.getSomoimList());
   };
 
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage = 
-        Math.round((somoim.currentJoiner / somoim.goalJoiner) * 1000) / 10;
+      let percentage =
+        Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
 
       let tagList;
       if (this.props.tags.length != 0) {
@@ -81,7 +84,7 @@ class SomoimDetail extends React.Component {
                         <span role="img" aria-label="thumb">
                           👍
                         </span>
-                        {somoim.likes}
+                        {somoim.likers.length}
                       </h4>
                     </Col>
                   </Row>
@@ -131,6 +134,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getTagList: () => dispatch(actionCreators.getTagList()),
+
+    getSomoimList: () => dispatch(actionCreators.getSomoimList()),
+
     increaseLikesOfSomoim: newLikedSomoim =>
       dispatch(actionCreators.increaseLikesOfSomoim(newLikedSomoim)),
     addLikedSomoim: (newLikedSomoim, user) =>

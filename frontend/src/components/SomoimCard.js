@@ -13,8 +13,8 @@ class SomoimCard extends React.Component {
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage = 
-        Math.round((somoim.currentJoiner / somoim.goalJoiner) * 1000) / 10;
+      let percentage =
+        Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = somoim.tags.map(item => (
@@ -43,7 +43,7 @@ class SomoimCard extends React.Component {
                   <Row>
                     <h2>{somoim.title}</h2>
                     <Col md={{ offset: 1 }}>
-                      <h4>{"👍 " + somoim.likes}</h4>
+                      <h4>{"👍 " + somoim.likers.length}</h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>

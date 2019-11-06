@@ -10,9 +10,7 @@ class ClubCard extends React.Component {
   }
   render() {
     let club = this.props.club;
-    let image = (
-      <img src={"/media/" + club.poster_img} width="100" height="100" alt="" />
-    );
+    let image = <img src={club.poster_img} width="100" height="100" alt="" />;
 
     let tagList;
     if (this.props.tags.length != 0) {
@@ -36,7 +34,7 @@ class ClubCard extends React.Component {
                 <Row>
                   <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{club.name}</h2>
                   <Col md={{ offset: 1 }}>
-                    <h4>{"👍 " + club.likes}</h4>
+                    <h4>{"👍 " + club.likers.length}</h4>
                   </Col>
                 </Row>
                 <Row>

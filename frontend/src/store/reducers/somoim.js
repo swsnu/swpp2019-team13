@@ -21,9 +21,7 @@ const reducer = (state = initialState, action) => {
         selected_dept: action.selected_dept,
         available_sem: action.available_sem,
         tags: [],
-        goalJoiner: action.goalJoiner,
-        currentJoiner: 0,
-        likes: 0
+        goalJoiner: action.goalJoiner
       };
       return { ...state, somoims: state.somoims.concat(newSomoim) };
 

@@ -25,9 +25,7 @@ export const postSomoim = at => {
 export const getSomoimList_ = somoims => {
   return {
     type: actionTypes.GET_SOMOIM_LIST,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
