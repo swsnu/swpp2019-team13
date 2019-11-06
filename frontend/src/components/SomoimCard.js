@@ -17,7 +17,6 @@ class SomoimCard extends React.Component {
         (somoim.fields.currentJoiner / somoim.fields.goalJoiner) * 100;
       let tagList;
       if (this.props.tags.length != 0) {
-        console.log(this.props.tags);
         tagList = somoim.fields.tags.map(item => (
           <Button key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
@@ -60,7 +59,6 @@ class SomoimCard extends React.Component {
       let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
       let tagList;
       if (this.props.tags.length != 0) {
-        console.log(this.props.tags);
         tagList = somoim.tags.map(item => (
           <Button key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}

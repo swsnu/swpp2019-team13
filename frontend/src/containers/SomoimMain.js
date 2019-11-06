@@ -77,7 +77,7 @@ class SomoimMain extends React.Component {
     let recommendedList, allList;
     if (this.props.somoims) {
       recommendedList = this.props.somoims.map(item => (
-        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+        <Col sm="4" key={item.pk} style={{ paddingLeft: 1, paddingRight: 1 }}>
           <SomoimCard
             clickHandler={this.somoimCardClickHandler}
             somoim={item}
@@ -87,7 +87,7 @@ class SomoimMain extends React.Component {
 
       if (this.state.selected_category === 0) {
         allList = this.props.somoims.map(item => (
-          <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+          <Col sm="5" key={item.pk} style={{ paddingLeft: 1, paddingRight: 1 }}>
             <SomoimCard
               clickHandler={this.somoimCardClickHandler}
               somoim={item}
@@ -96,9 +96,7 @@ class SomoimMain extends React.Component {
         ));
       } else {
         allList = this.props.somoims
-          .filter(
-            item => item.selected_category === this.state.selected_category
-          )
+          .filter(item => item.fields.category === this.state.selected_category)
           .map(item => (
             <Col
               sm="5"
