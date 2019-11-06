@@ -13,7 +13,8 @@ class ClubMain extends React.Component {
   state = {
     ClubDetailShow: false,
     ClubRegisterShow: false,
-    selectedClub: null
+    selectedClub: null,
+    selected_category: 0
   };
 
   ClubCardClickHandler = id => {
@@ -59,6 +60,9 @@ class ClubMain extends React.Component {
           className="category-button"
           key={item.id}
           variant="outline-secondary"
+          onClick={() =>
+            this.setState({ ...this.state, selected_category: item.id })
+          }
         >
           {item.name}
         </Button>
@@ -72,11 +76,21 @@ class ClubMain extends React.Component {
         </Col>
       ));
 
-      allList = this.props.Clubs.map(item => (
-        <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
-        </Col>
-      ));
+      if (this.state.selected_category === 0) {
+        allList = this.props.Clubs.map(item => (
+          <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+            <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+          </Col>
+        ));
+      } else {
+        allList = this.props.Clubs.filter(
+          item => item.selected_category === this.state.selected_category
+        ).map(item => (
+          <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+            <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+          </Col>
+        ));
+      }
     }
 
     return (
@@ -102,6 +116,15 @@ class ClubMain extends React.Component {
             <h2>All Clubs</h2>
           </Row>
           <Row>
+            <Button
+              className="all-club-button"
+              variant="outline-secondary"
+              onClick={() =>
+                this.setState({ ...this.state, selected_category: 0 })
+              }
+            >
+              전체
+            </Button>
             {categoryList}
             <Col>
               <Button

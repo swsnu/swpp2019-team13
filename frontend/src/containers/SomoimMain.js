@@ -13,7 +13,8 @@ class SomoimMain extends React.Component {
   state = {
     somoimDetailShow: false,
     somoimCreateShow: false,
-    selectedSomoim: null
+    selectedSomoim: null,
+    selected_category: 0
   };
 
   somoimCardClickHandler = id => {
@@ -53,6 +54,9 @@ class SomoimMain extends React.Component {
           className="category-button"
           key={item.id}
           variant="outline-secondary"
+          onClick={() =>
+            this.setState({ ...this.state, selected_category: item.id })
+          }
         >
           {item.name}
         </Button>
@@ -76,14 +80,33 @@ class SomoimMain extends React.Component {
         </Col>
       ));
 
-      allList = this.props.somoims.map(item => (
-        <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <SomoimCard
-            clickHandler={this.somoimCardClickHandler}
-            somoim={item}
-          />
-        </Col>
-      ));
+      if (this.state.selected_category === 0) {
+        allList = this.props.somoims.map(item => (
+          <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+            <SomoimCard
+              clickHandler={this.somoimCardClickHandler}
+              somoim={item}
+            />
+          </Col>
+        ));
+      } else {
+        allList = this.props.somoims
+          .filter(
+            item => item.selected_category === this.state.selected_category
+          )
+          .map(item => (
+            <Col
+              sm="5"
+              key={item.id}
+              style={{ paddingLeft: 1, paddingRight: 1 }}
+            >
+              <SomoimCard
+                clickHandler={this.somoimCardClickHandler}
+                somoim={item}
+              />
+            </Col>
+          ));
+      }
     }
 
     return (
@@ -108,7 +131,18 @@ class SomoimMain extends React.Component {
           <Row>
             <h2>All Somoims</h2>
           </Row>
-          <Row>{categoryList}</Row>
+          <Row>
+            <Button
+              className="all-club-button"
+              variant="outline-secondary"
+              onClick={() =>
+                this.setState({ ...this.state, selected_category: 0 })
+              }
+            >
+              전체
+            </Button>
+            {categoryList}
+          </Row>
           <br />
           <Row>
             <Col xs="10" style={{ paddingLeft: 0, paddingRight: 0 }}>
