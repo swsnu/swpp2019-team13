@@ -25,7 +25,8 @@ const reducer = (state = initialState, action) => {
         dept: action.user.dept,
         major: action.user.major,
         grade: action.user.grade,
-        available_semester: action.user.available_semester
+        available_semester: action.user.available_semester,
+        available_session_day: action.user.available_session_day
       };
       return { ...state, users: state.users.concat(newUser) };
     case actionTypes.GET_LOGIN_INFO:

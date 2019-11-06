@@ -10,6 +10,29 @@ class ClubCard extends React.Component {
   }
   render() {
     let club = this.props.club;
+
+    let acceptQualification = false;
+
+    if (club && this.props.loggedUser) {
+      // check qualification
+      // 1. check whether user can participate in session day
+      let qualification_1 =
+        (club.session_day & this.props.loggedUser.available_session_day) ===
+        club.session_day;
+
+      // 2. check whether user's major is available
+      let qualification_2 = club.available_major.includes(
+        this.props.loggedUser.major
+      );
+
+      // 3. check whether user can participate in next available semesters
+      let qualification_3 =
+        club.available_semester <= this.props.loggedUser.available_semester;
+
+      if (qualification_1 && qualification_2 && qualification_3)
+        acceptQualification = true;
+    }
+
     let image = <img src={club.poster_img} width="100" height="100" alt="" />;
 
     let tagList;

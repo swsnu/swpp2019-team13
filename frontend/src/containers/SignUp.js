@@ -16,7 +16,8 @@ class SignUp extends React.Component {
     dept: "",
     major: "",
     grade: 1,
-    available_semester: 1
+    available_semester: 1,
+    available_session_day: 0
   };
 
   componentDidMount() {
@@ -50,7 +51,8 @@ class SignUp extends React.Component {
       dept: deptID,
       major: majorID,
       grade: this.state.grade,
-      available_semester: this.state.available_semester
+      available_semester: this.state.available_semester,
+      available_session_day: this.state.available_session_day
     };
     this.props
       .signUp(newUser)
@@ -227,6 +229,28 @@ class SignUp extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Form.Row>
+            <Form.Row>
+              <Form.Label>활동 가능 학기 수</Form.Label>
+            </Form.Row>
+            {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
+              return (
+                <Form.Check
+                  key={i}
+                  id="signup-sessionday-checkbox"
+                  inline
+                  type={"checkbox"}
+                  label={a}
+                  checked={(this.state.available_session_day & (1 << i)) !== 0}
+                  value={i}
+                  onChange={event => {
+                    this.setState({
+                      available_session_day:
+                        this.state.available_session_day ^ (1 << i)
+                    });
+                  }}
+                />
+              );
+            })}
           </Form>
           <div style={{ marginTop: "5%" }}>
             <Button

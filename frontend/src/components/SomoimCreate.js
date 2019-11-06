@@ -12,29 +12,99 @@ class SomoimCreate extends React.Component {
     title: "",
     summary: "",
     description: "",
+    category: 1,
     goal_number: 1,
-    selected_dept: [],
-    available_semester: 1
+    available_major: [],
+    available_semester: 1,
+    session_day: 0,
+    current_dept: "",
+    current_major: ""
   };
+
+  handle_SelectAllMajor() {
+    let majorList = [];
+    if (this.props.majors) {
+      majorList = this.props.majors.map(a => a.id);
+    }
+    this.setState({ ...this.state, available_major: majorList });
+  }
+
+  handle_RemoveAllMajor() {
+    this.setState({ ...this.state, available_major: [] });
+  }
+
+  handle_SelectSpecificMajor(major) {
+    let majorList = [];
+    if (this.props.majors) {
+      let newMajor = this.props.majors.filter(a => a.name === major)[0].id;
+      if (this.props.majors.includes(newMajor)) {
+        return;
+      } else {
+        majorList = this.state.available_major.concat(newMajor);
+        this.setState({ ...this.state, available_major: majorList });
+      }
+    }
+  }
+
+  handle_RemoveSpecificMajor(major_id) {
+    let majorList = this.state.available_major.filter(a => a !== major_id);
+
+    this.setState({ ...this.state, available_major: majorList });
+  }
 
   componentDidMount() {
     this.props.getDeptList();
+    this.props.getMajorList();
   }
+
   // componentWillReceiveProps renamed into below name
   UNSAFE_componentWillReceiveProps() {
     this.setState({
       title: "",
       summary: "",
       description: "",
+      category: 1,
       goal_number: 1,
-      selected_dept: [],
-      available_semester: 1
+      available_major: [],
+      available_semester: 1,
+      session_day: 0,
+      current_dept: "",
+      current_major: ""
     });
   }
 
   render() {
+    /* deptOptionList */
+    // ㄴ Redux 에서 depts를 받아와서, option list를 만들어줍니다.
+    let deptOptionList = null;
+    if (this.props.depts) {
+      deptOptionList = this.props.depts.map(dept => (
+        <option key={dept.id}>{dept.name}</option>
+      ));
+    }
+
+    /* majorOptionList */
+    // ㄴ Redux 에서 선택한 dept에 따른 majorList를 받아와서, option list를 만들어줍니다.
+    let selectedDeptID = null;
+    if (this.props.depts) {
+      const selectedDept = this.props.depts.filter(dept => {
+        return dept.name === this.state.current_dept;
+      });
+      if (selectedDept.length !== 0) selectedDeptID = selectedDept[0].id;
+    }
+    let majorOptionList = null;
+    if (this.props.majors) {
+      const selectedMajorList = this.props.majors.filter(major => {
+        return major.dept_id === selectedDeptID;
+      });
+      majorOptionList = selectedMajorList.map(major => (
+        <option key={major.id}>{major.name}</option>
+      ));
+    }
+
     return (
       <Modal
+        style={{ fontSize: 10 }}
         className="SomoimCreate"
         show={this.props.show}
         onHide={this.props.closeHandler}
@@ -47,11 +117,12 @@ class SomoimCreate extends React.Component {
         <Modal.Body>
           <Container>
             <Row>
-              <Form.Label column sm="4">
-                이름
+              <Form.Label>
+                <h4>제목</h4>
               </Form.Label>
-              <Col sm="8">
+              <Col>
                 <Form.Control
+                  size="lg"
                   id="somoim-title-input"
                   value={this.state.title}
                   onChange={event =>
@@ -59,6 +130,28 @@ class SomoimCreate extends React.Component {
                   }
                 />
               </Col>
+            </Row>
+            <Row>
+              <Form.Label>분야</Form.Label>
+              <Form.Control
+                as="select"
+                id="somoim-category-input"
+                onChange={event =>
+                  this.setState({
+                    category: this.props.categories.filter(
+                      a => a.name === event.target.value
+                    )[0].id
+                  })
+                }
+              >
+                {this.props.categories.map(a => {
+                  return (
+                    <option key={a.id} value={a.name}>
+                      {a.name}
+                    </option>
+                  );
+                })}
+              </Form.Control>
             </Row>
             <Row>
               <Form.Label>Summary</Form.Label>
@@ -106,53 +199,94 @@ class SomoimCreate extends React.Component {
                 />
               </Col>
             </Row>
+
             <Row>
-              <Form.Label>분야</Form.Label>
-              <Form.Control
-                as="select"
-                id="somoim-category-input"
-                onChange={event =>
-                  this.setState({
-                    selected_category: Number(event.target.value)
-                  })
-                }
-              >
-                {this.props.categories.map(a => {
-                  return (
-                    <option key={a.id} value={a.name}>
-                      {a.name}
-                    </option>
-                  );
-                })}
-              </Form.Control>
+              <Form.Label>가능 학과</Form.Label>
             </Row>
+            <div
+              style={{
+                display: "flex",
+                overflowX: "scroll"
+              }}
+            >
+              {this.state.available_major.map(major_id => (
+                <Button
+                  key={major_id}
+                  onClick={() => this.handle_RemoveSpecificMajor(major_id)}
+                >
+                  {this.props.majors.filter(major => major.id === major_id)[0]
+                    .name + " X"}
+                </Button>
+              ))}
+            </div>
+
+            <Form.Row>
+              <Form.Group as={Col} controlId="formDept">
+                {/* 단과대 입력 칸 */}
+                <Form.Label>단과 대학</Form.Label>
+                <Form.Control
+                  as="select"
+                  size="lg"
+                  onChange={event => {
+                    this.setState({ current_dept: event.target.value });
+                  }}
+                >
+                  <option></option>
+                  {deptOptionList}
+                </Form.Control>
+              </Form.Group>
+
+              {/* 전공 입력 칸 */}
+              <Form.Group as={Col} controlId="formMajor">
+                <Form.Label>학과</Form.Label>
+                <Form.Control
+                  as="select"
+                  size="lg"
+                  onChange={event => {
+                    this.setState({ current_major: event.target.value });
+                  }}
+                >
+                  <option></option>
+                  {majorOptionList}
+                </Form.Control>
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formMajor">
+                <Button
+                  onClick={() =>
+                    this.handle_SelectSpecificMajor(this.state.current_major)
+                  }
+                  disabled={
+                    this.state.current_dept === "" ||
+                    this.state.current_major === ""
+                  }
+                >
+                  추가
+                </Button>
+                <Button onClick={() => this.handle_SelectAllMajor()}>
+                  전체 추가
+                </Button>
+                <Button onClick={() => this.handle_RemoveAllMajor()}>
+                  전체 삭제
+                </Button>
+              </Form.Group>
+            </Form.Row>
+            <Form.Label>활동 요일</Form.Label>
             <Row>
-              <Form.Label>가능 단과대학</Form.Label>
-            </Row>
-            <Row>
-              {this.props.depts.map(a => {
+              {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
                 return (
                   <Form.Check
-                    key={a.id}
-                    id="somoim-dept-checkbox"
+                    key={i}
+                    id="somoim-sessionday-checkbox"
                     inline
                     type={"checkbox"}
-                    label={a.name}
-                    checked={this.state.selected_dept.includes(a.id)}
-                    value={a.id}
+                    label={a}
+                    checked={(this.state.session_day & (1 << i)) !== 0}
+                    value={i}
                     onChange={event => {
-                      let new_selected_dept = this.state.selected_dept;
-                      // if list have id, pop
-                      if (new_selected_dept.includes(a.id)) {
-                        new_selected_dept = new_selected_dept.filter(
-                          b => b !== a.id
-                        );
-                      }
-                      // if list don't have id, push
-                      else {
-                        new_selected_dept.push(a.id);
-                      }
-                      this.setState({ selected_dept: new_selected_dept });
+                      this.setState({
+                        session_day: this.state.session_day ^ (1 << i)
+                      });
                     }}
                   />
                 );
@@ -191,9 +325,11 @@ class SomoimCreate extends React.Component {
                     this.state.title,
                     this.state.summary,
                     this.state.description,
+                    this.state.category,
                     this.state.goal_number,
-                    //this.state.selected_dept,
-                    this.state.available_semester
+                    this.state.available_major,
+                    this.state.available_semester,
+                    this.state.session_day
                   );
                   alert("Create Somoim Success!");
                   this.props.closeHandler();
@@ -217,6 +353,7 @@ class SomoimCreate extends React.Component {
 const mapStateToProps = state => {
   return {
     depts: state.dept.depts,
+    majors: state.major.majors,
     categories: state.category.categories
   };
 };
@@ -224,24 +361,27 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
     postSomoim: (
       title,
       summary,
       description,
+      category,
       goal_number,
-      //selected_dept,
-      available_semester
-      //category,
+      available_major,
+      available_semester,
+      session_day
     ) =>
       dispatch(
         actionCreators.postSomoim({
           title: title,
           summary: summary,
+          category: category,
           description: description,
           goalJoiner: goal_number,
-          //selected_dept: selected_dept,
-          available_semester: available_semester
-          //category : category
+          available_major: available_major,
+          available_semester: available_semester,
+          session_day: session_day
         })
       )
   };
