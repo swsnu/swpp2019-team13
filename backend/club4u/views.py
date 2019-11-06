@@ -305,7 +305,7 @@ def like_club(request, id=0):
             user.like_clubs.remove(user.like_clubs.get(id=somoim_id))
         except (ObjectDoesNotExist):
             user.like_clubs.add(Club.objects.get(id=somoim_id))
-        return HttpResponse(status=204)
+        return HttpResponse({"likes": user.like_clubs.count()})
 
     else:
         return HttpResponse(status=405)

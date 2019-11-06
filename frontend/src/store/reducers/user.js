@@ -47,15 +47,38 @@ const reducer = (state = initialState, action) => {
       return { ...state, joinedSomoims: action.somoims };
 
     case actionTypes.ADD_LIKED_CLUB:
-      return {
-        ...state,
-        likedClubs: state.likedClubs.concat(action.newLikedClub)
-      };
+      if (
+        state.likedClubs.filter(item => item.id === action.newLikedClub.id)
+          .length > 0
+      )
+        return {
+          ...state,
+          likedClubs: state.likedClubs.filter(
+            item => item.id !== action.newLikedClub.id
+          )
+        };
+      else
+        return {
+          ...state,
+          likedClubs: state.likedClubs.concat(action.newLikedClub)
+        };
+
     case actionTypes.ADD_LIKED_SOMOIM:
-      return {
-        ...state,
-        likedSomoims: state.likedSomoims.concat(action.newLikedSomoim)
-      };
+      if (
+        state.likedSomoims.filter(item => item.id === action.newLikedSomoim.id)
+          .length > 0
+      )
+        return {
+          ...state,
+          likedSomoims: state.likedSomoims.filter(
+            item => item.id !== action.newLikedSomoim.id
+          )
+        };
+      else
+        return {
+          ...state,
+          likedSomoims: state.likedSomoims.concat(action.newLikedSomoim)
+        };
 
     case actionTypes.ADD_APPLIED_CLUB:
       return {
@@ -63,10 +86,22 @@ const reducer = (state = initialState, action) => {
         appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
       };
     case actionTypes.ADD_JOINED_SOMOIM:
-      return {
-        ...state,
-        joinedSomoims: state.joinedSomoims.concat(action.newJoinedSomoim)
-      };
+      if (
+        state.joinedSomoims.filter(
+          item => item.id === action.newJoinedSomoim.id
+        ).length > 0
+      )
+        return {
+          ...state,
+          joinedSomoims: state.joinedSomoims.filter(
+            item => item.id !== action.newJoinedSomoim.id
+          )
+        };
+      else
+        return {
+          ...state,
+          joinedSomoims: state.joinedSomoims.concat(action.newJoinedSomoim)
+        };
 
     default:
       break;

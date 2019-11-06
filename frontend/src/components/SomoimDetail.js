@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
+import * as userActions from "../store/actions/user";
+
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -10,10 +12,19 @@ import "react-circular-progressbar/dist/styles.css";
 class SomoimDetail extends React.Component {
   componentDidMount() {
     this.props.getTagList();
+    if (this.props.loggedUser) {
+      this.props.onGetLikedSomoims(this.props.loggedUser);
+      this.props.onGetJoinedSomoims(this.props.loggedUser);
+    }
   }
   onClickLikeButton = () => {
     let newLikedSomoim = this.props.somoim;
-    newLikedSomoim.likes = newLikedSomoim.likes + 1;
+    if (
+      this.props.likedSomoims.filter(item => item.id === this.props.somoim.id)
+        .length > 0
+    )
+      newLikedSomoim.likes = newLikedSomoim.likes - 1;
+    else newLikedSomoim.likes = newLikedSomoim.likes + 1;
 
     this.props.increaseLikesOfSomoim(newLikedSomoim);
     this.props.addLikedSomoim(newLikedSomoim, this.props.loggedUser);
@@ -21,7 +32,12 @@ class SomoimDetail extends React.Component {
 
   onClickJoinButton = () => {
     let newJoinedSomoim = this.props.somoim;
-    newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
+    if (
+      this.props.joinedSomoims.filter(item => item.id === this.props.somoim.id)
+        .length > 0
+    )
+      newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner - 1;
+    else newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
 
     this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
     this.props.addJoinedSomoim(newJoinedSomoim, this.props.loggedUser);
@@ -105,7 +121,9 @@ class SomoimDetail extends React.Component {
 const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
-    loggedUser: state.user.loggedUser
+    loggedUser: state.user.loggedUser,
+    likedSomoims: state.user.likedSomoims,
+    joinedSomoims: state.user.joinedSomoims
   };
 };
 
@@ -119,7 +137,10 @@ const mapDispatchToProps = dispatch => {
     increaseNumOfCurrentJoiner: newJoinedSomoim =>
       dispatch(actionCreators.increaseNumOfCurrentJoiner(newJoinedSomoim)),
     addJoinedSomoim: (newJoinedSomoim, user) =>
-      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim, user))
+      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim, user)),
+
+    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user)),
+    onGetJoinedSomoims: user => dispatch(userActions.getJoinedSomoims(user))
   };
 };
 
