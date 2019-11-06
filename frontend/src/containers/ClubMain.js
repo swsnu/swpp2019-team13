@@ -12,8 +12,8 @@ import * as actionCreators from "../store/actions/index";
 
 class ClubMain extends React.Component {
   state = {
-    ClubDetailShow: false,
-    ClubRegisterShow: false,
+    clubDetailShow: false,
+    clubRegisterShow: false,
     selectedClub: null,
     selected_category: 0
   };
@@ -21,32 +21,32 @@ class ClubMain extends React.Component {
     this.props.getClubList();
     this.props.getCategoryList();
   }
-  ClubCardClickHandler = id => {
+  clubCardClickHandler = id => {
     this.setState({
       ...this.state,
-      ClubDetailShow: true,
-      selectedClub: this.props.Clubs[id - 1]
+      clubDetailShow: true,
+      selectedClub: this.props.clubs[id - 1]
     });
   };
 
-  ClubDetailCloseHandler = () => {
+  clubDetailCloseHandler = () => {
     this.setState({
       ...this.state,
-      ClubDetailShow: false
+      clubDetailShow: false
     });
   };
 
-  ClubRegisterClickHandler = () => {
+  clubRegisterClickHandler = () => {
     this.setState({
       ...this.state,
-      ClubRegisterShow: true
+      clubRegisterShow: true
     });
   };
 
-  ClubRegisterCloseHandler = () => {
+  clubRegisterCloseHandler = () => {
     this.setState({
       ...this.state,
-      ClubRegisterShow: false
+      clubRegisterShow: false
     });
   };
 
@@ -55,8 +55,8 @@ class ClubMain extends React.Component {
     if (this.props.categories) {
       RegisterButton = (
         <ClubRegister
-          show={this.state.ClubRegisterShow}
-          closeHandler={this.ClubRegisterCloseHandler}
+          show={this.state.clubRegisterShow}
+          closeHandler={this.clubRegisterCloseHandler}
         />
       );
       categoryList = this.props.categories.map(item => (
@@ -73,27 +73,43 @@ class ClubMain extends React.Component {
       ));
     }
     let recommendedList, allList;
-    if (this.props.Clubs) {
-      recommendedList = this.props.Clubs.map(item => (
+    if (this.props.clubs) {
+      recommendedList = this.props.clubs.map(item => (
         <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+          <ClubCard
+            clickHandler={this.clubCardClickHandler}
+            club={item}
+            forceRender={Math.random()}
+          />
         </Col>
       ));
 
       if (this.state.selected_category === 0) {
-        allList = this.props.Clubs.map(item => (
+        allList = this.props.clubs.map(item => (
           <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-            <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
+            <ClubCard
+              clickHandler={this.clubCardClickHandler}
+              club={item}
+              forceRender={Math.random()}
+            />
           </Col>
         ));
       } else {
-        allList = this.props.Clubs.filter(
-          item => item.category === this.state.selected_category
-        ).map(item => (
-          <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-            <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
-          </Col>
-        ));
+        allList = this.props.clubs
+          .filter(item => item.category === this.state.selected_category)
+          .map(item => (
+            <Col
+              sm="4"
+              key={item.id}
+              style={{ paddingLeft: 1, paddingRight: 1 }}
+            >
+              <ClubCard
+                clickHandler={this.clubCardClickHandler}
+                club={item}
+                forceRender={Math.random()}
+              />
+            </Col>
+          ));
       }
     }
 
@@ -136,7 +152,7 @@ class ClubMain extends React.Component {
                   className="club-create-button"
                   variant="outline-primary"
                   size="lg"
-                  onClick={this.ClubRegisterClickHandler}
+                  onClick={this.clubRegisterClickHandler}
                 >
                   Can't find your club?
                 </Button>
@@ -159,9 +175,10 @@ class ClubMain extends React.Component {
         </Container>
 
         <ClubDetail
-          show={this.state.ClubDetailShow}
+          show={this.state.clubDetailShow}
           club={this.state.selectedClub}
-          closeHandler={this.ClubDetailCloseHandler}
+          closeHandler={this.clubDetailCloseHandler}
+          forceRender={Math.random()}
         />
 
         {RegisterButton}
@@ -172,7 +189,7 @@ class ClubMain extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    Clubs: state.club.clubs,
+    clubs: state.club.clubs,
     categories: state.category.categories,
     loggedUser: state.user.loggedUser
   };

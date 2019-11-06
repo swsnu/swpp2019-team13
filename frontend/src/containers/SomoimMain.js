@@ -81,6 +81,7 @@ class SomoimMain extends React.Component {
           <SomoimCard
             clickHandler={this.somoimCardClickHandler}
             somoim={item}
+            forceRender={Math.random()}
           />
         </Col>
       ));
@@ -91,6 +92,7 @@ class SomoimMain extends React.Component {
             <SomoimCard
               clickHandler={this.somoimCardClickHandler}
               somoim={item}
+              forceRender={Math.random()}
             />
           </Col>
         ));
@@ -106,6 +108,7 @@ class SomoimMain extends React.Component {
               <SomoimCard
                 clickHandler={this.somoimCardClickHandler}
                 somoim={item}
+                forceRender={Math.random()}
               />
             </Col>
           ));
@@ -179,6 +182,7 @@ class SomoimMain extends React.Component {
           show={this.state.somoimDetailShow}
           somoim={this.state.selectedSomoim}
           closeHandler={this.somoimDetailCloseHandler}
+          forceRender={Math.random()}
         />
         {somoim_create}
       </div>
