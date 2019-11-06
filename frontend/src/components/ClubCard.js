@@ -11,12 +11,7 @@ class ClubCard extends React.Component {
   render() {
     let club = this.props.club;
     let image = (
-      <img
-        src={"/media/" + club.fields.poster_img}
-        width="100"
-        height="100"
-        alt=""
-      />
+      <img src={"/media/" + club.poster_img} width="100" height="100" alt="" />
     );
 
     let tagList;
@@ -30,7 +25,7 @@ class ClubCard extends React.Component {
     return (
       <Card
         onClick={() => {
-          this.props.clickHandler(club.pk);
+          this.props.clickHandler(club.id);
         }}
       >
         <Card.Body>
@@ -39,14 +34,14 @@ class ClubCard extends React.Component {
               <Col xs="5">{image}</Col>
               <Col>
                 <Row>
-                  <h2>{club.fields.name}</h2>
+                  <h2>{club.name}</h2>
                   <Col md={{ offset: 1 }}>
-                    <h4>{"👍 " + club.fields.likes}</h4>
+                    <h4>{"👍 " + club.likes}</h4>
                   </Col>
                 </Row>
                 <Row>{tagList}</Row>
                 <br />
-                <Row>{club.fields.summary}</Row>
+                <Row>{club.summary}</Row>
               </Col>
             </Row>
           </Container>

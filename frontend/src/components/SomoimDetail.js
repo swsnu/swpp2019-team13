@@ -30,8 +30,7 @@ class SomoimDetail extends React.Component {
   render() {
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage =
-        (somoim.fields.currentJoiner / somoim.fields.goalJoiner) * 100;
+      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
 
       let tagList;
       if (this.props.tags.length != 0) {
@@ -59,19 +58,19 @@ class SomoimDetail extends React.Component {
                 </Col>
                 <Col>
                   <Row>
-                    <h2>{somoim.fields.title}</h2>
+                    <h2>{somoim.title}</h2>
                     <Col md={{ offset: 1 }}>
                       <h4>
                         <span role="img" aria-label="thumb">
                           👍
                         </span>
-                        {somoim.fields.likes}
+                        {somoim.likes}
                       </h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.fields.description}</Row>
+                  <Row>{somoim.description}</Row>
                 </Col>
               </Row>
               <br />

@@ -75,7 +75,7 @@ class ClubMain extends React.Component {
     let recommendedList, allList;
     if (this.props.Clubs) {
       recommendedList = this.props.Clubs.map(item => (
-        <Col sm="4" key={item.pk} style={{ paddingLeft: 1, paddingRight: 1 }}>
+        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
           <ClubCard clickHandler={this.ClubCardClickHandler} club={item} />
         </Col>
       ));
