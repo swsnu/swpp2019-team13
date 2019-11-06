@@ -3,9 +3,6 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import "react-circular-progressbar/dist/styles.css";
-import img1 from "../components/1.jpg";
-import img2 from "../components/2.png";
-import img3 from "../components/3.png";
 import * as actionCreators from "../store/actions/index";
 class ClubCard extends React.Component {
   componentDidMount() {
@@ -16,12 +13,6 @@ class ClubCard extends React.Component {
     let image = (
       <img src={"/media/" + club.poster_img} width="100" height="100" alt="" />
     );
-    if (club.auth_img_file === "1")
-      image = <img src={img1} width="100" height="100" alt="" />;
-    if (club.auth_img_file === "2")
-      image = <img src={img2} width="100" height="100" alt="" />;
-    if (club.auth_img_file === "3")
-      image = <img src={img3} width="100" height="100" alt="" />;
 
     let tagList;
     if (this.props.tags.length != 0) {

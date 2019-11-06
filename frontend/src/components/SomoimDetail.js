@@ -75,23 +75,25 @@ class SomoimDetail extends React.Component {
               </Row>
               <br />
               <br />
-              <Row>
-                <Col></Col>
-                <Col>
-                  <Button size="lg" onClick={this.onClickLikeButton}>
-                    좋아요!{" "}
-                    <span role="img" aria-label="thumb">
-                      👍
-                    </span>
-                  </Button>
-                </Col>
-                <Col></Col>
-                <Col>
-                  <Button size="lg" onClick={this.onClickJoinButton}>
-                    함께하기
-                  </Button>
-                </Col>
-              </Row>
+              {this.props.loggedUser && (
+                <Row>
+                  <Col></Col>
+                  <Col>
+                    <Button size="lg" onClick={this.onClickLikeButton}>
+                      좋아요!{" "}
+                      <span role="img" aria-label="thumb">
+                        👍
+                      </span>
+                    </Button>
+                  </Col>
+                  <Col></Col>
+                  <Col>
+                    <Button size="lg" onClick={this.onClickJoinButton}>
+                      함께하기
+                    </Button>
+                  </Col>
+                </Row>
+              )}
             </Container>
           </Modal.Body>
         </Modal>
@@ -102,8 +104,8 @@ class SomoimDetail extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.user.loggedUser,
-    tags: state.tag.tags
+    tags: state.tag.tags,
+    loggedUser: state.user.loggedUser
   };
 };
 

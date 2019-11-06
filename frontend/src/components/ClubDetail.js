@@ -5,10 +5,6 @@ import * as actionCreators from "../store/actions/index";
 
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 
-import img1 from "../components/1.jpg";
-import img2 from "../components/2.png";
-import img3 from "../components/3.png";
-
 class ClubDetail extends React.Component {
   componentDidMount() {
     this.props.getTagList();
@@ -37,12 +33,6 @@ class ClubDetail extends React.Component {
           alt=""
         />
       );
-      if (club.auth_img_file === "1")
-        image = <img src={img1} width="100" height="100" alt="" />;
-      if (club.auth_img_file === "2")
-        image = <img src={img2} width="100" height="100" alt="" />;
-      if (club.auth_img_file === "3")
-        image = <img src={img3} width="100" height="100" alt="" />;
 
       let tagList;
       if (this.props.tags.length != 0) {
@@ -82,23 +72,25 @@ class ClubDetail extends React.Component {
               </Row>
               <br />
               <br />
-              <Row>
-                <Col></Col>
-                <Col>
-                  <Button onClick={this.onClickLikeButton} size="lg">
-                    좋아요!{" "}
-                    <span role="img" aria-label="thumb">
-                      👍
-                    </span>
-                  </Button>
-                </Col>
-                <Col></Col>
-                <Col>
-                  <Button onClick={this.onClickApplyButton} size="lg">
-                    지원하기
-                  </Button>
-                </Col>
-              </Row>
+              {this.props.loggedUser && (
+                <Row>
+                  <Col></Col>
+                  <Col>
+                    <Button onClick={this.onClickLikeButton} size="lg">
+                      좋아요!{" "}
+                      <span role="img" aria-label="thumb">
+                        👍
+                      </span>
+                    </Button>
+                  </Col>
+                  <Col></Col>
+                  <Col>
+                    <Button onClick={this.onClickApplyButton} size="lg">
+                      지원하기
+                    </Button>
+                  </Col>
+                </Row>
+              )}
             </Container>
           </Modal.Body>
         </Modal>
@@ -109,8 +101,8 @@ class ClubDetail extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.user.loggedUser,
-    tags: state.tag.tags
+    tags: state.tag.tags,
+    loggedUser: state.user.loggedUser
   };
 };
 
