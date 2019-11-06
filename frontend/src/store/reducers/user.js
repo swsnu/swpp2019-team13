@@ -81,10 +81,21 @@ const reducer = (state = initialState, action) => {
         };
 
     case actionTypes.ADD_APPLIED_CLUB:
-      return {
-        ...state,
-        appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
-      };
+      if (
+        state.appliedClubs.filter(item => item.id === action.newAppliedClub.id)
+          .length > 0
+      )
+        return {
+          ...state,
+          appliedClubs: state.appliedClubs.filter(
+            item => item.id !== action.newAppliedClub.id
+          )
+        };
+      else
+        return {
+          ...state,
+          appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
+        };
     case actionTypes.ADD_JOINED_SOMOIM:
       if (
         state.joinedSomoims.filter(

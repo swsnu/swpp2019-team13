@@ -14,11 +14,16 @@ import AppliedClubTab from "./AppliedClubTab";
 import ManagingSomoimTab from "./ManagingSomoimTab";
 import LikedSomoimTab from "./LikedSomoimTab";
 import JoinedSomoimTab from "./JoinedSomoimTab";
+import * as actionCreators from "../store/actions/index";
 
 class MyPage extends Component {
   state = {
     tab: 0
   };
+
+  componentDidMount() {
+    this.props.getClubList();
+  }
 
   render() {
     let tab = null;
@@ -208,7 +213,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    getClubList: () => dispatch(actionCreators.getClubList())
+  };
 };
 
 export default connect(

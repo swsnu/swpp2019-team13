@@ -7,7 +7,7 @@ import ClubDetail from "../components/ClubDetail";
 import * as userActions from "../store/actions/user";
 
 class LikedClubTab extends Component {
-  state = { clubDetailShow: false, selectedClub: null };
+  state = { clubDetailShow: false, selectedClubID: null };
 
   componentDidMount() {
     if (this.props.loggedUser) {
@@ -36,7 +36,7 @@ class LikedClubTab extends Component {
                   this.setState({
                     ...this.state,
                     clubDetailShow: true,
-                    selectedClub: item
+                    selectedClubID: item.id
                   });
                 }
               }}
@@ -52,7 +52,7 @@ class LikedClubTab extends Component {
         {list}
         <ClubDetail
           show={this.state.clubDetailShow}
-          club={this.state.selectedClub}
+          club={this.props.clubs[this.state.selectedClubID - 1]}
           closeHandler={() => {
             this.setState({
               ...this.state,
@@ -68,6 +68,7 @@ class LikedClubTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    clubs: state.club.clubs,
     likedClubs: state.user.likedClubs
   };
 };

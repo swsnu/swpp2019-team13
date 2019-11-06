@@ -89,9 +89,7 @@ export const putUserInformation = userInfo => {
 export const getManagingClubs_ = clubs => {
   return {
     type: actionTypes.GET_MANAGING_CLUBS,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 
@@ -106,9 +104,7 @@ export const getManagingClubs = user => {
 export const getLikedClubs_ = clubs => {
   return {
     type: actionTypes.GET_LIKED_CLUBS,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 
@@ -123,9 +119,7 @@ export const getLikedClubs = user => {
 export const getAppliedClubs_ = clubs => {
   return {
     type: actionTypes.GET_APPLIED_CLUBS,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 
