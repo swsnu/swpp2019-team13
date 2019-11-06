@@ -185,11 +185,13 @@ def signup(request):
             major = Major.objects.get(id=req_data['major'])
             grade = req_data['grade']
             available_semester = req_data['available_semester']
+            available_session_day = req_data['available_session_day']
             user = User.objects.create_user(
                 username=email, password=password, last_name=name)
             user.save()
             userprofile = UserProfile(user=user, dept=dept,
                                       major=major, grade=grade, available_semester=available_semester)
+            userprofile.available_session_day = available_session_day
             userprofile.save()
             return HttpResponse(status=201)
         except (KeyError, JSONDecodeError):
@@ -236,7 +238,7 @@ def logininfo(request):
             userprofile = UserProfile.objects.get(user_id=current_user)
             response_dict = {'id': userprofile.id, 'name': current_user.last_name, 'email': current_user.username,
                              'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
-                             'available_semester': userprofile.available_semester}
+                             'available_semester': userprofile.available_semester, 'available_session_day': userprofile.available_session_day}
             return JsonResponse(response_dict, safe=False)
         else:
             return JsonResponse(None, safe=False)

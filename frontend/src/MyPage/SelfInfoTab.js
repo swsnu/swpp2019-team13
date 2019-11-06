@@ -8,7 +8,6 @@ import * as actionCreators from "../store/actions/index";
 class SelfInfoTab extends Component {
   state = {
     firstLoaded: false,
-
     email: "",
     name: "",
     password: "",
@@ -16,7 +15,8 @@ class SelfInfoTab extends Component {
     dept: 0,
     major: 0,
     grade: 1,
-    available_semester: 1
+    available_semester: 1,
+    available_session_day: 0
   };
 
   componentDidMount = () => {
@@ -35,7 +35,8 @@ class SelfInfoTab extends Component {
           dept: this.props.loggedUser.dept,
           major: this.props.loggedUser.major,
           grade: this.props.loggedUser.grade,
-          available_semester: this.props.loggedUser.available_semester
+          available_semester: this.props.loggedUser.available_semester,
+          available_session_day: this.props.loggedUser.available_session_day
         });
       }
     } else {
@@ -191,6 +192,28 @@ class SelfInfoTab extends Component {
               </Form.Control>
             </Form.Group>
           </Form.Row>
+          <Form.Row>
+            <Form.Label>활동 가능 학기 수</Form.Label>
+          </Form.Row>
+          {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
+            return (
+              <Form.Check
+                key={i}
+                id="signup-sessionday-checkbox"
+                inline
+                type={"checkbox"}
+                label={a}
+                checked={(this.state.available_session_day & (1 << i)) !== 0}
+                value={i}
+                onChange={event => {
+                  this.setState({
+                    available_session_day:
+                      this.state.available_session_day ^ (1 << i)
+                  });
+                }}
+              />
+            );
+          })}
         </Form>
 
         <Button
