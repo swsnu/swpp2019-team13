@@ -10,17 +10,22 @@ import ClubDetail from "../components/ClubDetail";
 import ClubRegister from "../components/ClubRegister";
 import * as actionCreators from "../store/actions/index";
 
+import "./ClubMain.css";
+
 class ClubMain extends React.Component {
-  state = {
-    clubDetailShow: false,
-    clubRegisterShow: false,
-    selectedClub: null,
-    selected_category: 0
-  };
   componentDidMount() {
     this.props.getClubList();
     this.props.getCategoryList();
   }
+
+  state = {
+    clubDetailShow: false,
+    clubRegisterShow: false,
+    selectedClub: null,
+    selected_category: 0,
+    recommendedListPageNum: 0
+  };
+
   clubCardClickHandler = id => {
     this.setState({
       ...this.state,
@@ -72,27 +77,26 @@ class ClubMain extends React.Component {
         </Button>
       ));
     }
+
     let recommendedList, allList;
     if (this.props.clubs) {
       recommendedList = this.props.clubs.map(item => (
-        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-          <ClubCard
-            clickHandler={this.clubCardClickHandler}
-            club={item}
-            forceRender={Math.random()}
-          />
-        </Col>
+        <ClubCard
+          key={item.id}
+          clickHandler={this.clubCardClickHandler}
+          club={item}
+          forceRender={Math.random()}
+        />
       ));
 
       if (this.state.selected_category === 0) {
         allList = this.props.clubs.map(item => (
-          <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-            <ClubCard
-              clickHandler={this.clubCardClickHandler}
-              club={item}
-              forceRender={Math.random()}
-            />
-          </Col>
+          <ClubCard
+            key={item.id}
+            clickHandler={this.clubCardClickHandler}
+            club={item}
+            forceRender={Math.random()}
+          />
         ));
       } else {
         allList = this.props.clubs
@@ -114,22 +118,83 @@ class ClubMain extends React.Component {
     }
 
     return (
-      <div>
+      <div className="ClubMain">
         <Header />
-        <Container>
-          <Row>
-            <h2>Recommended Clubs</h2>
-          </Row>
-          <Row>
-            <div
+        <div className="ClubList">
+          <div>
+            <h2
               style={{
-                display: "flex",
-                overflowX: "scroll"
+                fontWeight: "bold",
+                display: "inline-block",
+                marginRight: "1%"
               }}
             >
-              {recommendedList}
+              추천 동아리
+            </h2>
+            <div>
+              <div className="ClubCard">
+                {this.state.recommendedListPageNum * 4 + 0 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
+                  : ""}
+              </div>
+              <div className="ClubCard">
+                {this.state.recommendedListPageNum * 4 + 1 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
+                  : ""}
+              </div>
             </div>
-          </Row>
+            <div>
+              <div className="ClubCard">
+                {this.state.recommendedListPageNum * 4 + 2 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
+                  : ""}
+              </div>
+              <div className="ClubCard">
+                {this.state.recommendedListPageNum * 4 + 3 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
+                  : ""}
+              </div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (this.state.recommendedListPageNum > 0)
+                    this.setState({
+                      ...this.state,
+                      recommendedListPageNum:
+                        this.state.recommendedListPageNum - 1
+                    });
+                }}
+              >
+                &laquo; 이전
+              </div>
+              <div className="bar">|</div>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (
+                    this.state.recommendedListPageNum <
+                    Math.ceil(recommendedList.length / 4) - 1
+                  )
+                    this.setState({
+                      ...this.state,
+                      recommendedListPageNum:
+                        this.state.recommendedListPageNum + 1
+                    });
+                  console.log(recommendedList.length);
+                }}
+              >
+                다음 &raquo;
+              </div>
+            </div>
+          </div>
+        </div>
+        <Container>
           <br />
           <br />
           <Row>

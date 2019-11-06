@@ -17,13 +17,14 @@ class ClubCard extends React.Component {
     let tagList;
     if (this.props.tags.length != 0) {
       tagList = club.tags.map(item => (
-        <Button key={item} variant="outline-primary">
+        <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
           {"#" + this.props.tags[item - 1].name}
         </Button>
       ));
     }
     return (
       <Card
+        style={{ height: "150px", margin: "10px" }}
         onClick={() => {
           this.props.clickHandler(club.id);
         }}
@@ -31,13 +32,21 @@ class ClubCard extends React.Component {
         <Card.Body>
           <Container>
             <Row>
-              <Col xs="5">{image}</Col>
+              <Col xs="4" style={{ paddingTop: "2%" }}>
+                {image}
+              </Col>
               <Col>
                 <Row>
-                  <h2>{club.name}</h2>
-                  <Col md={{ offset: 1 }}>
-                    <h4>{"👍 " + club.likes}</h4>
-                  </Col>
+                  <div>
+                    <h1
+                      style={{ display: "inline-block", paddingRight: "30px" }}
+                    >
+                      {club.name}
+                    </h1>
+                    <h3 style={{ display: "inline-block" }}>
+                      {"👍 " + club.likes}
+                    </h3>
+                  </div>
                 </Row>
                 <Row>{tagList}</Row>
                 <br />
