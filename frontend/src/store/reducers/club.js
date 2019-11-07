@@ -16,7 +16,7 @@ const reducer = (state = initialState, action) => {
       return { ...state, selectedClub: clubTargettedByID[0] };
     case actionTypes.POST_CLUB:
       const newClub = {
-        id: state.clubs.length,
+        id: action.id,
         name: action.name,
         content: "empty",
         clubmanager: action.clubmanager,

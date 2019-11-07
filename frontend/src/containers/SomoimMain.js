@@ -126,6 +126,8 @@ class SomoimMain extends React.Component {
       }
     }
 
+    console.log(this.state);
+
     return (
       <div>
         <Header />
@@ -191,7 +193,11 @@ class SomoimMain extends React.Component {
 
         <SomoimDetail
           show={this.state.somoimDetailShow}
-          somoim={this.props.somoims[this.state.selectedSomoimID - 1]}
+          somoim={
+            this.props.somoims.filter(
+              a => a.id === this.state.selectedSomoimID
+            )[0]
+          }
           closeHandler={this.somoimDetailCloseHandler}
           forceRender={Math.random()}
         />

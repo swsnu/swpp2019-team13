@@ -34,8 +34,6 @@ class SomoimCard extends React.Component {
           acceptQualification = true;
       }
 
-      // console.log(somoim);
-
       let percentage =
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
       let tagList;
