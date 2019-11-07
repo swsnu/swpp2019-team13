@@ -133,7 +133,10 @@ def somoim_list(request):
         for major_id in available_major_id_list:
             somoim.available_major.add(Major.objects.get(id=major_id))
 
-        return HttpResponse(status=201)
+        serializer = SomoimSerializer(
+            Somoim.objects.filter(id=somoim.id), many=True)
+
+        return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())
         try:
@@ -362,6 +365,17 @@ def manage_somoim(request, id=0):
         # serialized_data = serializers.serialize(
         #     "json", user.manage_somoims.all())
         # return HttpResponse(serialized_data)
+
+    elif request.method == 'PUT':
+        # handle user's mananging somoim (add/delete)
+        body = request.body.decode()
+        somoim_id = json.loads(body)['id']
+        try:
+            user.manage_somoims.get(id=somoim_id)
+            user.manage_somoims.remove(user.manage_somoims.get(id=somoim_id))
+        except (ObjectDoesNotExist):
+            user.manage_somoims.add(Somoim.objects.get(id=somoim_id))
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
@@ -382,7 +396,7 @@ def like_somoim(request, id=0):
         # return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
-           # toggle user's like status for requested somoim
+        # toggle user's like status for requested somoim
         body = request.body.decode()
         somoim_id = json.loads(body)['id']
         try:

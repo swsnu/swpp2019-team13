@@ -5,9 +5,6 @@ import { Card, Button, Container, Row, Col } from "react-bootstrap";
 import "react-circular-progressbar/dist/styles.css";
 import * as actionCreators from "../store/actions/index";
 class ClubCard extends React.Component {
-  componentDidMount() {
-    this.props.getTagList();
-  }
   render() {
     let club = this.props.club;
 
@@ -91,9 +88,7 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = dispatch => {
-  return {
-    getTagList: () => dispatch(actionCreators.getTagList())
-  };
+  return {};
 };
 export default connect(
   mapStateToProps,

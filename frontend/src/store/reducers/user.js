@@ -6,7 +6,9 @@ const initialState = {
   likedClubs: [],
   likedSomoims: [],
   appliedClubs: [],
-  joinedSomoims: []
+  joinedSomoims: [],
+  managingSomoims: [],
+  managingClubs: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -116,6 +118,11 @@ const reducer = (state = initialState, action) => {
           joinedSomoims: state.joinedSomoims.concat(action.newJoinedSomoim)
         };
 
+    case actionTypes.ADD_MANAGING_SOMOIM:
+      return {
+        ...state,
+        managingSomoims: state.managingSomoims.concat(action.newManagingSomoim)
+      };
     default:
       break;
   }

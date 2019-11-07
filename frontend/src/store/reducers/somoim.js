@@ -23,7 +23,9 @@ const reducer = (state = initialState, action) => {
         available_semester: action.available_semester,
         session_day: action.session_day,
         tags: [],
-        goalJoiner: action.goalJoiner
+        goalJoiner: action.goalJoiner,
+        joiners: [],
+        likers: []
       };
       return { ...state, somoims: state.somoims.concat(newSomoim) };
 

@@ -7,9 +7,7 @@ import "react-circular-progressbar/dist/styles.css";
 import * as actionCreators from "../store/actions/index";
 
 class SomoimCard extends React.Component {
-  componentDidMount() {
-    this.props.getTagList();
-  }
+  componentDidMount() {}
 
   render() {
     let acceptQualification = false;
@@ -35,6 +33,8 @@ class SomoimCard extends React.Component {
         if (qualification_1 && qualification_2 && qualification_3)
           acceptQualification = true;
       }
+
+      // console.log(somoim);
 
       let percentage =
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
@@ -134,7 +134,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList())
   };
 };

@@ -21,6 +21,7 @@ class SomoimMain extends React.Component {
   componentDidMount() {
     this.props.getSomoimList();
     this.props.getCategoryList();
+    this.props.getTagList();
   }
   somoimCardClickHandler = id => {
     this.setState({
@@ -200,6 +201,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
     getCategoryList: () => dispatch(actionCreators.getCategoryList())
   };

@@ -16,6 +16,7 @@ class ClubMain extends React.Component {
   componentDidMount() {
     this.props.getClubList();
     this.props.getCategoryList();
+    this.props.getTagList();
   }
 
   state = {
@@ -308,6 +309,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTagList: () => dispatch(actionCreators.getTagList()),
     getClubList: () => dispatch(actionCreators.getClubList()),
     getCategoryList: () => dispatch(actionCreators.getCategoryList())
   };

@@ -17,9 +17,10 @@ export const postSomoim_ = somoim => {
 
 export const postSomoim = somoim => {
   return dispatch => {
-    return axios
-      .post("api/somoim/list/", somoim)
-      .then(res => dispatch(postSomoim_(somoim)));
+    return axios.post("api/somoim/list/", somoim).then(res => {
+      dispatch(postSomoim_(somoim));
+      return res.data[0];
+    });
   };
 };
 

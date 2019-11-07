@@ -329,7 +329,8 @@ class SomoimCreate extends React.Component {
                     this.state.goal_number,
                     this.state.available_major,
                     this.state.available_semester,
-                    this.state.session_day
+                    this.state.session_day,
+                    this.props.loggedUser
                   );
                   alert("Create Somoim Success!");
                   this.props.closeHandler();
@@ -352,6 +353,8 @@ class SomoimCreate extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
+    somoim: state.somoim.somoims,
     depts: state.dept.depts,
     majors: state.major.majors,
     categories: state.category.categories
@@ -370,7 +373,8 @@ const mapDispatchToProps = dispatch => {
       goal_number,
       available_major,
       available_semester,
-      session_day
+      session_day,
+      user
     ) =>
       dispatch(
         actionCreators.postSomoim({
@@ -383,7 +387,9 @@ const mapDispatchToProps = dispatch => {
           available_semester: available_semester,
           session_day: session_day
         })
-      )
+      ).then(new_somoim => {
+        dispatch(actionCreators.addManagingSomoim(new_somoim, user));
+      })
   };
 };
 export default connect(

@@ -235,3 +235,18 @@ export const addJoinedSomoim = (newJoinedSomoim, user) => {
       .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)));
   };
 };
+
+export const addManagingSomoim_ = newManagingSomoim => {
+  return {
+    type: actionTypes.ADD_MANAGING_SOMOIM,
+    newManagingSomoim: newManagingSomoim
+  };
+};
+
+export const addManagingSomoim = (newManagingSomoim, user) => {
+  return dispatch => {
+    return axios
+      .put("/api/user/" + user.id + "/somoim/manage/", newManagingSomoim)
+      .then(res => dispatch(addManagingSomoim_(newManagingSomoim)));
+  };
+};
