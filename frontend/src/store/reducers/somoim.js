@@ -14,7 +14,7 @@ const reducer = (state = initialState, action) => {
       return { ...state, selectedSomoim: action.somoim };
     case actionTypes.POST_SOMOIM:
       const newSomoim = {
-        id: state.somoims.length + 1,
+        id: action.id,
         title: action.title,
         summary: action.summary,
         description: action.description,

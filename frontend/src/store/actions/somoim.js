@@ -3,23 +3,16 @@ import axios from "axios";
 
 export const postSomoim_ = somoim => {
   return {
-    type: actionTypes.POST_SOMOIM,
-    title: somoim.title,
-    summary: somoim.summary,
-    description: somoim.description,
-    category: somoim.category,
-    goalJoiner: somoim.goalJoiner,
-    available_major: somoim.available_major,
-    available_semester: somoim.available_semester,
-    session_day: somoim.session_day
+    ...somoim,
+    type: actionTypes.POST_SOMOIM
   };
 };
 
 export const postSomoim = somoim => {
   return dispatch => {
     return axios.post("api/somoim/list/", somoim).then(res => {
-      dispatch(postSomoim_(somoim));
-      return res.data[0];
+      dispatch(postSomoim_(res.data));
+      return res.data;
     });
   };
 };

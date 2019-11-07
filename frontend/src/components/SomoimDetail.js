@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 import * as userActions from "../store/actions/user";
 
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Form } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
@@ -26,9 +26,7 @@ class SomoimDetail extends React.Component {
     // else newLikedSomoim.likes = newLikedSomoim.likes + 1;
 
     // this.props.increaseLikesOfSomoim(newLikedSomoim);
-    this.props
-      .addLikedSomoim(this.props.somoim, this.props.loggedUser)
-      .then(this.props.getSomoimList());
+    this.props.addLikedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
   onClickJoinButton = () => {
@@ -41,14 +39,16 @@ class SomoimDetail extends React.Component {
     // else newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
 
     // this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
-    this.props
-      .addJoinedSomoim(this.props.somoim, this.props.loggedUser)
-      .then(this.props.getSomoimList());
+    this.props.addJoinedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
   render() {
     let acceptQualification = false;
+    let isLoggedUserLike = false;
     let qualificationMessage = "";
+    let available_major_string = "";
+    let session_day_string = "";
+
     let somoim = this.props.somoim;
     if (somoim) {
       if (this.props.loggedUser) {
@@ -78,26 +78,61 @@ class SomoimDetail extends React.Component {
 
         if (qualification_1 && qualification_2 && qualification_3)
           acceptQualification = true;
+
+        // check whether user had like
+        isLoggedUserLike = somoim.likers
+          .map(a => a.id)
+          .includes(this.props.loggedUser.id);
       }
 
+      if (somoim.available_major.length === this.props.majors.length) {
+        available_major_string = "제한 없음";
+      } else {
+        somoim.available_major.map(major_id => {
+          available_major_string += this.props.majors.filter(
+            a => a.id === major_id
+          )[0].name;
+          available_major_string += " ";
+        });
+      }
+
+      for (var i = 0; i < 7; i++) {
+        if ((somoim.session_day & (1 << i)) !== 0) {
+          session_day_string += ["월", "화", "수", "목", "금", "토", "일"][i];
+          session_day_string += " ";
+        }
+      }
       let percentage =
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
 
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = somoim.tags.map(item => (
-          <Button key={item} variant="outline-primary">
+          <Button size="lg" key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
       }
       return (
         <Modal
+          size="lg"
           show={this.props.show}
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton></Modal.Header>
+          <Modal.Header closeButton>
+            <Col sm={10}>
+              <h1>{somoim.title}</h1>
+            </Col>
+            <Col sm={2}>
+              <h1>
+                <span role="img" aria-label="thumb">
+                  👍
+                </span>
+                {somoim.likers.length}
+              </h1>
+            </Col>
+          </Modal.Header>
           <Modal.Body>
             <Container>
               <Row>
@@ -109,33 +144,63 @@ class SomoimDetail extends React.Component {
                 </Col>
                 <Col>
                   <Row>
-                    <h2>{somoim.title}</h2>
-                    <Col md={{ offset: 1 }}>
-                      <h4>
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                        {somoim.likers.length}
-                      </h4>
-                    </Col>
+                    <Col md={{ offset: 1 }}></Col>
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.description}</Row>
+                  <Row>
+                    <h3>{somoim.description}</h3>
+                  </Row>
                 </Col>
               </Row>
+              <br />
+              <br />
+              <Form.Label>
+                <h2>가입 조건</h2>
+              </Form.Label>
+              <Row>
+                <Form.Label>
+                  <h3>- 가능 학과</h3>
+                </Form.Label>
+              </Row>
+              <h4>{available_major_string}</h4>
+              <Row>
+                <h3>- 활동 요일</h3>
+              </Row>
+              <h4>{session_day_string}</h4>
+              <Row>
+                <h3>- 최소 활동 학기 수</h3>
+              </Row>
+              <h4>{somoim.available_semester + "학기"}</h4>
               <br />
               <br />
               {this.props.loggedUser && (
                 <Row>
                   <Col></Col>
                   <Col>
-                    <Button size="lg" onClick={this.onClickLikeButton}>
-                      좋아요!{" "}
-                      <span role="img" aria-label="thumb">
-                        👍
-                      </span>
-                    </Button>
+                    {isLoggedUserLike ? (
+                      <Button
+                        size="lg"
+                        variant="primary"
+                        onClick={this.onClickLikeButton}
+                      >
+                        좋아요!{" "}
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        onClick={this.onClickLikeButton}
+                      >
+                        좋아요!{" "}
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                      </Button>
+                    )}
                   </Col>
                   <Col></Col>
                   <Col>
@@ -149,6 +214,7 @@ class SomoimDetail extends React.Component {
                       </Button>
                     )}
                   </Col>
+                  <Col></Col>
                 </Row>
               )}
             </Container>
@@ -162,6 +228,7 @@ class SomoimDetail extends React.Component {
 const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
+    majors: state.major.majors,
     loggedUser: state.user.loggedUser,
     likedSomoims: state.user.likedSomoims,
     joinedSomoims: state.user.joinedSomoims

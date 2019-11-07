@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 import * as userActions from "../store/actions/user";
 
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Form } from "react-bootstrap";
 
 class ClubDetail extends React.Component {
   componentDidMount() {
@@ -23,9 +23,9 @@ class ClubDetail extends React.Component {
     // else newLikedClub.likes = newLikedClub.likes + 1;
 
     // this.props.increaseLikesOfClub(newLikedClub);
-    this.props
-      .addLikedClub(this.props.club, this.props.loggedUser)
-      .then(this.props.getClubList());
+    this.props.addLikedClub(this.props.club, this.props.loggedUser);
+    // .then(this.props.getClubList())
+    // .then(this.props.onGetRecommendedClubs(this.props.loggedUser));
     //TODO: change to get club by id
   };
 
@@ -36,7 +36,11 @@ class ClubDetail extends React.Component {
 
   render() {
     let acceptQualification = false;
+    let isLoggedUserLike = false;
     let qualificationMessage = "";
+    let available_major_string = "";
+    let session_day_string = "";
+
     let club = this.props.club;
     if (club) {
       if (this.props.loggedUser) {
@@ -66,58 +70,117 @@ class ClubDetail extends React.Component {
 
         if (qualification_1 && qualification_2 && qualification_3)
           acceptQualification = true;
+
+        // check whether user had like
+        isLoggedUserLike = club.likers
+          .map(a => a.id)
+          .includes(this.props.loggedUser.id);
       }
 
-      let image = <img src={club.poster_img} width="100" height="100" alt="" />;
+      if (club.available_major.length === this.props.majors.length) {
+        available_major_string = "제한 없음";
+      } else {
+        club.available_major.map(major_id => {
+          available_major_string += this.props.majors.filter(
+            a => a.id === major_id
+          )[0].name;
+          available_major_string += " ";
+        });
+      }
+
+      for (var i = 0; i < 7; i++) {
+        if ((club.session_day & (1 << i)) !== 0) {
+          session_day_string += ["월", "화", "수", "목", "금", "토", "일"][i];
+          session_day_string += " ";
+        }
+      }
+
+      let image = <img src={club.poster_img} width="400" height="400" alt="" />;
 
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = club.tags.map(item => (
-          <Button key={item} variant="outline-primary">
+          <Button size="lg" key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
       }
       return (
         <Modal
+          size="lg"
           show={this.props.show}
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton></Modal.Header>
+          <Modal.Header closeButton>
+            <Col sm={10}>
+              <h1>{club.name}</h1>
+            </Col>
+            <Col sm={2}>
+              <h1>
+                <span role="img" aria-label="thumb">
+                  👍
+                </span>
+                &nbsp;{club.likers.length}
+              </h1>
+            </Col>
+          </Modal.Header>
           <Modal.Body>
             <Container>
               <Row>
                 <Col>{image}</Col>
                 <Col>
-                  <Row>
-                    <h2>{club.name}</h2>
-                    <Col md={{ offset: 1 }}>
-                      <h4>
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                        {club.likers.length}
-                      </h4>
-                    </Col>
-                  </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{club.description}</Row>
+                  <Row>
+                    <h3>{club.description}</h3>
+                  </Row>
                 </Col>
               </Row>
+              <br />
+              <br />
+              <h2>가입 조건</h2>
+              <Row>
+                <h3>- 가능 학과</h3>
+              </Row>
+              <h4>{available_major_string}</h4>
+              <Row>
+                <h3>- 활동 요일</h3>
+              </Row>
+              <h4>{session_day_string}</h4>
+              <Row>
+                <h3>- 최소 활동 학기 수</h3>
+              </Row>
+              <h4>{club.available_semester + "학기"}</h4>
               <br />
               <br />
               {this.props.loggedUser && (
                 <Row>
                   <Col></Col>
                   <Col>
-                    <Button onClick={this.onClickLikeButton} size="lg">
-                      좋아요!{" "}
-                      <span role="img" aria-label="thumb">
-                        👍
-                      </span>
-                    </Button>
+                    {isLoggedUserLike ? (
+                      <Button
+                        size="lg"
+                        variant="primary"
+                        onClick={this.onClickLikeButton}
+                      >
+                        좋아요!{" "}
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        onClick={this.onClickLikeButton}
+                      >
+                        좋아요!{" "}
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                      </Button>
+                    )}
                   </Col>
                   <Col></Col>
                   <Col>
@@ -131,6 +194,7 @@ class ClubDetail extends React.Component {
                       </Button>
                     )}
                   </Col>
+                  <Col></Col>
                 </Row>
               )}
             </Container>
@@ -144,6 +208,7 @@ class ClubDetail extends React.Component {
 const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
+    majors: state.major.majors,
     loggedUser: state.user.loggedUser,
     likedClubs: state.user.likedClubs
   };
@@ -162,7 +227,9 @@ const mapDispatchToProps = dispatch => {
     addAppliedClub: (newAppliedClub, user) =>
       dispatch(actionCreators.addAppliedClub(newAppliedClub, user)),
 
-    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
+    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user)),
+    onGetRecommendedClubs: user =>
+      dispatch(userActions.getRecommendedClubs(user))
   };
 };
 

@@ -9,23 +9,32 @@ import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
 import SomoimCreate from "../components/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
+import * as userActions from "../store/actions/user";
 
 import "./SomoimMain.css";
 
 class SomoimMain extends React.Component {
-  componentDidMount() {
-    this.props.getSomoimList();
-    this.props.getCategoryList();
-    this.props.getTagList();
-  }
-
   state = {
     somoimDetailShow: false,
     somoimCreateShow: false,
     selectedSomoimID: null,
     selected_category: 0,
     recommendedListPageNum: 0,
-    allListPageNum: 0
+    allListPageNum: 0,
+    isRecommendedSomoimsLoaded: false
+  };
+
+  componentDidMount() {
+    this.props.getSomoimList();
+    this.props.getCategoryList();
+    this.props.getTagList();
+  }
+
+  componentDidUpdate = () => {
+    if (this.props.loggedUser && !this.state.isRecommendedSomoimsLoaded) {
+      this.setState({ ...this.state, isRecommendedSomoimsLoaded: true });
+      this.props.onGetRecommendedSomoims(this.props.loggedUser);
+    }
   };
 
   somoimCardClickHandler = id => {
@@ -87,9 +96,10 @@ class SomoimMain extends React.Component {
       );
     }
 
-    let recommendedList, allList;
-    if (this.props.somoims) {
-      recommendedList = this.props.somoims.map(item => (
+    let recommendedList = [],
+      allList = [];
+    if (this.props.recommendedSomoims) {
+      recommendedList = this.props.recommendedSomoims.map(item => (
         <SomoimCard
           key={item.id}
           clickHandler={this.somoimCardClickHandler}
@@ -97,7 +107,8 @@ class SomoimMain extends React.Component {
           forceRender={Math.random()}
         />
       ));
-
+    }
+    if (this.props.somoims) {
       if (this.state.selected_category === 0) {
         allList = this.props.somoims.map(item => (
           <SomoimCard
@@ -296,7 +307,11 @@ class SomoimMain extends React.Component {
 
         <SomoimDetail
           show={this.state.somoimDetailShow}
-          somoim={this.props.somoims[this.state.selectedSomoimID - 1]}
+          somoim={
+            this.props.somoims.filter(
+              a => a.id === this.state.selectedSomoimID
+            )[0]
+          }
           closeHandler={this.somoimDetailCloseHandler}
           forceRender={Math.random()}
         />
@@ -311,7 +326,8 @@ const mapStateToProps = state => {
   return {
     somoims: state.somoim.somoims,
     categories: state.category.categories,
-    loggedUser: state.user.loggedUser
+    loggedUser: state.user.loggedUser,
+    recommendedSomoims: state.user.recommendedSomoims
   };
 };
 
@@ -319,7 +335,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
-    getCategoryList: () => dispatch(actionCreators.getCategoryList())
+    getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    onGetRecommendedSomoims: user =>
+      dispatch(userActions.getRecommendedSomoims(user))
   };
 };
 export default connect(
