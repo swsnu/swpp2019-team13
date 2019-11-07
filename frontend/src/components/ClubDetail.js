@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 import * as userActions from "../store/actions/user";
 
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button, Form } from "react-bootstrap";
 
 class ClubDetail extends React.Component {
   componentDidMount() {
@@ -36,7 +36,11 @@ class ClubDetail extends React.Component {
 
   render() {
     let acceptQualification = false;
+    let isLoggedUserLike = false;
     let qualificationMessage = "";
+    let available_major_string = "";
+    let session_day_string = "";
+
     let club = this.props.club;
     if (club) {
       if (this.props.loggedUser) {
@@ -66,6 +70,29 @@ class ClubDetail extends React.Component {
 
         if (qualification_1 && qualification_2 && qualification_3)
           acceptQualification = true;
+
+        // check whether user had like
+        isLoggedUserLike = club.likers
+          .map(a => a.id)
+          .includes(this.props.loggedUser.id);
+      }
+
+      if (club.available_major.length === this.props.majors.length) {
+        available_major_string = "제한 없음";
+      } else {
+        club.available_major.map(major_id => {
+          available_major_string += this.props.majors.filter(
+            a => a.id === major_id
+          )[0].name;
+          available_major_string += " ";
+        });
+      }
+
+      for (var i = 0; i < 7; i++) {
+        if ((club.session_day & (1 << i)) !== 0) {
+          session_day_string += ["월", "화", "수", "목", "금", "토", "일"][i];
+          session_day_string += " ";
+        }
       }
 
       let image = <img src={club.poster_img} width="100" height="100" alt="" />;
@@ -84,23 +111,24 @@ class ClubDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton></Modal.Header>
+          <Modal.Header closeButton>
+            <Col sm={10}>
+              <h2>{club.name}</h2>
+            </Col>
+            <Col sm={2}>
+              <h4>
+                <span role="img" aria-label="thumb">
+                  👍
+                </span>
+                {club.likers.length}
+              </h4>
+            </Col>
+          </Modal.Header>
           <Modal.Body>
             <Container>
               <Row>
                 <Col>{image}</Col>
                 <Col>
-                  <Row>
-                    <h2>{club.name}</h2>
-                    <Col md={{ offset: 1 }}>
-                      <h4>
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                        {club.likers.length}
-                      </h4>
-                    </Col>
-                  </Row>
                   <Row>{tagList}</Row>
                   <br />
                   <Row>{club.description}</Row>
@@ -108,16 +136,50 @@ class ClubDetail extends React.Component {
               </Row>
               <br />
               <br />
+              <Form.Label>
+                <h4>가입 조건</h4>
+              </Form.Label>
+              <Row>
+                <Form.Label>- 가능 학과</Form.Label>
+              </Row>
+              {available_major_string}
+              <Row>
+                <Form.Label>- 활동 요일</Form.Label>
+              </Row>
+              {session_day_string}
+              <Row>
+                <Form.Label>- 최소 활동 학기 수</Form.Label>
+              </Row>
+              {club.available_semester + "학기"}
+              <br />
+              <br />
               {this.props.loggedUser && (
                 <Row>
                   <Col></Col>
                   <Col>
-                    <Button onClick={this.onClickLikeButton} size="lg">
-                      좋아요!{" "}
-                      <span role="img" aria-label="thumb">
-                        👍
-                      </span>
-                    </Button>
+                    {isLoggedUserLike ? (
+                      <Button
+                        size="lg"
+                        variant="primary"
+                        onClick={this.onClickLikeButton}
+                      >
+                        좋아요!{" "}
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        variant="secondary"
+                        onClick={this.onClickLikeButton}
+                      >
+                        좋아요!{" "}
+                        <span role="img" aria-label="thumb">
+                          👍
+                        </span>
+                      </Button>
+                    )}
                   </Col>
                   <Col></Col>
                   <Col>
@@ -144,6 +206,7 @@ class ClubDetail extends React.Component {
 const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
+    majors: state.major.majors,
     loggedUser: state.user.loggedUser,
     likedClubs: state.user.likedClubs
   };
