@@ -48,7 +48,7 @@ class SomoimCard extends React.Component {
 
       return (
         <Card
-          style={{ height: "180px", margin: "10px" }}
+          style={{ height: "160px", margin: "10px" }}
           onClick={() => {
             this.props.clickHandler(somoim.id);
           }}
@@ -62,7 +62,7 @@ class SomoimCard extends React.Component {
                     text={percentage + "%"}
                   />
                 </Col>
-                <Col style={{ paddingLeft: "50px" }}>
+                <Col style={{ paddingLeft: "80px" }}>
                   <Row>
                     <div>
                       <h2

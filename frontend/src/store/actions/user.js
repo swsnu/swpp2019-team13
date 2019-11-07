@@ -268,7 +268,9 @@ export const addJoinedSomoim = (newJoinedSomoim, user) => {
   return dispatch => {
     return axios
       .put("/api/user/" + user.id + "/somoim/join/", newJoinedSomoim)
-      .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)));
+      .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)))
+      .then(res => dispatch(getSomoimList())) //TODO: change to get club by id
+      .then(res => dispatch(getRecommendedSomoims(user)));
   };
 };
 

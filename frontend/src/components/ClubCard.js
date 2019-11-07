@@ -54,7 +54,7 @@ class ClubCard extends React.Component {
           <Container>
             <Row>
               <Col xs="4">{image}</Col>
-              <Col>
+              <Col style={{ marginLeft: "40px" }}>
                 <Row>
                   <div>
                     <h2
