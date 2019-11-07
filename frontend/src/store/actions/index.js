@@ -27,7 +27,8 @@ export {
   getAppliedClubs,
   getManagingSomoims,
   getLikedSomoims,
-  getJoinedSomoims
+  getJoinedSomoims,
+  addManagingSomoim
 } from "./user";
 export { getCategoryList } from "./category";
 export { getTagList } from "./tag";

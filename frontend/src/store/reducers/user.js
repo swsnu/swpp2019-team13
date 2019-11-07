@@ -6,7 +6,9 @@ const initialState = {
   likedClubs: [],
   likedSomoims: [],
   appliedClubs: [],
-  joinedSomoims: []
+  joinedSomoims: [],
+  managingSomoims: [],
+  managingClubs: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -25,7 +27,8 @@ const reducer = (state = initialState, action) => {
         dept: action.user.dept,
         major: action.user.major,
         grade: action.user.grade,
-        available_semester: action.user.available_semester
+        available_semester: action.user.available_semester,
+        available_session_day: action.user.available_session_day
       };
       return { ...state, users: state.users.concat(newUser) };
     case actionTypes.GET_LOGIN_INFO:
@@ -81,10 +84,22 @@ const reducer = (state = initialState, action) => {
         };
 
     case actionTypes.ADD_APPLIED_CLUB:
-      return {
-        ...state,
-        appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
-      };
+      if (
+        state.appliedClubs.filter(item => item.id === action.newAppliedClub.id)
+          .length > 0
+      )
+        return {
+          ...state,
+          appliedClubs: state.appliedClubs.filter(
+            item => item.id !== action.newAppliedClub.id
+          )
+        };
+      else
+        return {
+          ...state,
+          appliedClubs: state.appliedClubs.concat(action.newAppliedClub)
+        };
+
     case actionTypes.ADD_JOINED_SOMOIM:
       if (
         state.joinedSomoims.filter(
@@ -103,6 +118,11 @@ const reducer = (state = initialState, action) => {
           joinedSomoims: state.joinedSomoims.concat(action.newJoinedSomoim)
         };
 
+    case actionTypes.ADD_MANAGING_SOMOIM:
+      return {
+        ...state,
+        managingSomoims: state.managingSomoims.concat(action.newManagingSomoim)
+      };
     default:
       break;
   }

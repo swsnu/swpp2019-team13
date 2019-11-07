@@ -22,8 +22,7 @@ const reducer = (state = initialState, action) => {
         clubmanager: action.clubmanager,
         auth_img: action.auth_img,
         selected_category: action.selected_category,
-        tags: [],
-        likes: 0
+        tags: []
       };
       return { ...state, clubs: state.clubs.concat(newClub) };
 

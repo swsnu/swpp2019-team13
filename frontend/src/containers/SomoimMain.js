@@ -14,19 +14,20 @@ class SomoimMain extends React.Component {
   state = {
     somoimDetailShow: false,
     somoimCreateShow: false,
-    selectedSomoim: null,
+    selectedSomoimID: null,
     selected_category: 0
   };
 
   componentDidMount() {
     this.props.getSomoimList();
     this.props.getCategoryList();
+    this.props.getTagList();
   }
   somoimCardClickHandler = id => {
     this.setState({
       ...this.state,
       somoimDetailShow: true,
-      selectedSomoim: this.props.somoims[id - 1]
+      selectedSomoimID: id
     });
   };
 
@@ -180,7 +181,7 @@ class SomoimMain extends React.Component {
 
         <SomoimDetail
           show={this.state.somoimDetailShow}
-          somoim={this.state.selectedSomoim}
+          somoim={this.props.somoims[this.state.selectedSomoimID - 1]}
           closeHandler={this.somoimDetailCloseHandler}
           forceRender={Math.random()}
         />
@@ -200,6 +201,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
     getCategoryList: () => dispatch(actionCreators.getCategoryList())
   };
