@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
+
 import * as actionCreators from "../store/actions/index";
 
 import like_before_img from "../images/like_before.png";
@@ -11,7 +11,6 @@ import like_after_img from "../images/like_after.png";
 class ClubCard extends React.Component {
   render() {
     let club = this.props.club;
-
     let acceptQualification = false;
 
     if (club && this.props.loggedUser) {
@@ -34,7 +33,7 @@ class ClubCard extends React.Component {
         acceptQualification = true;
     }
 
-    let image = <img src={club.poster_img} width="100" height="100" alt="" />;
+    let image = <img src={club.poster_img} width="120" height="120" alt="" />;
 
     let tagList;
     if (this.props.tags.length != 0) {
@@ -54,9 +53,7 @@ class ClubCard extends React.Component {
         <Card.Body>
           <Container>
             <Row>
-              <Col xs="4" style={{ paddingTop: "2%" }}>
-                {image}
-              </Col>
+              <Col xs="4">{image}</Col>
               <Col>
                 <Row>
                   <div>
@@ -68,20 +65,11 @@ class ClubCard extends React.Component {
                     <h3 style={{ display: "inline-block" }}>
                       {"👍 " + club.likers.length}
                     </h3>
-                    <img
-                      src={like_before_img}
-                      width="20px"
-                      style={{ display: "inline-block" }}
-                    />
                   </div>
                 </Row>
-                <Row>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{tagList}
-                </Row>
+                <Row>{tagList}</Row>
                 <br />
-                <Row>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{club.summary}
-                </Row>
+                <Row>{club.summary}</Row>
               </Col>
             </Row>
           </Container>

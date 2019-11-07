@@ -1,0 +1,30 @@
+.SomoimList {
+  width: 74%;
+  position: relative;
+  left: 13%;
+  background-color: white;
+  padding: 2%;
+}
+
+.SomoimCard {
+  width: 50%;
+  display: inline-block;
+}
+
+.changePage {
+  text-decoration: none;
+  display: inline-block;
+  color: black;
+  padding: 5px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.bar {
+  text-decoration: none;
+  display: inline-block;
+  color: black;
+  padding: 5px;
+  margin-right: 4px;
+  cursor: default;
+}

@@ -34,14 +34,13 @@ class SomoimCard extends React.Component {
           acceptQualification = true;
       }
 
-      // console.log(somoim);
-
       let percentage =
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
+
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = somoim.tags.map(item => (
-          <Button key={item} variant="outline-primary">
+          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
@@ -49,6 +48,7 @@ class SomoimCard extends React.Component {
 
       return (
         <Card
+          style={{ height: "180px", margin: "10px" }}
           onClick={() => {
             this.props.clickHandler(somoim.id);
           }}
@@ -56,18 +56,28 @@ class SomoimCard extends React.Component {
           <Card.Body>
             <Container>
               <Row>
-                <Col xs="5">
+                <Col xs="4">
                   <CircularProgressbar
                     value={percentage}
                     text={percentage + "%"}
                   />
                 </Col>
-                <Col>
+                <Col style={{ paddingLeft: "50px" }}>
                   <Row>
-                    <h2>{somoim.title}</h2>
-                    <Col md={{ offset: 1 }}>
-                      <h4>{"👍 " + somoim.likers.length}</h4>
-                    </Col>
+                    <div>
+                      <h2
+                        style={{
+                          display: "inline-block",
+                          paddingRight: "30px",
+                          fontWeight: "bold"
+                        }}
+                      >
+                        {somoim.title}
+                      </h2>
+                      <h3 style={{ display: "inline-block" }}>
+                        {"👍 " + somoim.likers.length}
+                      </h3>
+                    </div>
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
@@ -78,49 +88,7 @@ class SomoimCard extends React.Component {
           </Card.Body>
         </Card>
       );
-    } else {
-      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
-      let tagList;
-      if (this.props.tags.length != 0) {
-        tagList = somoim.tags.map(item => (
-          <Button key={item} variant="outline-primary">
-            {"#" + this.props.tags[item - 1].name}
-          </Button>
-        ));
-      }
-
-      return (
-        <Card
-          onClick={() => {
-            this.props.clickHandler(somoim.id);
-          }}
-        >
-          <Card.Body>
-            <Container>
-              <Row>
-                <Col xs="5">
-                  <CircularProgressbar
-                    value={percentage}
-                    text={percentage + "%"}
-                  />
-                </Col>
-                <Col>
-                  <Row>
-                    <h2>{somoim.title}</h2>
-                    <Col md={{ offset: 1 }}>
-                      <h4>{"👍 " + somoim.likes}</h4>
-                    </Col>
-                  </Row>
-                  <Row>{tagList}</Row>
-                  <br />
-                  <Row>{somoim.summary}</Row>
-                </Col>
-              </Row>
-            </Container>
-          </Card.Body>
-        </Card>
-      );
-    }
+    } else return <></>;
   }
 }
 
