@@ -52,7 +52,9 @@ class AppliedClubTab extends Component {
         {list}
         <ClubDetail
           show={this.state.clubDetailShow}
-          club={this.props.clubs[this.state.selectedClubID - 1]}
+          club={
+            this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
+          }
           closeHandler={() => {
             this.setState({
               ...this.state,

@@ -134,8 +134,7 @@ def somoim_list(request):
         for major_id in available_major_id_list:
             somoim.available_major.add(Major.objects.get(id=major_id))
 
-        serializer = SomoimSerializer(
-            Somoim.objects.filter(id=somoim.id), many=True)
+        serializer = SomoimSerializer(Somoim.objects.get(id=somoim.id))
 
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
