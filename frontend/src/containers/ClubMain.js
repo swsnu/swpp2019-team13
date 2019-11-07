@@ -9,15 +9,24 @@ import ClubCard from "../components/ClubCard";
 import ClubDetail from "../components/ClubDetail";
 import ClubRegister from "../components/ClubRegister";
 import * as actionCreators from "../store/actions/index";
+import * as userActions from "../store/actions/user";
 
 import "./ClubMain.css";
 
 class ClubMain extends React.Component {
+  state = { isRecommendedClubsLoaded: false };
+
   componentDidMount() {
     this.props.getClubList();
     this.props.getCategoryList();
     this.props.getTagList();
   }
+  componentDidUpdate = () => {
+    if (this.props.loggedUser && !this.state.isRecommendedClubsLoaded) {
+      this.setState({ ...this.state, isRecommendedClubsLoaded: true });
+      this.props.onGetRecommendedClubs(this.props.loggedUser);
+    }
+  };
 
   state = {
     clubDetailShow: false,
@@ -81,9 +90,10 @@ class ClubMain extends React.Component {
       ));
     }
 
-    let recommendedList, allList;
-    if (this.props.clubs) {
-      recommendedList = this.props.clubs.map(item => (
+    let recommendedList = [],
+      allList = [];
+    if (this.props.recommendedClubs) {
+      recommendedList = this.props.recommendedClubs.map(item => (
         <ClubCard
           key={item.id}
           clickHandler={this.clubCardClickHandler}
@@ -91,7 +101,8 @@ class ClubMain extends React.Component {
           forceRender={Math.random()}
         />
       ));
-
+    }
+    if (this.props.clubs) {
       if (this.state.selected_category === 0) {
         allList = this.props.clubs.map(item => (
           <ClubCard
@@ -182,7 +193,6 @@ class ClubMain extends React.Component {
                       recommendedListPageNum:
                         this.state.recommendedListPageNum + 1
                     });
-                  console.log(recommendedList.length);
                 }}
               >
                 다음 &raquo;
@@ -303,7 +313,8 @@ const mapStateToProps = state => {
   return {
     clubs: state.club.clubs,
     categories: state.category.categories,
-    loggedUser: state.user.loggedUser
+    loggedUser: state.user.loggedUser,
+    recommendedClubs: state.user.recommendedClubs
   };
 };
 
@@ -311,7 +322,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getTagList: () => dispatch(actionCreators.getTagList()),
     getClubList: () => dispatch(actionCreators.getClubList()),
-    getCategoryList: () => dispatch(actionCreators.getCategoryList())
+    getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    onGetRecommendedClubs: user =>
+      dispatch(userActions.getRecommendedClubs(user))
   };
 };
 

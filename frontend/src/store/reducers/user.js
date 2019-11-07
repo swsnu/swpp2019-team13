@@ -35,12 +35,15 @@ const reducer = (state = initialState, action) => {
       return { ...state, loggedUser: action.loggedUser };
     case actionTypes.PUT_USER_INFORMATION:
       return { ...state, loggedUser: action.loggedUser };
+
     case actionTypes.GET_MANAGING_CLUBS:
       return { ...state, managingClubs: action.clubs };
     case actionTypes.GET_LIKED_CLUBS:
       return { ...state, likedClubs: action.clubs };
     case actionTypes.GET_APPLIED_CLUBS:
       return { ...state, appliedClubs: action.clubs };
+    case actionTypes.GET_RECOMMENDED_CLUBS:
+      return { ...state, recommendedClubs: action.clubs };
 
     case actionTypes.GET_MANAGING_SOMOIMS:
       return { ...state, managingSomoims: action.somoims };

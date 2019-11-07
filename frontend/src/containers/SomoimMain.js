@@ -75,7 +75,8 @@ class SomoimMain extends React.Component {
       );
     }
 
-    let recommendedList, allList;
+    let recommendedList = [],
+      allList = [];
     if (this.props.somoims) {
       recommendedList = this.props.somoims.map(item => (
         <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>

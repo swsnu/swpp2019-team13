@@ -131,6 +131,21 @@ export const getAppliedClubs = user => {
   };
 };
 
+export const getRecommendedClubs_ = clubs => {
+  return {
+    type: actionTypes.GET_RECOMMENDED_CLUBS,
+    clubs: clubs
+  };
+};
+
+export const getRecommendedClubs = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/club/recommend/")
+      .then(res => dispatch(getRecommendedClubs_(res.data)));
+  };
+};
+
 export const getManagingSomoims_ = somoims => {
   return {
     type: actionTypes.GET_MANAGING_SOMOIMS,

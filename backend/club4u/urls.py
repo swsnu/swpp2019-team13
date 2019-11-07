@@ -9,10 +9,10 @@ urlpatterns = [
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
 
-    path('category/list/', views.category_list, name='category_list'), 
-    path('tag/list/', views.tag_list, name='tag_list'), 
+    path('category/list/', views.category_list, name='category_list'),
+    path('tag/list/', views.tag_list, name='tag_list'),
     path('preclub/', views.pre_club, name='pre_club'),
-    
+
     path('club/edit/<int:id>/', views.club_edit, name='club_edit'),
     path('somoim/edit/<int:id>/', views.somoim_edit, name='somoim_edit'),
 
@@ -27,6 +27,8 @@ urlpatterns = [
     path('user/<int:id>/club/manage/', views.manage_club, name='manage_club'),
     path('user/<int:id>/club/like/', views.like_club, name='like_club'),
     path('user/<int:id>/club/apply/', views.apply_club, name='apply_club'),
+    path('user/<int:id>/club/recommend/',
+         views.recommend_club, name='recommend_club'),
 
     path('user/<int:id>/somoim/manage/',
          views.manage_somoim, name='manage_somoim'),

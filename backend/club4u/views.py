@@ -6,6 +6,7 @@ from json import JSONDecodeError
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models.query import EmptyQuerySet
 
 from rest_framework.renderers import JSONRenderer
 from .serializers import ClubSerializer, SomoimSerializer
@@ -347,6 +348,27 @@ def apply_club(request, id=0):
             user.apply_clubs.add(Club.objects.get(id=somoim_id))
 
         return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def recommend_club(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        recommended_clubs = Club.objects.none()
+        for like_club in user.like_clubs.all():
+            for liker in like_club.likers.all():
+                for club in liker.like_clubs.all():
+                    if recommended_clubs.filter(id=club.id).count() == 0:
+                        recommended_clubs |= Club.objects.filter(id=club.id)
+        serializer = ClubSerializer(recommended_clubs, many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
     else:
         return HttpResponse(status=405)
 
