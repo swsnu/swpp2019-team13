@@ -1,9 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
-import "react-circular-progressbar/dist/styles.css";
 import * as actionCreators from "../store/actions/index";
+
+import like_before_img from "../images/like_before.png";
+import like_after_img from "../images/like_after.png";
+
 class ClubCard extends React.Component {
   componentDidMount() {
     this.props.getTagList();
@@ -38,14 +42,19 @@ class ClubCard extends React.Component {
               <Col>
                 <Row>
                   <div>
-                    <h1
+                    <h2
                       style={{ display: "inline-block", paddingRight: "30px" }}
                     >
                       {club.name}
-                    </h1>
+                    </h2>
                     <h3 style={{ display: "inline-block" }}>
                       {"👍 " + club.likes}
                     </h3>
+                    <img
+                      src={like_before_img}
+                      width="20px"
+                      style={{ display: "inline-block" }}
+                    />
                   </div>
                 </Row>
                 <Row>{tagList}</Row>

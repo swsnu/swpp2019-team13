@@ -11,17 +11,20 @@ import SomoimCreate from "../components/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
 
 class SomoimMain extends React.Component {
-  state = {
-    somoimDetailShow: false,
-    somoimCreateShow: false,
-    selectedSomoim: null,
-    selected_category: 0
-  };
-
   componentDidMount() {
     this.props.getSomoimList();
     this.props.getCategoryList();
   }
+
+  state = {
+    somoimDetailShow: false,
+    somoimCreateShow: false,
+    selectedSomoim: null,
+    selected_category: 0,
+    recommendedListPageNum: 0,
+    allListPageNum: 0
+  };
+
   somoimCardClickHandler = id => {
     this.setState({
       ...this.state,
