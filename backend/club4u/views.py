@@ -6,7 +6,9 @@ from json import JSONDecodeError
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from django.core import serializers
+
+from rest_framework.renderers import JSONRenderer
+from .serializers import ClubSerializer, SomoimSerializer
 
 
 def pre_club(request):
@@ -67,10 +69,8 @@ def user_list(request):
 
 def club_list(request):
     if request.method == 'GET':
-        response_dict = [club for club in Club.objects.all()]
-        # print(response_dict[2].poster_img.path)
-        serialized_data = serializers.serialize("json", response_dict)
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(Club.objects.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
     else:
         return HttpResponse(status=405)
 
@@ -103,33 +103,40 @@ def club_edit(request, id=0):
 
 def somoim_list(request):
     if request.method == 'GET':
-        response_dict = [somoim for somoim in Somoim.objects.all()]
-        serialized_data = serializers.serialize("json", response_dict)
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(Somoim.objects.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'POST':
         req_data = json.loads(request.body.decode())
         title = req_data['title']
         summary = req_data['summary']
         description = req_data['description']
+        category_id = req_data['category']
         goalJoiner = req_data['goalJoiner']
+        available_major_id_list = req_data['available_major']
         available_semester = req_data['available_semester']
-        category = Category.objects.get(id=1)
-        selected_dept = Department.objects.get(id=1)
-        tags = Tag.objects.get(id=1)
-        somoim = Somoim()
+        session_day = req_data['session_day']
 
-        somoim.category = category
+        category = Category.objects.get(id=category_id)
+
+        # TODO : Add Tag
+        somoim = Somoim()
         somoim.title = title
+        somoim.category = category
         somoim.summary = summary
-        somoim. goalJoiner = goalJoiner
-        somoim.available_semester = available_semester
-        somoim.currentJoiner = 0
-        somoim.likes = 0
         somoim.description = description
+        somoim.goalJoiner = goalJoiner
+        somoim.available_semester = available_semester
+        somoim.session_day = session_day
+
         somoim.save()
-        somoim.tags.add(1, 2)
-        somoim.selected_dept.add(1, 2)
-        return HttpResponse(status=201)
+
+        for major_id in available_major_id_list:
+            somoim.available_major.add(Major.objects.get(id=major_id))
+
+        serializer = SomoimSerializer(
+            Somoim.objects.filter(id=somoim.id), many=True)
+
+        return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())
         try:
@@ -180,11 +187,13 @@ def signup(request):
             major = Major.objects.get(id=req_data['major'])
             grade = req_data['grade']
             available_semester = req_data['available_semester']
+            available_session_day = req_data['available_session_day']
             user = User.objects.create_user(
                 username=email, password=password, last_name=name)
             user.save()
             userprofile = UserProfile(user=user, dept=dept,
                                       major=major, grade=grade, available_semester=available_semester)
+            userprofile.available_session_day = available_session_day
             userprofile.save()
             return HttpResponse(status=201)
         except (KeyError, JSONDecodeError):
@@ -231,7 +240,7 @@ def logininfo(request):
             userprofile = UserProfile.objects.get(user_id=current_user)
             response_dict = {'id': userprofile.id, 'name': current_user.last_name, 'email': current_user.username,
                              'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
-                             'available_semester': userprofile.available_semester}
+                             'available_semester': userprofile.available_semester, 'available_session_day': userprofile.available_session_day}
             return JsonResponse(response_dict, safe=False)
         else:
             return JsonResponse(None, safe=False)
@@ -278,9 +287,11 @@ def manage_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.manage_clubs.all())
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(user.manage_clubs.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.manage_clubs.all())
+        # return HttpResponse(serialized_data)
     else:
         return HttpResponse(status=405)
 
@@ -294,8 +305,10 @@ def like_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize("json", user.like_clubs.all())
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(user.like_clubs.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize("json", user.like_clubs.all())
+        # return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
         body = request.body.decode()
@@ -320,8 +333,10 @@ def apply_club(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize("json", user.apply_clubs.all())
-        return HttpResponse(serialized_data)
+        serializer = ClubSerializer(user.apply_clubs.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize("json", user.apply_clubs.all())
+        # return HttpResponse(serialized_data)
     elif request.method == 'PUT':
         body = request.body.decode()
         somoim_id = json.loads(body)['id']
@@ -345,9 +360,22 @@ def manage_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.manage_somoims.all())
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(user.manage_somoims.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.manage_somoims.all())
+        # return HttpResponse(serialized_data)
+
+    elif request.method == 'PUT':
+        # handle user's mananging somoim (add/delete)
+        body = request.body.decode()
+        somoim_id = json.loads(body)['id']
+        try:
+            user.manage_somoims.get(id=somoim_id)
+            user.manage_somoims.remove(user.manage_somoims.get(id=somoim_id))
+        except (ObjectDoesNotExist):
+            user.manage_somoims.add(Somoim.objects.get(id=somoim_id))
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
@@ -361,12 +389,14 @@ def like_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.like_somoims.all())
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(user.like_somoims.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.like_somoims.all())
+        # return HttpResponse(serialized_data)
 
     elif request.method == 'PUT':
-           # toggle user's like status for requested somoim
+        # toggle user's like status for requested somoim
         body = request.body.decode()
         somoim_id = json.loads(body)['id']
         try:
@@ -389,9 +419,11 @@ def join_somoim(request, id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serialized_data = serializers.serialize(
-            "json", user.join_somoims.all())
-        return HttpResponse(serialized_data)
+        serializer = SomoimSerializer(user.join_somoims.all(), many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+        # serialized_data = serializers.serialize(
+        #     "json", user.join_somoims.all())
+        # return HttpResponse(serialized_data)
     elif request.method == 'PUT':
         body = request.body.decode()
         somoim_id = json.loads(body)['id']

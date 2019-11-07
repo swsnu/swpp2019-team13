@@ -89,9 +89,7 @@ export const putUserInformation = userInfo => {
 export const getManagingClubs_ = clubs => {
   return {
     type: actionTypes.GET_MANAGING_CLUBS,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 
@@ -106,9 +104,7 @@ export const getManagingClubs = user => {
 export const getLikedClubs_ = clubs => {
   return {
     type: actionTypes.GET_LIKED_CLUBS,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 
@@ -123,9 +119,7 @@ export const getLikedClubs = user => {
 export const getAppliedClubs_ = clubs => {
   return {
     type: actionTypes.GET_APPLIED_CLUBS,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 
@@ -140,9 +134,7 @@ export const getAppliedClubs = user => {
 export const getManagingSomoims_ = somoims => {
   return {
     type: actionTypes.GET_MANAGING_SOMOIMS,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
@@ -157,9 +149,7 @@ export const getManagingSomoims = user => {
 export const getLikedSomoims_ = somoims => {
   return {
     type: actionTypes.GET_LIKED_SOMOIMS,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
@@ -174,9 +164,7 @@ export const getLikedSomoims = user => {
 export const getJoinedSomoims_ = somoims => {
   return {
     type: actionTypes.GET_JOINED_SOMOIMS,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 
@@ -245,5 +233,20 @@ export const addJoinedSomoim = (newJoinedSomoim, user) => {
     return axios
       .put("/api/user/" + user.id + "/somoim/join/", newJoinedSomoim)
       .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)));
+  };
+};
+
+export const addManagingSomoim_ = newManagingSomoim => {
+  return {
+    type: actionTypes.ADD_MANAGING_SOMOIM,
+    newManagingSomoim: newManagingSomoim
+  };
+};
+
+export const addManagingSomoim = (newManagingSomoim, user) => {
+  return dispatch => {
+    return axios
+      .put("/api/user/" + user.id + "/somoim/manage/", newManagingSomoim)
+      .then(res => dispatch(addManagingSomoim_(newManagingSomoim)));
   };
 };

@@ -7,13 +7,37 @@ import "react-circular-progressbar/dist/styles.css";
 import * as actionCreators from "../store/actions/index";
 
 class SomoimCard extends React.Component {
-  componentDidMount() {
-    this.props.getTagList();
-  }
+  componentDidMount() {}
+
   render() {
+    let acceptQualification = false;
+
     let somoim = this.props.somoim;
     if (somoim) {
-      let percentage = (somoim.currentJoiner / somoim.goalJoiner) * 100;
+      if (this.props.loggedUser) {
+        // check qualification
+        // 1. check whether user can participate in session day
+        let qualification_1 =
+          (somoim.session_day & this.props.loggedUser.available_session_day) ===
+          somoim.session_day;
+
+        // 2. check whether user's major is available
+        let qualification_2 = somoim.available_major.includes(
+          this.props.loggedUser.major
+        );
+
+        // 3. check whether user can participate in next available semesters
+        let qualification_3 =
+          somoim.available_semester <= this.props.loggedUser.available_semester;
+
+        if (qualification_1 && qualification_2 && qualification_3)
+          acceptQualification = true;
+      }
+
+      // console.log(somoim);
+
+      let percentage =
+        Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = somoim.tags.map(item => (
@@ -42,7 +66,7 @@ class SomoimCard extends React.Component {
                   <Row>
                     <h2>{somoim.title}</h2>
                     <Col md={{ offset: 1 }}>
-                      <h4>{"👍 " + somoim.likes}</h4>
+                      <h4>{"👍 " + somoim.likers.length}</h4>
                     </Col>
                   </Row>
                   <Row>{tagList}</Row>
@@ -102,6 +126,7 @@ class SomoimCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     tags: state.tag.tags,
     somoims: state.somoim.somoims
   };
@@ -109,7 +134,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList())
   };
 };

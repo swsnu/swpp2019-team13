@@ -16,12 +16,13 @@ class ClubMain extends React.Component {
   componentDidMount() {
     this.props.getClubList();
     this.props.getCategoryList();
+    this.props.getTagList();
   }
 
   state = {
     clubDetailShow: false,
     clubRegisterShow: false,
-    selectedClub: null,
+    selectedClubID: null,
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0
@@ -31,7 +32,7 @@ class ClubMain extends React.Component {
     this.setState({
       ...this.state,
       clubDetailShow: true,
-      selectedClub: this.props.clubs[id - 1]
+      selectedClubID: id
     });
   };
 
@@ -295,7 +296,7 @@ class ClubMain extends React.Component {
 
         <ClubDetail
           show={this.state.clubDetailShow}
-          club={this.state.selectedClub}
+          club={this.props.clubs[this.state.selectedClubID - 1]}
           closeHandler={this.clubDetailCloseHandler}
           forceRender={Math.random()}
         />
@@ -316,6 +317,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getTagList: () => dispatch(actionCreators.getTagList()),
     getClubList: () => dispatch(actionCreators.getClubList()),
     getCategoryList: () => dispatch(actionCreators.getCategoryList())
   };

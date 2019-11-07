@@ -1,23 +1,26 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
 
-export const postSomoim_ = sm => {
+export const postSomoim_ = somoim => {
   return {
     type: actionTypes.POST_SOMOIM,
-    title: sm.title,
-    summary: sm.summary,
-    description: sm.description,
-    selected_dept: sm.selected_dept,
-    available_sem: sm.available_sem,
-    goalJoiner: sm.goalJoiner
+    title: somoim.title,
+    summary: somoim.summary,
+    description: somoim.description,
+    category: somoim.category,
+    goalJoiner: somoim.goalJoiner,
+    available_major: somoim.available_major,
+    available_semester: somoim.available_semester,
+    session_day: somoim.session_day
   };
 };
 
-export const postSomoim = at => {
+export const postSomoim = somoim => {
   return dispatch => {
-    return axios
-      .post("api/somoim/list/", at)
-      .then(res => dispatch(postSomoim_(at)));
+    return axios.post("api/somoim/list/", somoim).then(res => {
+      dispatch(postSomoim_(somoim));
+      return res.data[0];
+    });
   };
 };
 
@@ -25,9 +28,7 @@ export const postSomoim = at => {
 export const getSomoimList_ = somoims => {
   return {
     type: actionTypes.GET_SOMOIM_LIST,
-    somoims: somoims.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    somoims: somoims
   };
 };
 

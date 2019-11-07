@@ -21,9 +21,7 @@ export const postClub = at => {
 export const getClubList_ = clubs => {
   return {
     type: actionTypes.GET_CLUB_LIST,
-    clubs: clubs.map(item => {
-      return { ...item.fields, id: item.pk };
-    })
+    clubs: clubs
   };
 };
 

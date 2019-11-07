@@ -14,16 +14,19 @@ class ClubDetail extends React.Component {
     }
   }
   onClickLikeButton = () => {
-    let newLikedClub = this.props.club;
-    if (
-      this.props.likedClubs.filter(item => item.id === this.props.club.id)
-        .length > 0
-    )
-      newLikedClub.likes = newLikedClub.likes - 1;
-    else newLikedClub.likes = newLikedClub.likes + 1;
+    // let newLikedClub = this.props.club;
+    // if (
+    //   this.props.likedClubs.filter(item => item.id === this.props.club.id)
+    //     .length > 0
+    // )
+    //   newLikedClub.likes = newLikedClub.likes - 1;
+    // else newLikedClub.likes = newLikedClub.likes + 1;
 
-    this.props.increaseLikesOfClub(newLikedClub);
-    this.props.addLikedClub(newLikedClub, this.props.loggedUser);
+    // this.props.increaseLikesOfClub(newLikedClub);
+    this.props
+      .addLikedClub(this.props.club, this.props.loggedUser)
+      .then(this.props.getClubList());
+    //TODO: change to get club by id
   };
 
   onClickApplyButton = () => {
@@ -32,16 +35,40 @@ class ClubDetail extends React.Component {
   };
 
   render() {
+    let acceptQualification = false;
+    let qualificationMessage = "";
     let club = this.props.club;
     if (club) {
-      let image = (
-        <img
-          src={"/media/" + club.poster_img}
-          width="100"
-          height="100"
-          alt=""
-        />
-      );
+      if (this.props.loggedUser) {
+        // check qualification
+        // 1. check whether user can participate in session day
+        let qualification_1 =
+          (club.session_day & this.props.loggedUser.available_session_day) ===
+          club.session_day;
+
+        if (!qualification_1)
+          qualificationMessage += "활동 요일에 활동할 수 없습니다\n";
+
+        // 2. check whether user's major is available
+        let qualification_2 = club.available_major.includes(
+          this.props.loggedUser.major
+        );
+
+        if (!qualification_2)
+          qualificationMessage += "가입 가능 학과가 아닙니다\n";
+
+        // 3. check whether user can participate in next available semesters
+        let qualification_3 =
+          club.available_semester <= this.props.loggedUser.available_semester;
+
+        if (!qualification_3)
+          qualificationMessage += "활동 가능 학기가 충분하지 않습니다\n";
+
+        if (qualification_1 && qualification_2 && qualification_3)
+          acceptQualification = true;
+      }
+
+      let image = <img src={club.poster_img} width="100" height="100" alt="" />;
 
       let tagList;
       if (this.props.tags.length != 0) {
@@ -70,7 +97,7 @@ class ClubDetail extends React.Component {
                         <span role="img" aria-label="thumb">
                           👍
                         </span>
-                        {club.likes}
+                        {club.likers.length}
                       </h4>
                     </Col>
                   </Row>
@@ -94,9 +121,15 @@ class ClubDetail extends React.Component {
                   </Col>
                   <Col></Col>
                   <Col>
-                    <Button onClick={this.onClickApplyButton} size="lg">
-                      지원하기
-                    </Button>
+                    {acceptQualification ? (
+                      <Button onClick={this.onClickApplyButton} size="lg">
+                        지원하기
+                      </Button>
+                    ) : (
+                      <Button disabled title={qualificationMessage} size="lg">
+                        지원하기
+                      </Button>
+                    )}
                   </Col>
                 </Row>
               )}
@@ -119,8 +152,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getTagList: () => dispatch(actionCreators.getTagList()),
-    increaseLikesOfClub: newLikedClub =>
-      dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
+
+    getClubList: () => dispatch(actionCreators.getClubList()),
+
+    // increaseLikesOfClub: newLikedClub =>
+    //   dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
     addLikedClub: (newLikedClub, user) =>
       dispatch(actionCreators.addLikedClub(newLikedClub, user)),
     addAppliedClub: (newAppliedClub, user) =>

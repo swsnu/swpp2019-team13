@@ -9,14 +9,32 @@ import like_before_img from "../images/like_before.png";
 import like_after_img from "../images/like_after.png";
 
 class ClubCard extends React.Component {
-  componentDidMount() {
-    this.props.getTagList();
-  }
   render() {
     let club = this.props.club;
-    let image = (
-      <img src={"/media/" + club.poster_img} width="100" height="100" alt="" />
-    );
+
+    let acceptQualification = false;
+
+    if (club && this.props.loggedUser) {
+      // check qualification
+      // 1. check whether user can participate in session day
+      let qualification_1 =
+        (club.session_day & this.props.loggedUser.available_session_day) ===
+        club.session_day;
+
+      // 2. check whether user's major is available
+      let qualification_2 = club.available_major.includes(
+        this.props.loggedUser.major
+      );
+
+      // 3. check whether user can participate in next available semesters
+      let qualification_3 =
+        club.available_semester <= this.props.loggedUser.available_semester;
+
+      if (qualification_1 && qualification_2 && qualification_3)
+        acceptQualification = true;
+    }
+
+    let image = <img src={club.poster_img} width="100" height="100" alt="" />;
 
     let tagList;
     if (this.props.tags.length != 0) {
@@ -48,7 +66,7 @@ class ClubCard extends React.Component {
                       {club.name}
                     </h2>
                     <h3 style={{ display: "inline-block" }}>
-                      {"👍 " + club.likes}
+                      {"👍 " + club.likers.length}
                     </h3>
                     <img
                       src={like_before_img}
@@ -57,9 +75,13 @@ class ClubCard extends React.Component {
                     />
                   </div>
                 </Row>
-                <Row>{tagList}</Row>
+                <Row>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{tagList}
+                </Row>
                 <br />
-                <Row>{club.summary}</Row>
+                <Row>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{club.summary}
+                </Row>
               </Col>
             </Row>
           </Container>
@@ -75,9 +97,7 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = dispatch => {
-  return {
-    getTagList: () => dispatch(actionCreators.getTagList())
-  };
+  return {};
 };
 export default connect(
   mapStateToProps,
