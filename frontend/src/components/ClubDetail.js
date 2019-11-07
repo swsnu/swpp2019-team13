@@ -23,9 +23,9 @@ class ClubDetail extends React.Component {
     // else newLikedClub.likes = newLikedClub.likes + 1;
 
     // this.props.increaseLikesOfClub(newLikedClub);
-    this.props
-      .addLikedClub(this.props.club, this.props.loggedUser)
-      .then(this.props.getClubList());
+    this.props.addLikedClub(this.props.club, this.props.loggedUser);
+    // .then(this.props.getClubList())
+    // .then(this.props.onGetRecommendedClubs(this.props.loggedUser));
     //TODO: change to get club by id
   };
 
@@ -225,7 +225,9 @@ const mapDispatchToProps = dispatch => {
     addAppliedClub: (newAppliedClub, user) =>
       dispatch(actionCreators.addAppliedClub(newAppliedClub, user)),
 
-    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
+    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user)),
+    onGetRecommendedClubs: user =>
+      dispatch(userActions.getRecommendedClubs(user))
   };
 };
 

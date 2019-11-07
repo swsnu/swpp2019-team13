@@ -1,5 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
+import { getClubList } from "./club";
+import { getSomoimList } from "./somoim";
 
 export const getUserList_ = users => {
   return { type: actionTypes.GET_USER_LIST, users: users };
@@ -131,6 +133,21 @@ export const getAppliedClubs = user => {
   };
 };
 
+export const getRecommendedClubs_ = clubs => {
+  return {
+    type: actionTypes.GET_RECOMMENDED_CLUBS,
+    clubs: clubs
+  };
+};
+
+export const getRecommendedClubs = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/club/recommend/")
+      .then(res => dispatch(getRecommendedClubs_(res.data)));
+  };
+};
+
 export const getManagingSomoims_ = somoims => {
   return {
     type: actionTypes.GET_MANAGING_SOMOIMS,
@@ -176,6 +193,21 @@ export const getJoinedSomoims = user => {
   };
 };
 
+export const getRecommendedSomoims_ = somoims => {
+  return {
+    type: actionTypes.GET_RECOMMENDED_SOMOIMS,
+    somoims: somoims
+  };
+};
+
+export const getRecommendedSomoims = user => {
+  return dispatch => {
+    return axios
+      .get("/api/user/" + user.id + "/somoim/recommend/")
+      .then(res => dispatch(getRecommendedSomoims_(res.data)));
+  };
+};
+
 export const addLikedClub_ = newLikedClub => {
   return {
     type: actionTypes.ADD_LIKED_CLUB,
@@ -187,7 +219,9 @@ export const addLikedClub = (newLikedClub, user) => {
   return dispatch => {
     return axios
       .put("/api/user/" + user.id + "/club/like/", newLikedClub)
-      .then(res => dispatch(addLikedClub_(newLikedClub)));
+      .then(res => dispatch(addLikedClub_(newLikedClub)))
+      .then(res => dispatch(getClubList())) //TODO: change to get club by id
+      .then(res => dispatch(getRecommendedClubs(user)));
   };
 };
 
@@ -202,7 +236,9 @@ export const addLikedSomoim = (newLikedSomoim, user) => {
   return dispatch => {
     return axios
       .put("/api/user/" + user.id + "/somoim/like/", newLikedSomoim)
-      .then(res => dispatch(addLikedSomoim_(newLikedSomoim)));
+      .then(res => dispatch(addLikedSomoim_(newLikedSomoim)))
+      .then(res => dispatch(getSomoimList())) //TODO: change to get club by id
+      .then(res => dispatch(getRecommendedSomoims(user)));
   };
 };
 

@@ -26,9 +26,7 @@ class SomoimDetail extends React.Component {
     // else newLikedSomoim.likes = newLikedSomoim.likes + 1;
 
     // this.props.increaseLikesOfSomoim(newLikedSomoim);
-    this.props
-      .addLikedSomoim(this.props.somoim, this.props.loggedUser)
-      .then(this.props.getSomoimList());
+    this.props.addLikedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
   onClickJoinButton = () => {
@@ -41,9 +39,7 @@ class SomoimDetail extends React.Component {
     // else newJoinedSomoim.currentJoiner = newJoinedSomoim.currentJoiner + 1;
 
     // this.props.increaseNumOfCurrentJoiner(newJoinedSomoim);
-    this.props
-      .addJoinedSomoim(this.props.somoim, this.props.loggedUser)
-      .then(this.props.getSomoimList());
+    this.props.addJoinedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
   render() {
