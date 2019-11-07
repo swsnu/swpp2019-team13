@@ -108,28 +108,29 @@ class SomoimDetail extends React.Component {
       let tagList;
       if (this.props.tags.length != 0) {
         tagList = somoim.tags.map(item => (
-          <Button key={item} variant="outline-primary">
+          <Button size="lg" key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
       }
       return (
         <Modal
+          size="lg"
           show={this.props.show}
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
           <Modal.Header closeButton>
             <Col sm={10}>
-              <h2>{somoim.title}</h2>
+              <h1>{somoim.title}</h1>
             </Col>
             <Col sm={2}>
-              <h4>
+              <h1>
                 <span role="img" aria-label="thumb">
                   👍
                 </span>
                 {somoim.likers.length}
-              </h4>
+              </h1>
             </Col>
           </Modal.Header>
           <Modal.Body>
@@ -147,26 +148,30 @@ class SomoimDetail extends React.Component {
                   </Row>
                   <Row>{tagList}</Row>
                   <br />
-                  <Row>{somoim.description}</Row>
+                  <Row>
+                    <h3>{somoim.description}</h3>
+                  </Row>
                 </Col>
               </Row>
               <br />
               <br />
               <Form.Label>
-                <h4>가입 조건</h4>
+                <h2>가입 조건</h2>
               </Form.Label>
               <Row>
-                <Form.Label>- 가능 학과</Form.Label>
+                <Form.Label>
+                  <h3>- 가능 학과</h3>
+                </Form.Label>
               </Row>
-              {available_major_string}
+              <h4>{available_major_string}</h4>
               <Row>
-                <Form.Label>- 활동 요일</Form.Label>
+                <h3>- 활동 요일</h3>
               </Row>
-              {session_day_string}
+              <h4>{session_day_string}</h4>
               <Row>
-                <Form.Label>- 최소 활동 학기 수</Form.Label>
+                <h3>- 최소 활동 학기 수</h3>
               </Row>
-              {somoim.available_semester + "학기"}
+              <h4>{somoim.available_semester + "학기"}</h4>
               <br />
               <br />
               {this.props.loggedUser && (
