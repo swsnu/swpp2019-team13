@@ -230,7 +230,7 @@ class SignUp extends React.Component {
               </Form.Group>
             </Form.Row>
             <Form.Row>
-              <Form.Label>활동 가능 학기 수</Form.Label>
+              <Form.Label>활동 가능 요일</Form.Label>
             </Form.Row>
             {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
               return (

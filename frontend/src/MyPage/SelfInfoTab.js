@@ -51,7 +51,8 @@ class SelfInfoTab extends Component {
       dept: this.state.dept,
       major: this.state.major,
       grade: this.state.grade,
-      available_semester: this.state.available_semester
+      available_semester: this.state.available_semester,
+      available_session_day: this.state.available_session_day
     });
   };
 
@@ -62,6 +63,7 @@ class SelfInfoTab extends Component {
     let loggedUserMajor = null;
     let loggedUserGrade = null;
     let loggedUserAvailableSemester = null;
+    let loggedUserAvailableSessionDay = null;
 
     let deptOptionList = null;
     let majorOptionList = null;
@@ -73,6 +75,8 @@ class SelfInfoTab extends Component {
       loggedUserMajor = this.props.loggedUser.major;
       loggedUserGrade = this.props.loggedUser.grade;
       loggedUserAvailableSemester = this.props.loggedUser.available_semester;
+      loggedUserAvailableSessionDay = this.props.loggedUser
+        .available_session_day;
 
       if (this.props.depts) {
         deptOptionList = this.props.depts.map(dept => (
@@ -193,7 +197,7 @@ class SelfInfoTab extends Component {
             </Form.Group>
           </Form.Row>
           <Form.Row>
-            <Form.Label>활동 가능 학기 수</Form.Label>
+            <Form.Label>활동 가능 요일</Form.Label>
           </Form.Row>
           {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
             return (
@@ -232,7 +236,9 @@ class SelfInfoTab extends Component {
               String(this.state.major) === String(loggedUserMajor) &&
               String(this.state.grade) === String(loggedUserGrade) &&
               String(this.state.available_semester) ===
-                String(loggedUserAvailableSemester))
+                String(loggedUserAvailableSemester) &&
+              String(this.state.available_session_day) ===
+                String(loggedUserAvailableSessionDay))
           }
         >
           정보 수정

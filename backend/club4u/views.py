@@ -260,6 +260,7 @@ def information(request, id=0):
         major = json.loads(body)['major']
         grade = json.loads(body)['grade']
         available_semester = json.loads(body)['available_semester']
+        available_session_day = json.loads(body)['available_session_day']
 
         user_profile = UserProfile.objects.get(user_id=request.user)
         user_profile.user.last_name = name
@@ -268,6 +269,7 @@ def information(request, id=0):
         user_profile.major = Major.objects.get(id=major)
         user_profile.grade = grade
         user_profile.available_semester = available_semester
+        user_profile.available_session_day = available_session_day
         user_profile.save()
 
         response_dict = {'id': request.user.id, 'name': name, 'email': email,
