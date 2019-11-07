@@ -459,6 +459,28 @@ def join_somoim(request, id=0):
         return HttpResponse(status=405)
 
 
+def recommend_somoim(request, id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    try:
+        user = UserProfile.objects.get(id=id)
+    except (ObjectDoesNotExist):
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        recommended_somoims = Somoim.objects.none()
+        for like_somoim in user.like_somoims.all():
+            for liker in like_somoim.likers.all():
+                for somoim in liker.like_somoims.all():
+                    if recommended_somoims.filter(id=somoim.id).count() == 0:
+                        recommended_somoims |= Somoim.objects.filter(
+                            id=somoim.id)
+        serializer = SomoimSerializer(recommended_somoims, many=True)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    else:
+        return HttpResponse(status=405)
+
+
 @ensure_csrf_cookie
 def token(request):
     if request.method == 'GET':

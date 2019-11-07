@@ -14,7 +14,15 @@ import * as userActions from "../store/actions/user";
 import "./ClubMain.css";
 
 class ClubMain extends React.Component {
-  state = { isRecommendedClubsLoaded: false };
+  state = {
+    clubDetailShow: false,
+    clubRegisterShow: false,
+    selectedClubID: null,
+    selected_category: 0,
+    recommendedListPageNum: 0,
+    allListPageNum: 0,
+    isRecommendedClubsLoaded: false
+  };
 
   componentDidMount() {
     this.props.getClubList();
@@ -26,15 +34,6 @@ class ClubMain extends React.Component {
       this.setState({ ...this.state, isRecommendedClubsLoaded: true });
       this.props.onGetRecommendedClubs(this.props.loggedUser);
     }
-  };
-
-  state = {
-    clubDetailShow: false,
-    clubRegisterShow: false,
-    selectedClubID: null,
-    selected_category: 0,
-    recommendedListPageNum: 0,
-    allListPageNum: 0
   };
 
   clubCardClickHandler = id => {

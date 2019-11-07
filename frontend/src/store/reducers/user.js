@@ -51,6 +51,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, likedSomoims: action.somoims };
     case actionTypes.GET_JOINED_SOMOIMS:
       return { ...state, joinedSomoims: action.somoims };
+    case actionTypes.GET_RECOMMENDED_SOMOIMS:
+      return { ...state, recommendedSomoims: action.somoims };
 
     case actionTypes.ADD_LIKED_CLUB:
       if (

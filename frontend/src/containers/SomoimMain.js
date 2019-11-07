@@ -9,13 +9,15 @@ import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
 import SomoimCreate from "../components/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
+import * as userActions from "../store/actions/user";
 
 class SomoimMain extends React.Component {
   state = {
     somoimDetailShow: false,
     somoimCreateShow: false,
     selectedSomoimID: null,
-    selected_category: 0
+    selected_category: 0,
+    isRecommendedSomoimsLoaded: false
   };
 
   componentDidMount() {
@@ -23,6 +25,13 @@ class SomoimMain extends React.Component {
     this.props.getCategoryList();
     this.props.getTagList();
   }
+  componentDidUpdate = () => {
+    if (this.props.loggedUser && !this.state.isRecommendedSomoimsLoaded) {
+      this.setState({ ...this.state, isRecommendedSomoimsLoaded: true });
+      this.props.onGetRecommendedSomoims(this.props.loggedUser);
+    }
+  };
+
   somoimCardClickHandler = id => {
     this.setState({
       ...this.state,
@@ -77,8 +86,8 @@ class SomoimMain extends React.Component {
 
     let recommendedList = [],
       allList = [];
-    if (this.props.somoims) {
-      recommendedList = this.props.somoims.map(item => (
+    if (this.props.recommendedSomoims) {
+      recommendedList = this.props.recommendedSomoims.map(item => (
         <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
           <SomoimCard
             clickHandler={this.somoimCardClickHandler}
@@ -196,7 +205,8 @@ const mapStateToProps = state => {
   return {
     somoims: state.somoim.somoims,
     categories: state.category.categories,
-    loggedUser: state.user.loggedUser
+    loggedUser: state.user.loggedUser,
+    recommendedSomoims: state.user.recommendedSomoims
   };
 };
 
@@ -204,7 +214,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
-    getCategoryList: () => dispatch(actionCreators.getCategoryList())
+    getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    onGetRecommendedSomoims: user =>
+      dispatch(userActions.getRecommendedSomoims(user))
   };
 };
 export default connect(
