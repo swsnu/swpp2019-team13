@@ -41,7 +41,16 @@ class LikedClubTab extends Component {
                 }
               }}
             >
-              {item.name} <Button onClick={() => {}}>Unlike</Button>
+              <h1>{item.name}</h1>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {item.summary}
+              <Button
+                onClick={() => {
+                  this.props.addLikedClub(item, this.props.loggedUser);
+                }}
+              >
+                Unlike
+              </Button>
             </Card.Body>
           </Card>
         );
@@ -75,7 +84,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
+    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user)),
+    addLikedClub: (club, user) => dispatch(userActions.addLikedClub(club, user))
   };
 };
 
