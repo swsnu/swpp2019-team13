@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import { Container, Row, Col, Modal, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 
 class ClubDetail extends React.Component {
   onClickLikeButton = () => {
@@ -66,6 +66,7 @@ class ClubDetail extends React.Component {
             a => a.id === major_id
           )[0].name;
           available_major_string += " ";
+          return 0;
         });
       }
 
@@ -79,7 +80,7 @@ class ClubDetail extends React.Component {
       let image = <img src={club.poster_img} width="400" height="400" alt="" />;
 
       let tagList;
-      if (this.props.tags.length != 0) {
+      if (this.props.tags.length !== 0) {
         tagList = club.tags.map(item => (
           <Button size="lg" key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}

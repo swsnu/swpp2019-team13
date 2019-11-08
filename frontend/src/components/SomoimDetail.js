@@ -67,6 +67,7 @@ class SomoimDetail extends React.Component {
             a => a.id === major_id
           )[0].name;
           available_major_string += " ";
+          return 0;
         });
       }
 
@@ -80,7 +81,7 @@ class SomoimDetail extends React.Component {
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
 
       let tagList;
-      if (this.props.tags.length != 0) {
+      if (this.props.tags.length !== 0) {
         tagList = somoim.tags.map(item => (
           <Button size="lg" key={item} variant="outline-primary">
             {"#" + this.props.tags[item - 1].name}

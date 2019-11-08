@@ -2,9 +2,8 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import ClubDetail from "../components/ClubDetail";
-import * as actionCreators from "../store/actions/index";
 
 class ManagingClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };

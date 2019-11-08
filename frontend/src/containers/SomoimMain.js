@@ -2,7 +2,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import Header from "../components/Header";
 import SomoimCard from "../components/SomoimCard";
