@@ -1,16 +1,9 @@
-export {
-  getClubList,
-  getClubByID,
-  postClub,
-  increaseLikesOfClub
-} from "./club";
-export {
-  getSomoimList,
-  getSomoimByID,
-  postSomoim,
-  increaseLikesOfSomoim,
-  increaseNumOfCurrentJoiner
-} from "./somoim";
+export { getClubList, getClubByID, postClub } from "./club";
+export { getSomoimList, getSomoimByID, postSomoim } from "./somoim";
+export { getCategoryList } from "./category";
+export { getTagList } from "./tag";
+export { getDeptList } from "./dept";
+export { getMajorList } from "./major";
 export {
   getUserList,
   signIn,
@@ -32,7 +25,3 @@ export {
   addLikedSomoim,
   addJoinedSomoim
 } from "./user";
-export { getCategoryList } from "./category";
-export { getTagList } from "./tag";
-export { getDeptList } from "./dept";
-export { getMajorList } from "./major";
