@@ -2,7 +2,7 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import Header from "../components/Header";
 import ClubCard from "../components/ClubCard";
@@ -76,12 +76,18 @@ class ClubMain extends React.Component {
       );
       categoryList = this.props.categories.map(item => (
         <Button
-          className="category-button"
+          className={`category-button ${
+            this.state.selected_category === item.id ? "active" : ""
+          }`}
           key={item.id}
-          variant="outline-secondary"
+          variant="light"
           style={{ display: "inline-block", marginLeft: "5px" }}
           onClick={() =>
-            this.setState({ ...this.state, selected_category: item.id })
+            this.setState({
+              ...this.state,
+              selected_category: item.id,
+              allListPageNum: 0
+            })
           }
         >
           {item.name}
@@ -224,8 +230,10 @@ class ClubMain extends React.Component {
           </div>
           <div>
             <Button
-              className="all-club-button"
-              variant="outline-secondary"
+              className={`category-button ${
+                this.state.selected_category === 0 ? "active" : ""
+              }`}
+              variant="light"
               style={{ display: "inline-block" }}
               onClick={() =>
                 this.setState({ ...this.state, selected_category: 0 })

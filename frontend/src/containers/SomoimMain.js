@@ -11,12 +11,16 @@ import SomoimCreate from "../components/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
 import * as userActions from "../store/actions/user";
 
+import "./SomoimMain.css";
+
 class SomoimMain extends React.Component {
   state = {
     somoimDetailShow: false,
     somoimCreateShow: false,
     selectedSomoimID: null,
     selected_category: 0,
+    recommendedListPageNum: 0,
+    allListPageNum: 0,
     isRecommendedSomoimsLoaded: false
   };
 
@@ -25,6 +29,7 @@ class SomoimMain extends React.Component {
     this.props.getCategoryList();
     this.props.getTagList();
   }
+
   componentDidUpdate = () => {
     if (this.props.loggedUser && !this.state.isRecommendedSomoimsLoaded) {
       this.setState({ ...this.state, isRecommendedSomoimsLoaded: true });
@@ -66,11 +71,18 @@ class SomoimMain extends React.Component {
     if (this.props.categories) {
       categoryList = this.props.categories.map(item => (
         <Button
-          className="category-button"
+          className={`category-button ${
+            this.state.selected_category === item.id ? "active" : ""
+          }`}
           key={item.id}
-          variant="outline-secondary"
+          variant="light"
+          style={{ display: "inline-block", marginLeft: "5px" }}
           onClick={() =>
-            this.setState({ ...this.state, selected_category: item.id })
+            this.setState({
+              ...this.state,
+              selected_category: item.id,
+              allListPageNum: 0
+            })
           }
         >
           {item.name}
@@ -88,72 +100,143 @@ class SomoimMain extends React.Component {
       allList = [];
     if (this.props.recommendedSomoims) {
       recommendedList = this.props.recommendedSomoims.map(item => (
-        <Col sm="4" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
+        <SomoimCard
+          key={item.id}
+          clickHandler={this.somoimCardClickHandler}
+          somoim={item}
+          forceRender={Math.random()}
+        />
+      ));
+    }
+    if (this.props.somoims) {
+      if (this.state.selected_category === 0) {
+        allList = this.props.somoims.map(item => (
           <SomoimCard
+            key={item.id}
             clickHandler={this.somoimCardClickHandler}
             somoim={item}
             forceRender={Math.random()}
           />
-        </Col>
-      ));
-
-      if (this.state.selected_category === 0) {
-        allList = this.props.somoims.map(item => (
-          <Col sm="5" key={item.id} style={{ paddingLeft: 1, paddingRight: 1 }}>
-            <SomoimCard
-              clickHandler={this.somoimCardClickHandler}
-              somoim={item}
-              forceRender={Math.random()}
-            />
-          </Col>
         ));
       } else {
         allList = this.props.somoims
           .filter(item => item.category === this.state.selected_category)
           .map(item => (
-            <Col
-              sm="5"
+            <SomoimCard
               key={item.id}
-              style={{ paddingLeft: 1, paddingRight: 1 }}
-            >
-              <SomoimCard
-                clickHandler={this.somoimCardClickHandler}
-                somoim={item}
-                forceRender={Math.random()}
-              />
-            </Col>
+              clickHandler={this.somoimCardClickHandler}
+              somoim={item}
+              forceRender={Math.random()}
+            />
           ));
       }
     }
 
-    console.log(this.state);
-
     return (
-      <div>
+      <div className="SomoimMain">
         <Header />
-        <Container>
-          <Row>
-            <h2>Recommended Somoims</h2>
-          </Row>
-          <Row>
-            <div
+        <div className="SomoimList">
+          <h2
+            style={{
+              fontWeight: "bold"
+            }}
+          >
+            추천 소모임
+          </h2>
+          <div>
+            <div>
+              <div className="SomoimCard">
+                {this.state.recommendedListPageNum * 4 + 0 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
+                  : ""}
+              </div>
+              <div className="SomoimCard">
+                {this.state.recommendedListPageNum * 4 + 1 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
+                  : ""}
+              </div>
+            </div>
+            <div>
+              <div className="SomoimCard">
+                {this.state.recommendedListPageNum * 4 + 2 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
+                  : ""}
+              </div>
+              <div className="SomoimCard">
+                {this.state.recommendedListPageNum * 4 + 3 <
+                recommendedList.length
+                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
+                  : ""}
+              </div>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (this.state.recommendedListPageNum > 0)
+                    this.setState({
+                      ...this.state,
+                      recommendedListPageNum:
+                        this.state.recommendedListPageNum - 1
+                    });
+                }}
+              >
+                &laquo; 이전
+              </div>
+              <div className="bar">|</div>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (
+                    this.state.recommendedListPageNum <
+                    Math.ceil(recommendedList.length / 4) - 1
+                  )
+                    this.setState({
+                      ...this.state,
+                      recommendedListPageNum:
+                        this.state.recommendedListPageNum + 1
+                    });
+                  console.log(recommendedList.length);
+                }}
+              >
+                다음 &raquo;
+              </div>
+            </div>
+          </div>
+        </div>
+        <br />
+        <div className="SomoimList" style={{ marginBottom: "25px" }}>
+          <div>
+            <h2
               style={{
-                display: "flex",
-                overflowX: "scroll"
+                fontWeight: "bold",
+                display: "inline-block"
               }}
             >
-              {recommendedList}
-            </div>
-          </Row>
-          <br />
-          <br />
-          <Row>
-            <h2>All Somoims</h2>
-          </Row>
-          <Row>
+              모든 소모임
+            </h2>
+            {this.props.loggedUser && (
+              <Button
+                className="somoim-create-button"
+                variant="outline-primary"
+                size="lg"
+                style={{ display: "inline-block", float: "right" }}
+                onClick={this.somoimCreateClickHandler}
+              >
+                Do you want make your own somoim?
+              </Button>
+            )}
+          </div>
+          <div>
             <Button
-              className="all-club-button"
-              variant="outline-secondary"
+              className={`category-button ${
+                this.state.selected_category === 0 ? "active" : ""
+              }`}
+              variant="light"
+              style={{ display: "inline-block" }}
               onClick={() =>
                 this.setState({ ...this.state, selected_category: 0 })
               }
@@ -161,35 +244,66 @@ class SomoimMain extends React.Component {
               전체
             </Button>
             {categoryList}
-          </Row>
+          </div>
           <br />
-          <Row>
-            <Col xs="10" style={{ paddingLeft: 0, paddingRight: 0 }}>
+          <div>
+            <div>
+              <div className="SomoimCard">
+                {this.state.allListPageNum * 4 + 0 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 0]
+                  : ""}
+              </div>
+              <div className="SomoimCard">
+                {this.state.allListPageNum * 4 + 1 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 1]
+                  : ""}
+              </div>
+            </div>
+            <div>
+              <div className="SomoimCard">
+                {this.state.allListPageNum * 4 + 2 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 2]
+                  : ""}
+              </div>
+              <div className="SomoimCard">
+                {this.state.allListPageNum * 4 + 3 < allList.length
+                  ? allList[this.state.allListPageNum * 4 + 3]
+                  : ""}
+              </div>
+            </div>
+            <div style={{ textAlign: "center" }}>
               <div
-                style={{
-                  display: "flex",
-                  overflowX: "scroll",
-                  marginLeft: 0,
-                  marginRight: 0
+                className="changePage"
+                onClick={() => {
+                  if (this.state.allListPageNum > 0)
+                    this.setState({
+                      ...this.state,
+                      allListPageNum: this.state.allListPageNum - 1
+                    });
                 }}
               >
-                {allList}
+                &laquo; 이전
               </div>
-            </Col>
-            <Col>
-              {this.props.loggedUser && (
-                <Button
-                  className="somoim-create-button"
-                  variant="outline-primary"
-                  size="lg"
-                  onClick={this.somoimCreateClickHandler}
-                >
-                  +
-                </Button>
-              )}
-            </Col>
-          </Row>
-        </Container>
+              <div className="bar">|</div>
+              <div
+                className="changePage"
+                onClick={() => {
+                  if (
+                    this.state.allListPageNum <
+                    Math.ceil(allList.length / 4) - 1
+                  )
+                    this.setState({
+                      ...this.state,
+                      allListPageNum: this.state.allListPageNum + 1
+                    });
+                  console.log(allList.length);
+                }}
+              >
+                다음 &raquo;
+              </div>
+            </div>
+          </div>
+        </div>
 
         <SomoimDetail
           show={this.state.somoimDetailShow}
@@ -201,6 +315,7 @@ class SomoimMain extends React.Component {
           closeHandler={this.somoimDetailCloseHandler}
           forceRender={Math.random()}
         />
+
         {somoim_create}
       </div>
     );
