@@ -35,7 +35,9 @@ class ManagingSomoimTab extends Component {
                 }
               }}
             >
-              {item.title}
+              <h1>{item.title}</h1>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {item.summary}
             </Card.Body>
           </Card>
         );
