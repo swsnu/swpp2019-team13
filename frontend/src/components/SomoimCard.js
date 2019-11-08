@@ -94,9 +94,9 @@ class SomoimCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.user.loggedUser,
+    somoims: state.somoim.somoims,
     tags: state.tag.tags,
-    somoims: state.somoim.somoims
+    loggedUser: state.user.loggedUser
   };
 };
 
