@@ -294,7 +294,7 @@ def apply_club(request, id=0):
 
 def recommend_club(request, id=0):
     if not request.user.is_authenticated:
-        return HttpResponse(status=401)
+        return HttpResponse([])
     try:
         user = UserProfile.objects.get(id=id)
     except (ObjectDoesNotExist):
@@ -390,7 +390,7 @@ def join_somoim(request, id=0):
 
 def recommend_somoim(request, id=0):
     if not request.user.is_authenticated:
-        return HttpResponse(status=401)
+        return HttpResponse([])
     try:
         user = UserProfile.objects.get(id=id)
     except (ObjectDoesNotExist):

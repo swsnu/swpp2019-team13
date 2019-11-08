@@ -2,6 +2,7 @@ import * as actionTypes from "./actionTypes";
 import axios from "axios";
 import { getClubList } from "./club";
 import { getSomoimList } from "./somoim";
+import { push } from "connected-react-router";
 
 // not used
 export const getUserList_ = users => {
@@ -39,7 +40,10 @@ export const signOut_ = () => {
 
 export const signOut = () => {
   return dispatch => {
-    return axios.get("api/user/signout/").then(res => dispatch(signOut_()));
+    return axios
+      .get("api/user/signout/")
+      .then(res => dispatch(signOut_()))
+      .then(() => dispatch(push("/club")));
   };
 };
 

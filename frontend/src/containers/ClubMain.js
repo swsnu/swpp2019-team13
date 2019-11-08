@@ -33,9 +33,16 @@ class ClubMain extends React.Component {
   }
 
   componentDidUpdate = () => {
-    if (this.props.loggedUser && !this.state.isUserInfoLoaded) {
-      this.setState({ ...this.state, isUserInfoLoaded: true });
-      this.props.onGetRecommendedClubs(this.props.loggedUser);
+    if (this.props.loggedUser) {
+      if (!this.state.isUserInfoLoaded) {
+        this.setState({ ...this.state, isUserInfoLoaded: true });
+        this.props.onGetRecommendedClubs(this.props.loggedUser);
+      }
+    } else {
+      this.props.onGetRecommendedClubs({ id: 0 });
+      if (this.state.isUserInfoLoaded) {
+        this.setState({ ...this.state, isUserInfoLoaded: false });
+      }
     }
   };
 
