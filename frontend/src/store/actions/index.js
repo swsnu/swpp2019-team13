@@ -16,19 +16,21 @@ export {
   signIn,
   signOut,
   signUp,
-  addLikedClub,
-  addLikedSomoim,
-  addAppliedClub,
-  addJoinedSomoim,
   getLoginInfo,
   putUserInformation,
   getManagingClubs,
   getLikedClubs,
   getAppliedClubs,
+  getRecommendedClubs,
   getManagingSomoims,
   getLikedSomoims,
   getJoinedSomoims,
-  addManagingSomoim
+  getRecommendedSomoims,
+  addLikedClub,
+  addAppliedClub,
+  addManagingSomoim,
+  addLikedSomoim,
+  addJoinedSomoim
 } from "./user";
 export { getCategoryList } from "./category";
 export { getTagList } from "./tag";

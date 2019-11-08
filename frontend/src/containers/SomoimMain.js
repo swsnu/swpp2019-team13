@@ -21,18 +21,21 @@ class SomoimMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isRecommendedSomoimsLoaded: false
+    isUserInfoLoaded: false
   };
 
   componentDidMount() {
     this.props.getSomoimList();
+
     this.props.getCategoryList();
     this.props.getTagList();
+    this.props.getDeptList();
+    this.props.getMajorList();
   }
 
   componentDidUpdate = () => {
-    if (this.props.loggedUser && !this.state.isRecommendedSomoimsLoaded) {
-      this.setState({ ...this.state, isRecommendedSomoimsLoaded: true });
+    if (this.props.loggedUser && !this.state.isUserInfoLoaded) {
+      this.setState({ ...this.state, isUserInfoLoaded: true });
       this.props.onGetRecommendedSomoims(this.props.loggedUser);
     }
   };
@@ -327,17 +330,24 @@ const mapStateToProps = state => {
     somoims: state.somoim.somoims,
     categories: state.category.categories,
     loggedUser: state.user.loggedUser,
-    recommendedSomoims: state.user.recommendedSomoims
+    recommendedSomoims: state.user.recommendedSomoims,
+    likedSomoims: state.user.likedSomoims,
+    joinedSomoims: state.user.joinedSomoims
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
     getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    getTagList: () => dispatch(actionCreators.getTagList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+
     onGetRecommendedSomoims: user =>
-      dispatch(userActions.getRecommendedSomoims(user))
+      dispatch(userActions.getRecommendedSomoims(user)),
+    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user)),
+    onGetJoinedSomoims: user => dispatch(userActions.getJoinedSomoims(user))
   };
 };
 export default connect(

@@ -2,31 +2,12 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
-import * as userActions from "../store/actions/user";
 
 import { Container, Row, Col, Modal, Button, Form } from "react-bootstrap";
 
 class ClubDetail extends React.Component {
-  componentDidMount() {
-    this.props.getTagList();
-    if (this.props.loggedUser) {
-      this.props.onGetLikedClubs(this.props.loggedUser);
-    }
-  }
   onClickLikeButton = () => {
-    // let newLikedClub = this.props.club;
-    // if (
-    //   this.props.likedClubs.filter(item => item.id === this.props.club.id)
-    //     .length > 0
-    // )
-    //   newLikedClub.likes = newLikedClub.likes - 1;
-    // else newLikedClub.likes = newLikedClub.likes + 1;
-
-    // this.props.increaseLikesOfClub(newLikedClub);
     this.props.addLikedClub(this.props.club, this.props.loggedUser);
-    // .then(this.props.getClubList())
-    // .then(this.props.onGetRecommendedClubs(this.props.loggedUser));
-    //TODO: change to get club by id
   };
 
   onClickApplyButton = () => {
@@ -209,27 +190,16 @@ const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
     majors: state.major.majors,
-    loggedUser: state.user.loggedUser,
-    likedClubs: state.user.likedClubs
+    loggedUser: state.user.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
-
-    getClubList: () => dispatch(actionCreators.getClubList()),
-
-    // increaseLikesOfClub: newLikedClub =>
-    //   dispatch(actionCreators.increaseLikesOfClub(newLikedClub)),
     addLikedClub: (newLikedClub, user) =>
       dispatch(actionCreators.addLikedClub(newLikedClub, user)),
     addAppliedClub: (newAppliedClub, user) =>
-      dispatch(actionCreators.addAppliedClub(newAppliedClub, user)),
-
-    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user)),
-    onGetRecommendedClubs: user =>
-      dispatch(userActions.getRecommendedClubs(user))
+      dispatch(actionCreators.addAppliedClub(newAppliedClub, user))
   };
 };
 

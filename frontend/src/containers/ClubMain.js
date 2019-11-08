@@ -21,18 +21,23 @@ class ClubMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isRecommendedClubsLoaded: false
+    isUserInfoLoaded: false
   };
 
   componentDidMount() {
     this.props.getClubList();
+
     this.props.getCategoryList();
     this.props.getTagList();
+    this.props.getDeptList();
+    this.props.getMajorList();
   }
+
   componentDidUpdate = () => {
-    if (this.props.loggedUser && !this.state.isRecommendedClubsLoaded) {
-      this.setState({ ...this.state, isRecommendedClubsLoaded: true });
+    if (this.props.loggedUser && !this.state.isUserInfoLoaded) {
+      this.setState({ ...this.state, isUserInfoLoaded: true });
       this.props.onGetRecommendedClubs(this.props.loggedUser);
+      // this.props.onGetLikedClubs(this.props.loggedUser);
     }
   };
 
@@ -329,11 +334,15 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
     getClubList: () => dispatch(actionCreators.getClubList()),
     getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    getTagList: () => dispatch(actionCreators.getTagList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+
     onGetRecommendedClubs: user =>
-      dispatch(userActions.getRecommendedClubs(user))
+      dispatch(userActions.getRecommendedClubs(user)),
+    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
   };
 };
 
