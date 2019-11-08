@@ -3,6 +3,7 @@ import axios from "axios";
 import { getClubList } from "./club";
 import { getSomoimList } from "./somoim";
 
+// not used
 export const getUserList_ = users => {
   return { type: actionTypes.GET_USER_LIST, users: users };
 };
@@ -253,7 +254,9 @@ export const addAppliedClub = (newAppliedClub, user) => {
   return dispatch => {
     return axios
       .put("/api/user/" + user.id + "/club/apply/", newAppliedClub)
-      .then(res => dispatch(addAppliedClub_(newAppliedClub)));
+      .then(res => dispatch(addAppliedClub_(newAppliedClub)))
+      .then(res => dispatch(getSomoimList())) //TODO: change to get club by id
+      .then(res => dispatch(getRecommendedSomoims(user)));
   };
 };
 

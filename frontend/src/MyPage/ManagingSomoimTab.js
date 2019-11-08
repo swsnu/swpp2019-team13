@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button, Card } from "react-bootstrap";
 import SomoimDetail from "../components/SomoimDetail";
-import * as userActions from "../store/actions/user";
+import * as actionCreators from "../store/actions/index";
 
 class ManagingSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
@@ -79,7 +79,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetManagingSomoims: user => dispatch(userActions.getManagingSomoims(user))
+    onGetManagingSomoims: user =>
+      dispatch(actionCreators.getManagingSomoims(user))
   };
 };
 

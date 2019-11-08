@@ -9,7 +9,6 @@ import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
 import SomoimCreate from "../components/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
-import * as userActions from "../store/actions/user";
 
 import "./SomoimMain.css";
 
@@ -345,9 +344,7 @@ const mapDispatchToProps = dispatch => {
     getMajorList: () => dispatch(actionCreators.getMajorList()),
 
     onGetRecommendedSomoims: user =>
-      dispatch(userActions.getRecommendedSomoims(user)),
-    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user)),
-    onGetJoinedSomoims: user => dispatch(userActions.getJoinedSomoims(user))
+      dispatch(actionCreators.getRecommendedSomoims(user))
   };
 };
 export default connect(

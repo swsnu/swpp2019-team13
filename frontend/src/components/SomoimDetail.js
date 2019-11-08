@@ -203,29 +203,16 @@ const mapStateToProps = state => {
   return {
     tags: state.tag.tags,
     majors: state.major.majors,
-    loggedUser: state.user.loggedUser,
-    likedSomoims: state.user.likedSomoims,
-    joinedSomoims: state.user.joinedSomoims
+    loggedUser: state.user.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
-
-    getSomoimList: () => dispatch(actionCreators.getSomoimList()),
-
-    increaseLikesOfSomoim: newLikedSomoim =>
-      dispatch(actionCreators.increaseLikesOfSomoim(newLikedSomoim)),
     addLikedSomoim: (newLikedSomoim, user) =>
       dispatch(actionCreators.addLikedSomoim(newLikedSomoim, user)),
-    increaseNumOfCurrentJoiner: newJoinedSomoim =>
-      dispatch(actionCreators.increaseNumOfCurrentJoiner(newJoinedSomoim)),
     addJoinedSomoim: (newJoinedSomoim, user) =>
-      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim, user)),
-
-    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user)),
-    onGetJoinedSomoims: user => dispatch(userActions.getJoinedSomoims(user))
+      dispatch(actionCreators.addJoinedSomoim(newJoinedSomoim, user))
   };
 };
 

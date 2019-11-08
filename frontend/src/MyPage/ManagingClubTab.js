@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button, Card } from "react-bootstrap";
 import ClubDetail from "../components/ClubDetail";
-import * as userActions from "../store/actions/user";
+import * as actionCreators from "../store/actions/index";
 
 class ManagingClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
@@ -79,7 +79,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetManagingClubs: user => dispatch(userActions.getManagingClubs(user))
+    onGetManagingClubs: user => dispatch(actionCreators.getManagingClubs(user))
   };
 };
 

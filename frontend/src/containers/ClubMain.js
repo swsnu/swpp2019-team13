@@ -9,7 +9,6 @@ import ClubCard from "../components/ClubCard";
 import ClubDetail from "../components/ClubDetail";
 import ClubRegister from "../components/ClubRegister";
 import * as actionCreators from "../store/actions/index";
-import * as userActions from "../store/actions/user";
 
 import "./ClubMain.css";
 
@@ -37,7 +36,6 @@ class ClubMain extends React.Component {
     if (this.props.loggedUser && !this.state.isUserInfoLoaded) {
       this.setState({ ...this.state, isUserInfoLoaded: true });
       this.props.onGetRecommendedClubs(this.props.loggedUser);
-      // this.props.onGetLikedClubs(this.props.loggedUser);
     }
   };
 
@@ -341,8 +339,7 @@ const mapDispatchToProps = dispatch => {
     getMajorList: () => dispatch(actionCreators.getMajorList()),
 
     onGetRecommendedClubs: user =>
-      dispatch(userActions.getRecommendedClubs(user)),
-    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
+      dispatch(actionCreators.getRecommendedClubs(user))
   };
 };
 
