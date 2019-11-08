@@ -41,7 +41,16 @@ class LikedSomoimTab extends Component {
                 }
               }}
             >
-              {item.title} <Button onClick={() => {}}>Unlike</Button>
+              <h1>{item.title}</h1>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {item.summary}{" "}
+              <Button
+                onClick={() => {
+                  this.props.addLikedSomoim(item, this.props.loggedUser);
+                }}
+              >
+                Unlike
+              </Button>
             </Card.Body>
           </Card>
         );
@@ -79,7 +88,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user))
+    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user)),
+    addLikedSomoim: (somoim, user) =>
+      dispatch(userActions.addLikedSomoim(somoim, user))
   };
 };
 

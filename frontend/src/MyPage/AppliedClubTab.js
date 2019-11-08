@@ -41,7 +41,9 @@ class AppliedClubTab extends Component {
                 }
               }}
             >
-              {item.name}
+              <h1>{item.name}</h1>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {item.summary}
             </Card.Body>
           </Card>
         );
