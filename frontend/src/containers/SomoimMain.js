@@ -338,6 +338,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
+
     getCategoryList: () => dispatch(actionCreators.getCategoryList()),
     getTagList: () => dispatch(actionCreators.getTagList()),
     getDeptList: () => dispatch(actionCreators.getDeptList()),

@@ -9,12 +9,6 @@ import * as actionCreators from "../store/actions/index";
 class ManagingSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
 
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetManagingSomoims(this.props.loggedUser);
-    }
-  }
-
   render() {
     let list = null;
     if (this.props.managingSomoims) {
@@ -78,10 +72,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onGetManagingSomoims: user =>
-      dispatch(actionCreators.getManagingSomoims(user))
-  };
+  return {};
 };
 
 export default connect(

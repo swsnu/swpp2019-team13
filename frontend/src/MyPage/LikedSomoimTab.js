@@ -9,12 +9,6 @@ import * as actionCreators from "../store/actions/index";
 class LikedSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
 
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetLikedSomoims(this.props.loggedUser);
-    }
-  }
-
   render() {
     let list = null;
     if (this.props.likedSomoims) {
@@ -78,9 +72,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onGetLikedSomoims: user => dispatch(actionCreators.getLikedSomoims(user))
-  };
+  return {};
 };
 
 export default connect(

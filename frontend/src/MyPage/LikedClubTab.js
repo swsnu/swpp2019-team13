@@ -9,12 +9,6 @@ import * as actionCreators from "../store/actions/index";
 class LikedClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
 
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetLikedClubs(this.props.loggedUser);
-    }
-  }
-
   render() {
     let list = null;
     if (this.props.likedClubs) {
@@ -76,9 +70,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onGetLikedClubs: user => dispatch(actionCreators.getLikedClubs(user))
-  };
+  return {};
 };
 
 export default connect(
