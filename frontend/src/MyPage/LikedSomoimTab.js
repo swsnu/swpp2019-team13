@@ -75,6 +75,7 @@ class LikedSomoimTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     somoims: state.somoim.somoims,
     likedSomoims: state.user.likedSomoims
   };
@@ -83,7 +84,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     addLikedSomoim: (somoim, user) =>
-      dispatch(userActions.addLikedSomoim(somoim, user))
+      dispatch(actionCreators.addLikedSomoim(somoim, user))
   };
 };
 

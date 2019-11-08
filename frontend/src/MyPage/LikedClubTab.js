@@ -73,6 +73,7 @@ class LikedClubTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     clubs: state.club.clubs,
     likedClubs: state.user.likedClubs
   };
@@ -80,7 +81,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addLikedClub: (club, user) => dispatch(userActions.addLikedClub(club, user))
+    addLikedClub: (club, user) =>
+      dispatch(actionCreators.addLikedClub(club, user))
   };
 };
 
