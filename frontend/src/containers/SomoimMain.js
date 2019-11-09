@@ -2,14 +2,13 @@ import React from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
 import Header from "../components/Header";
 import SomoimCard from "../components/SomoimCard";
 import SomoimDetail from "../components/SomoimDetail";
 import SomoimCreate from "../components/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
-import * as userActions from "../store/actions/user";
 
 import "./SomoimMain.css";
 
@@ -21,19 +20,29 @@ class SomoimMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isRecommendedSomoimsLoaded: false
+    isUserInfoLoaded: false
   };
 
   componentDidMount() {
     this.props.getSomoimList();
+
     this.props.getCategoryList();
     this.props.getTagList();
+    this.props.getDeptList();
+    this.props.getMajorList();
   }
 
   componentDidUpdate = () => {
-    if (this.props.loggedUser && !this.state.isRecommendedSomoimsLoaded) {
-      this.setState({ ...this.state, isRecommendedSomoimsLoaded: true });
-      this.props.onGetRecommendedSomoims(this.props.loggedUser);
+    if (this.props.loggedUser) {
+      if (!this.state.isUserInfoLoaded) {
+        this.setState({ ...this.state, isUserInfoLoaded: true });
+        this.props.onGetRecommendedSomoims(this.props.loggedUser);
+      }
+    } else {
+      this.props.onGetRecommendedSomoims({ id: 0 });
+      if (this.state.isUserInfoLoaded) {
+        this.setState({ ...this.state, isUserInfoLoaded: false });
+      }
     }
   };
 
@@ -327,17 +336,23 @@ const mapStateToProps = state => {
     somoims: state.somoim.somoims,
     categories: state.category.categories,
     loggedUser: state.user.loggedUser,
-    recommendedSomoims: state.user.recommendedSomoims
+    recommendedSomoims: state.user.recommendedSomoims,
+    likedSomoims: state.user.likedSomoims,
+    joinedSomoims: state.user.joinedSomoims
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTagList: () => dispatch(actionCreators.getTagList()),
     getSomoimList: () => dispatch(actionCreators.getSomoimList()),
+
     getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    getTagList: () => dispatch(actionCreators.getTagList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+
     onGetRecommendedSomoims: user =>
-      dispatch(userActions.getRecommendedSomoims(user))
+      dispatch(actionCreators.getRecommendedSomoims(user))
   };
 };
 export default connect(

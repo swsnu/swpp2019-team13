@@ -4,16 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button, Card } from "react-bootstrap";
 import SomoimDetail from "../components/SomoimDetail";
-import * as userActions from "../store/actions/user";
+import * as actionCreators from "../store/actions/index";
 
 class LikedSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
-
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetLikedSomoims(this.props.loggedUser);
-    }
-  }
 
   render() {
     let list = null;
@@ -81,6 +75,7 @@ class LikedSomoimTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     somoims: state.somoim.somoims,
     likedSomoims: state.user.likedSomoims
   };
@@ -88,9 +83,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetLikedSomoims: user => dispatch(userActions.getLikedSomoims(user)),
     addLikedSomoim: (somoim, user) =>
-      dispatch(userActions.addLikedSomoim(somoim, user))
+      dispatch(actionCreators.addLikedSomoim(somoim, user))
   };
 };
 

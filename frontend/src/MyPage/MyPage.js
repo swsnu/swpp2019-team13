@@ -6,49 +6,67 @@ import { Container, Row, Col, Button, Card, Accordion } from "react-bootstrap";
 
 import Header from "../components/Header";
 import SelfInfoTab from "./SelfInfoTab";
-
 import ManagingClubTab from "./ManagingClubTab";
 import LikedClubTab from "./LikedClubTab";
 import AppliedClubTab from "./AppliedClubTab";
-
 import ManagingSomoimTab from "./ManagingSomoimTab";
 import LikedSomoimTab from "./LikedSomoimTab";
 import JoinedSomoimTab from "./JoinedSomoimTab";
+
 import * as actionCreators from "../store/actions/index";
 
 class MyPage extends Component {
   state = {
-    tab: 0
+    tab: 0,
+    isUserInfoLoaded: false
   };
 
   componentDidMount() {
     this.props.getClubList();
     this.props.getSomoimList();
+
+    this.props.getCategoryList();
+    this.props.getTagList();
+    this.props.getDeptList();
+    this.props.getMajorList();
   }
+
+  componentDidUpdate = () => {
+    if (this.props.loggedUser && !this.state.isUserInfoLoaded) {
+      this.setState({ ...this.state, isUserInfoLoaded: true });
+
+      this.props.onGetManagingClubs(this.props.loggedUser);
+      this.props.onGetLikedClubs(this.props.loggedUser);
+      this.props.onGetAppliedClubs(this.props.loggedUser);
+      this.props.onGetManagingSomoims(this.props.loggedUser);
+      this.props.onGetLikedSomoims(this.props.loggedUser);
+      this.props.onGetJoinedSomoims(this.props.loggedUser);
+    }
+  };
 
   render() {
     let tab = null;
     switch (this.state.tab) {
       case 0:
-        tab = <SelfInfoTab loggedUser={this.props.loggedUser} />;
+        tab = <SelfInfoTab />;
         break;
       case 1:
-        tab = <ManagingClubTab loggedUser={this.props.loggedUser} />;
+        tab = <ManagingClubTab />;
         break;
       case 2:
-        tab = <LikedClubTab loggedUser={this.props.loggedUser} />;
+        tab = <LikedClubTab />;
         break;
       case 3:
-        tab = <AppliedClubTab loggedUser={this.props.loggedUser} />;
+        tab = <AppliedClubTab />;
         break;
       case 4:
-        tab = <ManagingSomoimTab loggedUser={this.props.loggedUser} />;
+        tab = <ManagingSomoimTab />;
         break;
       case 5:
-        tab = <LikedSomoimTab loggedUser={this.props.loggedUser} />;
+        tab = <LikedSomoimTab />;
         break;
       case 6:
-        tab = <JoinedSomoimTab loggedUser={this.props.loggedUser} />;
+        tab = <JoinedSomoimTab />;
         break;
       default:
         tab = null;
@@ -208,15 +226,26 @@ class MyPage extends Component {
 }
 
 const mapStateToProps = state => {
-  return {
-    loggedUser: state.user.loggedUser
-  };
+  return { loggedUser: state.user.loggedUser };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getClubList: () => dispatch(actionCreators.getClubList()),
-    getSomoimList: () => dispatch(actionCreators.getSomoimList())
+    getSomoimList: () => dispatch(actionCreators.getSomoimList()),
+
+    getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    getTagList: () => dispatch(actionCreators.getTagList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+
+    onGetManagingClubs: user => dispatch(actionCreators.getManagingClubs(user)),
+    onGetLikedClubs: user => dispatch(actionCreators.getLikedClubs(user)),
+    onGetAppliedClubs: user => dispatch(actionCreators.getAppliedClubs(user)),
+    onGetManagingSomoims: user =>
+      dispatch(actionCreators.getManagingSomoims(user)),
+    onGetLikedSomoims: user => dispatch(actionCreators.getLikedSomoims(user)),
+    onGetJoinedSomoims: user => dispatch(actionCreators.getJoinedSomoims(user))
   };
 };
 

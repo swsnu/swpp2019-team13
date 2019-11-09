@@ -19,11 +19,6 @@ class SelfInfoTab extends Component {
     available_session_day: 0
   };
 
-  componentDidMount = () => {
-    this.props.onGetMajorList();
-    this.props.onGetDeptList();
-  };
-
   componentDidUpdate = () => {
     if (this.props.loggedUser) {
       if (!this.state.firstLoaded) {
@@ -221,7 +216,6 @@ class SelfInfoTab extends Component {
         </Form>
 
         <Button
-          // not implemeted yet
           style={{ marginTop: "10px" }}
           variant="dark"
           size="lg"
@@ -258,8 +252,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetMajorList: () => dispatch(actionCreators.getMajorList()),
-    onGetDeptList: () => dispatch(actionCreators.getDeptList()),
     onPutUserInformation: userInfo =>
       dispatch(actionCreators.putUserInformation(userInfo))
   };

@@ -2,18 +2,11 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import ClubDetail from "../components/ClubDetail";
-import * as userActions from "../store/actions/user";
 
 class AppliedClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
-
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetAppliedClubs(this.props.loggedUser);
-    }
-  }
 
   render() {
     let list = null;
@@ -78,9 +71,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onGetAppliedClubs: user => dispatch(userActions.getAppliedClubs(user))
-  };
+  return {};
 };
 
 export default connect(

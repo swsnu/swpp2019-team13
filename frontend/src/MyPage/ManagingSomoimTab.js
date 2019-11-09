@@ -2,18 +2,11 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Button, Card } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import SomoimDetail from "../components/SomoimDetail";
-import * as userActions from "../store/actions/user";
 
 class ManagingSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
-
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetManagingSomoims(this.props.loggedUser);
-    }
-  }
 
   render() {
     let list = null;
@@ -80,9 +73,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onGetManagingSomoims: user => dispatch(userActions.getManagingSomoims(user))
-  };
+  return {};
 };
 
 export default connect(
