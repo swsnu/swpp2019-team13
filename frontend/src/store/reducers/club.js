@@ -25,20 +25,6 @@ const reducer = (state = initialState, action) => {
         tags: []
       };
       return { ...state, clubs: state.clubs.concat(newClub) };
-
-    case actionTypes.INCREASE_LIKES_OF_CLUB:
-      const clubsModifiedByClickingLike = state.clubs.map(club => {
-        if (club.id === action.newLikedClub.id) {
-          return action.newLikedClub;
-        } else {
-          return club;
-        }
-      });
-
-      return {
-        ...state,
-        clubs: clubsModifiedByClickingLike
-      };
     default:
       break;
   }

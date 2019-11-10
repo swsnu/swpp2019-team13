@@ -3,10 +3,8 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Card, Button, Container, Row, Col } from "react-bootstrap";
 
-import * as actionCreators from "../store/actions/index";
-
-import like_before_img from "../images/like_before.png";
-import like_after_img from "../images/like_after.png";
+// import like_before_img from "../images/like_before.png";
+// import like_after_img from "../images/like_after.png";
 
 class ClubCard extends React.Component {
   render() {
@@ -36,7 +34,7 @@ class ClubCard extends React.Component {
     let image = <img src={club.poster_img} width="120" height="120" alt="" />;
 
     let tagList;
-    if (this.props.tags.length != 0) {
+    if (this.props.tags.length !== 0) {
       tagList = club.tags.map(item => (
         <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
           {"#" + this.props.tags[item - 1].name}
@@ -81,7 +79,9 @@ class ClubCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    tags: state.tag.tags
+    clubs: state.club.somoims,
+    tags: state.tag.tags,
+    loggedUser: state.user.loggedUser
   };
 };
 const mapDispatchToProps = dispatch => {

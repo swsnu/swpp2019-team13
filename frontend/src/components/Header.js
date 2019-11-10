@@ -26,7 +26,6 @@ class Header extends Component {
   /* Do when click Logout Button */
   logoutButtonHandler = () => {
     this.props.signOut();
-    this.props.history.push("/club");
   };
 
   componentDidMount() {

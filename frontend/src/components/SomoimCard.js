@@ -38,7 +38,7 @@ class SomoimCard extends React.Component {
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
 
       let tagList;
-      if (this.props.tags.length != 0) {
+      if (this.props.tags.length !== 0) {
         tagList = somoim.tags.map(item => (
           <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
             {"#" + this.props.tags[item - 1].name}
@@ -94,9 +94,9 @@ class SomoimCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loggedUser: state.user.loggedUser,
+    somoims: state.somoim.somoims,
     tags: state.tag.tags,
-    somoims: state.somoim.somoims
+    loggedUser: state.user.loggedUser
   };
 };
 

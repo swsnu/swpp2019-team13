@@ -29,32 +29,6 @@ const reducer = (state = initialState, action) => {
       };
       return { ...state, somoims: state.somoims.concat(newSomoim) };
 
-    case actionTypes.INCREASE_LIKES_OF_SOMOIM:
-      const somoimsModifiedByClickingLike = state.somoims.map(somoim => {
-        if (somoim.id === action.newLikedSomoim.id) {
-          return action.newLikedSomoim;
-        } else {
-          return somoim;
-        }
-      });
-      return {
-        ...state,
-        somoims: somoimsModifiedByClickingLike
-      };
-
-    case actionTypes.INCREASE_NUM_OF_CURRENT_JOINER:
-      const somoimsModifiedByClickingJoin = state.somoims.map(somoim => {
-        if (somoim.id === action.newJoinedSomoim.id) {
-          return action.newJoinedSomoim;
-        } else {
-          return somoim;
-        }
-      });
-      return {
-        ...state,
-        somoims: somoimsModifiedByClickingJoin
-      };
-
     default:
       break;
   }

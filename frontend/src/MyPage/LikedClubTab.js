@@ -4,16 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button, Card } from "react-bootstrap";
 import ClubDetail from "../components/ClubDetail";
-import * as userActions from "../store/actions/user";
+import * as actionCreators from "../store/actions/index";
 
 class LikedClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
-
-  componentDidMount() {
-    if (this.props.loggedUser) {
-      this.props.onGetLikedClubs(this.props.loggedUser);
-    }
-  }
 
   render() {
     let list = null;
@@ -41,7 +35,16 @@ class LikedClubTab extends Component {
                 }
               }}
             >
-              {item.name} <Button onClick={() => {}}>Unlike</Button>
+              <h1>{item.name}</h1>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              {item.summary}
+              <Button
+                onClick={() => {
+                  this.props.addLikedClub(item, this.props.loggedUser);
+                }}
+              >
+                Unlike
+              </Button>
             </Card.Body>
           </Card>
         );
@@ -70,6 +73,7 @@ class LikedClubTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    loggedUser: state.user.loggedUser,
     clubs: state.club.clubs,
     likedClubs: state.user.likedClubs
   };
@@ -77,7 +81,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onGetLikedClubs: user => dispatch(userActions.getLikedClubs(user))
+    addLikedClub: (club, user) =>
+      dispatch(actionCreators.addLikedClub(club, user))
   };
 };
 
