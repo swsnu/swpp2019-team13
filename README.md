@@ -38,6 +38,7 @@ Since we use mysql, you should install belows by apt-get
 ```
 sudo apt-get install mysql-server mysql-client
 sudo apt-get install libmysqlclient-dev
+sudo apt-get install pylint
 ```
 
 should setting mysql with this [link](https://bscnote.tistory.com/77) at first
@@ -52,9 +53,9 @@ mysql -u root club4u < [FILE NAME]
 
 <u>**Window**</u>
 
-1. install mysql server manually in  https://dev.mysql.com/downloads/installer/ 
+1. install mysql server manually in https://dev.mysql.com/downloads/installer/
 2. install l mysql client using whl (ref : https://hyunyikim.tistory.com/9 )
-3. install mysql workbench in  https://dev.mysql.com/downloads/workbench/ 
+3. install mysql workbench in https://dev.mysql.com/downloads/workbench/
 4. create new schema "club4u"
 5. open sql file, and double click club4u schema, then execute sql
 6. `python manage.py makemigrations`

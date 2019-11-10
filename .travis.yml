@@ -46,7 +46,7 @@ matrix:
         - cd backend
         - python3 manage.py migrate
       script:
-        - pylint --rcfile=./.pylintrc backend --disable='fixme, duplicate-code'
+        - pylint --rcfile=.pylintrc backend/club4u --disable='fixme, duplicate-code'
         - coverage run --source='.' ./manage.py test
         - coverage report --fail-under=90
         - coverage xml
