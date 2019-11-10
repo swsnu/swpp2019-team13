@@ -135,7 +135,6 @@ def userinfo(request, id=0):
     if request.method == 'PUT':
         body = request.body.decode()
         name = json.loads(body)['name']
-        email = json.loads(body)['email']
         dept = json.loads(body)['dept']
         major = json.loads(body)['major']
         grade = json.loads(body)['grade']
@@ -152,15 +151,16 @@ def userinfo(request, id=0):
         user_profile.available_session_day = available_session_day
         user_profile.save()
 
-        response_dict = {'id': request.user.id, 'name': name, 'email': email,
+        response_dict = {'id': request.user.id, 'name': name, 'email': request.user.username,
                          'dept': dept, 'major': major, 'grade': grade,
-                         'available_semester': available_semester}
+                         'available_semester': available_semester,
+                         'available_session_day': available_session_day}
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
 
 
-def preclub(request):
+def preclub_list(request):
     if request.method == 'POST':
         req_data = json.loads(request.body.decode())
         name = req_data['name']
@@ -257,12 +257,12 @@ def like_club(request, id=0):
 
     elif request.method == 'PUT':
         body = request.body.decode()
-        somoim_id = json.loads(body)['id']
+        club_id = json.loads(body)['id']
         try:
-            user.like_clubs.get(id=somoim_id)
-            user.like_clubs.remove(user.like_clubs.get(id=somoim_id))
+            user.like_clubs.get(id=club_id)
+            user.like_clubs.remove(user.like_clubs.get(id=club_id))
         except (ObjectDoesNotExist):
-            user.like_clubs.add(Club.objects.get(id=somoim_id))
+            user.like_clubs.add(Club.objects.get(id=club_id))
         return HttpResponse({"likes": user.like_clubs.count()})
 
     else:
@@ -282,12 +282,12 @@ def apply_club(request, id=0):
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         body = request.body.decode()
-        somoim_id = json.loads(body)['id']
+        club_id = json.loads(body)['id']
         try:
-            user.apply_clubs.get(id=somoim_id)
-            user.apply_clubs.remove(user.apply_clubs.get(id=somoim_id))
+            user.apply_clubs.get(id=club_id)
+            user.apply_clubs.remove(user.apply_clubs.get(id=club_id))
         except (ObjectDoesNotExist):
-            user.apply_clubs.add(Club.objects.get(id=somoim_id))
+            user.apply_clubs.add(Club.objects.get(id=club_id))
 
         return HttpResponse(status=204)
     else:

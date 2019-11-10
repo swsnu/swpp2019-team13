@@ -12,6 +12,8 @@ export const postPreClub_ = at => {
 };
 export const postPreClub = at => {
   return dispatch => {
-    return axios.post("api/preclub/").then(res => dispatch(postPreClub_(at)));
+    return axios
+      .post("api/preclub/list/")
+      .then(res => dispatch(postPreClub_(at)));
   };
 };

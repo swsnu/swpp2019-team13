@@ -17,7 +17,7 @@ urlpatterns = [
     path('user/logininfo/', views.logininfo, name='logininfo'),
     path('user/info/', views.userinfo, name='userinfo'),
 
-    path('preclub/', views.preclub, name='preclub'),
+    path('preclub/list/', views.preclub_list, name='preclub'),
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
 
