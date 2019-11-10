@@ -4,3 +4,5 @@ mysqlclient
 pillow
 coverage
 coveralls
+pylint
+pylint-django
