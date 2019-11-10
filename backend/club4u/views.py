@@ -12,21 +12,6 @@ from rest_framework.renderers import JSONRenderer
 from .serializers import ClubSerializer, SomoimSerializer
 
 
-def pre_club(request):
-    if request.method == 'POST':
-        req_data = json.loads(request.body.decode())
-        name = req_data['name']
-        manager = req_data['manager']
-        category = Category.objects.get(id=req_data['category'])
-        auth_img = req_data['auth_img'].FILES['image']
-        preclub = PreClub(
-            name=name, manager=manager, category=category, auth_img=auth_img)
-        preclub.save()
-        return HttpResponse(status=201)
-    else:
-        return HttpResponse(status=405)
-
-
 def category_list(request):
     if request.method == 'GET':
         response_dict = [
@@ -124,6 +109,8 @@ def signout(request):
             return HttpResponse(status=204)
         else:
             return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=405)
 
 
 def logininfo(request):
@@ -141,7 +128,7 @@ def logininfo(request):
         return HttpResponse(status=405)
 
 
-def information(request, id=0):
+def userinfo(request, id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
@@ -169,6 +156,21 @@ def information(request, id=0):
                          'dept': dept, 'major': major, 'grade': grade,
                          'available_semester': available_semester}
         return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
+
+
+def preclub(request):
+    if request.method == 'POST':
+        req_data = json.loads(request.body.decode())
+        name = req_data['name']
+        manager = req_data['manager']
+        category = Category.objects.get(id=req_data['category'])
+        auth_img = req_data['auth_img'].FILES['image']
+        preclub = PreClub(
+            name=name, manager=manager, category=category, auth_img=auth_img)
+        preclub.save()
+        return HttpResponse(status=201)
     else:
         return HttpResponse(status=405)
 
