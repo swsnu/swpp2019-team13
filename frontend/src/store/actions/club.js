@@ -32,15 +32,17 @@ export const getClubList = () => {
   };
 };
 
-export const getClubByID_ = id => {
+export const getClubByID_ = club => {
   return {
     type: actionTypes.GET_CLUB_BY_ID,
-    id: id
+    selectedClub: club
   };
 };
 
 export const getClubByID = id => {
   return dispatch => {
-    return new Promise(() => dispatch(getClubByID_(id)));
+    return axios
+      .get("api/club/" + id + "/")
+      .then(res => dispatch(getClubByID_(res.data)));
   };
 };

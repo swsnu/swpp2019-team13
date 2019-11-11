@@ -18,6 +18,7 @@ urlpatterns = [
     path('user/info/', views.userinfo, name='userinfo'),
 
     path('preclub/list/', views.preclub_list, name='preclub'),
+    path('club/<int:club_id>/', views.club, name='club'),
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
 

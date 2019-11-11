@@ -10,10 +10,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_CLUB_LIST:
       return { ...state, clubs: action.clubs };
     case actionTypes.GET_CLUB_BY_ID:
-      let clubTargettedByID = state.clubs.filter(club => {
-        return club.id === action.id;
-      });
-      return { ...state, selectedClub: clubTargettedByID[0] };
+      return { ...state, selectedClub: action.selectedClub };
     case actionTypes.POST_CLUB:
       const newClub = {
         id: action.id,

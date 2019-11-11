@@ -174,6 +174,17 @@ def preclub_list(request):
         return HttpResponse(status=405)
 
 
+def club(request, club_id=None):
+    if request.method == 'GET':
+        try:
+            serializer = ClubSerializer(Club.objects.get(id=club_id))
+            return HttpResponse(JSONRenderer().render(serializer.data))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+
 def club_list(request):
     if request.method == 'GET':
         serializer = ClubSerializer(Club.objects.all(), many=True)
