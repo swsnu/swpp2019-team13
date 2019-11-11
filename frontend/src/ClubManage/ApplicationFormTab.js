@@ -9,6 +9,63 @@ import imagePNG from "./image.png";
 // import * as actionCreators from "../store/actions/index";
 
 class ApplicationFormTab extends Component {
+  state = {
+    formList: []
+  };
+
+  addNewForm = type => {
+    switch (type) {
+      case "shortText":
+        this.setState({
+          ...this.state,
+          formList: this.state.formList.concat({
+            type: type,
+            title: "short text"
+          })
+        });
+        break;
+      case "longText":
+        this.setState({
+          ...this.state,
+          formList: this.state.formList.concat({
+            type: type,
+            title: "long text"
+          })
+        });
+        break;
+      case "multiChoice":
+        this.setState({
+          ...this.state,
+          formList: this.state.formList.concat({
+            type: type,
+            title: "multi choice",
+            choices: ["choice1", "choice2", "choice3", "choice4", "choice5"]
+          })
+        });
+        break;
+      case "selectImage":
+        this.setState({
+          ...this.state,
+          formList: this.state.formList.concat({
+            type: type,
+            title: "select image"
+          })
+        });
+        break;
+      case "selectFile":
+        this.setState({
+          ...this.state,
+          formList: this.state.formList.concat({
+            type: type,
+            title: "select file"
+          })
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   shortText = props => {
     return (
       <Card style={{ margin: "10px" }}>
@@ -76,19 +133,49 @@ class ApplicationFormTab extends Component {
       <div>
         <div>새 항목 추가</div>
         <div style={{ marginTop: "10px" }}>
-          <Button size="lg" variant="outline-secondary">
+          <Button
+            size="lg"
+            variant="outline-secondary"
+            onClick={() => {
+              this.addNewForm("shortText");
+            }}
+          >
             짧은 글
           </Button>
-          <Button size="lg" variant="outline-secondary">
+          <Button
+            size="lg"
+            variant="outline-secondary"
+            onClick={() => {
+              this.addNewForm("longText");
+            }}
+          >
             긴 글
           </Button>
-          <Button size="lg" variant="outline-secondary">
+          <Button
+            size="lg"
+            variant="outline-secondary"
+            onClick={() => {
+              this.addNewForm("multiChoice");
+            }}
+          >
             객관식 문항
           </Button>
-          <Button size="lg" variant="outline-secondary">
+          <Button
+            size="lg"
+            variant="outline-secondary"
+            onClick={() => {
+              this.addNewForm("selectImage");
+            }}
+          >
             사진
           </Button>
-          <Button size="lg" variant="outline-secondary">
+          <Button
+            size="lg"
+            variant="outline-secondary"
+            onClick={() => {
+              this.addNewForm("selectFile");
+            }}
+          >
             파일
           </Button>
         </div>
@@ -98,21 +185,7 @@ class ApplicationFormTab extends Component {
         >
           <ReactDragList
             handles={false}
-            dataSource={[
-              { type: "shortText", title: "short text" },
-              { type: "longText", title: "long text" },
-              {
-                type: "multiChoice",
-                title: "multi choice",
-                choices: ["choice1", "choice2", "choice3", "choice4", "choice5"]
-              },
-              { type: "selectImage", title: "select image" },
-              { type: "selectFile", title: "select file" },
-              { type: "selectFile", title: "select file" },
-              { type: "selectFile", title: "select file" },
-              { type: "selectFile", title: "select file" },
-              { type: "selectFile", title: "select file" }
-            ]}
+            dataSource={this.state.formList}
             onUpdate={e => {
               console.log(e);
             }}
