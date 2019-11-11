@@ -42,7 +42,6 @@ class SelfInfoTab extends Component {
   modifyInfoButtonHandler = () => {
     this.props.onPutUserInformation({
       name: this.state.name,
-      email: this.state.email,
       dept: this.state.dept,
       major: this.state.major,
       grade: this.state.grade,
@@ -98,9 +97,7 @@ class SelfInfoTab extends Component {
             <Form.Label>이메일</Form.Label>
             <Form.Control
               size="lg"
-              onChange={event => {
-                this.setState({ email: event.target.value });
-              }}
+              readOnly
               defaultValue={loggedUserEmail}
               disabled={true}
             />
@@ -225,7 +222,6 @@ class SelfInfoTab extends Component {
             this.state.name === "" ||
             this.state.email === "" ||
             (String(this.state.name) === String(loggedUserName) &&
-              String(this.state.email) === String(loggedUserEmail) &&
               String(this.state.dept) === String(loggedUserDept) &&
               String(this.state.major) === String(loggedUserMajor) &&
               String(this.state.grade) === String(loggedUserGrade) &&
