@@ -88,7 +88,7 @@ export const putUserInformation_ = user => {
 export const putUserInformation = userInfo => {
   return dispatch => {
     return axios
-      .put("/api/user/information/", userInfo)
+      .put("/api/user/info/", userInfo)
       .then(res => dispatch(putUserInformation_(res.data)));
   };
 };
