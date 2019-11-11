@@ -11,7 +11,7 @@ class ClubInfoTab extends Component {
     name: "",
     summary: "",
     description: "",
-    cateogry: 0,
+    category: 0,
     poster_img: [],
     available_semester: 0,
     available_major: [],
@@ -59,26 +59,31 @@ class ClubInfoTab extends Component {
   };
 
   render() {
-    let loggedUserName = null;
-    let loggedUserEmail = null;
-    let loggedUserDept = null;
-    let loggedUserMajor = null;
-    let loggedUserGrade = null;
-    let loggedUserAvailableSemester = null;
-    let loggedUserAvailableSessionDay = null;
+    let selectedClubName = null;
+    let selectedClubSummary = null;
+    let selectedClubDescription = null;
+    let selectedClubAvailableSemester = null;
+    let selectedClubSessionDay = null;
 
+    let categoryOptionList = null;
     let deptOptionList = null;
     let majorOptionList = null;
 
-    if (this.props.loggedUser) {
-      loggedUserName = this.props.loggedUser.name;
-      loggedUserEmail = this.props.loggedUser.email;
-      loggedUserDept = this.props.loggedUser.dept;
-      loggedUserMajor = this.props.loggedUser.major;
-      loggedUserGrade = this.props.loggedUser.grade;
-      loggedUserAvailableSemester = this.props.loggedUser.available_semester;
-      loggedUserAvailableSessionDay = this.props.loggedUser
-        .available_session_day;
+    if (this.props.selectedClub) {
+      selectedClubName = this.props.selectedClub.name;
+      selectedClubSummary = this.props.selectedClub.summary;
+      selectedClubDescription = this.props.selectedClub.description;
+      selectedClubAvailableSemester = this.props.selectedClub
+        .available_semester;
+      selectedClubSessionDay = this.props.selectedClub.session_day;
+
+      if (this.props.categories) {
+        categoryOptionList = this.props.categories.map(category => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ));
+      }
 
       if (this.props.depts) {
         deptOptionList = this.props.depts.map(dept => (
@@ -101,28 +106,53 @@ class ClubInfoTab extends Component {
     return (
       <div>
         <Form>
-          <Form.Group controlId="formBasicEmail">
-            <Form.Label>이메일</Form.Label>
+          <Form.Group controlId="formBasicClubname">
+            <Form.Label>동아리 이름</Form.Label>
             <Form.Control
               size="lg"
-              readOnly
-              defaultValue={loggedUserEmail}
-              disabled={true}
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formBasicUsername">
-            <Form.Label>유저 이름</Form.Label>
-            <Form.Control
-              size="lg"
-              type="email"
               onChange={event => {
                 this.setState({ name: event.target.value });
               }}
-              defaultValue={loggedUserName}
+              defaultValue={selectedClubName}
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicClubsummary">
+            <Form.Label>요약</Form.Label>
+            <Form.Control
+              as="textarea"
+              size="lg"
+              onChange={event => {
+                this.setState({ summary: event.target.value });
+              }}
+              defaultValue={selectedClubSummary}
+            />
+          </Form.Group>
+          <Form.Group controlId="formBasicClubdesciption">
+            <Form.Label>구체적인 동아리 설명</Form.Label>
+            <Form.Control
+              as="textarea"
+              size="lg"
+              onChange={event => {
+                this.setState({ description: event.target.value });
+              }}
+              defaultValue={selectedClubDescription}
             />
           </Form.Group>
 
+          <Form.Label>동아리 분류</Form.Label>
+          <Form.Control
+            as="select"
+            size="lg"
+            onChange={event => {
+              this.setState({ category: event.target.value });
+            }}
+            value={this.state.category}
+          >
+            {categoryOptionList}
+          </Form.Control>
+
+          <br />
+          <h1 align="center">가입 조건</h1>
           <Form.Row>
             <Form.Group as={Col} controlId="formDept">
               <Form.Label>단과 대학</Form.Label>
@@ -154,25 +184,6 @@ class ClubInfoTab extends Component {
           </Form.Row>
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formGrade">
-              <Form.Label>학년</Form.Label>
-              <Form.Control
-                as="select"
-                size="lg"
-                onChange={event => {
-                  this.setState({ grade: event.target.value });
-                }}
-                value={this.state.grade}
-              >
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-                <option value={5}>5</option>
-                <option value={6}>6</option>
-              </Form.Control>
-            </Form.Group>
-
             <Form.Group as={Col} controlId="formavailable_semester">
               <Form.Label>활동 가능 학기 수</Form.Label>
               <Form.Control
@@ -195,49 +206,41 @@ class ClubInfoTab extends Component {
                 <option value={10}>10</option>
               </Form.Control>
             </Form.Group>
+            <Form.Group as={Col} controlId="formavailable_semester">
+              <Form.Label>활동 가능 요일</Form.Label>
+              <Form.Row>
+                {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
+                  return (
+                    <Form.Check
+                      key={i}
+                      id="signup-sessionday-checkbox"
+                      inline
+                      type={"checkbox"}
+                      label={a}
+                      checked={
+                        (this.state.available_session_day & (1 << i)) !== 0
+                      }
+                      value={i}
+                      onChange={event => {
+                        this.setState({
+                          available_session_day:
+                            this.state.available_session_day ^ (1 << i)
+                        });
+                      }}
+                    />
+                  );
+                })}
+              </Form.Row>
+            </Form.Group>
           </Form.Row>
-          <Form.Row>
-            <Form.Label>활동 가능 요일</Form.Label>
-          </Form.Row>
-          {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
-            return (
-              <Form.Check
-                key={i}
-                id="signup-sessionday-checkbox"
-                inline
-                type={"checkbox"}
-                label={a}
-                checked={(this.state.available_session_day & (1 << i)) !== 0}
-                value={i}
-                onChange={event => {
-                  this.setState({
-                    available_session_day:
-                      this.state.available_session_day ^ (1 << i)
-                  });
-                }}
-              />
-            );
-          })}
         </Form>
-
         <Button
           style={{ marginTop: "10px" }}
           variant="dark"
           size="lg"
           block
           onClick={this.modifyInfoButtonHandler}
-          disabled={
-            this.state.name === "" ||
-            this.state.email === "" ||
-            (String(this.state.name) === String(loggedUserName) &&
-              String(this.state.dept) === String(loggedUserDept) &&
-              String(this.state.major) === String(loggedUserMajor) &&
-              String(this.state.grade) === String(loggedUserGrade) &&
-              String(this.state.available_semester) ===
-                String(loggedUserAvailableSemester) &&
-              String(this.state.available_session_day) ===
-                String(loggedUserAvailableSessionDay))
-          }
+          disabled={this.state.name === ""}
         >
           정보 수정
         </Button>
@@ -250,6 +253,7 @@ const mapStateToProps = state => {
   return {
     loggedUser: state.user.loggedUser,
     selectedClub: state.user.selectedClub,
+    categories: state.category.categories,
     depts: state.dept.depts,
     majors: state.major.majors
   };

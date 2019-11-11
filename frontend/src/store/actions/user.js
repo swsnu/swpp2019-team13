@@ -12,7 +12,7 @@ export const getUserList_ = users => {
 export const getUserList = () => {
   return dispatch => {
     return axios
-      .get("api/user/list/")
+      .get("/api/user/list/")
       .then(res => dispatch(getUserList_(res.data)));
   };
 };
@@ -41,7 +41,7 @@ export const signOut_ = () => {
 export const signOut = () => {
   return dispatch => {
     return axios
-      .get("api/user/signout/")
+      .get("/api/user/signout/")
       .then(res => dispatch(signOut_()))
       .then(() => dispatch(push("/club")));
   };

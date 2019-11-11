@@ -27,7 +27,7 @@ export const getClubList_ = clubs => {
 export const getClubList = () => {
   return dispatch => {
     return axios
-      .get("api/club/list/")
+      .get("/api/club/list/")
       .then(res => dispatch(getClubList_(res.data)));
   };
 };
@@ -42,7 +42,7 @@ export const getClubByID_ = club => {
 export const getClubByID = id => {
   return dispatch => {
     return axios
-      .get("api/club/" + id + "/")
+      .get("/api/club/" + id + "/")
       .then(res => dispatch(getClubByID_(res.data)));
   };
 };
