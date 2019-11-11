@@ -1,7 +1,6 @@
-from django.test import TestCase, Client
 import json
-from ..models import User, UserProfile, Tag, Department, Category, Major
-from django.forms.models import model_to_dict
+from django.test import TestCase, Client
+from ..models import Tag, Department, Category, Major
 
 
 class GeneralTestCase(TestCase):

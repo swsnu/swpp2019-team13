@@ -1,7 +1,6 @@
-from django.test import TestCase, Client
 import json
-from ..models import User, UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
-from django.forms.models import model_to_dict
+from django.test import TestCase, Client
+from ..models import User, UserProfile, Somoim, Department, Category, Major
 
 
 class SomoimTestCase(TestCase):
@@ -46,6 +45,13 @@ class SomoimTestCase(TestCase):
                                test_json, content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Somoim.objects.all()), 2)
+
+    def test_put_somomim_list_success(self):
+        client = Client(enforce_csrf_checks=False)
+        test_json = json.dumps({'id': 1})
+        response = client.put('/api/somoim/list/',
+                              test_json, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
     def test_put_somomim_list_fail(self):
         client = Client(enforce_csrf_checks=False)

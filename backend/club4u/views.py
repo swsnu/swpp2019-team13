@@ -1,14 +1,13 @@
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseNotFound, HttpResponseBadRequest, JsonResponse
-from django.contrib.auth.models import User
-from django.views.decorators.csrf import ensure_csrf_cookie
 import json
 from json import JSONDecodeError
-from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
-from django.contrib.auth import login, authenticate, logout
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models.query import EmptyQuerySet
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from rest_framework.renderers import JSONRenderer
+from django.contrib.auth import login, authenticate, logout
+from django.core.exceptions import ObjectDoesNotExist
+from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
 from .serializers import ClubSerializer, SomoimSerializer
 
 
@@ -128,7 +127,7 @@ def logininfo(request):
         return HttpResponse(status=405)
 
 
-def userinfo(request, id=0):
+def userinfo(request):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
 
@@ -221,19 +220,20 @@ def somoim_list(request):
     elif request.method == 'PUT':
         req_data = json.loads(request.body.decode())
         try:
-            selected_somoim = Somoim.objects.get(id=req_data['id'])
+            Somoim.objects.get(id=req_data['id'])
+            return HttpResponse(status=200)
         except Somoim.DoesNotExist:
             return HttpResponseNotFound()
     else:
         return HttpResponse(status=405)
 
 
-def manage_club(request, id=0):
+def manage_club(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
@@ -243,12 +243,12 @@ def manage_club(request, id=0):
         return HttpResponse(status=405)
 
 
-def like_club(request, id=0):
+def like_club(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
@@ -261,7 +261,7 @@ def like_club(request, id=0):
         try:
             user.like_clubs.get(id=club_id)
             user.like_clubs.remove(user.like_clubs.get(id=club_id))
-        except (ObjectDoesNotExist):
+        except ObjectDoesNotExist:
             user.like_clubs.add(Club.objects.get(id=club_id))
         return HttpResponse({"likes": user.like_clubs.count()})
 
@@ -269,12 +269,12 @@ def like_club(request, id=0):
         return HttpResponse(status=405)
 
 
-def apply_club(request, id=0):
+def apply_club(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
@@ -286,7 +286,7 @@ def apply_club(request, id=0):
         try:
             user.apply_clubs.get(id=club_id)
             user.apply_clubs.remove(user.apply_clubs.get(id=club_id))
-        except (ObjectDoesNotExist):
+        except ObjectDoesNotExist:
             user.apply_clubs.add(Club.objects.get(id=club_id))
 
         return HttpResponse(status=204)
@@ -294,18 +294,18 @@ def apply_club(request, id=0):
         return HttpResponse(status=405)
 
 
-def recommend_club(request, id=0):
+def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse([])
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
         recommended_clubs = Club.objects.none()
-        for like_club in user.like_clubs.all():
-            for liker in like_club.likers.all():
+        for user_like_club in user.like_clubs.all():
+            for liker in user_like_club.likers.all():
                 for club in liker.like_clubs.all():
                     if recommended_clubs.filter(id=club.id).count() == 0:
                         recommended_clubs |= Club.objects.filter(id=club.id)
@@ -315,12 +315,12 @@ def recommend_club(request, id=0):
         return HttpResponse(status=405)
 
 
-def manage_somoim(request, id=0):
+def manage_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
@@ -333,19 +333,19 @@ def manage_somoim(request, id=0):
         try:
             user.manage_somoims.get(id=somoim_id)
             user.manage_somoims.remove(user.manage_somoims.get(id=somoim_id))
-        except (ObjectDoesNotExist):
+        except ObjectDoesNotExist:
             user.manage_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
 
-def like_somoim(request, id=0):
+def like_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
@@ -358,7 +358,7 @@ def like_somoim(request, id=0):
         try:
             user.like_somoims.get(id=somoim_id)
             user.like_somoims.remove(user.like_somoims.get(id=somoim_id))
-        except (ObjectDoesNotExist):
+        except ObjectDoesNotExist:
             user.like_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
 
@@ -366,12 +366,12 @@ def like_somoim(request, id=0):
         return HttpResponse(status=405)
 
 
-def join_somoim(request, id=0):
+def join_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse(status=401)
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
@@ -383,25 +383,25 @@ def join_somoim(request, id=0):
         try:
             user.join_somoims.get(id=somoim_id)
             user.join_somoims.remove(user.join_somoims.get(id=somoim_id))
-        except (ObjectDoesNotExist):
+        except ObjectDoesNotExist:
             user.join_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
 
-def recommend_somoim(request, id=0):
+def recommend_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse([])
     try:
-        user = UserProfile.objects.get(id=id)
-    except (ObjectDoesNotExist):
+        user = UserProfile.objects.get(id=user_id)
+    except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
         recommended_somoims = Somoim.objects.none()
-        for like_somoim in user.like_somoims.all():
-            for liker in like_somoim.likers.all():
+        for user_like_somoim in user.like_somoims.all():
+            for liker in user_like_somoim.likers.all():
                 for somoim in liker.like_somoims.all():
                     if recommended_somoims.filter(id=somoim.id).count() == 0:
                         recommended_somoims |= Somoim.objects.filter(

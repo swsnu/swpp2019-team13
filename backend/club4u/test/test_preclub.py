@@ -1,7 +1,6 @@
+# import json
 from django.test import TestCase, Client
-import json
-from ..models import User, UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
-from django.forms.models import model_to_dict
+from ..models import User, UserProfile, Department, Category, Major
 
 # for test with file
 # from django.test import override_settings
@@ -20,11 +19,11 @@ from django.forms.models import model_to_dict
 class PreClubTestCase(TestCase):
     def setUp(self):
         Category.objects.create(id=1, name='category1')
-        # dept = Department.objects.create(id=1, name='dept1')
-        # major = Major.objects.create(id=1, dept=dept, name='major1')
-        # user = User.objects.create_user(
-        #     id=1, username='user1', password='pw1', last_name='name1')
-        # UserProfile.objects.create(id=1, user=user, dept=dept, major=major)
+        dept = Department.objects.create(id=1, name='dept1')
+        major = Major.objects.create(id=1, dept=dept, name='major1')
+        user = User.objects.create_user(
+            id=1, username='user1', password='pw1', last_name='name1')
+        UserProfile.objects.create(id=1, user=user, dept=dept, major=major)
 
     # def test_post_preclub_success(self):
     #     client = Client(enforce_csrf_checks=False)
