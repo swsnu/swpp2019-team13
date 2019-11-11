@@ -11,7 +11,7 @@ export const getCategoryList_ = categories => {
 export const getCategoryList = () => {
   return dispatch => {
     return axios
-      .get("api/category/list/")
+      .get("/api/category/list/")
       .then(res => dispatch(getCategoryList_(res.data)));
   };
 };
