@@ -56,7 +56,7 @@ class Header extends Component {
       );
       logoutButton = (
         <div
-          className="user-item"
+          className="user-item second-item"
           onClick={() => {
             this.logoutButtonHandler();
           }}
@@ -77,7 +77,7 @@ class Header extends Component {
       );
       signupButton = (
         <div
-          className="user-item"
+          className="user-item second-item"
           onClick={() => {
             this.props.history.push("/signup");
           }}
@@ -92,40 +92,43 @@ class Header extends Component {
     /* Render */
     return (
       <div className="Header">
-        {/* Home 로고 */}
-        <div
-          className="home"
-          onClick={() => {
-            this.props.history.push("/club");
-          }}
-        >
-          Club4u
-        </div>
+        <div className="Header-flex-container">
+          {/* Home 로고 */}
+          <div
+            className="logo"
+            onClick={() => {
+              this.props.history.push("/club");
+            }}
+          >
+            Club4u
+          </div>
 
-        {/* 동아리 / 소모임 전환 탭 */}
-        <div
-          className={`menu-item ${
-            this.props.location.pathname === "/club" ? "active" : ""
-          }`}
-          onClick={() => {
-            this.props.history.push("/club");
-          }}
-        >
-          동아리
-        </div>
-        <div
-          className={`menu-item ${
-            this.props.location.pathname === "/somoim" ? "active" : ""
-          }`}
-          onClick={() => {
-            this.props.history.push("/somoim");
-          }}
-        >
-          소모임
-        </div>
+          {/* 동아리 / 소모임 전환 탭 */}
+          <div className="nav">
+            <div
+              className={`nav-item ${
+                this.props.location.pathname === "/club" ? "active" : ""
+              }`}
+              onClick={() => {
+                this.props.history.push("/club");
+              }}
+            >
+              동아리
+            </div>
+            <div
+              className={`nav-item ${
+                this.props.location.pathname === "/somoim" ? "active" : ""
+              }`}
+              onClick={() => {
+                this.props.history.push("/somoim");
+              }}
+            >
+              소모임
+            </div>
+          </div>
 
-        {/* 검색 바 - 제거 됨 */}
-        {/* <div className="search">
+          {/* 검색 바 - 제거 됨 */}
+          {/* <div className="search">
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -140,11 +143,14 @@ class Header extends Component {
           </button>
         </div> */}
 
-        {/* 유저 관련 버튼 */}
-        {loginButton}
-        {signupButton}
-        {mypageButton}
-        {logoutButton}
+          {/* 유저 관련 버튼 */}
+          <div className="user">
+            {loginButton}
+            {signupButton}
+            {mypageButton}
+            {logoutButton}
+          </div>
+        </div>
 
         {/* 로그인 Modal */}
         <Login
@@ -169,7 +175,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
