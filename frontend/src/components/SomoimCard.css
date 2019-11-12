@@ -1,9 +1,10 @@
 .Card {
   flex: 1;
-  margin: 5px;
+  margin: 10px;
   border: 1px solid #bebebe;
   padding: 15px 15px;
   text-align: center;
+  box-shadow: 0px 0px 2px 2px gray;
 }
 
 .applicable-term {
@@ -18,10 +19,32 @@
   padding: 10px 10px;
 }
 
-.tagList {
-  margin-top: 10px;
+.user-info {
+  display: flex;
+  justify-content: center;
+}
+
+.user-info-item {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+img {
+  position: relative;
+  bottom: 6px;
+}
+
+p {
+  color: #6b6b6b;
 }
 
 .summary {
-  padding: 10px 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.tagList {
+  margin-top: 10px;
 }
