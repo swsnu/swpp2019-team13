@@ -61,9 +61,9 @@ class SomoimCard extends React.Component {
           <div className="title">
             <h2>{somoim.title}</h2>
           </div>
-          <div className="applicable-term">
+          {/* <div className="applicable-term">
             <p>01/07 ~ 01/20</p>
-          </div>
+          </div> */}
           <div className="percentage">
             <CircularProgressbar
               value={percentage}
