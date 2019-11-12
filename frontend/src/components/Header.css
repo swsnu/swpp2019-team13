@@ -12,7 +12,7 @@
   font-size: 1.4em;
   font-weight: bold;
   padding-right: 40px;
-  padding-bottom: 5px;
+  padding-bottom: 4px;
 }
 
 .user {
@@ -28,7 +28,11 @@
 }
 
 .nav-item:hover {
-  color: #9500a9;
+  color: #ce50df;
+}
+
+.nav-item.active {
+  color: #ce50df;
 }
 
 .separate {
