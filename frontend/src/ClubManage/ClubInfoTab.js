@@ -26,8 +26,8 @@ class ClubInfoTab extends Component {
     available_major: [],
     session_day: 0,
     tags: [],
-    recruit_start: null,
-    recruit_end: null,
+    recruit_start_day: null,
+    recruit_end_day: null,
     current_dept: "",
     current_major: ""
   };
@@ -55,8 +55,8 @@ class ClubInfoTab extends Component {
           available_major: this.props.selectedClub.available_major,
           session_day: this.props.selectedClub.session_day,
           tags: this.props.selectedClub.tags,
-          recruit_start: this.props.selectedClub.recruit_start,
-          recruit_end: this.props.selectedClub.recruit_end
+          recruit_start_day: this.props.selectedClub.recruit_start_day,
+          recruit_end_day: this.props.selectedClub.recruit_end_day
         });
       }
     } else {
@@ -80,6 +80,10 @@ class ClubInfoTab extends Component {
         loaded: 0
       });
     }
+  };
+
+  confirmEditHandler = () => {
+    // this.props.put
   };
 
   handle_SelectAllMajor() {
@@ -250,11 +254,13 @@ class ClubInfoTab extends Component {
               <Form.Label>모집 시작 일자</Form.Label>
               <Form.Row size="lg">
                 <DatePicker
-                  selected={this.state.recruit_start}
+                  selected={this.state.recruit_start_day}
                   onChange={date => {
-                    if (date > this.state.recruit_end) {
-                      this.setState({ recruit_start: this.state.recruit_end });
-                    } else this.setState({ recruit_start: date });
+                    if (date > this.state.recruit_end_day) {
+                      this.setState({
+                        recruit_start_day: this.state.recruit_end_day
+                      });
+                    } else this.setState({ recruit_start_day: date });
                   }}
                   dateFormat="yyyy/MM/d"
                 />
@@ -265,11 +271,13 @@ class ClubInfoTab extends Component {
               <Form.Label>모집 마감 일자</Form.Label>
               <Form.Row size="lg">
                 <DatePicker
-                  selected={this.state.recruit_end}
+                  selected={this.state.recruit_end_day}
                   onChange={date => {
-                    if (date < this.state.recruit_start) {
-                      this.setState({ recruit_end: this.state.recruit_start });
-                    } else this.setState({ recruit_end: date });
+                    if (date < this.state.recruit_start_day) {
+                      this.setState({
+                        recruit_end_day: this.state.recruit_start_day
+                      });
+                    } else this.setState({ recruit_end_day: date });
                   }}
                   dateFormat="yyyy/MM/dd"
                 />

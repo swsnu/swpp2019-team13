@@ -7,7 +7,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
+from .models import UserProfile, PreClub, Club, ClubPoster, Somoim, Tag, Department, Category, Major
 from .serializers import ClubSerializer, SomoimSerializer
 
 
@@ -177,8 +177,45 @@ def preclub_list(request):
 def club(request, club_id=None):
     if request.method == 'GET':
         try:
-            serializer = ClubSerializer(Club.objects.get(id=club_id))
-            return HttpResponse(JSONRenderer().render(serializer.data))
+            selected_club = Club.objects.get(id=club_id)
+            serializer = ClubSerializer(selected_club)
+
+            poster_list = ClubPoster.objects.filter(
+                club=selected_club).values()
+
+            poster_img_list = []
+
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            print(poster_img_list)
+
+            response_dict = serializer.data
+            response_dict['poster_img'] = poster_img_list
+            return HttpResponse(JSONRenderer().render(response_dict))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    if request.methoe == 'PUT':
+        try:
+            selected_club = Club.objects.get(id=club_id)
+
+            req_data = json.loads(request.body.decode())
+
+            serializer = ClubSerializer(selected_club)
+
+            poster_list = ClubPoster.objects.filter(
+                club=selected_club).values()
+
+            poster_img_list = []
+
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            print(poster_img_list)
+
+            response_dict = serializer.data
+            response_dict['poster_img'] = poster_img_list
+            return HttpResponse(JSONRenderer().render(response_dict))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
     else:
@@ -188,6 +225,18 @@ def club(request, club_id=None):
 def club_list(request):
     if request.method == 'GET':
         serializer = ClubSerializer(Club.objects.all(), many=True)
+
+        response_dict = serializer.data
+
+        for c in response_dict:
+            poster_list = ClubPoster.objects.filter(
+                club=Club.objects.get(id=c['id'])).values()
+
+            poster_img_list = []
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            c['poster_img'] = poster_img_list
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:
         return HttpResponse(status=405)

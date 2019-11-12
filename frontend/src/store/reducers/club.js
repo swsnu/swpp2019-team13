@@ -11,17 +11,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, clubs: action.clubs };
     case actionTypes.GET_CLUB_BY_ID:
       return { ...state, selectedClub: action.selectedClub };
-    case actionTypes.POST_CLUB:
-      const newClub = {
-        id: action.id,
-        name: action.name,
-        content: "empty",
-        clubmanager: action.clubmanager,
-        auth_img: action.auth_img,
-        selected_category: action.selected_category,
-        tags: []
-      };
-      return { ...state, clubs: state.clubs.concat(newClub) };
+    case actionTypes.PUT_CLUB_INFORMATION:
+      return { ...state, selectedClub: action.selectedClub };
     default:
       break;
   }
