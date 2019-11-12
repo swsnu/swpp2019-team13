@@ -1,0 +1,27 @@
+.Card {
+  flex: 1;
+  margin: 5px;
+  border: 1px solid #bebebe;
+  padding: 15px 15px;
+  text-align: center;
+}
+
+.applicable-term {
+  font-size: 0.9em;
+  color: #6b6b6b;
+  border-bottom: 1px solid #bebebe;
+  position: relative;
+  bottom: 10px;
+}
+
+.percentage {
+  padding: 10px 10px;
+}
+
+.tagList {
+  margin-top: 10px;
+}
+
+.summary {
+  padding: 10px 5px;
+}

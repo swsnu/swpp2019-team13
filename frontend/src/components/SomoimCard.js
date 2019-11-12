@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Card, Button, Container, Row, Col } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import * as actionCreators from "../store/actions/index";
+
+import "./SomoimCard.css";
 
 class SomoimCard extends React.Component {
   componentDidMount() {}
@@ -47,46 +49,27 @@ class SomoimCard extends React.Component {
       }
 
       return (
-        <Card
-          style={{ height: "160px", margin: "10px" }}
+        <div
+          className="Card"
           onClick={() => {
             this.props.clickHandler(somoim.id);
           }}
         >
-          <Card.Body>
-            <Container>
-              <Row>
-                <Col xs="4">
-                  <CircularProgressbar
-                    value={percentage}
-                    text={percentage + "%"}
-                  />
-                </Col>
-                <Col style={{ paddingLeft: "80px" }}>
-                  <Row>
-                    <div>
-                      <h2
-                        style={{
-                          display: "inline-block",
-                          paddingRight: "30px",
-                          fontWeight: "bold"
-                        }}
-                      >
-                        {somoim.title}
-                      </h2>
-                      <h3 style={{ display: "inline-block" }}>
-                        {"👍 " + somoim.likers.length}
-                      </h3>
-                    </div>
-                  </Row>
-                  <Row>{tagList}</Row>
-                  <br />
-                  <Row>{somoim.summary}</Row>
-                </Col>
-              </Row>
-            </Container>
-          </Card.Body>
-        </Card>
+          <div className="title">
+            <h2>{somoim.title}</h2>
+          </div>
+          <div className="applicable-term">
+            <p>01/07 ~ 01/20</p>
+          </div>
+          <div className="percentage">
+            <CircularProgressbar value={percentage} text={percentage + "%"} />
+          </div>
+          <h3 style={{ display: "inline-block" }}>
+            {"👍 " + somoim.likers.length}
+          </h3>
+          <div className="summary">{somoim.summary}</div>
+          <div className="tagList">{tagList}</div>
+        </div>
       );
     } else return <></>;
   }
