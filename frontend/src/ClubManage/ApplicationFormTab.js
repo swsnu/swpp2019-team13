@@ -6,6 +6,10 @@ import ReactDragList from "react-drag-list";
 import { Card, Form, Button, ButtonToolbar } from "react-bootstrap";
 import filePNG from "./file.png";
 import imagePNG from "./image.png";
+import deletePNG from "./delete.png";
+import minusPNG from "./minus.png";
+import plusPNG from "./plus.png";
+
 // import * as actionCreators from "../store/actions/index";
 
 class ApplicationFormTab extends Component {
@@ -20,7 +24,7 @@ class ApplicationFormTab extends Component {
           ...this.state,
           formList: this.state.formList.concat({
             type: type,
-            title: "short text"
+            title: "질문을 입력하세요."
           })
         });
         break;
@@ -29,7 +33,7 @@ class ApplicationFormTab extends Component {
           ...this.state,
           formList: this.state.formList.concat({
             type: type,
-            title: "long text"
+            title: "질문을 입력하세요."
           })
         });
         break;
@@ -38,7 +42,7 @@ class ApplicationFormTab extends Component {
           ...this.state,
           formList: this.state.formList.concat({
             type: type,
-            title: "multi choice",
+            title: "질문을 입력하세요.",
             choices: ["choice1", "choice2", "choice3", "choice4", "choice5"]
           })
         });
@@ -48,7 +52,7 @@ class ApplicationFormTab extends Component {
           ...this.state,
           formList: this.state.formList.concat({
             type: type,
-            title: "select image"
+            title: "질문을 입력하세요."
           })
         });
         break;
@@ -57,7 +61,7 @@ class ApplicationFormTab extends Component {
           ...this.state,
           formList: this.state.formList.concat({
             type: type,
-            title: "select file"
+            title: "질문을 입력하세요."
           })
         });
         break;
@@ -69,9 +73,18 @@ class ApplicationFormTab extends Component {
   shortText = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header>{props.title}</Card.Header>
+        <Card.Header style={{ display: "flex" }}>
+          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
+          <img
+            src={deletePNG}
+            width="30"
+            height="30"
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        </Card.Header>
         <Card.Body>
-          <Form.Control></Form.Control>
+          <div style={{ height: "20px" }}></div>
         </Card.Body>
       </Card>
     );
@@ -80,9 +93,18 @@ class ApplicationFormTab extends Component {
   longText = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header>{props.title}</Card.Header>
+        <Card.Header style={{ display: "flex" }}>
+          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
+          <img
+            src={deletePNG}
+            width="30"
+            height="30"
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        </Card.Header>
         <Card.Body>
-          <Form.Control as="textarea" rows="4"></Form.Control>
+          <div style={{ height: "100px" }}></div>
         </Card.Body>
       </Card>
     );
@@ -91,14 +113,44 @@ class ApplicationFormTab extends Component {
   multiChoice = props => {
     let choices = props.choices.map((item, index) => {
       return (
-        <Form.Check key={index} id={index} inline type="radio" label={item} />
+        <div style={{ display: "flex", marginTop: "5px" }}>
+          <input type="checkbox"></input>
+          <Form.Control size="md" defaultValue={item}></Form.Control>
+          <img
+            src={minusPNG}
+            width="20"
+            height="20"
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        </div>
       );
     });
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header>{props.title}</Card.Header>
-        <Card.Body>
-          <Form>{choices}</Form>
+        <Card.Header style={{ display: "flex" }}>
+          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
+          <img
+            src={deletePNG}
+            width="30"
+            height="30"
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        </Card.Header>
+        <Card.Body style={{ width: "95%", marginLeft: "10px" }}>
+          <div style={{ display: "flex" }}>
+            <Form.Control size="md" defaultValue={props.title}></Form.Control>
+            <img
+              src={plusPNG}
+              width="22"
+              height="22"
+              alt=""
+              style={{ marginLeft: "10px" }}
+            />
+          </div>
+          <hr />
+          {choices}
         </Card.Body>
       </Card>
     );
@@ -107,7 +159,16 @@ class ApplicationFormTab extends Component {
   selectImage = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header>{props.title}</Card.Header>
+        <Card.Header style={{ display: "flex" }}>
+          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
+          <img
+            src={deletePNG}
+            width="30"
+            height="30"
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        </Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
           {/* <Button>Select Image</Button> */}
           <img src={imagePNG} width="120" height="120" alt="" />
@@ -119,7 +180,16 @@ class ApplicationFormTab extends Component {
   selectFile = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header>{props.title}</Card.Header>
+        <Card.Header style={{ display: "flex" }}>
+          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
+          <img
+            src={deletePNG}
+            width="30"
+            height="30"
+            alt=""
+            style={{ marginLeft: "10px" }}
+          />
+        </Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
           {/* <Button>Select Image</Button> */}
           <img src={filePNG} width="120" height="120" alt="" />
@@ -187,7 +257,7 @@ class ApplicationFormTab extends Component {
             handles={false}
             dataSource={this.state.formList}
             onUpdate={e => {
-              console.log(e);
+              console.log(this.state.formList);
             }}
             row={(record, index) => {
               switch (record.type) {
