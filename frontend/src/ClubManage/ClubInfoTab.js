@@ -33,10 +33,6 @@ class ClubInfoTab extends Component {
     new_img: []
   };
 
-  componentDidMount = () => {
-    this.props.getClubByID(this.props.match.params.club_id);
-  };
-
   componentDidUpdate = () => {
     if (
       this.props.selectedClub &&
@@ -55,14 +51,18 @@ class ClubInfoTab extends Component {
           available_semester: this.props.selectedClub.available_semester,
           available_major: this.props.selectedClub.available_major,
           session_day: this.props.selectedClub.session_day,
-          tags: this.props.selectedClub.tags,
-          recruit_start_day: new Date(
-            this.props.selectedClub.recruit_start_day + "T15:00:00.000Z"
-          ),
-          recruit_end_day: new Date(
-            this.props.selectedClub.recruit_end_day + "T15:00:00.000Z"
-          )
+          tags: this.props.selectedClub.tags
         });
+        if (this.props.selectedClub.recruit_start_day) {
+          this.setState({
+            recruit_start_day: new Date(
+              this.props.selectedClub.recruit_start_day + "T15:00:00.000Z"
+            ),
+            recruit_end_day: new Date(
+              this.props.selectedClub.recruit_end_day + "T15:00:00.000Z"
+            )
+          });
+        }
       }
     } else {
       // this.props.history.push("/club");
@@ -116,6 +116,8 @@ class ClubInfoTab extends Component {
         });
       })
       .then(() => this.props.getClubByID(this.props.match.params.club_id));
+
+    this.setState({ ...this.state, firstLoaded: false });
   };
 
   handle_SelectAllMajor() {
@@ -175,7 +177,6 @@ class ClubInfoTab extends Component {
       selectedClubSummary = this.props.selectedClub.summary;
       selectedClubDescription = this.props.selectedClub.description;
       selectedClubCategory = this.props.selectedClub.selectedClubCategory;
-      selectedClubPosterImg = this.props.selectedClub.poster_img;
       selectedClubAvailableSemester = this.props.selectedClub
         .available_semester;
       selectedClubAvailableMajor = this.props.selectedClub.available_major;
@@ -504,7 +505,6 @@ class ClubInfoTab extends Component {
               String(this.state.description) ===
                 String(selectedClubDescription) &&
               String(this.state.category) === String(selectedClubCategory) &&
-              String(this.state.poster_img) === String(selectedClubPosterImg) &&
               String(this.state.available_semester) ===
                 String(selectedClubAvailableSemester) &&
               String(this.state.available_major) ===

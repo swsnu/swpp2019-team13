@@ -15,7 +15,13 @@ class ClubManageMain extends Component {
     isUserInfoLoaded: false
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.props.getCategoryList();
+    this.props.getTagList();
+    this.props.getDeptList();
+    this.props.getMajorList();
+    this.props.getClubByID(this.props.match.params.club_id);
+  }
 
   componentDidUpdate = () => {};
 
@@ -94,7 +100,13 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    getCategoryList: () => dispatch(actionCreators.getCategoryList()),
+    getTagList: () => dispatch(actionCreators.getTagList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+    getClubByID: id => dispatch(actionCreators.getClubByID(id))
+  };
 };
 
 export default connect(
