@@ -11,7 +11,6 @@ const reducer = (state = initialState, action) => {
       return { ...state, clubs: action.clubs };
     case actionTypes.GET_CLUB_BY_ID:
       return { ...state, selectedClub: action.selectedClub };
-<<<<<<< HEAD
     case actionTypes.POST_CLUB:
       const newClub = {
         id: action.id,
@@ -25,12 +24,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, clubs: state.clubs.concat(newClub) };
     case actionTypes.GET_APPLICATION_FORM_BY_ID:
       return { ...state, applicationForm: action.form };
-=======
     case actionTypes.PUT_CLUB_INFORMATION:
     case actionTypes.POST_CLUB_POSTER:
       return state;
 
->>>>>>> 5e139a163aa3935863bcd8465e526ea8fd927a78
     default:
       break;
   }
