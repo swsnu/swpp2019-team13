@@ -25,7 +25,8 @@ class ApplicationFormTab extends Component {
         id: this.state.formID,
         type: type,
         title: "질문을 입력하세요.",
-        choices: []
+        choices: [],
+        isDeleted: false
       }),
       formID: this.state.formID + 1
     });
@@ -37,7 +38,16 @@ class ApplicationFormTab extends Component {
         <Form.Control
           size="lg"
           defaultValue={props.title}
-          onChange={() => {}}
+          onChange={e => {
+            this.setState({
+              ...this.state,
+              formList: this.state.formList.map(item => {
+                if (item.id === props.id)
+                  return { ...item, title: e.target.value };
+                else return item;
+              })
+            });
+          }}
         ></Form.Control>
         <img
           src={deletePNG}
@@ -45,7 +55,16 @@ class ApplicationFormTab extends Component {
           height="30"
           alt=""
           style={{ marginLeft: "10px" }}
-          onChange={() => {}}
+          onClick={() => {
+            console.log(props);
+            this.setState({
+              ...this.state,
+              formList: this.state.formList.map(item => {
+                if (item.id === props.id) return { ...item, isDeleted: true };
+                else return item;
+              })
+            });
+          }}
         />
       </Card.Header>
     );
@@ -210,19 +229,21 @@ class ApplicationFormTab extends Component {
               console.log(this.state.formList);
             }}
             row={(record, index) => {
-              switch (record.type) {
-                case "shortText":
-                  return this.shortText({ ...record, order: index });
-                case "longText":
-                  return this.longText({ ...record, order: index });
-                case "multiChoice":
-                  return this.multiChoice({ ...record, order: index });
-                case "selectImage":
-                  return this.selectImage({ ...record, order: index });
-                case "selectFile":
-                  return this.selectFile({ ...record, order: index });
-                default:
-                  return <></>;
+              if (!record.isDeleted) {
+                switch (record.type) {
+                  case "shortText":
+                    return this.shortText({ ...record, order: index });
+                  case "longText":
+                    return this.longText({ ...record, order: index });
+                  case "multiChoice":
+                    return this.multiChoice({ ...record, order: index });
+                  case "selectImage":
+                    return this.selectImage({ ...record, order: index });
+                  case "selectFile":
+                    return this.selectFile({ ...record, order: index });
+                  default:
+                    return <></>;
+                }
               }
             }}
           />
