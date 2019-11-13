@@ -9,9 +9,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from .models import UserProfile, PreClub, Club, ClubPoster, Somoim, Tag, Department, Category, Major
-from .application_models import ApplicationForm, ShortTextForm, LongTextForm, MultiChoiceForm, ImageForm, FileForm
-from .serializers import ClubSerializer, SomoimSerializer
+
+from .models import *
+from .application_models import *
+from .serializers import *
+from .application_serializers import *
 
 from django.core.files import File
 from django.forms.models import model_to_dict
@@ -511,15 +513,15 @@ def recommend_somoim(request, user_id=0):
 
 
 def application_form(request, club_id=0):
-    if not request.user.is_authenticated:
-        return HttpResponse(401)
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
     try:
-        form = ApplicationForm.objects.get(club=club_id)
+        form = Application.objects.get(club=club_id, user=None)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serializer = SomoimSerializer(form)
+        serializer = ApplcationSerializer(form)
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         body = request.body.decode()

@@ -1,41 +1,77 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
+from django_mysql.models import ListCharField
 from .models import Club, Somoim, UserProfile
 
 # Create your models here.
 
 
+class Application(models.Model):
+    club = models.OneToOneField(Club, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        UserProfile,
+        related_name='application',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+
 class ShortTextForm(models.Model):
+    application = models.ForeignKey(
+        Application,
+        related_name='short_texts',
+        on_delete=models.CASCADE,
+        null=True
+    )
     order = models.IntegerField(default=0)
+    title = models.CharField(max_length=100)
     content = models.CharField(max_length=100)
 
 
 class LongTextForm(models.Model):
+    application = models.ForeignKey(
+        Application,
+        related_name='long_texts',
+        on_delete=models.CASCADE,
+        null=True
+    )
     order = models.IntegerField(default=0)
+    title = models.CharField(max_length=100)
     content = models.CharField(max_length=500)
 
 
-# class Choice(models.Model):
-#     content = models.CharField(max_length=100)
 class MultiChoiceForm(models.Model):
+    application = models.ForeignKey(
+        Application,
+        related_name='multi_choices',
+        on_delete=models.CASCADE,
+        null=True
+    )
     order = models.IntegerField(default=0)
-    choice = ArrayField(models.CharField(max_length=100))
+    title = models.CharField(max_length=100)
+    choices = ListCharField(base_field=models.CharField(
+        max_length=100), max_length=100)
 
 
 class ImageForm(models.Model):
+    application = models.ForeignKey(
+        Application,
+        related_name='images',
+        on_delete=models.CASCADE,
+        null=True
+    )
     order = models.IntegerField(default=0)
+    title = models.CharField(max_length=100)
     content = models.ImageField(null=True)
 
 
 class FileForm(models.Model):
+    application = models.ForeignKey(
+        Application,
+        related_name='files',
+        on_delete=models.CASCADE,
+        null=True
+    )
     order = models.IntegerField(default=0)
+    title = models.CharField(max_length=100)
     content = models.FileField(null=True)
-
-
-class ApplicationForm(models.Model):
-    club = models.OneToOneField(Club, on_delete=models.CASCADE)
-    short_texts = models.OneToManyField(ShortTextForm)
-    long_texts = models.OneToManyField(LongTextForm)
-    multi_choices = models.OneToManyField(MultiChoiceForm)
-    images = models.OneToManyField(ImageForm)
-    files = models.OneToManyField(FileForm)

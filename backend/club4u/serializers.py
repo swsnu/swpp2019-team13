@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Club, Somoim, UserProfile, ClubPoster
-from .application_models import ApplicationForm
+from .application_models import *
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -26,11 +26,4 @@ class SomoimSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Somoim
-        fields = '__all__'
-
-
-class ApplcationFormSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = ApplicationForm
         fields = '__all__'

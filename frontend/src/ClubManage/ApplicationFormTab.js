@@ -227,7 +227,10 @@ class ApplicationFormTab extends Component {
     );
   };
 
-  saveApplicationFormHandler = () => {};
+  saveApplicationFormHandler = () => {
+    console.log(this.state.formList);
+    console.log(this.props.match.params.club_id);
+  };
 
   render() {
     return (
