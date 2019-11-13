@@ -165,6 +165,7 @@ class ApplicationFormTab extends Component {
           <div style={{ display: "flex", marginTop: "5px" }} key={item.id}>
             <input type="checkbox"></input>
             <Form.Control
+              style={{ width: "100%" }}
               size="md"
               defaultValue={item.content}
               onChange={e => {
