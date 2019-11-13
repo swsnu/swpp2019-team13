@@ -31,17 +31,30 @@ export const getClubByID = id => {
   };
 };
 
-export const putClubInformation_ = club => {
+export const putClubInformation_ = () => {
   return {
-    type: actionTypes.PUT_CLUB_INFORMATION,
-    selectedClub: club
+    type: actionTypes.PUT_CLUB_INFORMATION
   };
 };
 
 export const putClubInformation = (id, clubInfo) => {
   return dispatch => {
     return axios
-      .get("/api/club/" + id + "/", clubInfo)
-      .then(res => dispatch(putClubInformation_(res.data)));
+      .put("/api/club/" + id + "/", clubInfo)
+      .then(res => dispatch(putClubInformation_()));
+  };
+};
+
+export const postClubPoster_ = () => {
+  return {
+    type: actionTypes.POST_CLUB_POSTER
+  };
+};
+
+export const postClubPoster = (club_id, poster) => {
+  return dispatch => {
+    return axios
+      .post("/api/club/" + club_id + "/poster/", poster)
+      .then(res => dispatch(postClubPoster_()));
   };
 };

@@ -22,14 +22,15 @@ class ClubInfoTab extends Component {
     description: "",
     category: 0,
     poster_img: [],
-    available_semester: 0,
+    available_semester: 1,
     available_major: [],
     session_day: 0,
     tags: [],
     recruit_start_day: null,
     recruit_end_day: null,
     current_dept: "",
-    current_major: ""
+    current_major: "",
+    new_img: []
   };
 
   componentDidMount = () => {
@@ -64,26 +65,59 @@ class ClubInfoTab extends Component {
     }
   };
 
-  imgUploadHandler = event => {
-    if (
-      // import from utils/CheckUploadedFile
-      maxSelectFile(event) &&
-      checkMimeType(event, 10) &&
-      checkFileSize(event)
-    ) {
-      let file_urls = [];
-      for (let x = 0; x < event.target.files.length; x++) {
-        file_urls.push(URL.createObjectURL(event.target.files[x]));
-      }
-      this.setState({
-        poster_img: file_urls,
-        loaded: 0
-      });
-    }
+  // imgUploadHandler = event => {
+  //   if (
+  //     // import from utils/CheckUploadedFile
+  //     maxSelectFile(event) &&
+  //     checkMimeType(event, 10) &&
+  //     checkFileSize(event)
+  //   ) {
+  //     let file_urls = [];
+  //     for (let x = 0; x < event.target.files.length; x++) {
+  //       file_urls.push(URL.createObjectURL(event.target.files[x]));
+  //     }
+  //     this.setState({
+  //       poster_img: file_urls,
+  //       loaded: 0
+  //     });
+  //   }
+  // };
+
+  imgUploadHandler = data => {
+    this.setState({ new_img: data.map(img => img.blob) });
   };
 
   confirmEditHandler = () => {
-    // this.props.put
+    let editedClubInfo = {
+      isShow: this.state.isShow,
+      name: this.state.name,
+      summary: this.state.summary,
+      description: this.state.description,
+      category: this.state.category,
+      available_semester: this.state.available_semester,
+      available_major: this.state.available_major,
+      session_day: this.state.session_day,
+      tags: this.state.tags,
+      recruit_start_day: this.state.recruit_start_day,
+      recruit_end_day: this.state.recruit_end_day,
+      current_dept: this.state.current_dept,
+      current_major: this.state.current_major
+    };
+    this.props.putClubInformation(
+      this.props.match.params.club_id,
+      editedClubInfo
+    );
+
+    this.state.new_img.map(image => {
+      const fd = new FormData();
+      const file = new File([image], "img.jpg");
+
+      fd.append("image", file);
+
+      this.props.postClubPoster(this.props.match.params.club_id, fd);
+    });
+
+    this.props.getClubByID(this.props.match.params.club_id);
   };
 
   handle_SelectAllMajor() {
@@ -121,9 +155,20 @@ class ClubInfoTab extends Component {
   }
 
   render() {
+    console.log(this.state.new_img);
+    console.log(this.state.poster_img);
+    // console.log(this.props.selectedClub);
     let selectedClubName = null;
     let selectedClubSummary = null;
     let selectedClubDescription = null;
+    let selectedClubCategory = null;
+    let selectedClubPosterImg = null;
+    let selectedClubAvailableSemester = null;
+    let selectedClubAvailableMajor = null;
+    let selectedClubSessionDay = null;
+    let selectedClubTags = null;
+    let selectedClubStartDay = null;
+    let selectedClubEndDay = null;
 
     let categoryOptionList = null;
     let deptOptionList = null;
@@ -133,6 +178,15 @@ class ClubInfoTab extends Component {
       selectedClubName = this.props.selectedClub.name;
       selectedClubSummary = this.props.selectedClub.summary;
       selectedClubDescription = this.props.selectedClub.description;
+      selectedClubCategory = this.props.selectedClub.selectedClubCategory;
+      selectedClubPosterImg = this.props.selectedClub.poster_img;
+      selectedClubAvailableSemester = this.props.selectedClub
+        .available_semester;
+      selectedClubAvailableMajor = this.props.selectedClub.available_major;
+      selectedClubSessionDay = this.props.selectedClub.session_day;
+      selectedClubTags = this.props.selectedClub.tags;
+      selectedClubStartDay = this.props.selectedClub.recruit_start_day;
+      selectedClubEndDay = this.props.selectedClub.recruit_end_day;
     }
 
     if (this.props.categories) {
@@ -242,12 +296,26 @@ class ClubInfoTab extends Component {
           </Form.Control>
 
           <Form.Label>포스터 사진</Form.Label>
+          {this.state.poster_img.map(img => (
+            <img src={"../../media/" + img} width="120" height="120" alt="" />
+          ))}
           <input
             type="file"
             id="club-poster-file-input"
             multiple
             onChange={this.imgUploadHandler}
           />
+          {/* TODO : remove when img upload implemented without ImageSelectView */}
+          {/* <div>
+            <ImageSelectPreview
+              id="club-poster-file-input"
+              imageTypes="png|jpg|gif"
+              onChange={data => {
+                this.imgUploadHandler(data);
+              }}
+              max={10}
+            />
+          </div> */}
 
           <Form.Row>
             <Form.Group as={Col} controlId="formDept">
@@ -256,11 +324,7 @@ class ClubInfoTab extends Component {
                 <DatePicker
                   selected={this.state.recruit_start_day}
                   onChange={date => {
-                    if (date > this.state.recruit_end_day) {
-                      this.setState({
-                        recruit_start_day: this.state.recruit_end_day
-                      });
-                    } else this.setState({ recruit_start_day: date });
+                    this.setState({ recruit_start_day: date });
                   }}
                   dateFormat="yyyy/MM/d"
                 />
@@ -272,13 +336,7 @@ class ClubInfoTab extends Component {
               <Form.Row size="lg">
                 <DatePicker
                   selected={this.state.recruit_end_day}
-                  onChange={date => {
-                    if (date < this.state.recruit_start_day) {
-                      this.setState({
-                        recruit_end_day: this.state.recruit_start_day
-                      });
-                    } else this.setState({ recruit_end_day: date });
-                  }}
+                  onChange={date => this.setState({ recruit_end_day: date })}
                   dateFormat="yyyy/MM/dd"
                 />
               </Form.Row>
@@ -421,8 +479,37 @@ class ClubInfoTab extends Component {
           variant="dark"
           size="lg"
           block
-          onClick={() => {}}
-          disabled={this.state.name === ""}
+          onClick={this.confirmEditHandler}
+          disabled={
+            this.state.name === "" ||
+            this.state.summary === "" ||
+            this.state.description === "" ||
+            this.state.category === 0 ||
+            this.state.poster_img === [] ||
+            this.state.available_major === [] ||
+            this.state.session_day === 0 ||
+            this.state.recruit_start_day === null ||
+            this.state.recruit_end_day === null ||
+            this.state.recruit_end_day < this.state.recruit_start_day ||
+            (String(this.state.name) === String(selectedClubName) &&
+              String(this.state.summary) === String(selectedClubSummary) &&
+              String(this.state.description) ===
+                String(selectedClubDescription) &&
+              String(this.state.category) === String(selectedClubCategory) &&
+              String(this.state.poster_img) === String(selectedClubPosterImg) &&
+              String(this.state.available_semester) ===
+                String(selectedClubAvailableSemester) &&
+              String(this.state.available_major) ===
+                String(selectedClubAvailableMajor) &&
+              String(this.state.available_major) ===
+                String(selectedClubSessionDay) &&
+              String(this.state.session_day) ===
+                String(selectedClubAvailableMajor) &&
+              String(this.state.tags) === String(selectedClubTags) &&
+              String(this.state.recruit_start_day) ===
+                String(selectedClubStartDay) &&
+              String(this.state.recruit_end_day) === String(selectedClubEndDay))
+          }
         >
           정보 수정
         </Button>
@@ -443,7 +530,11 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getClubByID: id => dispatch(actionCreators.getClubByID(id))
+    getClubByID: id => dispatch(actionCreators.getClubByID(id)),
+    putClubInformation: (id, clubInfo) =>
+      dispatch(actionCreators.putClubInformation(id, clubInfo)),
+    postClubPoster: (club_id, poster) =>
+      dispatch(actionCreators.postClubPoster(club_id, poster))
   };
 };
 

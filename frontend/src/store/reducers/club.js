@@ -12,7 +12,9 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_CLUB_BY_ID:
       return { ...state, selectedClub: action.selectedClub };
     case actionTypes.PUT_CLUB_INFORMATION:
-      return { ...state, selectedClub: action.selectedClub };
+    case actionTypes.POST_CLUB_POSTER:
+      return state;
+
     default:
       break;
   }
