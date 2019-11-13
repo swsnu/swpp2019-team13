@@ -45,7 +45,7 @@ class ApplicationFormTab extends Component {
               formID++,
               item.title,
               item.order,
-              item.choices
+              item.choices.map(choice => ({ ...choice, isDeleted: false }))
             )
           )
         );
@@ -82,7 +82,7 @@ class ApplicationFormTab extends Component {
       type: type,
       title: title ? title : "내용을 입력하세요.",
       defalutChoice: "내용을 입력하세요.",
-      choiceID: 0,
+      choiceID: choices ? choices.length + 1 : 0,
       choices: choices ? choices : [],
       isDeleted: false,
       order: order
@@ -248,9 +248,9 @@ class ApplicationFormTab extends Component {
                       return {
                         ...item,
                         choices: item.choices.concat({
+                          id: item.choiceID,
                           content: item.defalutChoice,
-                          isDeleted: false,
-                          id: item.choiceID
+                          isDeleted: false
                         }),
                         choiceID: item.choiceID + 1
                       };
