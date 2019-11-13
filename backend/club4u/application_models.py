@@ -62,7 +62,7 @@ class ImageForm(models.Model):
     )
     order = models.IntegerField(default=0)
     title = models.CharField(max_length=100)
-    content = models.ImageField(null=True)
+    content = models.ImageField(null=True, blank=True)
 
 
 class FileForm(models.Model):
@@ -74,4 +74,4 @@ class FileForm(models.Model):
     )
     order = models.IntegerField(default=0)
     title = models.CharField(max_length=100)
-    content = models.FileField(null=True)
+    content = models.FileField(null=True, blank=True)

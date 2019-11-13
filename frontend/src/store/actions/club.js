@@ -42,7 +42,7 @@ export const getApplicationFormByID = id => {
   return dispatch => {
     return axios
       .get("/api/club/" + id + "/application/form/")
-      .then(res => dispatch(getClubByID_(res.data)));
+      .then(res => dispatch(getApplicationFormByID_(res.data)));
   };
 };
 

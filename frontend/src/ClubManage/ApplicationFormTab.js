@@ -14,24 +14,76 @@ import * as actionCreators from "../store/actions/index";
 
 class ApplicationFormTab extends Component {
   state = {
+    firstLoaded: false,
     formList: [],
     formID: 0
   };
 
-  addNewForm = type => {
-    this.setState({
-      ...this.state,
-      formList: this.state.formList.concat({
-        id: this.state.formID,
-        type: type,
-        title: "질문을 입력하세요.",
-        defalutChoice: "내용을 입력하세요.",
-        choiceID: 0,
-        choices: [],
-        isDeleted: false
-      }),
-      formID: this.state.formID + 1
-    });
+  componentDidMount = () => {
+    this.props.getApplicationFormByID(this.props.match.params.club_id);
+  };
+
+  componentDidUpdate = () => {
+    if (!this.state.firstLoaded) {
+      if (this.props.applicationForm) {
+        let formList = [];
+        let formID = 0;
+        formList = formList.concat(
+          this.props.applicationForm.short_texts.map(item =>
+            this.addNewForm("shortText", formID++, item.title, item.order)
+          )
+        );
+        formList = formList.concat(
+          this.props.applicationForm.long_texts.map(item =>
+            this.addNewForm("longText", formID++, item.title, item.order)
+          )
+        );
+        formList = formList.concat(
+          this.props.applicationForm.multi_choices.map(item =>
+            this.addNewForm("multiChoice", formID++, item.title, item.order)
+          )
+        );
+        formList = formList.concat(
+          this.props.applicationForm.images.map(item =>
+            this.addNewForm("image", formID++, item.title, item.order)
+          )
+        );
+        formList = formList.concat(
+          this.props.applicationForm.files.map(item =>
+            this.addNewForm("file", formID++, item.title, item.order)
+          )
+        );
+        formList.sort((a, b) => (a.order > b.order ? 1 : -1));
+        this.setState({
+          ...this.state,
+          firstLoaded: true,
+          formList: formList,
+          formID: formID
+        });
+      }
+    }
+  };
+
+  addNewForm = (type, id = null, title = null, order = null) => {
+    let newForm = {
+      id: id ? id : this.state.formID,
+      type: type,
+      title: title ? title : "내용을 입력하세요.",
+      defalutChoice: "내용을 입력하세요.",
+      choiceID: 0,
+      choices: [],
+      isDeleted: false,
+      order: order
+    };
+    if (!id) {
+      this.setState({
+        ...this.state,
+        formList: this.state.formList.concat(newForm),
+        formID: this.state.formID + 1,
+        firstLoaded: true
+      });
+    }
+    return newForm;
   };
 
   formHeader = props => {
@@ -203,7 +255,7 @@ class ApplicationFormTab extends Component {
     );
   };
 
-  selectImage = props => {
+  image = props => {
     return (
       <Card style={{ margin: "10px" }}>
         {this.formHeader(props)}
@@ -215,7 +267,7 @@ class ApplicationFormTab extends Component {
     );
   };
 
-  selectFile = props => {
+  file = props => {
     return (
       <Card style={{ margin: "10px" }}>
         {this.formHeader(props)}
@@ -229,7 +281,6 @@ class ApplicationFormTab extends Component {
 
   saveApplicationFormHandler = () => {
     console.log(this.state.formList);
-    console.log(this.props.match.params.club_id);
   };
 
   render() {
@@ -270,7 +321,7 @@ class ApplicationFormTab extends Component {
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
-                  this.addNewForm("selectImage");
+                  this.addNewForm("image");
                 }}
               >
                 사진
@@ -279,7 +330,7 @@ class ApplicationFormTab extends Component {
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
-                  this.addNewForm("selectFile");
+                  this.addNewForm("file");
                 }}
               >
                 파일
@@ -314,10 +365,10 @@ class ApplicationFormTab extends Component {
                     return this.longText({ ...record, order: index });
                   case "multiChoice":
                     return this.multiChoice({ ...record, order: index });
-                  case "selectImage":
-                    return this.selectImage({ ...record, order: index });
-                  case "selectFile":
-                    return this.selectFile({ ...record, order: index });
+                  case "image":
+                    return this.image({ ...record, order: index });
+                  case "file":
+                    return this.file({ ...record, order: index });
                   default:
                     return <></>;
                 }
@@ -331,7 +382,7 @@ class ApplicationFormTab extends Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return { applicationForm: state.club.applicationForm };
 };
 
 const mapDispatchToProps = dispatch => {

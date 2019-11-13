@@ -12,7 +12,7 @@ import ApplicationFormTab from "./ApplicationFormTab";
 
 class ClubManageMain extends Component {
   state = {
-    tab: 0,
+    tab: 1,
     isUserInfoLoaded: false
   };
 
