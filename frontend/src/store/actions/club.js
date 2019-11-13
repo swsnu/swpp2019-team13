@@ -47,9 +47,10 @@ export const getClubByID = id => {
   };
 };
 
-export const getApplicationFormByID_ = id => {
+export const getApplicationFormByID_ = form => {
   return {
-    type: actionTypes.GET_APPLICATION_FORM_BY_ID
+    type: actionTypes.GET_APPLICATION_FORM_BY_ID,
+    form: form
   };
 };
 
@@ -61,16 +62,16 @@ export const getApplicationFormByID = id => {
   };
 };
 
-export const putApplicationFormByID_ = id => {
+export const putApplicationFormByID_ = (id, form) => {
   return {
     type: actionTypes.PUT_APPLICATION_FORM_BY_ID
   };
 };
 
-export const putApplicationFormByID = id => {
+export const putApplicationFormByID = (id, form) => {
   return dispatch => {
     return axios
-      .put("/api/club/" + id + "/application/form/", id)
+      .put("/api/club/" + id + "/application/form/", form)
       .then(res => dispatch(putApplicationFormByID_(res.data)));
   };
 };

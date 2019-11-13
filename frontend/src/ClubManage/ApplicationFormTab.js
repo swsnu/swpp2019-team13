@@ -10,80 +10,51 @@ import deletePNG from "./delete.png";
 import minusPNG from "./minus.png";
 import plusPNG from "./plus.png";
 import savePNG from "./save.png";
-
-// import * as actionCreators from "../store/actions/index";
+import * as actionCreators from "../store/actions/index";
 
 class ApplicationFormTab extends Component {
   state = {
-    formList: []
+    formList: [],
+    formID: 0
   };
 
   addNewForm = type => {
-    switch (type) {
-      case "shortText":
-        this.setState({
-          ...this.state,
-          formList: this.state.formList.concat({
-            type: type,
-            title: "질문을 입력하세요."
-          })
-        });
-        break;
-      case "longText":
-        this.setState({
-          ...this.state,
-          formList: this.state.formList.concat({
-            type: type,
-            title: "질문을 입력하세요."
-          })
-        });
-        break;
-      case "multiChoice":
-        this.setState({
-          ...this.state,
-          formList: this.state.formList.concat({
-            type: type,
-            title: "질문을 입력하세요.",
-            choices: ["choice1", "choice2", "choice3", "choice4", "choice5"]
-          })
-        });
-        break;
-      case "selectImage":
-        this.setState({
-          ...this.state,
-          formList: this.state.formList.concat({
-            type: type,
-            title: "질문을 입력하세요."
-          })
-        });
-        break;
-      case "selectFile":
-        this.setState({
-          ...this.state,
-          formList: this.state.formList.concat({
-            type: type,
-            title: "질문을 입력하세요."
-          })
-        });
-        break;
-      default:
-        break;
-    }
+    this.setState({
+      ...this.state,
+      formList: this.state.formList.concat({
+        id: this.state.formID,
+        type: type,
+        title: "질문을 입력하세요.",
+        choices: []
+      }),
+      formID: this.state.formID + 1
+    });
+  };
+
+  formHeader = props => {
+    return (
+      <Card.Header style={{ display: "flex" }}>
+        <Form.Control
+          size="lg"
+          defaultValue={props.title}
+          onChange={() => {}}
+        ></Form.Control>
+        <img
+          src={deletePNG}
+          width="30"
+          height="30"
+          alt=""
+          style={{ marginLeft: "10px" }}
+          onChange={() => {}}
+        />
+      </Card.Header>
+    );
   };
 
   shortText = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header style={{ display: "flex" }}>
-          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
-          <img
-            src={deletePNG}
-            width="30"
-            height="30"
-            alt=""
-            style={{ marginLeft: "10px" }}
-          />
-        </Card.Header>
+        {this.formHeader(props)}
         <Card.Body>
           <div style={{ height: "20px" }}></div>
         </Card.Body>
@@ -94,16 +65,7 @@ class ApplicationFormTab extends Component {
   longText = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header style={{ display: "flex" }}>
-          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
-          <img
-            src={deletePNG}
-            width="30"
-            height="30"
-            alt=""
-            style={{ marginLeft: "10px" }}
-          />
-        </Card.Header>
+        {this.formHeader(props)}
         <Card.Body>
           <div style={{ height: "100px" }}></div>
         </Card.Body>
@@ -129,16 +91,7 @@ class ApplicationFormTab extends Component {
     });
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header style={{ display: "flex" }}>
-          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
-          <img
-            src={deletePNG}
-            width="30"
-            height="30"
-            alt=""
-            style={{ marginLeft: "10px" }}
-          />
-        </Card.Header>
+        {this.formHeader(props)}
         <Card.Body style={{ width: "95%", marginLeft: "10px" }}>
           <div style={{ display: "flex" }}>
             <Form.Control size="md" defaultValue={props.title}></Form.Control>
@@ -160,16 +113,7 @@ class ApplicationFormTab extends Component {
   selectImage = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header style={{ display: "flex" }}>
-          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
-          <img
-            src={deletePNG}
-            width="30"
-            height="30"
-            alt=""
-            style={{ marginLeft: "10px" }}
-          />
-        </Card.Header>
+        {this.formHeader(props)}
         <Card.Body style={{ textAlign: "center" }}>
           {/* <Button>Select Image</Button> */}
           <img src={imagePNG} width="120" height="120" alt="" />
@@ -181,16 +125,7 @@ class ApplicationFormTab extends Component {
   selectFile = props => {
     return (
       <Card style={{ margin: "10px" }}>
-        <Card.Header style={{ display: "flex" }}>
-          <Form.Control size="lg" defaultValue={props.title}></Form.Control>
-          <img
-            src={deletePNG}
-            width="30"
-            height="30"
-            alt=""
-            style={{ marginLeft: "10px" }}
-          />
-        </Card.Header>
+        {this.formHeader(props)}
         <Card.Body style={{ textAlign: "center" }}>
           {/* <Button>Select Image</Button> */}
           <img src={filePNG} width="120" height="120" alt="" />
@@ -198,6 +133,8 @@ class ApplicationFormTab extends Component {
       </Card>
     );
   };
+
+  saveApplicationFormHandler = () => {};
 
   render() {
     return (
@@ -254,7 +191,10 @@ class ApplicationFormTab extends Component {
             </div>
           </Col>
           <Col style={{ textAlign: "right" }}>
-            <div style={{ margin: "20px" }}>
+            <div
+              style={{ margin: "20px" }}
+              onClick={this.saveApplicationFormHandler}
+            >
               <img src={savePNG} width="30" height="30" alt="" /> 저장
             </div>
           </Col>
@@ -297,7 +237,12 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    getApplicationFormByID: id =>
+      dispatch(actionCreators.getApplicationFormByID(id)),
+    putApplicationFormByID: (id, form) =>
+      dispatch(actionCreators.putApplicationFormByID(id, form))
+  };
 };
 
 export default connect(
