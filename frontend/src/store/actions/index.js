@@ -1,7 +1,6 @@
 export {
   getClubList,
   getClubByID,
-  postClub,
   putClubInformation,
   postClubPoster,
   getApplicationFormByID,

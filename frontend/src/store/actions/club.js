@@ -31,7 +31,6 @@ export const getClubByID = id => {
   };
 };
 
-<<<<<<< HEAD
 export const getApplicationFormByID_ = form => {
   return {
     type: actionTypes.GET_APPLICATION_FORM_BY_ID,
@@ -58,7 +57,9 @@ export const putApplicationFormByID = (id, form) => {
     return axios
       .put("/api/club/" + id + "/application/form/", form)
       .then(res => dispatch(putApplicationFormByID_(res.data)));
-=======
+  };
+};
+
 export const putClubInformation_ = () => {
   return {
     type: actionTypes.PUT_CLUB_INFORMATION
@@ -84,6 +85,5 @@ export const postClubPoster = (club_id, poster) => {
     return axios
       .post("/api/club/" + club_id + "/poster/", poster)
       .then(res => dispatch(postClubPoster_()));
->>>>>>> 5e139a163aa3935863bcd8465e526ea8fd927a78
   };
 };
