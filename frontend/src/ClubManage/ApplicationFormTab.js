@@ -40,7 +40,13 @@ class ApplicationFormTab extends Component {
         );
         formList = formList.concat(
           this.props.applicationForm.multi_choices.map(item =>
-            this.addNewForm("multiChoice", formID++, item.title, item.order)
+            this.addNewForm(
+              "multiChoice",
+              formID++,
+              item.title,
+              item.order,
+              item.choices
+            )
           )
         );
         formList = formList.concat(
@@ -64,14 +70,20 @@ class ApplicationFormTab extends Component {
     }
   };
 
-  addNewForm = (type, id = null, title = null, order = null) => {
+  addNewForm = (
+    type,
+    id = null,
+    title = null,
+    order = null,
+    choices = null
+  ) => {
     let newForm = {
       id: id ? id : this.state.formID,
       type: type,
       title: title ? title : "내용을 입력하세요.",
       defalutChoice: "내용을 입력하세요.",
       choiceID: 0,
-      choices: [],
+      choices: choices ? choices : [],
       isDeleted: false,
       order: order
     };

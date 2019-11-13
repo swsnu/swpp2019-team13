@@ -1,5 +1,4 @@
 from django.db import models
-from django_mysql.models import ListCharField
 from .models import Club, Somoim, UserProfile
 
 # Create your models here.
@@ -49,8 +48,16 @@ class MultiChoiceForm(models.Model):
     )
     order = models.IntegerField(default=0)
     title = models.CharField(max_length=100)
-    choices = ListCharField(base_field=models.CharField(
-        max_length=100), max_length=100)
+
+
+class Choice (models.Model):
+    multi = models.ForeignKey(
+        MultiChoiceForm,
+        related_name='choices',
+        on_delete=models.CASCADE,
+        null=True
+    )
+    content = models.CharField(max_length=100)
 
 
 class ImageForm(models.Model):

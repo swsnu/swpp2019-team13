@@ -3,20 +3,25 @@ from .application_models import *
 
 
 class ShortTextSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ShortTextForm
         fields = '__all__'
 
 
 class LongTextSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = LongTextForm
         fields = '__all__'
 
 
+class ChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Choice
+        fields = '__all__'
+
+
 class MultiChoiceSerializer(serializers.ModelSerializer):
+    choices = ChoiceSerializer(many=True, read_only=True)
 
     class Meta:
         model = MultiChoiceForm
@@ -24,14 +29,12 @@ class MultiChoiceSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ImageForm
         fields = '__all__'
 
 
 class FileSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FileForm
         fields = '__all__'
