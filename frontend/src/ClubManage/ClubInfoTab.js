@@ -56,8 +56,12 @@ class ClubInfoTab extends Component {
           available_major: this.props.selectedClub.available_major,
           session_day: this.props.selectedClub.session_day,
           tags: this.props.selectedClub.tags,
-          recruit_start_day: this.props.selectedClub.recruit_start_day,
-          recruit_end_day: this.props.selectedClub.recruit_end_day
+          recruit_start_day: new Date(
+            this.props.selectedClub.recruit_start_day + "T15:00:00.000Z"
+          ),
+          recruit_end_day: new Date(
+            this.props.selectedClub.recruit_end_day + "T15:00:00.000Z"
+          )
         });
       }
     } else {
@@ -65,26 +69,21 @@ class ClubInfoTab extends Component {
     }
   };
 
-  // imgUploadHandler = event => {
-  //   if (
-  //     // import from utils/CheckUploadedFile
-  //     maxSelectFile(event) &&
-  //     checkMimeType(event, 10) &&
-  //     checkFileSize(event)
-  //   ) {
-  //     let file_urls = [];
-  //     for (let x = 0; x < event.target.files.length; x++) {
-  //       file_urls.push(URL.createObjectURL(event.target.files[x]));
-  //     }
-  //     this.setState({
-  //       poster_img: file_urls,
-  //       loaded: 0
-  //     });
-  //   }
-  // };
-
-  imgUploadHandler = data => {
-    this.setState({ new_img: data.map(img => img.blob) });
+  imgUploadHandler = event => {
+    if (
+      // import from utils/CheckUploadedFile
+      maxSelectFile(event) &&
+      checkMimeType(event, 10) &&
+      checkFileSize(event)
+    ) {
+      let files = [];
+      for (let x = 0; x < event.target.files.length; x++) {
+        files.push(event.target.files[x]);
+      }
+      this.setState({
+        new_img: files
+      });
+    }
   };
 
   confirmEditHandler = () => {
@@ -103,21 +102,20 @@ class ClubInfoTab extends Component {
       current_dept: this.state.current_dept,
       current_major: this.state.current_major
     };
-    this.props.putClubInformation(
-      this.props.match.params.club_id,
-      editedClubInfo
-    );
 
-    this.state.new_img.map(image => {
-      const fd = new FormData();
-      const file = new File([image], "img.jpg");
+    this.props
+      .putClubInformation(this.props.match.params.club_id, editedClubInfo)
+      .then(() => {
+        this.state.new_img.map(image => {
+          const fd = new FormData();
+          const file = new File([image], "img.jpg");
 
-      fd.append("image", file);
+          fd.append("image", file);
 
-      this.props.postClubPoster(this.props.match.params.club_id, fd);
-    });
-
-    this.props.getClubByID(this.props.match.params.club_id);
+          this.props.postClubPoster(this.props.match.params.club_id, fd);
+        });
+      })
+      .then(() => this.props.getClubByID(this.props.match.params.club_id));
   };
 
   handle_SelectAllMajor() {
@@ -155,9 +153,7 @@ class ClubInfoTab extends Component {
   }
 
   render() {
-    console.log(this.state.new_img);
-    console.log(this.state.poster_img);
-    // console.log(this.props.selectedClub);
+    console.log(this.state);
     let selectedClubName = null;
     let selectedClubSummary = null;
     let selectedClubDescription = null;
@@ -296,9 +292,19 @@ class ClubInfoTab extends Component {
           </Form.Control>
 
           <Form.Label>포스터 사진</Form.Label>
-          {this.state.poster_img.map(img => (
-            <img src={"../../media/" + img} width="120" height="120" alt="" />
+          <Form.Row>
+            <Form.Label>현재 사진</Form.Label>
+          </Form.Row>
+          {this.state.poster_img.map((img, i) => (
+            <img
+              key={i}
+              src={"../../media/" + img}
+              width="120"
+              height="120"
+              alt=""
+            />
           ))}
+          <Form.Label>새로운 사진</Form.Label>
           <input
             type="file"
             id="club-poster-file-input"
@@ -433,7 +439,9 @@ class ClubInfoTab extends Component {
                 as="select"
                 size="lg"
                 onChange={event => {
-                  this.setState({ available_semester: event.target.value });
+                  this.setState({
+                    available_semester: Number(event.target.value)
+                  });
                 }}
                 value={this.state.available_semester}
               >

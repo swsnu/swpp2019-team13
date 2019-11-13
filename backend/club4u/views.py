@@ -230,8 +230,12 @@ def club(request, club_id=None):
 
             # tags = req_data['tags']
 
-            selected_club.recruit_start_day = req_data['recruit_start_day']
-            selected_club.recruit_end_day = req_data['recruit_end_day']
+            selected_club.recruit_start_day = req_data['recruit_start_day'].split('T')[
+                0]
+            selected_club.recruit_end_day = req_data['recruit_end_day'].split('T')[
+                0]
+
+            selected_club.save()
 
             return HttpResponse(status=204)
         except ObjectDoesNotExist:
