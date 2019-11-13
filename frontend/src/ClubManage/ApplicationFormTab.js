@@ -25,6 +25,8 @@ class ApplicationFormTab extends Component {
         id: this.state.formID,
         type: type,
         title: "질문을 입력하세요.",
+        defalutChoice: "내용을 입력하세요.",
+        choiceID: 0,
         choices: [],
         isDeleted: false
       }),
@@ -56,7 +58,6 @@ class ApplicationFormTab extends Component {
           alt=""
           style={{ marginLeft: "10px" }}
           onClick={() => {
-            console.log(props);
             this.setState({
               ...this.state,
               formList: this.state.formList.map(item => {
@@ -93,33 +94,106 @@ class ApplicationFormTab extends Component {
   };
 
   multiChoice = props => {
-    let choices = props.choices.map((item, index) => {
-      return (
-        <div style={{ display: "flex", marginTop: "5px" }}>
-          <input type="checkbox"></input>
-          <Form.Control size="md" defaultValue={item}></Form.Control>
-          <img
-            src={minusPNG}
-            width="20"
-            height="20"
-            alt=""
-            style={{ marginLeft: "10px" }}
-          />
-        </div>
-      );
-    });
+    let choices = props.choices
+      .filter(item => !item.isDeleted)
+      .map(item => {
+        return (
+          <div style={{ display: "flex", marginTop: "5px" }} key={item.id}>
+            <input type="checkbox"></input>
+            <Form.Control
+              size="md"
+              defaultValue={item.content}
+              onChange={e => {
+                this.setState({
+                  ...this.state,
+                  formList: this.state.formList.map(form => {
+                    if (form.id === props.id)
+                      return {
+                        ...form,
+                        choices: form.choices.map(choice => {
+                          if (choice.id === item.id)
+                            return { ...choice, content: e.target.value };
+                          else return choice;
+                        })
+                      };
+                    else return form;
+                  })
+                });
+              }}
+            ></Form.Control>
+            <img
+              src={minusPNG}
+              width="20"
+              height="20"
+              alt=""
+              style={{ marginLeft: "10px" }}
+              onClick={() => {
+                this.setState({
+                  ...this.state,
+                  formList: this.state.formList.map(form => {
+                    if (form.id === props.id)
+                      return {
+                        ...form,
+                        choices: form.choices.map(choice => {
+                          if (choice.id === item.id)
+                            return { ...choice, isDeleted: true };
+                          else return choice;
+                        })
+                      };
+                    else return form;
+                  })
+                });
+              }}
+            />
+          </div>
+        );
+      });
     return (
       <Card style={{ margin: "10px" }}>
         {this.formHeader(props)}
         <Card.Body style={{ width: "95%", marginLeft: "10px" }}>
           <div style={{ display: "flex" }}>
-            <Form.Control size="md" defaultValue={props.title}></Form.Control>
+            <Form.Control
+              size="md"
+              defaultValue={"내용을 입력하세요."}
+              onChange={e => {
+                this.setState({
+                  ...this.state,
+                  formList: this.state.formList.map(item => {
+                    if (item.id === props.id)
+                      return {
+                        ...item,
+                        defalutChoice: e.target.value
+                      };
+                    else return item;
+                  })
+                });
+              }}
+            ></Form.Control>
             <img
               src={plusPNG}
               width="22"
               height="22"
               alt=""
               style={{ marginLeft: "10px" }}
+              onClick={() => {
+                this.setState({
+                  ...this.state,
+                  formList: this.state.formList.map(item => {
+                    if (item.id === props.id)
+                      return {
+                        ...item,
+                        choices: item.choices.concat({
+                          content: item.defalutChoice,
+                          isDeleted: false,
+                          id: item.choiceID
+                        }),
+                        choiceID: item.choiceID + 1
+                      };
+                    else return item;
+                  })
+                });
+              }}
             />
           </div>
           <hr />
