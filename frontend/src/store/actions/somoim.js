@@ -27,7 +27,7 @@ export const getSomoimList_ = somoims => {
 export const getSomoimList = () => {
   return dispatch => {
     return axios
-      .get("api/somoim/list/")
+      .get("/api/somoim/list/")
       .then(res => dispatch(getSomoimList_(res.data)));
   };
 };

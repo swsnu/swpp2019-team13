@@ -11,7 +11,7 @@ export const getTagList_ = tags => {
 export const getTagList = () => {
   return dispatch => {
     return axios
-      .get("api/tag/list/")
+      .get("/api/tag/list/")
       .then(res => dispatch(getTagList_(res.data)));
   };
 };

@@ -22,6 +22,8 @@ const reducer = (state = initialState, action) => {
         tags: []
       };
       return { ...state, clubs: state.clubs.concat(newClub) };
+    case actionTypes.GET_APPLICATION_FORM_BY_ID:
+      return state;
     default:
       break;
   }

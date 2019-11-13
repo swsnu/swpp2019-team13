@@ -3,12 +3,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import ReactDragList from "react-drag-list";
-import { Card, Form, Button, ButtonToolbar } from "react-bootstrap";
+import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import filePNG from "./file.png";
 import imagePNG from "./image.png";
 import deletePNG from "./delete.png";
 import minusPNG from "./minus.png";
 import plusPNG from "./plus.png";
+import savePNG from "./save.png";
 
 // import * as actionCreators from "../store/actions/index";
 
@@ -201,54 +202,63 @@ class ApplicationFormTab extends Component {
   render() {
     return (
       <div>
-        <div>새 항목 추가</div>
-        <div style={{ marginTop: "10px" }}>
-          <Button
-            size="lg"
-            variant="outline-secondary"
-            onClick={() => {
-              this.addNewForm("shortText");
-            }}
-          >
-            짧은 글
-          </Button>
-          <Button
-            size="lg"
-            variant="outline-secondary"
-            onClick={() => {
-              this.addNewForm("longText");
-            }}
-          >
-            긴 글
-          </Button>
-          <Button
-            size="lg"
-            variant="outline-secondary"
-            onClick={() => {
-              this.addNewForm("multiChoice");
-            }}
-          >
-            객관식 문항
-          </Button>
-          <Button
-            size="lg"
-            variant="outline-secondary"
-            onClick={() => {
-              this.addNewForm("selectImage");
-            }}
-          >
-            사진
-          </Button>
-          <Button
-            size="lg"
-            variant="outline-secondary"
-            onClick={() => {
-              this.addNewForm("selectFile");
-            }}
-          >
-            파일
-          </Button>
-        </div>
+        <Row>
+          <Col>
+            <div>새 항목 추가</div>
+            <div style={{ marginTop: "10px" }}>
+              <Button
+                size="lg"
+                variant="outline-secondary"
+                onClick={() => {
+                  this.addNewForm("shortText");
+                }}
+              >
+                짧은 글
+              </Button>
+              <Button
+                size="lg"
+                variant="outline-secondary"
+                onClick={() => {
+                  this.addNewForm("longText");
+                }}
+              >
+                긴 글
+              </Button>
+              <Button
+                size="lg"
+                variant="outline-secondary"
+                onClick={() => {
+                  this.addNewForm("multiChoice");
+                }}
+              >
+                객관식 문항
+              </Button>
+              <Button
+                size="lg"
+                variant="outline-secondary"
+                onClick={() => {
+                  this.addNewForm("selectImage");
+                }}
+              >
+                사진
+              </Button>
+              <Button
+                size="lg"
+                variant="outline-secondary"
+                onClick={() => {
+                  this.addNewForm("selectFile");
+                }}
+              >
+                파일
+              </Button>
+            </div>
+          </Col>
+          <Col style={{ textAlign: "right" }}>
+            <div style={{ margin: "20px" }}>
+              <img src={savePNG} width="30" height="30" alt="" /> 저장
+            </div>
+          </Col>
+        </Row>
         <hr />
         <div
           style={{ overflowY: "scroll", height: "700px", marginTop: "10px" }}

@@ -8,6 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
+from .application_models import ApplicationForm,ShortTextForm,LongTextForm,MultiChoiceForm,ImageForm,FileForm
 from .serializers import ClubSerializer, SomoimSerializer
 
 
@@ -419,6 +420,30 @@ def recommend_somoim(request, user_id=0):
                             id=somoim.id)
         serializer = SomoimSerializer(recommended_somoims, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
+    else:
+        return HttpResponse(status=405)
+
+
+def application_form(request, club_id=0):
+    if not request.user.is_authenticated:
+        return HttpResponse(401)
+    try:
+        form = ApplicationForm.objects.get(club=club_id)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serializer = SomoimSerializer(form)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    elif request.method == 'PUT':
+        body = request.body.decode()
+        # somoim_id = json.loads(body)['id']
+        # try:
+        #     user.join_somoims.get(id=somoim_id)
+        #     user.join_somoims.remove(user.join_somoims.get(id=somoim_id))
+        # except ObjectDoesNotExist:
+        #     user.join_somoims.add(Somoim.objects.get(id=somoim_id))
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 

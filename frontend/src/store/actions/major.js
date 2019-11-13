@@ -8,7 +8,7 @@ export const getMajorList_ = majors => {
 export const getMajorList = () => {
   return dispatch => {
     return axios
-      .get("api/major/list/")
+      .get("/api/major/list/")
       .then(res => dispatch(getMajorList_(res.data)));
   };
 };

@@ -8,7 +8,7 @@ export const getDeptList_ = depts => {
 export const getDeptList = () => {
   return dispatch => {
     return axios
-      .get("api/dept/list/")
+      .get("/api/dept/list/")
       .then(res => dispatch(getDeptList_(res.data)));
   };
 };
