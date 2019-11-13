@@ -2,6 +2,8 @@ export {
   getClubList,
   getClubByID,
   postClub,
+  putClubInformation,
+  postClubPoster,
   getApplicationFormByID,
   putApplicationFormByID
 } from "./club";

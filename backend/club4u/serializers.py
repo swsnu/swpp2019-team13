@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Club, Somoim, UserProfile
+from .models import Club, Somoim, UserProfile, ClubPoster
 from .application_models import ApplicationForm
 
 

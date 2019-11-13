@@ -5,7 +5,8 @@ export const GET_MAJOR_LIST = "GET_MAJOR_LIST";
 
 export const GET_CLUB_LIST = "GET_CLUB_LIST";
 export const GET_CLUB_BY_ID = "GET_CLUB_BY_ID";
-export const POST_CLUB = "POST_CLUB";
+export const PUT_CLUB_INFORMATION = "PUT_CLUB_INFORMATION";
+export const POST_CLUB_POSTER = "POST_CLUB_POSTER";
 
 export const GET_SOMOIM_LIST = "GET_SOMOIM_LIST";
 export const GET_SOMOIM_BY_ID = "GET_SOMOIM_BY_ID";

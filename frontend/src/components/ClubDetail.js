@@ -77,7 +77,17 @@ class ClubDetail extends React.Component {
         }
       }
 
-      let image = <img src={club.poster_img} width="400" height="400" alt="" />;
+      let image = <img src={null} width="400" height="400" alt="" />;
+
+      if (club.poster_img && club.poster_img.length > 0)
+        image = (
+          <img
+            src={"media/" + club.poster_img[0]}
+            width="400"
+            height="400"
+            alt=""
+          />
+        );
 
       let tagList;
       if (this.props.tags.length !== 0) {
