@@ -2,14 +2,16 @@ import reducer from "./club";
 import * as actionTypes from "../actions/actionTypes";
 
 const stubClub = {
-  id: 3,
+  id: 0,
   name: "SNUStone",
-  content: "empty",
+  content: "SNU Best HearthStone Club",
   clubmanager: "김지훈",
   selected_category: 0,
-  auth_img_file: "1",
-  tags: [],
-  likes: 0
+  auth_img: "1",
+  isRegistered: true,
+  tags: [0, 1],
+  available_major: [1],
+  likes: 10
 };
 
 const initialclubs = [
@@ -19,9 +21,10 @@ const initialclubs = [
     content: "SNU Best HearthStone Club",
     clubmanager: "김지훈",
     selected_category: 0,
-    auth_img_file: "1",
+    auth_img: "1",
     isRegistered: true,
     tags: [0, 1],
+    available_major: [1],
     likes: 10
   },
   {
@@ -30,9 +33,10 @@ const initialclubs = [
     content: "SNU Best Training Club",
     clubmanager: "김동우",
     selected_category: 6,
-    auth_img_file: "2",
+    auth_img: "2",
     isRegistered: true,
     tags: [2, 3],
+    available_major: [1],
     likes: 15
   },
 
@@ -42,18 +46,61 @@ const initialclubs = [
     content: "SNU Best LoL Club",
     clubmanager: "김도현",
     selected_category: 6,
-    auth_img_file: "3",
+    auth_img: "3",
     isRegistered: true,
     tags: [2, 3],
+    available_major: [1],
     likes: 20
   }
 ];
+const initialstate = {
+  clubs: [
+    {
+      id: 0,
+      name: "SNUStone",
+      content: "SNU Best HearthStone Club",
+      clubmanager: "김지훈",
+      selected_category: 0,
+      auth_img: "1",
+      isRegistered: true,
+      tags: [0, 1],
+      available_major: [1],
+      likes: 10
+    },
+    {
+      id: 1,
+      name: "SnuWOD",
+      content: "SNU Best Training Club",
+      clubmanager: "김동우",
+      selected_category: 6,
+      auth_img: "2",
+      isRegistered: true,
+      tags: [2, 3],
+      available_major: [1],
+      likes: 15
+    },
+
+    {
+      id: 2,
+      name: "SnuLoL",
+      content: "SNU Best LoL Club",
+      clubmanager: "김도현",
+      selected_category: 6,
+      auth_img: "3",
+      isRegistered: true,
+      tags: [2, 3],
+      available_major: [1],
+      likes: 20
+    }
+  ],
+  selectedClub: null
+};
 
 describe("Club Reducer", () => {
   it("should return default state", () => {
     const newState = reducer(undefined, {}); // initialize
     expect(newState).toEqual({
-      clubs: initialclubs,
+      clubs: [],
       selectedClub: null
     });
   });
@@ -66,7 +113,7 @@ describe("Club Reducer", () => {
         content: "SNU Best HearthStone Club",
         clubmanager: "김지훈",
         selected_category: 0,
-        auth_img_file: "1",
+        auth_img: "1",
         isRegistered: true,
         tags: [0, 1],
         likes: 10
@@ -83,16 +130,16 @@ describe("Club Reducer", () => {
   });
 
   it("should get specific club", () => {
-    const newState = reducer(undefined, {
+    const newState = reducer(initialstate, {
       type: actionTypes.GET_CLUB_BY_ID,
-      club: stubClub
+      id: 0
     });
     expect(newState).toEqual({
       clubs: initialclubs,
       selectedClub: stubClub
     });
   });
-
+  /*
   it("should post club", () => {
     const newState = reducer(undefined, {
       type: actionTypes.POST_CLUB,
@@ -106,4 +153,5 @@ describe("Club Reducer", () => {
       selectedClub: null
     });
   });
+  */
 });

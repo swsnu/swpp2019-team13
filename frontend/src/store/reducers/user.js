@@ -8,7 +8,9 @@ const initialState = {
   appliedClubs: [],
   joinedSomoims: [],
   managingSomoims: [],
-  managingClubs: []
+  managingClubs: [],
+  recommendedClubs: [],
+  recommendedSomoims: []
 };
 
 const reducer = (state = initialState, action) => {

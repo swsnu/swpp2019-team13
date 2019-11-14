@@ -6,6 +6,7 @@ describe("tag Reducer", () => {
     const newState = reducer(undefined, {}); // initialize
     expect(newState).toEqual({
       tags: [
+        /*
         { id: 0, name: "friendship" },
         { id: 1, name: "love" },
         { id: 2, name: "sport" },
@@ -13,7 +14,7 @@ describe("tag Reducer", () => {
         { id: 4, name: "study" },
         { id: 5, name: "music" },
         { id: 6, name: "art" },
-        { id: 7, name: "nothing" }
+        { id: 7, name: "nothing" }*/
       ]
     });
   });
