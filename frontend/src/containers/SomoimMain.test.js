@@ -24,7 +24,7 @@ let temp_somoims = [
     tags: [1],
     goalJoiner: 20,
     currentJoiner: 7,
-    likes: 10,
+    category: 0,
     available_major: [0, 1],
     joiners: [],
     likers: []
@@ -39,7 +39,7 @@ let temp_somoims = [
     tags: [2, 3],
     goalJoiner: 10,
     currentJoiner: 3,
-    likes: 5,
+    category: 2,
     available_major: [0, 1],
     joiners: [],
     likers: []
@@ -54,7 +54,7 @@ let temp_somoims = [
     tags: [4, 5],
     goalJoiner: 10,
     currentJoiner: 9,
-    likes: 5,
+    category: 2,
     available_major: [0, 1],
     joiners: [],
     likers: []
@@ -69,7 +69,7 @@ let temp_somoims = [
     tags: [6, 7],
     goalJoiner: 10,
     currentJoiner: 1,
-    likes: 5,
+    category: 2,
     available_major: [0, 1],
     joiners: [],
     likers: []
@@ -87,7 +87,7 @@ let stubInitialState = {
       tags: [1],
       goalJoiner: 20,
       currentJoiner: 7,
-      likes: 10,
+      category: 0,
       available_major: [0, 1],
       joiners: [],
       likers: []
@@ -102,7 +102,7 @@ let stubInitialState = {
       tags: [2, 3],
       goalJoiner: 10,
       currentJoiner: 3,
-      likes: 5,
+      category: 2,
       available_major: [0, 1],
       joiners: [],
       likers: []
@@ -117,7 +117,7 @@ let stubInitialState = {
       tags: [4, 5],
       goalJoiner: 10,
       currentJoiner: 9,
-      likes: 5,
+      category: 2,
       available_major: [0, 1],
       joiners: [],
       likers: []
@@ -132,7 +132,7 @@ let stubInitialState = {
       tags: [6, 7],
       goalJoiner: 10,
       currentJoiner: 1,
-      likes: 5,
+      category: 2,
       available_major: [0, 1],
       joiners: [],
       likers: []
@@ -245,7 +245,8 @@ let stubInitialState = {
       name: "자유전공학부"
     }
   ],
-  loggedUser: { id: 1 }
+  loggedUser: { id: 1 },
+  recommendedSomoims: null
 };
 
 describe("<SomoimMain />", () => {
@@ -414,6 +415,113 @@ describe("<SomoimMain />", () => {
     expect(wrapper.length).toBe(0);
 
     stubInitialState.categories = savedCategories;
+    mockStore = getMockStore(stubInitialState);
+  });
+
+  it("somoim change recommended page button click event handling", () => {
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    let wrapper = component.find(".changePage");
+    wrapper.at(0).simulate("click");
+    mainInstance.setState({ ...mainInstance.state, recommendedListPageNum: 1 });
+    wrapper.at(0).simulate("click");
+    expect(mainInstance.state.recommendedListPageNum).toBe(0);
+    wrapper.at(1).simulate("click");
+    mainInstance.setState({
+      ...mainInstance.state,
+      recommendedListPageNum: -2
+    });
+    wrapper.at(1).simulate("click");
+    expect(mainInstance.state.recommendedListPageNum).toBe(-1);
+  });
+
+  it("somoim change all page button click event handling", () => {
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    let wrapper = component.find(".changePage");
+    wrapper.at(2).simulate("click");
+    mainInstance.setState({ ...mainInstance.state, allListPageNum: 2 });
+    wrapper.at(2).simulate("click");
+    expect(mainInstance.state.allListPageNum).toBe(1);
+    wrapper.at(3).simulate("click");
+    mainInstance.setState({
+      ...mainInstance.state,
+      allListPageNum: -2
+    });
+    wrapper.at(3).simulate("click");
+    expect(mainInstance.state.allListPageNum).toBe(-1);
+  });
+
+  it("category select", () => {
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    let wrapper = component.find(".category-button");
+    wrapper.at(0).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(0);
+    wrapper.at(6).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(2);
+  });
+
+  it("recommended somoim list", () => {
+    let saved = stubInitialState.recommendedSomoims;
+    stubInitialState.recommendedSomoims = temp_somoims;
+    mockStore = getMockStore(stubInitialState);
+    somoimMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <SomoimMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
+    let wrapper = component.find(".recommended-somoim-card");
+    expect(wrapper.length).toBe(12);
+
+    stubInitialState.recommendedSomoims = saved;
+    mockStore = getMockStore(stubInitialState);
+  });
+
+  it("not logged in user", () => {
+    let saved = stubInitialState.loggedUser;
+    stubInitialState.loggedUser = null;
+    mockStore = getMockStore(stubInitialState);
+    somoimMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <SomoimMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    let component = mount(somoimMain);
+    component.update();
+    let mainInstance = component.find("SomoimMain").instance();
+    mainInstance.setState({
+      ...mainInstance.state,
+      isUserInfoLoaded: true
+    });
+    expect(spyGetRecommendedSomoims).toBeCalledTimes(9);
+
+    stubInitialState.loggedUser = saved;
     mockStore = getMockStore(stubInitialState);
   });
 });
