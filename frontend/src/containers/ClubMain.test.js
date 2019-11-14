@@ -212,7 +212,7 @@ let stubInitialState = {
     }
   ],
   loggedUser: { id: 1 },
-  recommendedClubs: []
+  recommendedClubs: null
 };
 
 let mockStore = getMockStore(stubInitialState);
@@ -387,9 +387,11 @@ describe("<ClubMain />", () => {
     const component = mount(clubMain);
     let mainInstance = component.find("ClubMain").instance();
     let wrapper = component.find(".changePage");
+    wrapper.at(0).simulate("click");
     mainInstance.setState({ ...mainInstance.state, recommendedListPageNum: 1 });
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.recommendedListPageNum).toBe(0);
+    wrapper.at(1).simulate("click");
     mainInstance.setState({
       ...mainInstance.state,
       recommendedListPageNum: -2
@@ -402,9 +404,11 @@ describe("<ClubMain />", () => {
     const component = mount(clubMain);
     let mainInstance = component.find("ClubMain").instance();
     let wrapper = component.find(".changePage");
+    wrapper.at(2).simulate("click");
     mainInstance.setState({ ...mainInstance.state, allListPageNum: 2 });
     wrapper.at(2).simulate("click");
     expect(mainInstance.state.allListPageNum).toBe(1);
+    wrapper.at(3).simulate("click");
     mainInstance.setState({
       ...mainInstance.state,
       allListPageNum: -2
@@ -425,13 +429,59 @@ describe("<ClubMain />", () => {
   it("recommended club list", () => {
     let saved = stubInitialState.recommendedClubs;
     stubInitialState.recommendedClubs = temp_clubs;
+    mockStore = getMockStore(stubInitialState);
+    clubMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <ClubMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
 
     const component = mount(clubMain);
     let mainInstance = component.find("ClubMain").instance();
     let wrapper = component.find(".changePage");
     mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
+
+    stubInitialState.recommendedClubs = [];
+    mockStore = getMockStore(stubInitialState);
   });
 
-  stubInitialState.recommendedClubs = [];
-  mockStore = getMockStore(stubInitialState);
+  it("not logged in user", () => {
+    let saved = stubInitialState.loggedUser;
+    stubInitialState.loggedUser = null;
+    mockStore = getMockStore(stubInitialState);
+    clubMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <ClubMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    let component = mount(clubMain);
+    component.update();
+    let mainInstance = component.find("ClubMain").instance();
+    // expect(spyGetRecommendedClubs).toBeCalledTimes(7);
+    mainInstance.setState({ ...mainInstance.state, isUserInfoLoaded: true });
+
+    stubInitialState.loggedUser = saved;
+    mockStore = getMockStore(stubInitialState);
+  });
 });
