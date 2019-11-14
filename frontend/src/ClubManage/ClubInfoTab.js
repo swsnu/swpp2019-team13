@@ -34,10 +34,7 @@ class ClubInfoTab extends Component {
   };
 
   componentDidMount = () => {
-    if (
-      this.props.selectedClub &&
-      this.props.selectedClub.managers[0].id === this.props.loggedUser.id
-    ) {
+    if (this.props.selectedClub) {
       if (!this.state.firstLoaded) {
         this.setState({
           ...this.state,
@@ -164,7 +161,6 @@ class ClubInfoTab extends Component {
     let selectedClubSummary = null;
     let selectedClubDescription = null;
     let selectedClubCategory = null;
-    let selectedClubPosterImg = null;
     let selectedClubAvailableSemester = null;
     let selectedClubAvailableMajor = null;
     let selectedClubSessionDay = null;
@@ -225,13 +221,14 @@ class ClubInfoTab extends Component {
     }
 
     return (
-      <div>
+      <div className="ClubInfoTab">
         <Form>
           <Form.Row>
             <Form.Group as={Col} controlId="formBasicClubname">
               <Form.Label>동아리 이름</Form.Label>
               <Form.Control
                 size="lg"
+                id="clubinfo-name-input"
                 onChange={event => {
                   this.setState({ name: event.target.value });
                 }}
@@ -243,6 +240,7 @@ class ClubInfoTab extends Component {
               {this.state.isShow ? (
                 <Button
                   as={Col}
+                  id="clubinfo-isshow-button-true"
                   variant="primary"
                   size="lg"
                   onClick={() => this.setState({ isShow: !this.state.isShow })}
@@ -252,6 +250,7 @@ class ClubInfoTab extends Component {
               ) : (
                 <Button
                   as={Col}
+                  id="clubinfo-isshow-button-false"
                   variant="outline-primary"
                   size="lg"
                   onClick={() => this.setState({ isShow: !this.state.isShow })}
@@ -266,6 +265,7 @@ class ClubInfoTab extends Component {
             <Form.Control
               as="textarea"
               size="lg"
+              id="clubinfo-summary-input"
               onChange={event => {
                 this.setState({ summary: event.target.value });
               }}
@@ -277,6 +277,7 @@ class ClubInfoTab extends Component {
             <Form.Control
               as="textarea"
               size="lg"
+              id="clubinfo-description-input"
               onChange={event => {
                 this.setState({ description: event.target.value });
               }}
@@ -288,6 +289,7 @@ class ClubInfoTab extends Component {
           <Form.Control
             as="select"
             size="lg"
+            id="clubinfo-category-input"
             onChange={event => {
               this.setState({ category: event.target.value });
             }}
@@ -375,6 +377,7 @@ class ClubInfoTab extends Component {
               <Form.Control
                 as="select"
                 size="lg"
+                id="clubinfo-dept-input"
                 onChange={event => {
                   if (event.target.value === "")
                     this.setState({ current_major: "" });
@@ -391,6 +394,7 @@ class ClubInfoTab extends Component {
               <Form.Control
                 as="select"
                 size="lg"
+                id="clubinfo-major-input"
                 onChange={event => {
                   this.setState({ current_major: event.target.value });
                 }}
@@ -406,6 +410,7 @@ class ClubInfoTab extends Component {
               style={{ marginTop: "10px" }}
               variant="dark"
               size="lg"
+              id="clubinfo-addmajor-button"
               onClick={() =>
                 this.handle_SelectSpecificMajor(this.state.current_major)
               }
@@ -422,6 +427,7 @@ class ClubInfoTab extends Component {
               style={{ marginTop: "10px" }}
               variant="dark"
               size="lg"
+              id="clubinfo-addallmajor-button"
               onClick={() => this.handle_SelectAllMajor()}
             >
               전체 추가
@@ -432,6 +438,7 @@ class ClubInfoTab extends Component {
               style={{ marginTop: "10px" }}
               variant="dark"
               size="lg"
+              id="clubinfo-removeallmajor-button"
               onClick={() => this.handle_RemoveAllMajor()}
             >
               전체 삭제
@@ -443,6 +450,7 @@ class ClubInfoTab extends Component {
               <Form.Control
                 as="select"
                 size="lg"
+                id="clubinfo-available-semester-input"
                 onChange={event => {
                   this.setState({
                     available_semester: Number(event.target.value)
