@@ -546,6 +546,14 @@ def application_form(request, club_id=0):
                     choice = Choice(multi=multi_choice,
                                     content=item_choice['content'])
                     choice.save()
+            elif item['type'] == 'file':
+                file = FileForm(
+                    application=form, order=item['order'], title=item['title'])
+                file.save()
+            elif item['type'] == 'image':
+                image = ImageForm(
+                    application=form, order=item['order'], title=item['title'])
+                image.save()
 
         return HttpResponse(status=204)
     else:
