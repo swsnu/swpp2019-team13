@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
 
-import JoinedSomoimTab from "./JoinedSomoimTab";
+import LikedSomoimTab from "./LikedSomoimTab";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as userActions from "../store/actions/user";
@@ -84,7 +84,7 @@ let stubInitialState = {
       likers: []
     }
   ],
-  joinedSomoims: [
+  likedSomoims: [
     {
       id: 0,
       title: "Let's LoL!",
@@ -150,12 +150,11 @@ let stubInitialState = {
 
 let mockStore = getMockStore(stubInitialState);
 
-describe("<JoinedSomoimTab />", () => {
-  let joinedSomoimTab;
-  let spyAddLikedSomoim;
+describe("<LikedSomoimTab />", () => {
+  let likedSomoimTab;
 
   beforeEach(() => {
-    joinedSomoimTab = (
+    likedSomoimTab = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
@@ -163,29 +162,24 @@ describe("<JoinedSomoimTab />", () => {
               path="/"
               exact
               render={() => {
-                return <JoinedSomoimTab />;
+                return <LikedSomoimTab />;
               }}
             />
           </Switch>
         </ConnectedRouter>
       </Provider>
     );
-    spyAddLikedSomoim = jest
-      .spyOn(userActions, "addLikedSomoim")
-      .mockImplementation(() => {
-        return dispatch => {};
-      });
   });
 
   it("should render Page", () => {
-    const component = mount(joinedSomoimTab);
-    const wrapper = component.find("JoinedSomoimTab");
+    const component = mount(likedSomoimTab);
+    const wrapper = component.find("LikedSomoimTab");
     expect(wrapper.length).toBe(1);
   });
 
   it("list item click handle", () => {
-    let component = mount(joinedSomoimTab);
-    let mainInstance = component.find("JoinedSomoimTab").instance();
+    let component = mount(likedSomoimTab);
+    let mainInstance = component.find("LikedSomoimTab").instance();
     let wrapper = component.find("h1");
     wrapper.at(0).simulate("click");
     wrapper = component.find("#list-item-body");
@@ -197,11 +191,19 @@ describe("<JoinedSomoimTab />", () => {
     expect(mainInstance.state.somoimDetailShow).toBe(false);
   });
 
-  it("when joinedSomoims info is not loaded", () => {
-    let savedInfo = stubInitialState.joinedSomoims;
-    stubInitialState.joinedSomoims = null;
+  it("unlike button click handle", () => {
+    let component = mount(LikedSomoimTab);
+    let mainInstance = component.find("LikedSomoimTab").instance();
+    let wrapper = component.find("#club-unlike-button");
+    wrapper.at(1).simulate("click");
+    expect(spyAddLikedClub).toBeCalledTimes(1);
+  });
+
+  it("when likedSomoims info is not loaded", () => {
+    let savedInfo = stubInitialState.likedSomoims;
+    stubInitialState.likedSomoims = null;
     mockStore = getMockStore(stubInitialState);
-    joinedSomoimTab = (
+    likedSomoimTab = (
       <Provider store={mockStore}>
         <ConnectedRouter history={history}>
           <Switch>
@@ -209,16 +211,16 @@ describe("<JoinedSomoimTab />", () => {
               path="/"
               exact
               render={() => {
-                return <JoinedSomoimTab />;
+                return <LikedSomoimTab />;
               }}
             />
           </Switch>
         </ConnectedRouter>
       </Provider>
     );
-    const component = mount(joinedSomoimTab);
+    const component = mount(likedSomoimTab);
 
-    stubInitialState.joinedSomoims = savedInfo;
+    stubInitialState.likedSomoims = savedInfo;
     mockStore = getMockStore(stubInitialState);
   });
 });
