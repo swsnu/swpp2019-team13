@@ -33,7 +33,7 @@ class ClubInfoTab extends Component {
     new_img: []
   };
 
-  componentDidUpdate = () => {
+  componentDidMount = () => {
     if (
       this.props.selectedClub &&
       this.props.selectedClub.managers[0].id === this.props.loggedUser.id
@@ -103,21 +103,26 @@ class ClubInfoTab extends Component {
       current_major: this.state.current_major
     };
 
+    let poster_files = [];
+
+    this.state.new_img.map(image => {
+      const fd = new FormData();
+      const file = new File([image], image.name);
+      fd.append("image", file);
+      poster_files.push(fd);
+    });
+
     this.props
       .putClubInformation(this.props.match.params.club_id, editedClubInfo)
       .then(() => {
-        this.state.new_img.map(image => {
-          const fd = new FormData();
-          const file = new File([image], "img.jpg");
-
-          fd.append("image", file);
-
-          this.props.postClubPoster(this.props.match.params.club_id, fd);
-        });
-      })
-      .then(() => this.props.getClubByID(this.props.match.params.club_id));
-
-    this.setState({ ...this.state, firstLoaded: false });
+        this.props
+          .postClubPoster(this.props.match.params.club_id, poster_files)
+          .then(() => {
+            this.props.getClubByID(this.props.match.params.club_id).then(() => {
+              this.setState({ poster_img: this.props.selectedClub.poster_img });
+            });
+          });
+      });
   };
 
   handle_SelectAllMajor() {
@@ -155,7 +160,6 @@ class ClubInfoTab extends Component {
   }
 
   render() {
-    console.log(this.state);
     let selectedClubName = null;
     let selectedClubSummary = null;
     let selectedClubDescription = null;
@@ -541,8 +545,8 @@ const mapDispatchToProps = dispatch => {
     getClubByID: id => dispatch(actionCreators.getClubByID(id)),
     putClubInformation: (id, clubInfo) =>
       dispatch(actionCreators.putClubInformation(id, clubInfo)),
-    postClubPoster: (club_id, poster) =>
-      dispatch(actionCreators.postClubPoster(club_id, poster))
+    postClubPoster: (club_id, poster_files) =>
+      dispatch(actionCreators.postClubPoster(club_id, poster_files))
   };
 };
 

@@ -80,10 +80,12 @@ export const postClubPoster_ = () => {
   };
 };
 
-export const postClubPoster = (club_id, poster) => {
+export const postClubPoster = (club_id, poster_file) => {
+  let promise_arr = poster_file.map(poster =>
+    axios.post("/api/club/" + club_id + "/poster/", poster)
+  );
+
   return dispatch => {
-    return axios
-      .post("/api/club/" + club_id + "/poster/", poster)
-      .then(res => dispatch(postClubPoster_()));
+    return axios.all(promise_arr).then(res => dispatch(postClubPoster_()));
   };
 };

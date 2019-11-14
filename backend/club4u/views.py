@@ -529,7 +529,6 @@ def application_form(request, club_id=0):
         form.save()
         body = json.loads(request.body.decode())
         for item in body:
-            print(item)
             if item['type'] == 'shortText':
                 short_text = ShortTextForm(
                     application=form, order=item['order'], title=item['title'])
