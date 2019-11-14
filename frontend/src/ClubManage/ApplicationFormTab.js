@@ -24,7 +24,6 @@ class ApplicationFormTab extends Component {
   };
 
   componentDidUpdate = () => {
-    console.log(this.state.formList);
     if (!this.state.firstLoaded) {
       if (this.props.applicationForm) {
         let formList = [];
@@ -375,7 +374,7 @@ class ApplicationFormTab extends Component {
             onUpdate={e => {
               // this.forceUpdate();
             }}
-            // rowKey="id"
+            rowKey="id"
             row={(record, index) => {
               if (!record.isDeleted) {
                 switch (record.type) {
