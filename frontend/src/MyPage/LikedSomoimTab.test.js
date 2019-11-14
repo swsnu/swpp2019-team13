@@ -152,6 +152,7 @@ let mockStore = getMockStore(stubInitialState);
 
 describe("<LikedSomoimTab />", () => {
   let likedSomoimTab;
+  let spyAddLikedSomoim;
 
   beforeEach(() => {
     likedSomoimTab = (
@@ -169,6 +170,11 @@ describe("<LikedSomoimTab />", () => {
         </ConnectedRouter>
       </Provider>
     );
+    spyAddLikedSomoim = jest
+      .spyOn(userActions, "addLikedSomoim")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render Page", () => {
@@ -192,11 +198,11 @@ describe("<LikedSomoimTab />", () => {
   });
 
   it("unlike button click handle", () => {
-    let component = mount(LikedSomoimTab);
+    let component = mount(likedSomoimTab);
     let mainInstance = component.find("LikedSomoimTab").instance();
-    let wrapper = component.find("#club-unlike-button");
+    let wrapper = component.find("#somoim-unlike-button");
     wrapper.at(1).simulate("click");
-    expect(spyAddLikedClub).toBeCalledTimes(1);
+    expect(spyAddLikedSomoim).toBeCalledTimes(1);
   });
 
   it("when likedSomoims info is not loaded", () => {
