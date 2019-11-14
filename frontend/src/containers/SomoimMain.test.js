@@ -8,32 +8,129 @@ import SomoimMain from "./SomoimMain";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as somoimActionCreators from "../store/actions/somoim";
-
+let temp_somoims = [
+  {
+    id: 0,
+    title: "Let's LoL!",
+    summary: "Playing LoL together!! :D",
+    description: "LoL\nLoL\nLol",
+    selected_dept: [0, 1],
+    available_semester: 1,
+    tags: [1],
+    goalJoiner: 20,
+    currentJoiner: 7,
+    likes: 10,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  },
+  {
+    id: 1,
+    title: "Book lovers",
+    summary: "We read books until we fall asleep..",
+    description: "Actually, it's sleep somoim :)",
+    selected_dept: [0, 1, 3, 4, 5],
+    available_semester: 1,
+    tags: [2, 3],
+    goalJoiner: 10,
+    currentJoiner: 3,
+    likes: 5,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  },
+  {
+    id: 2,
+    title: "test somoim",
+    summary: "i am testing the somoim list",
+    description: "Me too bro",
+    selected_dept: [0, 1, 3, 4, 5],
+    available_semester: 3,
+    tags: [4, 5],
+    goalJoiner: 10,
+    currentJoiner: 9,
+    likes: 5,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  },
+  {
+    id: 3,
+    title: "301 assa somoim",
+    summary: "We are assa in 301",
+    description: "Sad..",
+    selected_dept: [0, 1, 3, 4, 5],
+    available_semester: 5,
+    tags: [6, 7],
+    goalJoiner: 10,
+    currentJoiner: 1,
+    likes: 5,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  }
+];
 let stubInitialState = {
   somoims: [
     {
       id: 0,
-      title: "TEST_SOMOIM_1",
-      summary: "TEST_SUMMARY_1",
-      description: "TEST_DESCRIPTION_1",
-      selected_dept: [0],
-      available_sem: 1,
-      tags: [0],
-      goalJoiner: 10,
+      title: "Let's LoL!",
+      summary: "Playing LoL together!! :D",
+      description: "LoL\nLoL\nLol",
+      selected_dept: [0, 1],
+      available_semester: 1,
+      tags: [1],
+      goalJoiner: 20,
       currentJoiner: 7,
-      likes: 10
+      likes: 10,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     },
     {
       id: 1,
-      title: "TEST_SOMOIM_2",
-      summary: "TEST_SUMMARY_2",
-      description: "TEST_DESCRIPTION_2",
-      selected_dept: [0, 1],
-      available_sem: 3,
-      tags: [1],
-      goalJoiner: 1,
-      currentJoiner: 0,
-      likes: 0
+      title: "Book lovers",
+      summary: "We read books until we fall asleep..",
+      description: "Actually, it's sleep somoim :)",
+      selected_dept: [0, 1, 3, 4, 5],
+      available_semester: 1,
+      tags: [2, 3],
+      goalJoiner: 10,
+      currentJoiner: 3,
+      likes: 5,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
+    },
+    {
+      id: 2,
+      title: "test somoim",
+      summary: "i am testing the somoim list",
+      description: "Me too bro",
+      selected_dept: [0, 1, 3, 4, 5],
+      available_semester: 3,
+      tags: [4, 5],
+      goalJoiner: 10,
+      currentJoiner: 9,
+      likes: 5,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
+    },
+    {
+      id: 3,
+      title: "301 assa somoim",
+      summary: "We are assa in 301",
+      description: "Sad..",
+      selected_dept: [0, 1, 3, 4, 5],
+      available_semester: 5,
+      tags: [6, 7],
+      goalJoiner: 10,
+      currentJoiner: 1,
+      likes: 5,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     }
   ],
   categories: [
@@ -75,6 +172,11 @@ let stubInitialState = {
     { id: 5, name: "music" },
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
+  ],
+  majors: [
+    { id: 0, name: "cs" },
+    { id: 1, name: "economy" },
+    { id: 2, name: "music" }
   ],
   depts: [
     {
@@ -137,14 +239,13 @@ let stubInitialState = {
       id: 14,
       name: "자유전공학부"
     }
-  ]
+  ],
+  loggedUser: { id: 1 }
 };
-
-let mockStore = getMockStore(stubInitialState);
 
 describe("<SomoimMain />", () => {
   let somoimMain;
-
+  let mockStore = getMockStore(stubInitialState);
   beforeEach(() => {
     somoimMain = (
       <Provider store={mockStore}>
@@ -234,6 +335,7 @@ describe("<SomoimMain />", () => {
   it("when category list info does not loaded yet", () => {
     let savedCategories = stubInitialState.categories;
     stubInitialState.categories = null;
+    stubInitialState.somoims = temp_somoims;
     mockStore = getMockStore(stubInitialState);
     somoimMain = (
       <Provider store={mockStore}>

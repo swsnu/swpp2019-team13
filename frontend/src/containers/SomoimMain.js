@@ -76,7 +76,12 @@ class SomoimMain extends React.Component {
   };
 
   render() {
-    let categoryList, somoim_create;
+    let categoryList, somoim_create, selectedSomoim;
+    if (this.props.somoims) {
+      selectedSomoim = this.props.somoims.filter(
+        a => a.id === this.state.selectedSomoimID
+      )[0];
+    }
     if (this.props.categories) {
       categoryList = this.props.categories.map(item => (
         <Button
@@ -316,11 +321,7 @@ class SomoimMain extends React.Component {
 
         <SomoimDetail
           show={this.state.somoimDetailShow}
-          somoim={
-            this.props.somoims.filter(
-              a => a.id === this.state.selectedSomoimID
-            )[0]
-          }
+          somoim={selectedSomoim}
           closeHandler={this.somoimDetailCloseHandler}
           forceRender={Math.random()}
         />

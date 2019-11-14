@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 // import * as router from 'connected-react-router';
 
 import * as actionCreators from "./club";
@@ -24,7 +24,18 @@ describe("Category Actions", () => {
   });
 
   it("getClubByID", () => {
-    store.dispatch(actionCreators.getClubByID()).then(() => {
+    const spygetClubByID = jest.spyOn(axios, "get").mockImplementation(url => {
+      return new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: 1
+        };
+        resolve(result);
+      });
+    });
+
+    store.dispatch(actionCreators.getClubByID(1)).then(() => {
+      expect(spygetClubByID).toHaveBeenCalledTimes(1);
       done();
     });
   });

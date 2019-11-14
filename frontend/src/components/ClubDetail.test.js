@@ -19,6 +19,11 @@ const stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
+  majors: [
+    { id: 0, name: "cs" },
+    { id: 1, name: "economy" },
+    { id: 2, name: "music" }
+  ],
 
   clubs: [
     {
@@ -27,9 +32,11 @@ const stubInitialState = {
       content: "SNU Best HearthStone Club",
       clubmanager: "김지훈",
       selected_category: 0,
-      auth_img_file: "1",
+      auth_img: "1",
       isRegistered: true,
-      tags: [0, 1],
+      available_major: [1],
+      tags: [1],
+      likers: [],
       likes: 10
     },
     {
@@ -38,9 +45,11 @@ const stubInitialState = {
       content: "SNU Best Training Club",
       clubmanager: "김동우",
       selected_category: 6,
-      auth_img_file: "2",
+      auth_img: "2",
       isRegistered: true,
       tags: [2, 3],
+      available_major: [1],
+      likers: [],
       likes: 15
     },
 
@@ -50,9 +59,11 @@ const stubInitialState = {
       content: "SNU Best LoL Club",
       clubmanager: "김도현",
       selected_category: 6,
-      auth_img_file: "3",
+      auth_img: "3",
       isRegistered: true,
       tags: [2, 3],
+      available_major: [1],
+      likers: [],
       likes: 20
     }
   ]

@@ -6,6 +6,7 @@ describe("category Reducer", () => {
     const newState = reducer(undefined, {}); // initialize
     expect(newState).toEqual({
       categories: [
+        /*
         {
           id: 0,
           name: "학술매체"
@@ -33,7 +34,7 @@ describe("category Reducer", () => {
         {
           id: 6,
           name: "운동부"
-        }
+        }*/
       ]
     });
   });

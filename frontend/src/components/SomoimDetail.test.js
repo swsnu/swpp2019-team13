@@ -19,6 +19,11 @@ const stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
+  majors: [
+    { id: 0, name: "cs" },
+    { id: 1, name: "economy" },
+    { id: 2, name: "music" }
+  ],
 
   somoims: [
     {
@@ -27,11 +32,14 @@ const stubInitialState = {
       summary: "Playing LoL together!! :D",
       description: "LoL\nLoL\nLol",
       selected_dept: [0, 1],
-      available_sem: 1,
-      tags: [0, 1],
+      available_semester: 1,
+      tags: [1],
       goalJoiner: 20,
       currentJoiner: 7,
-      likes: 10
+      likes: 10,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     },
     {
       id: 1,
@@ -39,11 +47,14 @@ const stubInitialState = {
       summary: "We read books until we fall asleep..",
       description: "Actually, it's sleep somoim :)",
       selected_dept: [0, 1, 3, 4, 5],
-      available_sem: 1,
+      available_semester: 1,
       tags: [2, 3],
       goalJoiner: 10,
       currentJoiner: 3,
-      likes: 5
+      likes: 5,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     },
     {
       id: 2,
@@ -51,11 +62,14 @@ const stubInitialState = {
       summary: "i am testing the somoim list",
       description: "Me too bro",
       selected_dept: [0, 1, 3, 4, 5],
-      available_sem: 3,
+      available_semester: 3,
       tags: [4, 5],
       goalJoiner: 10,
       currentJoiner: 9,
-      likes: 5
+      likes: 5,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     },
     {
       id: 3,
@@ -63,11 +77,14 @@ const stubInitialState = {
       summary: "We are assa in 301",
       description: "Sad..",
       selected_dept: [0, 1, 3, 4, 5],
-      available_sem: 5,
+      available_semester: 5,
       tags: [6, 7],
       goalJoiner: 10,
       currentJoiner: 1,
-      likes: 5
+      likes: 5,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     }
   ]
 };

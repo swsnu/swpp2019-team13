@@ -76,7 +76,12 @@ class ClubMain extends React.Component {
   };
 
   render() {
-    let categoryList, RegisterButton;
+    let categoryList, RegisterButton, selected_club;
+    if (this.props.clubs) {
+      selected_club = this.props.clubs.filter(
+        a => a.id === this.state.selectedClubID
+      )[0];
+    }
     if (this.props.categories) {
       RegisterButton = (
         <ClubRegister
@@ -314,9 +319,7 @@ class ClubMain extends React.Component {
 
         <ClubDetail
           show={this.state.clubDetailShow}
-          club={
-            this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
-          }
+          club={selected_club}
           closeHandler={this.clubDetailCloseHandler}
           forceRender={Math.random()}
         />

@@ -10,33 +10,52 @@ import { history } from "../store/store";
 import * as clubActionCreators from "../store/actions/club";
 
 const stubInitialState = {
-  somoims: [
+  clubs: [
     {
       id: 0,
-      title: "TEST_SOMOIM_1",
-      summary: "TEST_SUMMARY_1",
-      description: "TEST_DESCRIPTION_1",
-      selected_dept: [0],
-      available_sem: 1,
-      tag: [0],
-      goalJoiner: 10,
-      currentJoiner: 7,
+      name: "SNUStone",
+      content: "SNU Best HearthStone Club",
+      clubmanager: "김지훈",
+      selected_category: 0,
+      auth_img: "1",
+      isRegistered: true,
+      available_major: [1],
+      tags: [1],
+      likers: [],
       likes: 10
     },
     {
       id: 1,
-      title: "TEST_SOMOIM_2",
-      summary: "TEST_SUMMARY_2",
-      description: "TEST_DESCRIPTION_2",
-      selected_dept: [0, 1],
-      available_sem: 3,
-      tag: [1],
-      goalJoiner: 1,
-      currentJoiner: 0,
-      likes: 0
+      name: "SnuWOD",
+      content: "SNU Best Training Club",
+      clubmanager: "김동우",
+      selected_category: 6,
+      auth_img: "2",
+      isRegistered: true,
+      tags: [2, 3],
+      available_major: [1],
+      likers: [],
+      likes: 15
+    },
+
+    {
+      id: 2,
+      name: "SnuLoL",
+      content: "SNU Best LoL Club",
+      clubmanager: "김도현",
+      selected_category: 6,
+      auth_img: "3",
+      isRegistered: true,
+      tags: [2, 3],
+      available_major: [1],
+      likers: [],
+      likes: 20
     }
   ],
-  categories: [{ id: 0, name: "CATEGORY_1" }, { id: 1, name: "CATEGORY_2" }]
+  categories: [
+    { id: 0, name: "CATEGORY_1" },
+    { id: 1, name: "CATEGORY_2" }
+  ]
 };
 
 const mockStore = getMockStore(stubInitialState);

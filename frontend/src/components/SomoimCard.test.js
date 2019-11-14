@@ -28,10 +28,12 @@ const stubInitialState = {
       description: "LoL\nLoL\nLol",
       selected_dept: [0, 1],
       available_sem: 1,
-      tags: [0, 1],
+      tags: [1],
       goalJoiner: 20,
+      joiners: [],
       currentJoiner: 7,
-      likes: 10
+      likes: 10,
+      likers: []
     },
     {
       id: 1,
@@ -43,7 +45,9 @@ const stubInitialState = {
       tags: [2, 3],
       goalJoiner: 10,
       currentJoiner: 3,
-      likes: 5
+      joiners: [],
+      likes: 5,
+      likers: []
     },
     {
       id: 2,
@@ -55,7 +59,8 @@ const stubInitialState = {
       tags: [4, 5],
       goalJoiner: 10,
       currentJoiner: 9,
-      likes: 5
+      likes: 5,
+      likers: []
     },
     {
       id: 3,
@@ -67,7 +72,9 @@ const stubInitialState = {
       tags: [6, 7],
       goalJoiner: 10,
       currentJoiner: 1,
-      likes: 5
+      joiners: [],
+      likes: 5,
+      likers: []
     }
   ]
 };
