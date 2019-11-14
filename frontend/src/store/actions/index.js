@@ -1,4 +1,11 @@
-export { getClubList, getClubByID, postClub } from "./club";
+export {
+  getClubList,
+  getClubByID,
+  putClubInformation,
+  postClubPoster,
+  getApplicationFormByID,
+  putApplicationFormByID
+} from "./club";
 export { getSomoimList, getSomoimByID, postSomoim } from "./somoim";
 export { getCategoryList } from "./category";
 export { getTagList } from "./tag";

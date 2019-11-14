@@ -31,7 +31,17 @@ class ClubCard extends React.Component {
         acceptQualification = true;
     }
 
-    let image = <img src={club.poster_img} width="120" height="120" alt="" />;
+    let image = <img src={null} width="120" height="120" alt="" />;
+
+    if (club.poster_img && club.poster_img.length > 0)
+      image = (
+        <img
+          src={"media/" + club.poster_img[0]}
+          width="120"
+          height="120"
+          alt=""
+        />
+      );
 
     let tagList;
     if (this.props.tags.length !== 0) {

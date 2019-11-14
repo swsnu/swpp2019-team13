@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Card } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import ClubDetail from "../components/ClubDetail";
 
 class ManagingClubTab extends Component {
@@ -37,6 +37,13 @@ class ManagingClubTab extends Component {
               <h1>{item.name}</h1>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               {item.summary}
+              <Button
+                onClick={() => {
+                  this.props.history.push("/club/manage/" + item.id);
+                }}
+              >
+                동아리 관리
+              </Button>
             </Card.Body>
           </Card>
         );
@@ -48,9 +55,7 @@ class ManagingClubTab extends Component {
         <ClubDetail
           show={this.state.clubDetailShow}
           club={
-            this.props.clubs.filter(
-              a => a.id === this.state.selectedSomoimID
-            )[0]
+            this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
           }
           closeHandler={() => {
             this.setState({

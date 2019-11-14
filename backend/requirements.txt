@@ -6,3 +6,5 @@ coverage
 coveralls
 pylint
 pylint-django
+psycopg2
+django_mysql

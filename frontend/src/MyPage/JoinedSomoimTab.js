@@ -49,7 +49,7 @@ class JoinedSomoimTab extends Component {
           show={this.state.somoimDetailShow}
           somoim={
             this.props.somoims.filter(
-              a => a.id === this.state.selectedClubID
+              a => a.id === this.state.selectedSomoimID
             )[0]
           }
           closeHandler={() => {

@@ -25,7 +25,6 @@ class ClubMain extends React.Component {
 
   componentDidMount() {
     this.props.getClubList();
-
     this.props.getCategoryList();
     this.props.getTagList();
     this.props.getDeptList();
@@ -346,7 +345,6 @@ const mapDispatchToProps = dispatch => {
     getTagList: () => dispatch(actionCreators.getTagList()),
     getDeptList: () => dispatch(actionCreators.getDeptList()),
     getMajorList: () => dispatch(actionCreators.getMajorList()),
-
     onGetRecommendedClubs: user =>
       dispatch(actionCreators.getRecommendedClubs(user))
   };

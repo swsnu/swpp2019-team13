@@ -45,13 +45,13 @@ class PreClub(models.Model):
 
 class Club(models.Model):
     name = models.CharField(max_length=64)
+    isShow = models.BooleanField(default=False)
     summary = models.TextField(default="")
     description = models.TextField(default="")
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE
     )
-    poster_img = models.ImageField(null=True)
     available_semester = models.IntegerField(default=0)
     available_major = models.ManyToManyField(
         Major,
@@ -59,10 +59,21 @@ class Club(models.Model):
         blank=True
     )
     session_day = models.IntegerField(default=0)
+    recruit_start_day = models.DateField(null=True)
+    recruit_end_day = models.DateField(null=True)
     tags = models.ManyToManyField(
         Tag,
         related_name="clubs",
         blank=True
+    )
+
+
+class ClubPoster(models.Model):
+    img = models.ImageField()
+    club = models.ForeignKey(
+        Club,
+        on_delete=models.CASCADE,
+        related_name='club_poster'
     )
 
 

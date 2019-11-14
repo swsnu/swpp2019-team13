@@ -37,7 +37,7 @@ class SomoimCreate extends React.Component {
     let majorList = [];
     if (this.props.majors) {
       let newMajor = this.props.majors.filter(a => a.name === major)[0].id;
-      if (this.props.majors.includes(newMajor)) {
+      if (this.state.available_major.includes(newMajor)) {
         return;
       } else {
         majorList = this.state.available_major.concat(newMajor);
@@ -222,7 +222,6 @@ class SomoimCreate extends React.Component {
 
             <Form.Row>
               <Form.Group as={Col} controlId="formDept">
-                {/* 단과대 입력 칸 */}
                 <Form.Label>단과 대학</Form.Label>
                 <Form.Control
                   as="select"
@@ -236,7 +235,6 @@ class SomoimCreate extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              {/* 전공 입력 칸 */}
               <Form.Group as={Col} controlId="formMajor">
                 <Form.Label>학과</Form.Label>
                 <Form.Control
