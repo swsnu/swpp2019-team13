@@ -5,7 +5,7 @@ import * as actionCreators from "./tag";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("getTagList", () => {
+  it("getTagList", done => {
     const stubTagList = [1];
 
     const spyGetTagList = jest.spyOn(axios, "get").mockImplementation(url => {

@@ -5,7 +5,7 @@ import * as actionCreators from "./category";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("getCategoryList", () => {
+  it("getCategoryList", done => {
     const spygetClubByID = jest.spyOn(axios, "get").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {

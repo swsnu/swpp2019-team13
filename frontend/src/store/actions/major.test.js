@@ -14,7 +14,7 @@ describe("Major Actions", () => {
     jest.clearAllMocks();
   });
 
-  it("getMajorList", () => {
+  it("getMajorList", done => {
     const stubMajorList = [stubMajor];
 
     const spyGetDeptList = jest.spyOn(axios, "get").mockImplementation(url => {

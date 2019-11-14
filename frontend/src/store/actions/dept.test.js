@@ -13,7 +13,7 @@ describe("Dept Actions", () => {
     jest.clearAllMocks();
   });
 
-  it("getDeptList", () => {
+  it("getDeptList", done => {
     const stubDeptList = [stubDept];
 
     const spyGetDeptList = jest.spyOn(axios, "get").mockImplementation(url => {
