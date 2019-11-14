@@ -2,7 +2,9 @@ export {
   getClubList,
   getClubByID,
   putClubInformation,
-  postClubPoster
+  postClubPoster,
+  getApplicationFormByID,
+  putApplicationFormByID
 } from "./club";
 export { getSomoimList, getSomoimByID, postSomoim } from "./somoim";
 export { getCategoryList } from "./category";

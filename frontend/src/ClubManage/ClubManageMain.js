@@ -8,10 +8,11 @@ import Header from "../components/Header";
 
 import * as actionCreators from "../store/actions/index";
 import ClubInfoTab from "./ClubInfoTab";
+import ApplicationFormTab from "./ApplicationFormTab";
 
 class ClubManageMain extends Component {
   state = {
-    tab: 0,
+    tab: 1,
     isUserInfoLoaded: false
   };
 
@@ -30,6 +31,9 @@ class ClubManageMain extends Component {
     switch (this.state.tab) {
       case 0:
         tab = <ClubInfoTab />;
+        break;
+      case 1:
+        tab = <ApplicationFormTab />;
         break;
       default:
         tab = null;

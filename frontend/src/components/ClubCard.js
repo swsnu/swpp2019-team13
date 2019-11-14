@@ -89,7 +89,7 @@ class ClubCard extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    clubs: state.club.somoims,
+    //clubs: state.club.somoims,
     tags: state.tag.tags,
     loggedUser: state.user.loggedUser
   };

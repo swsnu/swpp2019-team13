@@ -9,8 +9,11 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from .models import UserProfile, PreClub, Club, ClubPoster, Somoim, Tag, Department, Category, Major
-from .serializers import ClubSerializer, SomoimSerializer
+
+from .models import *
+from .application_models import *
+from .serializers import *
+from .application_serializers import *
 
 from django.core.files import File
 from django.forms.models import model_to_dict
@@ -505,6 +508,54 @@ def recommend_somoim(request, user_id=0):
                             id=somoim.id)
         serializer = SomoimSerializer(recommended_somoims, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
+    else:
+        return HttpResponse(status=405)
+
+
+def application_form(request, club_id=0):
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
+    try:
+        form = Application.objects.get(club=club_id, user=None)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serializer = ApplcationSerializer(form)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    elif request.method == 'PUT':
+        form.delete()
+        form = Application(club=Club.objects.get(id=club_id))
+        form.save()
+        body = json.loads(request.body.decode())
+        for item in body:
+            print(item)
+            if item['type'] == 'shortText':
+                short_text = ShortTextForm(
+                    application=form, order=item['order'], title=item['title'])
+                short_text.save()
+            elif item['type'] == 'longText':
+                long_text = LongTextForm(
+                    application=form, order=item['order'], title=item['title'])
+                long_text.save()
+            elif item['type'] == 'multiChoice':
+                multi_choice = MultiChoiceForm(
+                    application=form, order=item['order'], title=item['title'])
+                multi_choice.save()
+                for item_choice in item['choices']:
+                    choice = Choice(multi=multi_choice,
+                                    content=item_choice['content'])
+                    choice.save()
+            elif item['type'] == 'file':
+                file = FileForm(
+                    application=form, order=item['order'], title=item['title'])
+                file.save()
+            elif item['type'] == 'image':
+                image = ImageForm(
+                    application=form, order=item['order'], title=item['title'])
+                image.save()
+
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
