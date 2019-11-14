@@ -104,7 +104,15 @@ class SignUp extends React.Component {
         >
           회원 가입
         </h1>
-        <div style={{ width: "40%", position: "relative", left: "30%" }}>
+        <div
+          style={{
+            width: "50%",
+            position: "relative",
+            left: "25%",
+            backgroundColor: "white",
+            padding: "15px 30px"
+          }}
+        >
           {/* 유저 정보를 입력받는다 */}
           <Form>
             {/* 이메일 입력 칸 */}
@@ -295,7 +303,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(SignUp));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));

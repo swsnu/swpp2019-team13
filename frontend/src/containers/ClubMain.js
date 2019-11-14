@@ -114,6 +114,7 @@ class ClubMain extends React.Component {
     if (this.props.recommendedClubs) {
       recommendedList = this.props.recommendedClubs.map(item => (
         <ClubCard
+          className="recommended-club-card"
           key={item.id}
           clickHandler={this.clubCardClickHandler}
           club={item}

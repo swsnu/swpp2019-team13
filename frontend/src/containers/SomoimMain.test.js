@@ -7,7 +7,12 @@ import { Route, Switch } from "react-router-dom";
 import SomoimMain from "./SomoimMain";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
-import * as somoimActionCreators from "../store/actions/somoim";
+import * as userActions from "../store/actions/user";
+import * as somoimActions from "../store/actions/somoim";
+import * as categoryActions from "../store/actions/category";
+import * as tagActions from "../store/actions/tag";
+import * as deptActions from "../store/actions/dept";
+import * as majorActions from "../store/actions/major";
 let temp_somoims = [
   {
     id: 0,
@@ -246,6 +251,15 @@ let stubInitialState = {
 describe("<SomoimMain />", () => {
   let somoimMain;
   let mockStore = getMockStore(stubInitialState);
+
+  let spyGetLoginInfo,
+    spyGetSomoimList,
+    spyGetCategoryList,
+    spyGetTagList,
+    spyGetDeptList,
+    spyGetMajorList,
+    spyGetRecommendedSomoims;
+
   beforeEach(() => {
     somoimMain = (
       <Provider store={mockStore}>
@@ -262,6 +276,48 @@ describe("<SomoimMain />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyGetLoginInfo = jest
+      .spyOn(userActions, "getLoginInfo")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetSomoimList = jest
+      .spyOn(somoimActions, "getSomoimList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetCategoryList = jest
+      .spyOn(categoryActions, "getCategoryList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetTagList = jest
+      .spyOn(tagActions, "getTagList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetDeptList = jest
+      .spyOn(deptActions, "getDeptList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetMajorList = jest
+      .spyOn(majorActions, "getMajorList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetRecommendedSomoims = jest
+      .spyOn(userActions, "getRecommendedSomoims")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render Page", () => {

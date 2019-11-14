@@ -150,15 +150,15 @@ class SomoimMain extends React.Component {
       <div className="SomoimMain">
         <Header />
         <div className="SomoimList">
-          <h2
+          <h1
             style={{
               fontWeight: "bold"
             }}
           >
             추천 소모임
-          </h2>
+          </h1>
           <div>
-            <div>
+            <div className="card-flex-container">
               <div className="SomoimCard">
                 {this.state.recommendedListPageNum * 4 + 0 <
                 recommendedList.length
@@ -171,8 +171,6 @@ class SomoimMain extends React.Component {
                   ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
                   : ""}
               </div>
-            </div>
-            <div>
               <div className="SomoimCard">
                 {this.state.recommendedListPageNum * 4 + 2 <
                 recommendedList.length
@@ -224,14 +222,14 @@ class SomoimMain extends React.Component {
         <br />
         <div className="SomoimList" style={{ marginBottom: "25px" }}>
           <div>
-            <h2
+            <h1
               style={{
                 fontWeight: "bold",
                 display: "inline-block"
               }}
             >
               모든 소모임
-            </h2>
+            </h1>
             {this.props.loggedUser && (
               <Button
                 className="somoim-create-button"
@@ -261,7 +259,7 @@ class SomoimMain extends React.Component {
           </div>
           <br />
           <div>
-            <div>
+            <div className="card-flex-container">
               <div className="SomoimCard">
                 {this.state.allListPageNum * 4 + 0 < allList.length
                   ? allList[this.state.allListPageNum * 4 + 0]
@@ -272,8 +270,6 @@ class SomoimMain extends React.Component {
                   ? allList[this.state.allListPageNum * 4 + 1]
                   : ""}
               </div>
-            </div>
-            <div>
               <div className="SomoimCard">
                 {this.state.allListPageNum * 4 + 2 < allList.length
                   ? allList[this.state.allListPageNum * 4 + 2]
