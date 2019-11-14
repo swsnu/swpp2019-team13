@@ -10,7 +10,7 @@ export const postSomoim_ = somoim => {
 
 export const postSomoim = somoim => {
   return dispatch => {
-    return axios.post("api/somoim/list/", somoim).then(res => {
+    return axios.post("/api/somoim/list/", somoim).then(res => {
       dispatch(postSomoim_(res.data));
       return res.data;
     });

@@ -18,6 +18,8 @@ urlpatterns = [
     path('user/info/', views.userinfo, name='userinfo'),
 
     path('preclub/list/', views.preclub_list, name='preclub'),
+    path('club/<int:club_id>/poster/', views.clubposter, name='clubposter'),
+    path('club/<int:club_id>/', views.club, name='club'),
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
 
@@ -36,4 +38,7 @@ urlpatterns = [
          views.join_somoim, name='join_somoim'),
     path('user/<int:user_id>/somoim/recommend/',
          views.recommend_somoim, name='recommend_somoim'),
+
+    path('club/<int:club_id>/application/form/',
+         views.application_form, name='application_form'),
 ]

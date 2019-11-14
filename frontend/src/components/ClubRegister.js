@@ -2,6 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Modal, Button, Form } from "react-bootstrap";
+import {
+  maxSelectFile,
+  checkMimeType,
+  checkFileSize
+} from "../utils/CheckUploadedFile";
 
 class ClubRegister extends React.Component {
   state = {
@@ -20,52 +25,12 @@ class ClubRegister extends React.Component {
     });
   }
 
-  checkMimeType = event => {
-    let files = event.target.files;
-    let err = [];
-    const types = ["image/png", "image/jpeg", "image/gif"];
-    for (let x = 0; x < files.length; x++) {
-      if (types.every(type => files[x].type !== type)) {
-        err[x] = files[x].type + " is not a supported format\n";
-      }
-    }
-    for (let z = 0; z < err.length; z++) {
-      alert(err[z]);
-      event.target.value = null;
-    }
-    return true;
-  };
-  maxSelectFile = event => {
-    let files = event.target.files;
-    if (files.length > 3) {
-      const msg = "Only 3 images can be uploaded at a time";
-      event.target.value = null;
-      alert(msg);
-      return false;
-    }
-    return true;
-  };
-  checkFileSize = event => {
-    let files = event.target.files;
-    let size = 2000000;
-    let err = [];
-    for (let x = 0; x < files.length; x++) {
-      if (files[x].size > size) {
-        err[x] = files[x].name + " is too large, please pick a smaller file\n";
-      }
-    }
-    for (let z = 0; z < err.length; z++) {
-      alert(err[z]);
-      event.target.value = null;
-    }
-    return true;
-  };
-
   onChangeHandler = event => {
     if (
-      this.maxSelectFile(event) &&
-      this.checkMimeType(event) &&
-      this.checkFileSize(event)
+      // import from utils/CheckUploadedFile
+      maxSelectFile(event) &&
+      checkMimeType(event, 3) &&
+      checkFileSize(event)
     ) {
       let file_urls = [];
       for (let x = 0; x < event.target.files.length; x++) {

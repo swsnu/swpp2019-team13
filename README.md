@@ -39,6 +39,7 @@ Since we use mysql, you should install belows by apt-get
 sudo apt-get install mysql-server mysql-client
 sudo apt-get install libmysqlclient-dev
 sudo apt-get install pylint
+sudo apt-get install libpq-dev python-dev
 ```
 
 should setting mysql with this [link](https://bscnote.tistory.com/77) at first

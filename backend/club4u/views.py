@@ -1,4 +1,6 @@
 import json
+import os
+
 from json import JSONDecodeError
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
@@ -7,8 +9,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
-from .models import UserProfile, PreClub, Club, Somoim, Tag, Department, Category, Major
-from .serializers import ClubSerializer, SomoimSerializer
+
+from .models import *
+from .application_models import *
+from .serializers import *
+from .application_serializers import *
+
+from django.core.files import File
+from django.forms.models import model_to_dict
 
 
 def category_list(request):
@@ -174,9 +182,101 @@ def preclub_list(request):
         return HttpResponse(status=405)
 
 
+def club(request, club_id=None):
+    if request.method == 'GET':
+        try:
+            selected_club = Club.objects.get(id=club_id)
+            serializer = ClubSerializer(selected_club)
+
+            poster_list = ClubPoster.objects.filter(
+                club=selected_club).values()
+
+            poster_img_list = []
+
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            response_dict = serializer.data
+            response_dict['poster_img'] = poster_img_list
+            return HttpResponse(JSONRenderer().render(response_dict))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    if request.method == 'PUT':
+        try:
+            selected_club = Club.objects.get(id=club_id)
+
+            req_data = json.loads(request.body.decode())
+            selected_club.isShow = req_data['isShow']
+            selected_club.name = req_data['name']
+            selected_club.summary = req_data['summary']
+            selected_club.description = req_data['description']
+            selected_club.category = Category.objects.get(
+                id=req_data['category'])
+            selected_club.available_semester = req_data['available_semester']
+            selected_club.session_day = req_data['session_day']
+
+            selected_club.available_major.clear()
+
+            for major_id in req_data['available_major']:
+                selected_club.available_major.add(
+                    Major.objects.get(id=major_id))
+
+            # delete existing poster before add new poster
+            poster_club = ClubPoster.objects.filter(club=selected_club)
+
+            for poster in poster_club.values():
+                file_path = os.getcwd() + "/media/" + str(poster['img'])
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+
+            poster_club.delete()
+
+            # tags = req_data['tags']
+
+            selected_club.recruit_start_day = req_data['recruit_start_day'].split('T')[
+                0]
+            selected_club.recruit_end_day = req_data['recruit_end_day'].split('T')[
+                0]
+
+            selected_club.save()
+
+            return HttpResponse(status=204)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+
+def clubposter(request, club_id=0):
+    if request.method == 'POST':
+        selectedClub = Club.objects.get(id=club_id)
+        new_poster = ClubPoster(img=request.FILES['image'], club=selectedClub)
+        new_poster.save()
+
+        # response_dict = {'img': str(model_to_dict(new_poster)['img'])}
+
+        # return JsonResponse(response_dict, safe=False)
+
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
 def club_list(request):
     if request.method == 'GET':
         serializer = ClubSerializer(Club.objects.all(), many=True)
+
+        response_dict = serializer.data
+
+        for c in response_dict:
+            poster_list = ClubPoster.objects.filter(
+                club=Club.objects.get(id=c['id'])).values()
+
+            poster_img_list = []
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            c['poster_img'] = poster_img_list
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:
         return HttpResponse(status=405)
@@ -408,6 +508,54 @@ def recommend_somoim(request, user_id=0):
                             id=somoim.id)
         serializer = SomoimSerializer(recommended_somoims, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
+    else:
+        return HttpResponse(status=405)
+
+
+def application_form(request, club_id=0):
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
+    try:
+        form = Application.objects.get(club=club_id, user=None)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serializer = ApplcationSerializer(form)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    elif request.method == 'PUT':
+        form.delete()
+        form = Application(club=Club.objects.get(id=club_id))
+        form.save()
+        body = json.loads(request.body.decode())
+        for item in body:
+            print(item)
+            if item['type'] == 'shortText':
+                short_text = ShortTextForm(
+                    application=form, order=item['order'], title=item['title'])
+                short_text.save()
+            elif item['type'] == 'longText':
+                long_text = LongTextForm(
+                    application=form, order=item['order'], title=item['title'])
+                long_text.save()
+            elif item['type'] == 'multiChoice':
+                multi_choice = MultiChoiceForm(
+                    application=form, order=item['order'], title=item['title'])
+                multi_choice.save()
+                for item_choice in item['choices']:
+                    choice = Choice(multi=multi_choice,
+                                    content=item_choice['content'])
+                    choice.save()
+            elif item['type'] == 'file':
+                file = FileForm(
+                    application=form, order=item['order'], title=item['title'])
+                file.save()
+            elif item['type'] == 'image':
+                image = ImageForm(
+                    application=form, order=item['order'], title=item['title'])
+                image.save()
+
+        return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
 
