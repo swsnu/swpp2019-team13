@@ -17,7 +17,7 @@ class LongTextSerializer(serializers.ModelSerializer):
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
-        fields = ('id', 'content')
+        fields = '__all__'
 
 
 class MultiChoiceSerializer(serializers.ModelSerializer):

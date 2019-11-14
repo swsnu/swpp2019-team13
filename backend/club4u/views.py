@@ -524,13 +524,29 @@ def application_form(request, club_id=0):
         serializer = ApplcationSerializer(form)
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
-        body = request.body.decode()
-        # somoim_id = json.loads(body)['id']
-        # try:
-        #     user.join_somoims.get(id=somoim_id)
-        #     user.join_somoims.remove(user.join_somoims.get(id=somoim_id))
-        # except ObjectDoesNotExist:
-        #     user.join_somoims.add(Somoim.objects.get(id=somoim_id))
+        form.delete()
+        form = Application(club=Club.objects.get(id=club_id))
+        form.save()
+        body = json.loads(request.body.decode())
+        for item in body:
+            print(item)
+            if item['type'] == 'shortText':
+                short_text = ShortTextForm(
+                    application=form, order=item['order'], title=item['title'])
+                short_text.save()
+            elif item['type'] == 'longText':
+                long_text = LongTextForm(
+                    application=form, order=item['order'], title=item['title'])
+                long_text.save()
+            elif item['type'] == 'multiChoice':
+                multi_choice = MultiChoiceForm(
+                    application=form, order=item['order'], title=item['title'])
+                multi_choice.save()
+                for item_choice in item['choices']:
+                    choice = Choice(multi=multi_choice,
+                                    content=item_choice['content'])
+                    choice.save()
+
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)

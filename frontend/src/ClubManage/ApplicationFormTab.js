@@ -24,6 +24,7 @@ class ApplicationFormTab extends Component {
   };
 
   componentDidUpdate = () => {
+    console.log(this.state.formList);
     if (!this.state.firstLoaded) {
       if (this.props.applicationForm) {
         let formList = [];
@@ -114,7 +115,7 @@ class ApplicationFormTab extends Component {
               })
             });
           }}
-        ></Form.Control>
+        />
         <img
           src={deletePNG}
           width="30"
@@ -185,7 +186,7 @@ class ApplicationFormTab extends Component {
                   })
                 });
               }}
-            ></Form.Control>
+            />
             <img
               src={minusPNG}
               width="20"
@@ -234,7 +235,7 @@ class ApplicationFormTab extends Component {
                   })
                 });
               }}
-            ></Form.Control>
+            />
             <img
               src={plusPNG}
               width="22"
@@ -293,7 +294,12 @@ class ApplicationFormTab extends Component {
   };
 
   saveApplicationFormHandler = () => {
-    console.log(this.state.formList);
+    this.props.putApplicationFormByID(
+      this.props.match.params.club_id,
+      this.state.formList
+        .filter(item => !item.isDeleted)
+        .map((item, index) => ({ ...item, order: index }))
+    );
   };
 
   render() {
@@ -367,21 +373,22 @@ class ApplicationFormTab extends Component {
             handles={false}
             dataSource={this.state.formList}
             onUpdate={e => {
-              console.log(this.state.formList);
+              // this.forceUpdate();
             }}
+            // rowKey="id"
             row={(record, index) => {
               if (!record.isDeleted) {
                 switch (record.type) {
                   case "shortText":
-                    return this.shortText({ ...record, order: index });
+                    return this.shortText(record);
                   case "longText":
-                    return this.longText({ ...record, order: index });
+                    return this.longText(record);
                   case "multiChoice":
-                    return this.multiChoice({ ...record, order: index });
+                    return this.multiChoice(record);
                   case "image":
-                    return this.image({ ...record, order: index });
+                    return this.image(record);
                   case "file":
-                    return this.file({ ...record, order: index });
+                    return this.file(record);
                   default:
                     return <></>;
                 }

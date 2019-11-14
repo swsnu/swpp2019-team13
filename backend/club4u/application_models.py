@@ -24,7 +24,7 @@ class ShortTextForm(models.Model):
     )
     order = models.IntegerField(default=0)
     title = models.CharField(max_length=100)
-    content = models.CharField(max_length=100)
+    content = models.CharField(max_length=100, null=True, blank=True)
 
 
 class LongTextForm(models.Model):
@@ -36,7 +36,7 @@ class LongTextForm(models.Model):
     )
     order = models.IntegerField(default=0)
     title = models.CharField(max_length=100)
-    content = models.CharField(max_length=500)
+    content = models.CharField(max_length=500, null=True, blank=True)
 
 
 class MultiChoiceForm(models.Model):
@@ -58,6 +58,7 @@ class Choice (models.Model):
         null=True
     )
     content = models.CharField(max_length=100)
+    checked = models.BooleanField(default=False)
 
 
 class ImageForm(models.Model):
