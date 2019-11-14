@@ -25,6 +25,7 @@ class LikedSomoimTab extends Component {
             }}
           >
             <Card.Body
+              id="list-item-body"
               onClick={e => {
                 if (e.target.className === "card-body") {
                   this.setState({
@@ -39,6 +40,7 @@ class LikedSomoimTab extends Component {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               {item.summary}{" "}
               <Button
+                id="somoim-unlike-button"
                 onClick={() => {
                   this.props.addLikedSomoim(item, this.props.loggedUser);
                 }}

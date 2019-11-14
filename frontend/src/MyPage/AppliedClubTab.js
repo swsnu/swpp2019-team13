@@ -24,6 +24,7 @@ class AppliedClubTab extends Component {
             }}
           >
             <Card.Body
+              id="list-item-body"
               onClick={e => {
                 if (e.target.className === "card-body") {
                   this.setState({

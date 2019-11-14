@@ -24,6 +24,7 @@ class ManagingClubTab extends Component {
             }}
           >
             <Card.Body
+              id="list-item-body"
               onClick={e => {
                 if (e.target.className === "card-body") {
                   this.setState({
@@ -38,6 +39,7 @@ class ManagingClubTab extends Component {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               {item.summary}
               <Button
+                id="manage-club-button"
                 onClick={() => {
                   this.props.history.push("/club/manage/" + item.id);
                 }}

@@ -195,7 +195,7 @@ class SelfInfoTab extends Component {
             return (
               <Form.Check
                 key={i}
-                id="signup-sessionday-checkbox"
+                id="mypage-sessionday-checkbox"
                 inline
                 type={"checkbox"}
                 label={a}
@@ -213,6 +213,7 @@ class SelfInfoTab extends Component {
         </Form>
 
         <Button
+          className="edit-info-button"
           style={{ marginTop: "10px" }}
           variant="dark"
           size="lg"
