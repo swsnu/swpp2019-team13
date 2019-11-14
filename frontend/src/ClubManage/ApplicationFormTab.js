@@ -4,12 +4,12 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import ReactDragList from "react-drag-list";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
-import filePNG from "./file.png";
-import imagePNG from "./image.png";
-import deletePNG from "./delete.png";
-import minusPNG from "./minus.png";
-import plusPNG from "./plus.png";
-import savePNG from "./save.png";
+import filePNG from "./images/file.png";
+import imagePNG from "./images/image.png";
+import deletePNG from "./images/delete.png";
+import minusPNG from "./images/minus.png";
+import plusPNG from "./images/plus.png";
+import savePNG from "./images/save.png";
 import * as actionCreators from "../store/actions/index";
 
 class ApplicationFormTab extends Component {
