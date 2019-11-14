@@ -1,0 +1,56 @@
+.Card {
+  flex: 1;
+  margin: 10px;
+  border: 1px solid #bebebe;
+  padding: 15px 15px;
+  text-align: center;
+  box-shadow: 0px 0px 2px 2px gray;
+}
+
+.title {
+  border-bottom: 1px solid #bebebe;
+  padding-bottom: 5px;
+  margin-bottom: 3px;
+}
+
+/* .applicable-term {
+  font-size: 0.9em;
+  color: #6b6b6b;
+  border-bottom: 1px solid #bebebe;
+  position: relative;
+  bottom: 10px;
+} */
+
+.percentage {
+  padding: 10px 10px;
+}
+
+.user-info {
+  display: flex;
+  justify-content: center;
+}
+
+.user-info-item {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+img {
+  position: relative;
+  bottom: 4px;
+}
+
+p {
+  color: #6b6b6b;
+}
+
+.summary {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.tagList {
+  margin-top: 10px;
+}
