@@ -11,7 +11,8 @@ let stubUser = {
   dept: 0,
   major: 3,
   grade: 3,
-  available_semester: 2
+  available_semester: 2,
+  available_session_day: 0
 };
 
 let stubClubs = [{ fields: {} }, { fields: {} }];
@@ -25,7 +26,26 @@ describe("User Actions", () => {
     jest.clearAllMocks();
   });
 
-  it("getUserList", () => {
+  it("Sign Up", done => {
+    const spySignUp = jest.spyOn(axios, "post").mockImplementation(url => {
+      return new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: stubUser
+        };
+        resolve(result);
+      });
+    });
+
+    store.dispatch(actionCreators.signUp(stubUser)).then(() => {
+      const newState = store.getState();
+      expect(newState.user.users[0]).toStrictEqual(stubUser);
+      expect(spySignUp).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
+
+  it("getUserList", done => {
     const stubUserList = [stubUser];
 
     const spyGetUserList = jest.spyOn(axios, "get").mockImplementation(url => {
@@ -46,7 +66,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Sign In", () => {
+  it("Sign In", done => {
     const spySignIn = jest.spyOn(axios, "post").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
@@ -65,7 +85,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Sign Out", () => {
+  it("Sign Out", done => {
     const spySignOut = jest.spyOn(axios, "get").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
@@ -81,26 +101,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Sign Up", () => {
-    const spySignUp = jest.spyOn(axios, "post").mockImplementation(url => {
-      return new Promise((resolve, reject) => {
-        const result = {
-          status: 200,
-          data: stubUser
-        };
-        resolve(result);
-      });
-    });
-
-    store.dispatch(actionCreators.signUp(stubUser)).then(() => {
-      const newState = store.getState();
-      expect(newState.user.users).toBe([stubUser]);
-      expect(spySignUp).toHaveBeenCalledTimes(1);
-      done();
-    });
-  });
-
-  it("Get Login Info", () => {
+  it("Get Login Info", done => {
     const spyGetLoginInfo = jest.spyOn(axios, "get").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
@@ -117,7 +118,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Put User Info", () => {
+  it("Put User Info", done => {
     const spyPutUserInfo = jest.spyOn(axios, "put").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
@@ -134,7 +135,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Managing Club", () => {
+  it("Get Managing Club", done => {
     const spyGetManagingClubs = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -153,7 +154,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Liked Club", () => {
+  it("Get Liked Club", done => {
     const spyGetLikedClubs = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -172,7 +173,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Applied Club", () => {
+  it("Get Applied Club", done => {
     const spyGetAppliedClubs = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -191,7 +192,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Recommended Club", () => {
+  it("Get Recommended Club", done => {
     const spyGetRecommendedClubs = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -210,7 +211,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Managing Somoim", () => {
+  it("Get Managing Somoim", done => {
     const spyGetManagingSomoims = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -229,7 +230,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Liked Somoim", () => {
+  it("Get Liked Somoim", done => {
     const spyGetLikedSomoims = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -248,7 +249,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Joined Somoim", () => {
+  it("Get Joined Somoim", done => {
     const spyGetJoinedSomoims = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -267,7 +268,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Get Recommended Somoim", () => {
+  it("Get Recommended Somoim", done => {
     const spyGetRecommendedSomoims = jest
       .spyOn(axios, "get")
       .mockImplementation(url => {
@@ -286,7 +287,7 @@ describe("User Actions", () => {
     });
   });
 
-  it("Add Managing Somoim", () => {
+  it("Add Managing Somoim", done => {
     const spyAddManagingSomoim = jest
       .spyOn(axios, "put")
       .mockImplementation(url => {
@@ -307,7 +308,7 @@ describe("User Actions", () => {
       });
   });
 
-  it("Add Joined Somoim", () => {
+  it("Add Joined Somoim", done => {
     const spyAddJoinedSomoim = jest
       .spyOn(axios, "put")
       .mockImplementation(url => {
@@ -328,7 +329,7 @@ describe("User Actions", () => {
       });
   });
 
-  it("Add Applied Club", () => {
+  it("Add Applied Club", done => {
     const spyAddAppliedClub = jest
       .spyOn(axios, "put")
       .mockImplementation(url => {
@@ -349,7 +350,7 @@ describe("User Actions", () => {
       });
   });
 
-  it("Add Liked Somoim", () => {
+  it("Add Liked Somoim", done => {
     const spyAddLikedSomoim = jest
       .spyOn(axios, "put")
       .mockImplementation(url => {
@@ -370,7 +371,7 @@ describe("User Actions", () => {
       });
   });
 
-  it("Add Liked Club", () => {
+  it("Add Liked Club", done => {
     const spyAddLikedClub = jest.spyOn(axios, "put").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
@@ -382,7 +383,7 @@ describe("User Actions", () => {
     });
 
     store.dispatch(actionCreators.addLikedClub(stubClub, stubUser)).then(() => {
-      expect(spyAddLikedSomoim).toHaveBeenCalledTimes(1);
+      expect(spyAddLikedClub).toHaveBeenCalledTimes(1);
       done();
     });
   });

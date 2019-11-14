@@ -5,7 +5,7 @@ import * as actionCreators from "./somoim";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("postSomoim", () => {
+  it("postSomoim", done => {
     const spypostSomoim = jest.spyOn(axios, "post").mockImplementation(url => {
       return new Promise((resolve, reject) => {
         const result = {
@@ -23,13 +23,13 @@ describe("Category Actions", () => {
       done();
     });
   });
-  it("getSomoimList", () => {
+  it("getSomoimList", done => {
     store.dispatch(actionCreators.getSomoimList()).then(() => {
       done();
     });
   });
 
-  it("getSomoimByID", () => {
+  it("getSomoimByID", done => {
     store.dispatch(actionCreators.getSomoimByID()).then(() => {
       done();
     });

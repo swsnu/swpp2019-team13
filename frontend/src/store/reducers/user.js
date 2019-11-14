@@ -23,9 +23,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, loggedUser: null };
     case actionTypes.SIGN_UP:
       const newUser = {
-        password: action.user.password,
-        email: action.user.email,
+        id: action.user.id,
         name: action.user.name,
+        email: action.user.email,
+        password: action.user.password,
         dept: action.user.dept,
         major: action.user.major,
         grade: action.user.grade,
