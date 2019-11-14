@@ -422,8 +422,9 @@ describe("<ClubMain />", () => {
     let mainInstance = component.find("ClubMain").instance();
     let wrapper = component.find(".category-button");
     wrapper.at(0).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(0);
     wrapper.at(6).simulate("click");
-    // mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
+    expect(mainInstance.state.selected_category).toBe(2);
   });
 
   it("recommended club list", () => {
@@ -448,8 +449,9 @@ describe("<ClubMain />", () => {
 
     const component = mount(clubMain);
     let mainInstance = component.find("ClubMain").instance();
-    let wrapper = component.find(".changePage");
     mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
+    let wrapper = component.find(".recommended-club-card");
+    expect(wrapper.length).toBe(9);
 
     stubInitialState.recommendedClubs = [];
     mockStore = getMockStore(stubInitialState);
@@ -478,8 +480,11 @@ describe("<ClubMain />", () => {
     let component = mount(clubMain);
     component.update();
     let mainInstance = component.find("ClubMain").instance();
-    // expect(spyGetRecommendedClubs).toBeCalledTimes(7);
-    mainInstance.setState({ ...mainInstance.state, isUserInfoLoaded: true });
+    mainInstance.setState({
+      ...mainInstance.state,
+      isUserInfoLoaded: true
+    });
+    expect(spyGetRecommendedClubs).toBeCalledTimes(9);
 
     stubInitialState.loggedUser = saved;
     mockStore = getMockStore(stubInitialState);

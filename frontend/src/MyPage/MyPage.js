@@ -80,6 +80,7 @@ class MyPage extends Component {
             <Col sm="2">
               <Accordion>
                 <Accordion.Toggle
+                  className="self-info-button"
                   style={{ marginBottom: "5px", marginTop: "13px" }}
                   as={Button}
                   variant="outline-dark"
@@ -109,6 +110,7 @@ class MyPage extends Component {
                 <Accordion.Collapse eventKey="1">
                   <div>
                     <Button
+                      className="manage-club-button"
                       style={{
                         width: "95%",
                         marginLeft: "5px"
@@ -123,6 +125,7 @@ class MyPage extends Component {
                       동아리 관리
                     </Button>
                     <Button
+                      className="like-club-button"
                       style={{
                         width: "95%",
                         marginLeft: "5px"
@@ -138,6 +141,7 @@ class MyPage extends Component {
                     </Button>
 
                     <Button
+                      className="apply-club-button"
                       style={{
                         width: "95%",
                         marginLeft: "5px"
@@ -167,6 +171,7 @@ class MyPage extends Component {
                 <Accordion.Collapse eventKey="2">
                   <div>
                     <Button
+                      className="manage-somoim-button"
                       style={{
                         width: "95%",
                         marginLeft: "5px"
@@ -181,6 +186,7 @@ class MyPage extends Component {
                       소모임 관리
                     </Button>
                     <Button
+                      className="like-somoim-button"
                       style={{
                         width: "95%",
                         marginLeft: "5px"
@@ -196,6 +202,7 @@ class MyPage extends Component {
                     </Button>
 
                     <Button
+                      className="join-somoim-button"
                       style={{
                         width: "95%",
                         marginLeft: "5px"
@@ -249,7 +256,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(MyPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MyPage));
