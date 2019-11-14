@@ -6,8 +6,12 @@
   padding: 2%;
 }
 
+.card-flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .SomoimCard {
-  width: 50%;
   display: inline-block;
 }
 
