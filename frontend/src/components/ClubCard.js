@@ -11,28 +11,28 @@ import person from "../images/person.png";
 class ClubCard extends React.Component {
   render() {
     let club = this.props.club;
-    let acceptQualification = false;
+    // let acceptQualification = false;
 
     if (club) {
-      if (this.props.loggedUser) {
-        // check qualification
-        // 1. check whether user can participate in session day
-        let qualification_1 =
-          (club.session_day & this.props.loggedUser.available_session_day) ===
-          club.session_day;
+      // if (this.props.loggedUser) {
+      //   // check qualification
+      //   // 1. check whether user can participate in session day
+      //   let qualification_1 =
+      //     (club.session_day & this.props.loggedUser.available_session_day) ===
+      //     club.session_day;
 
-        // 2. check whether user's major is available
-        let qualification_2 = club.available_major.includes(
-          this.props.loggedUser.major
-        );
+      //   // 2. check whether user's major is available
+      //   let qualification_2 = club.available_major.includes(
+      //     this.props.loggedUser.major
+      //   );
 
-        // 3. check whether user can participate in next available semesters
-        let qualification_3 =
-          club.available_semester <= this.props.loggedUser.available_semester;
+      //   // 3. check whether user can participate in next available semesters
+      //   let qualification_3 =
+      //     club.available_semester <= this.props.loggedUser.available_semester;
 
-        if (qualification_1 && qualification_2 && qualification_3)
-          acceptQualification = true;
-      }
+      //   if (qualification_1 && qualification_2 && qualification_3)
+      //     acceptQualification = true;
+      // }
 
       let image = (
         <img
