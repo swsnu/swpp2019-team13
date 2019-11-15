@@ -12,12 +12,10 @@ import views from "../images/views.png";
 import person from "../images/person.png";
 
 class SomoimCard extends React.Component {
-  componentDidMount() {}
-
   render() {
+    let somoim = this.props.somoim;
     let acceptQualification = false;
 
-    let somoim = this.props.somoim;
     if (somoim) {
       if (this.props.loggedUser) {
         // check qualification
