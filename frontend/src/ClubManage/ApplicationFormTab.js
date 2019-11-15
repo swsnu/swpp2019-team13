@@ -81,7 +81,7 @@ class ApplicationFormTab extends Component {
       id: id ? id : this.state.formID,
       type: type,
       title: title ? title : "내용을 입력하세요.",
-      defalutChoice: "내용을 입력하세요.",
+      defaultChoice: "내용을 입력하세요.",
       choiceID: choices ? choices.length + 1 : 0,
       choices: choices ? choices : [],
       isDeleted: false,
@@ -102,6 +102,7 @@ class ApplicationFormTab extends Component {
     return (
       <Card.Header style={{ display: "flex" }}>
         <Form.Control
+          className="form-title-input"
           size="lg"
           defaultValue={props.title}
           onChange={e => {
@@ -116,6 +117,7 @@ class ApplicationFormTab extends Component {
           }}
         />
         <img
+          className="form-delete-button"
           src={deletePNG}
           width="30"
           height="30"
@@ -165,6 +167,7 @@ class ApplicationFormTab extends Component {
           <div style={{ display: "flex", marginTop: "5px" }} key={item.id}>
             <input type="checkbox"></input>
             <Form.Control
+              className="multi-choice-textbox"
               style={{ width: "100%" }}
               size="md"
               defaultValue={item.content}
@@ -187,6 +190,7 @@ class ApplicationFormTab extends Component {
               }}
             />
             <img
+              className="choice-remove-button"
               src={minusPNG}
               width="20"
               height="20"
@@ -219,6 +223,7 @@ class ApplicationFormTab extends Component {
         <Card.Body style={{ width: "95%", marginLeft: "10px" }}>
           <div style={{ display: "flex" }}>
             <Form.Control
+              className="multi-default-choice"
               size="md"
               defaultValue={"내용을 입력하세요."}
               onChange={e => {
@@ -228,7 +233,7 @@ class ApplicationFormTab extends Component {
                     if (item.id === props.id)
                       return {
                         ...item,
-                        defalutChoice: e.target.value
+                        defaultChoice: e.target.value
                       };
                     else return item;
                   })
@@ -236,6 +241,7 @@ class ApplicationFormTab extends Component {
               }}
             />
             <img
+              className="choice-add-button"
               src={plusPNG}
               width="22"
               height="22"
@@ -250,7 +256,7 @@ class ApplicationFormTab extends Component {
                         ...item,
                         choices: item.choices.concat({
                           id: item.choiceID,
-                          content: item.defalutChoice,
+                          content: item.defaultChoice,
                           isDeleted: false
                         }),
                         choiceID: item.choiceID + 1
@@ -309,6 +315,7 @@ class ApplicationFormTab extends Component {
             <div>새 항목 추가</div>
             <div style={{ marginTop: "10px" }}>
               <Button
+                className="short-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -318,6 +325,7 @@ class ApplicationFormTab extends Component {
                 짧은 글
               </Button>
               <Button
+                className="long-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -327,6 +335,7 @@ class ApplicationFormTab extends Component {
                 긴 글
               </Button>
               <Button
+                className="multi-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -336,6 +345,7 @@ class ApplicationFormTab extends Component {
                 객관식 문항
               </Button>
               <Button
+                className="image-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -345,6 +355,7 @@ class ApplicationFormTab extends Component {
                 사진
               </Button>
               <Button
+                className="file-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -357,6 +368,7 @@ class ApplicationFormTab extends Component {
           </Col>
           <Col style={{ textAlign: "right" }}>
             <div
+              className="form-save-button"
               style={{ margin: "20px" }}
               onClick={this.saveApplicationFormHandler}
             >
