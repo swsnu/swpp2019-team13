@@ -31,7 +31,7 @@ export const getSomoimList = () => {
       .then(res => dispatch(getSomoimList_(res.data)));
   };
 };
-
+/*
 export const getSomoimByID_ = id => {
   return {
     type: actionTypes.GET_SOMOIM_BY_ID
@@ -43,3 +43,4 @@ export const getSomoimByID = id => {
     return new Promise(() => dispatch(getSomoimByID_(id)));
   };
 };
+*/

@@ -6,7 +6,7 @@ export {
   getApplicationFormByID,
   putApplicationFormByID
 } from "./club";
-export { getSomoimList, getSomoimByID, postSomoim } from "./somoim";
+export { getSomoimList, postSomoim } from "./somoim";
 export { getCategoryList } from "./category";
 export { getTagList } from "./tag";
 export { getDeptList } from "./dept";

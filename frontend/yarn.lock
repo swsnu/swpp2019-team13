@@ -2217,7 +2217,7 @@ babel-preset-react-app@^9.0.2:
     babel-plugin-macros "2.6.1"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
 
-babel-runtime@6.x.x, babel-runtime@^6.26.0:
+babel-runtime@6.x, babel-runtime@6.x.x, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
   integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
@@ -2703,7 +2703,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@^2.2.3, classnames@^2.2.6:
+classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
@@ -3374,6 +3374,11 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
+
+date-fns@^2.0.1:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.7.0.tgz#8271d943cc4636a1f27698f1b8d6a9f1ceb74026"
+  integrity sha512-wxYp2PGoUDN5ZEACc61aOtYFvSsJUylIvCjpjDOqM1UDaKIIuMJ9fAnMYFHV3TQaDpfTVxhwNK/GiCaHKuemTA==
 
 date-now@^0.1.4:
   version "0.1.4"
@@ -8643,7 +8648,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^3.0.0"
 
-prop-types@^15.5.8, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8863,6 +8868,17 @@ react-context-toolbox@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-context-toolbox/-/react-context-toolbox-2.0.2.tgz#35637287cb23f801e6ed802c2bb7a97e1f04e3fb"
   integrity sha512-tY4j0imkYC3n5ZlYSgFkaw7fmlCp3IoQQ6DxpqeNHzcD0hf+6V+/HeJxviLUZ1Rv1Yn3N3xyO2EhkkZwHn0m1A==
 
+react-datepicker@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-2.10.0.tgz#c300dd00cf7d80861cd0d0cb0864994b342b937c"
+  integrity sha512-3dzmk+QJ2DML5sAHry8TWp8yRgHHkHwXKhirbOwCAdQIWXyLMdODgjhyqYZyk0KbAPnVSLqozIQ2xxN/eJb+vA==
+  dependencies:
+    classnames "^2.2.6"
+    date-fns "^2.0.1"
+    prop-types "^15.7.2"
+    react-onclickoutside "^6.9.0"
+    react-popper "^1.3.4"
+
 react-dev-utils@^9.0.4:
   version "9.0.4"
   resolved "https://registry.yarnpkg.com/react-dev-utils/-/react-dev-utils-9.0.4.tgz#5c71a8e8afdec0232c44d4e049d21baa437a92af"
@@ -8904,10 +8920,26 @@ react-dom@^16.10.1:
     prop-types "^15.6.2"
     scheduler "^0.16.1"
 
+react-drag-list@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-drag-list/-/react-drag-list-1.1.0.tgz#a6a2ddd219830759ed10c7fbfdc35658e6668f89"
+  integrity sha512-stV5hWy9ui/0RLdWuSH/q3M11wwWWpLs2lgNMpfVddjCbhXU/1w95h2NMmcsxnSmKZ/WvN1zlbymk/UlT0vP0A==
+  dependencies:
+    babel-runtime "6.x"
+    classnames "^2.2.5"
+    sortablejs "^1.5.1"
+
 react-error-overlay@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.2.tgz#642bd6157c6a4b6e9ca4a816f7ed30b868c47f81"
   integrity sha512-DHRuRk3K4Lg9obI6J4Y+nKvtwjasYRU9CFL3ud42x9YJG1HbQjSNublapC/WBJOA726gNUbqbj0U2df9+uzspQ==
+
+react-image-select-pv@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-image-select-pv/-/react-image-select-pv-2.1.2.tgz#8a422c34478742c5a7637b788ee93c890653bb12"
+  integrity sha512-vozmWZIb6TanYZgfIwmQLjd/SsJAWcTIiUSS/A79t3BC3oQBYYzl3FS0GPqDOwGGBR2Va+YKaU/wFrLYRZ9SAQ==
+  dependencies:
+    prop-types "^15.6.0"
 
 react-is@^16.10.2, react-is@^16.8.6:
   version "16.11.0"
@@ -8934,6 +8966,11 @@ react-numeric-input@^2.2.3:
   resolved "https://registry.yarnpkg.com/react-numeric-input/-/react-numeric-input-2.2.3.tgz#4bf5918c3eafed851a80df1eb992d941002bb552"
   integrity sha1-S/WRjD6v7YUagN8euZLZQQArtVI=
 
+react-onclickoutside@^6.9.0:
+  version "6.9.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.9.0.tgz#a54bc317ae8cf6131a5d78acea55a11067f37a1f"
+  integrity sha512-8ltIY3bC7oGhj2nPAvWOGi+xGFybPNhJM0V1H8hY/whNcXgmDeaeoCMPPd8VatrpTsUWjb/vGzrmu6SrXVty3A==
+
 react-overlays@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-overlays/-/react-overlays-1.2.0.tgz#205368eeb0a5fb0b7f9b717fa7a12d518500abdb"
@@ -8952,6 +8989,18 @@ react-popper@^1.3.2, react-popper@^1.3.3:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-1.3.4.tgz#f0cd3b0d30378e1f663b0d79bcc8614221652ced"
   integrity sha512-9AcQB29V+WrBKk6X7p0eojd1f25/oJajVdMZkywIoAV6Ag7hzE1Mhyeup2Q1QnvFRtGQFQvtqfhlEoDAPfKAVA==
+  dependencies:
+    "@babel/runtime" "^7.1.2"
+    create-react-context "^0.3.0"
+    popper.js "^1.14.4"
+    prop-types "^15.6.1"
+    typed-styles "^0.0.7"
+    warning "^4.0.2"
+
+react-popper@^1.3.4:
+  version "1.3.6"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-1.3.6.tgz#32122f83af8fda01bdd4f86625ddacaf64fdd06d"
+  integrity sha512-kLTfa9z8n+0jJvRVal9+vIuirg41rObg4Bbrvv/ZfsGPQDN9reyVVSxqnHF1ZNgXgV7x11PeUfd5ItF8DZnqhg==
   dependencies:
     "@babel/runtime" "^7.1.2"
     create-react-context "^0.3.0"
@@ -9900,6 +9949,11 @@ sort-keys@^1.0.0:
   integrity sha1-RBttTTRnmPG05J6JIK37oOVD+a0=
   dependencies:
     is-plain-obj "^1.0.0"
+
+sortablejs@^1.5.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.10.1.tgz#3d52b00f871be00f00f84d99a60d120bf3dfe52c"
+  integrity sha512-N6r7GrVmO8RW1rn0cTdvK3JR0BcqecAJ0PmYMCL3ZuqTH3pY+9QyqkmJSkkLyyDvd+AJnwaxTP22Ybr/83V9hQ==
 
 source-list-map@^2.0.0:
   version "2.0.1"

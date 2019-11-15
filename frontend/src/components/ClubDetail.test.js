@@ -7,6 +7,13 @@ import { Route, Switch } from "react-router-dom";
 import ClubDetail from "./ClubDetail";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
+import * as userActions from "../store/actions/user";
+import * as clubActions from "../store/actions/club";
+import * as somoimActions from "../store/actions/somoim";
+import * as categoryActions from "../store/actions/category";
+import * as tagActions from "../store/actions/tag";
+import * as deptActions from "../store/actions/dept";
+import * as majorActions from "../store/actions/major";
 
 const stubInitialState = {
   tags: [
@@ -33,6 +40,7 @@ const stubInitialState = {
       clubmanager: "김지훈",
       selected_category: 0,
       auth_img: "1",
+      poster_img: "1",
       isRegistered: true,
       available_major: [1],
       tags: [1],
@@ -46,6 +54,7 @@ const stubInitialState = {
       clubmanager: "김동우",
       selected_category: 6,
       auth_img: "2",
+      poster_img: "1",
       isRegistered: true,
       tags: [2, 3],
       available_major: [1],
@@ -60,23 +69,58 @@ const stubInitialState = {
       clubmanager: "김도현",
       selected_category: 6,
       auth_img: "3",
+      poster_img: "1",
       isRegistered: true,
       tags: [2, 3],
       available_major: [1],
       likers: [],
       likes: 20
     }
-  ]
+  ],
+  loggedUser: {
+    id: 0,
+    name: "test",
+    email: "test@test.com",
+    password: "test",
+    dept: 0,
+    major: 1,
+    grade: 3,
+    available_semester: 2,
+    available_session_day: 0
+  },
+  users: [{
+    id: 0,
+    name: "test",
+    email: "test@test.com",
+    password: "test",
+    dept: 0,
+    major: 1,
+    grade: 3,
+    available_semester: 2,
+    available_session_day: 0
+  }]
 };
 
 const mockStore = getMockStore(stubInitialState);
 
 describe("<ClubDetail />", () => {
   let clubDetail, clubDetail2, clubDetail3;
-  let spyCloseHandler;
+  let spyCloseHandler, spyaddLikedClub, spyaddAppliedClub;
 
   beforeEach(() => {
-    spyCloseHandler = jest.fn();
+    let spyCloseHandler = jest.fn();
+
+    spyaddLikedClub = jest
+      .spyOn(userActions, "addLikedClub")
+      .mockImplementation(() => {
+        return dispatch => { };
+      });
+
+    spyaddAppliedClub = jest
+      .spyOn(userActions, "addAppliedClub")
+      .mockImplementation(() => {
+        return dispatch => { };
+      });
 
     clubDetail = (
       <Provider store={mockStore}>
@@ -184,4 +228,12 @@ describe("<ClubDetail />", () => {
     const wrapper = component.find("Bootstrap(Modal)");
     expect(wrapper.length).toBe(0);
   });
+  /*
+    it("should click like", () => {
+      const component = mount(clubDetail);
+      const wrapper = component.find(".likebutton2").at(0);
+      wrapper.simulate("click");
+      expect(wrapper.length).toBe(1);
+    });
+    */
 });

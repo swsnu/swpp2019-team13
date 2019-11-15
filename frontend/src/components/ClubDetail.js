@@ -137,47 +137,47 @@ class ClubDetail extends React.Component {
                         prev
                       </Button>
                     ) : (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                        onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            selected_image: this.state.selected_image - 1
-                          });
-                        }}
-                      >
-                        prev
+                        <Button
+                          as={Col}
+                          size="lg"
+                          style={{ marginTop: "3px", marginRight: "3px" }}
+                          onClick={() => {
+                            this.setState({
+                              ...this.state,
+                              selected_image: this.state.selected_image - 1
+                            });
+                          }}
+                        >
+                          prev
                       </Button>
-                    )}
+                      )}
 
                     <Col sm={5}></Col>
                     {club.poster_img.length === 0 ||
-                    this.state.selected_image === club.poster_img.length - 1 ? (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        disabled={true}
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                      >
-                        next
+                      this.state.selected_image === club.poster_img.length - 1 ? (
+                        <Button
+                          as={Col}
+                          size="lg"
+                          disabled={true}
+                          style={{ marginTop: "3px", marginRight: "3px" }}
+                        >
+                          next
                       </Button>
-                    ) : (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                        onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            selected_image: this.state.selected_image + 1
-                          });
-                        }}
-                      >
-                        next
+                      ) : (
+                        <Button
+                          as={Col}
+                          size="lg"
+                          style={{ marginTop: "3px", marginRight: "3px" }}
+                          onClick={() => {
+                            this.setState({
+                              ...this.state,
+                              selected_image: this.state.selected_image + 1
+                            });
+                          }}
+                        >
+                          next
                       </Button>
-                    )}
+                      )}
 
                     <Col sm={1}></Col>
                   </Row>
@@ -213,6 +213,7 @@ class ClubDetail extends React.Component {
                   <Col>
                     {isLoggedUserLike ? (
                       <Button
+                        className='likebutton'
                         size="lg"
                         variant="primary"
                         onClick={this.onClickLikeButton}
@@ -223,29 +224,31 @@ class ClubDetail extends React.Component {
                         </span>
                       </Button>
                     ) : (
-                      <Button
-                        size="lg"
-                        variant="secondary"
-                        onClick={this.onClickLikeButton}
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
+                        <Button
+                          className='likebutton2'
+                          size="lg"
+                          variant="secondary"
+                          onClick={this.onClickLikeButton}
+                        >
+                          좋아요!{" "}
+                          <span role="img" aria-label="thumb">
+                            👍
                         </span>
-                      </Button>
-                    )}
+                        </Button>
+                      )}
                   </Col>
                   <Col></Col>
                   <Col>
                     {acceptQualification ? (
-                      <Button onClick={this.onClickApplyButton} size="lg">
+                      <Button onClick={this.onClickApplyButton} size="lg"
+                        className="applybutton">
                         지원하기
                       </Button>
                     ) : (
-                      <Button disabled title={qualificationMessage} size="lg">
-                        지원하기
+                        <Button disabled title={qualificationMessage} size="lg">
+                          지원하기
                       </Button>
-                    )}
+                      )}
                   </Col>
                   <Col></Col>
                 </Row>
