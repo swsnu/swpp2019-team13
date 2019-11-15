@@ -26,7 +26,8 @@ let temp_clubs = [
     tags: [1, 2],
     likers: [],
     likes: 10,
-    majors: []
+    majors: [],
+    poster_img: []
   },
   {
     id: 1,
@@ -40,7 +41,8 @@ let temp_clubs = [
     available_major: [1],
     likers: [],
     likes: 15,
-    majors: []
+    majors: [],
+    poster_img: []
   },
 
   {
@@ -55,7 +57,8 @@ let temp_clubs = [
     available_major: [1],
     likers: [],
     likes: 20,
-    majors: []
+    majors: [],
+    poster_img: []
   }
 ];
 let stubInitialState = {
@@ -72,7 +75,8 @@ let stubInitialState = {
       tags: [1, 2],
       likers: [],
       likes: 10,
-      majors: []
+      majors: [],
+      poster_img: []
     },
     {
       id: 1,
@@ -86,7 +90,8 @@ let stubInitialState = {
       available_major: [1],
       likers: [],
       likes: 15,
-      majors: []
+      majors: [],
+      poster_img: []
     },
 
     {
@@ -101,7 +106,8 @@ let stubInitialState = {
       available_major: [1],
       likers: [],
       likes: 20,
-      majors: []
+      majors: [],
+      poster_img: []
     }
   ],
   categories: [
