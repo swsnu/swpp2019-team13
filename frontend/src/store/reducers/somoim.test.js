@@ -173,17 +173,17 @@ describe("Somoim Reducer", () => {
     });
   });
   /*
-  it("should get specific somoim", () => {
-    const newState = reducer(initialsomoims, {
-      type: actionTypes.GET_SOMOIM_BY_ID,
-      somoim: stubSomoim
+    it("should get specific somoim", () => {
+      const newState = reducer(initialsomoims, {
+        type: actionTypes.GET_SOMOIM_BY_ID,
+        somoim: stubSomoim
+      });
+      expect(newState).toEqual({
+        somoims: initialsomoims,
+        selectedSomoim: stubSomoim
+      });
     });
-    expect(newState).toEqual({
-      somoims: initialsomoims,
-      selectedSomoim: stubSomoim
-    });
-  });
-*/
+  */
   it("should post article", () => {
     const newState = reducer(initialstate, {
       type: actionTypes.POST_SOMOIM,

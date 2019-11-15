@@ -10,8 +10,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_SOMOIM_LIST:
       return { ...state, somoims: action.somoims };
-    case actionTypes.GET_SOMOIM_BY_ID:
-      return { ...state, selectedSomoim: action.somoim };
+    //case actionTypes.GET_SOMOIM_BY_ID:
+    //  return { ...state, selectedSomoim: action.somoim };
     case actionTypes.POST_SOMOIM:
       const newSomoim = {
         id: action.id,

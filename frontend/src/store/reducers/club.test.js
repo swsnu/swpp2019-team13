@@ -101,7 +101,8 @@ describe("Club Reducer", () => {
     const newState = reducer(undefined, {}); // initialize
     expect(newState).toEqual({
       clubs: [],
-      selectedClub: null
+      selectedClub: null,
+      applicationForm: null
     });
   });
 
@@ -125,18 +126,41 @@ describe("Club Reducer", () => {
     });
     expect(newState).toEqual({
       clubs: stubClubList,
-      selectedClub: null
+      selectedClub: null,
+      applicationForm: null
     });
   });
 
   it("should get specific club", () => {
     const newState = reducer(initialstate, {
       type: actionTypes.GET_CLUB_BY_ID,
-      id: 0
+      selectedClub: stubClub
     });
     expect(newState).toEqual({
       clubs: initialclubs,
       selectedClub: stubClub
+    });
+  });
+
+  it("should get application form by id", () => {
+    const newState = reducer(initialstate, {
+      type: actionTypes.GET_APPLICATION_FORM_BY_ID,
+      form: 1
+    });
+    expect(newState).toEqual({
+      clubs: initialclubs,
+      applicationForm: 1,
+      selectedClub: null
+    });
+  });
+
+  it("should put club information", () => {
+    const newState = reducer(initialstate, {
+      type: actionTypes.PUT_CLUB_INFORMATION
+    });
+    expect(newState).toEqual({
+      clubs: initialclubs,
+      selectedClub: null
     });
   });
   /*

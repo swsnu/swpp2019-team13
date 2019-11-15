@@ -2,7 +2,8 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
   clubs: [],
-  selectedClub: null
+  selectedClub: null,
+  applicationForm: null
 };
 // TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
