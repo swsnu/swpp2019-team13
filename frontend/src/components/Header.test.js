@@ -57,7 +57,7 @@ describe("<Header />", () => {
 
   it("should render Logo", () => {
     const component = mount(header);
-    const wrapper = component.find(".home");
+    const wrapper = component.find(".logo");
     expect(wrapper.length).toBe(1);
     expect(wrapper.at(0).text()).toBe("Club4u");
   });
@@ -67,14 +67,14 @@ describe("<Header />", () => {
       .spyOn(history, "push")
       .mockImplementation(path => {});
     const component = mount(header);
-    const wrapper = component.find(".home");
+    const wrapper = component.find(".logo");
     wrapper.simulate("click");
     expect(spyHistoryPush).toHaveBeenCalledWith("/club");
   });
 
   it("should render navigation", () => {
     const component = mount(header);
-    const wrapper = component.find(".menu-item");
+    const wrapper = component.find(".nav-item");
     expect(wrapper.length).toBe(2);
     expect(wrapper.at(0).text()).toBe("동아리");
     expect(wrapper.at(1).text()).toBe("소모임");
@@ -86,7 +86,7 @@ describe("<Header />", () => {
       .mockImplementation(path => {});
     const component = mount(header);
 
-    const wrapper = component.find(".menu-item").at(0);
+    const wrapper = component.find(".nav-item").at(0);
     wrapper.simulate("click");
     expect(spyHistoryPush).toHaveBeenCalledWith("/club");
   });
@@ -96,7 +96,7 @@ describe("<Header />", () => {
       .spyOn(history, "push")
       .mockImplementation(path => {});
     const component = mount(header);
-    const wrapper = component.find(".menu-item").at(1);
+    const wrapper = component.find(".nav-item").at(1);
     wrapper.simulate("click");
     expect(spyHistoryPush).toHaveBeenCalledWith("/somoim");
   });
