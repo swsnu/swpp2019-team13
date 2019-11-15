@@ -1,4 +1,4 @@
-.Card {
+.Somoim-Card {
   flex: 1;
   margin: 10px;
   border: 1px solid #bebebe;
@@ -7,7 +7,7 @@
   box-shadow: 0px 0px 2px 2px gray;
 }
 
-.title {
+.somoim-title {
   border-bottom: 1px solid #bebebe;
   padding-bottom: 5px;
   margin-bottom: 3px;
@@ -21,16 +21,16 @@
   bottom: 10px;
 } */
 
-.percentage {
+.somoim-percentage {
   padding: 10px 10px;
 }
 
-.user-info {
+.somoim-user-info {
   display: flex;
   justify-content: center;
 }
 
-.user-info-item {
+.somoim-user-info-item {
   display: flex;
   align-items: center;
   padding-left: 5px;
@@ -46,11 +46,11 @@ p {
   color: #6b6b6b;
 }
 
-.summary {
+.somoim-summary {
   padding-left: 3px;
   padding-right: 3px;
 }
 
-.tagList {
+.somoim-tagList {
   margin-top: 10px;
 }

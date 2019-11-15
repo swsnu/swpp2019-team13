@@ -51,18 +51,18 @@ class SomoimCard extends React.Component {
 
       return (
         <div
-          className="Card"
+          className="Somoim-Card"
           onClick={() => {
             this.props.clickHandler(somoim.id);
           }}
         >
-          <div className="title">
+          <div className="somoim-title">
             <h2>{somoim.title}</h2>
           </div>
           {/* <div className="applicable-term">
             <p>01/07 ~ 01/20</p>
           </div> */}
-          <div className="percentage">
+          <div className="somoim-percentage">
             <CircularProgressbar
               value={percentage}
               text={percentage + "%"}
@@ -79,22 +79,22 @@ class SomoimCard extends React.Component {
               })}
             />
           </div>
-          <div className="user-info">
-            <div className="user-info-item">
+          <div className="somoim-user-info">
+            <div className="somoim-user-info-item">
               <img src={person} width="15px" height="15px" alt="person"></img>
               <p>&nbsp;25</p>
             </div>
-            <div className="user-info-item">
+            <div className="somoim-user-info-item">
               <img src={views} width="20px" height="20px" alt="views"></img>
               <p>&nbsp;50</p>
             </div>
-            <div className="user-info-item">
+            <div className="somoim-user-info-item">
               <img src={heart} width="25px" height="28px" alt="heart"></img>
               <p>{somoim.likers.length}</p>
             </div>
           </div>
-          <div className="summary">{somoim.summary}</div>
-          <div className="tagList">{tagList}</div>
+          <div className="somoim-summary">{somoim.summary}</div>
+          <div className="somoim-tagList">{tagList}</div>
         </div>
       );
     } else return <></>;
