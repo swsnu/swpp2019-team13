@@ -6,6 +6,11 @@
   padding: 2%;
 }
 
+.card-flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .ClubCard {
   width: 50%;
   display: inline-block;

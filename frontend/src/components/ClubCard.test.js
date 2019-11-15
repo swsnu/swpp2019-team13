@@ -31,7 +31,8 @@ const stubInitialState = {
       available_major: [1],
       tags: [1, 2],
       likers: [],
-      likes: 10
+      likes: 10,
+      poster_img: ["test.jpg"]
     },
     {
       id: 1,
@@ -44,7 +45,8 @@ const stubInitialState = {
       tags: [2, 3],
       available_major: [1],
       likers: [],
-      likes: 15
+      likes: 15,
+      poster_img: null
     },
 
     {
@@ -58,7 +60,8 @@ const stubInitialState = {
       tags: [2, 3],
       available_major: [1],
       likers: [],
-      likes: 20
+      likes: 20,
+      poster_img: []
     }
   ]
 };
@@ -95,14 +98,117 @@ describe("<ClubCard />", () => {
 
   it("should render without errors", () => {
     const component = mount(clubCard);
-    const wrapper = component.find("ClubCard");
+    const wrapper = component.find(".Club-Card");
     expect(wrapper.length).toBe(1);
+
+    const wrapper2 = component.find(".club-poster-img");
+    expect(wrapper2.length).toBe(1);
   });
 
   it("should handle clicks", () => {
     const component = mount(clubCard);
-    const wrapper = component.find("Card");
+    const wrapper = component.find(".Club-Card");
     wrapper.simulate("click");
     expect(spyClickHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it("should render empty component", () => {
+    clubCard = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <ClubCard club={null} clickHandler={spyClickHandler} />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(clubCard);
+    const wrapper = component.find(".Club-Card");
+    expect(wrapper.length).toBe(0);
+  });
+
+  it("test branch - no image", () => {
+    clubCard = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <ClubCard
+                    club={stubInitialState.clubs[1]}
+                    clickHandler={spyClickHandler}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(clubCard);
+    const wrapper2 = component.find(".club-poster-img");
+    expect(wrapper2.length).toBe(1);
+  });
+
+  it("test branch - no image(2)", () => {
+    clubCard = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <ClubCard
+                    club={stubInitialState.clubs[2]}
+                    clickHandler={spyClickHandler}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(clubCard);
+    const wrapper = component.find(".club-poster-img");
+    expect(wrapper.length).toBe(1);
+  });
+
+  it("test branch - no tags", () => {
+    stubInitialState.tags = [];
+    clubCard = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <ClubCard
+                    club={stubInitialState.clubs[0]}
+                    clickHandler={spyClickHandler}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(clubCard);
+    const wrapper = component.find("#secondary");
+    expect(wrapper.length).toBe(0);
   });
 });
