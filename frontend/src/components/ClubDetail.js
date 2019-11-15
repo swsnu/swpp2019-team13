@@ -6,6 +6,9 @@ import * as actionCreators from "../store/actions/index";
 import { Container, Row, Col, Modal, Button } from "react-bootstrap";
 
 class ClubDetail extends React.Component {
+  state = {
+    selected_image: 0
+  };
   onClickLikeButton = () => {
     this.props.addLikedClub(this.props.club, this.props.loggedUser);
   };
@@ -82,9 +85,9 @@ class ClubDetail extends React.Component {
       if (club.poster_img && club.poster_img.length > 0)
         image = (
           <img
-            src={"media/" + club.poster_img[0]}
+            src={"media/" + club.poster_img[this.state.selected_image]}
             width="400"
-            height="400"
+            height="500"
             alt=""
           />
         );
@@ -120,7 +123,65 @@ class ClubDetail extends React.Component {
           <Modal.Body>
             <Container>
               <Row>
-                <Col>{image}</Col>
+                <Col>
+                  {image}
+                  <Row>
+                    <Col sm={1}></Col>
+                    {this.state.selected_image === 0 ? (
+                      <Button
+                        as={Col}
+                        size="lg"
+                        disabled={true}
+                        style={{ marginTop: "3px", marginRight: "3px" }}
+                      >
+                        prev
+                      </Button>
+                    ) : (
+                      <Button
+                        as={Col}
+                        size="lg"
+                        style={{ marginTop: "3px", marginRight: "3px" }}
+                        onClick={() => {
+                          this.setState({
+                            ...this.state,
+                            selected_image: this.state.selected_image - 1
+                          });
+                        }}
+                      >
+                        prev
+                      </Button>
+                    )}
+
+                    <Col sm={5}></Col>
+                    {club.poster_img.length === 0 ||
+                    this.state.selected_image === club.poster_img.length - 1 ? (
+                      <Button
+                        as={Col}
+                        size="lg"
+                        disabled={true}
+                        style={{ marginTop: "3px", marginRight: "3px" }}
+                      >
+                        next
+                      </Button>
+                    ) : (
+                      <Button
+                        as={Col}
+                        size="lg"
+                        style={{ marginTop: "3px", marginRight: "3px" }}
+                        onClick={() => {
+                          this.setState({
+                            ...this.state,
+                            selected_image: this.state.selected_image + 1
+                          });
+                        }}
+                      >
+                        next
+                      </Button>
+                    )}
+
+                    <Col sm={1}></Col>
+                  </Row>
+                </Col>
                 <Col>
                   <Row>{tagList}</Row>
                   <br />
