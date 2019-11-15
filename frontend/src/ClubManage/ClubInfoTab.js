@@ -5,11 +5,7 @@ import { withRouter } from "react-router";
 import { Form, Col, Button } from "react-bootstrap";
 import * as actionCreators from "../store/actions/index";
 import DatePicker from "react-datepicker";
-import {
-  maxSelectFile,
-  checkMimeType,
-  checkFileSize
-} from "../utils/CheckUploadedFile";
+import { ImageSelectPreview } from "react-image-select-pv";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -61,21 +57,14 @@ class ClubInfoTab extends Component {
     }
   };
 
-  imgUploadHandler = event => {
-    if (
-      // import from utils/CheckUploadedFile
-      maxSelectFile(event) &&
-      checkMimeType(event, 10) &&
-      checkFileSize(event)
-    ) {
-      let files = [];
-      for (let x = 0; x < event.target.files.length; x++) {
-        files.push(event.target.files[x]);
-      }
-      this.setState({
-        new_img: files
-      });
-    }
+  imgUploadHandler = imgs => {
+    let files = [];
+
+    imgs.map(img => files.push(img.blob));
+
+    this.setState({
+      new_img: files
+    });
   };
 
   confirmEditHandler = () => {
@@ -159,13 +148,6 @@ class ClubInfoTab extends Component {
     let selectedClubName = null;
     let selectedClubSummary = null;
     let selectedClubDescription = null;
-    let selectedClubCategory = null;
-    let selectedClubAvailableSemester = null;
-    let selectedClubAvailableMajor = null;
-    let selectedClubSessionDay = null;
-    let selectedClubTags = null;
-    let selectedClubStartDay = null;
-    let selectedClubEndDay = null;
 
     let categoryOptionList = null;
     let deptOptionList = null;
@@ -175,14 +157,6 @@ class ClubInfoTab extends Component {
       selectedClubName = this.props.selectedClub.name;
       selectedClubSummary = this.props.selectedClub.summary;
       selectedClubDescription = this.props.selectedClub.description;
-      selectedClubCategory = this.props.selectedClub.selectedClubCategory;
-      selectedClubAvailableSemester = this.props.selectedClub
-        .available_semester;
-      selectedClubAvailableMajor = this.props.selectedClub.available_major;
-      selectedClubSessionDay = this.props.selectedClub.session_day;
-      selectedClubTags = this.props.selectedClub.tags;
-      selectedClubStartDay = this.props.selectedClub.recruit_start_day;
-      selectedClubEndDay = this.props.selectedClub.recruit_end_day;
     }
 
     if (this.props.categories) {
@@ -296,7 +270,7 @@ class ClubInfoTab extends Component {
           >
             {categoryOptionList}
           </Form.Control>
-
+          <br />
           <Form.Label>포스터 사진</Form.Label>
           <Form.Row>
             <Form.Label>현재 사진</Form.Label>
@@ -310,25 +284,29 @@ class ClubInfoTab extends Component {
               alt=""
             />
           ))}
-          <Form.Label>새로운 사진</Form.Label>
-          <input
+          <br />
+          <Form.Row>
+            <Form.Label>새로운 사진</Form.Label>
+          </Form.Row>
+          <Form.Row>
+            {/* <input
             type="file"
             id="club-poster-file-input"
             multiple
             onChange={this.imgUploadHandler}
-          />
-          {/* TODO : remove when img upload implemented without ImageSelectView */}
-          {/* <div>
-            <ImageSelectPreview
-              id="club-poster-file-input"
-              imageTypes="png|jpg|gif"
-              onChange={data => {
-                this.imgUploadHandler(data);
-              }}
-              max={10}
-            />
-          </div> */}
-
+          /> */}
+            {/* TODO : remove when img upload implemented without ImageSelectView */}
+            <div>
+              <ImageSelectPreview
+                id="club-poster-file-input"
+                imageTypes="png|jpg|gif"
+                onChange={data => {
+                  this.imgUploadHandler(data);
+                }}
+                max={10}
+              />
+            </div>
+          </Form.Row>
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Label>모집 시작 일자</Form.Label>
@@ -518,23 +496,6 @@ class ClubInfoTab extends Component {
             this.state.recruit_start_day === null ||
             this.state.recruit_end_day === null ||
             this.state.recruit_end_day < this.state.recruit_start_day
-            // (String(this.state.name) === String(selectedClubName) &&
-            //   String(this.state.summary) === String(selectedClubSummary) &&
-            //   String(this.state.description) ===
-            //     String(selectedClubDescription) &&
-            //   String(this.state.category) === String(selectedClubCategory) &&
-            //   String(this.state.available_semester) ===
-            //     String(selectedClubAvailableSemester) &&
-            //   String(this.state.available_major) ===
-            //     String(selectedClubAvailableMajor) &&
-            //   String(this.state.available_major) ===
-            //     String(selectedClubSessionDay) &&
-            //   String(this.state.session_day) ===
-            //     String(selectedClubAvailableMajor) &&
-            //   String(this.state.tags) === String(selectedClubTags) &&
-            //   String(this.state.recruit_start_day) ===
-            //     String(selectedClubStartDay) &&
-            //   String(this.state.recruit_end_day) === String(selectedClubEndDay))
           }
         >
           정보 수정

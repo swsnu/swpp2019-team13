@@ -462,8 +462,12 @@ describe("<ClubInfoTab />", () => {
     ];
     const component = mount(clubInfoTab);
 
-    let wrapper = component.find("#club-poster-file-input");
-    wrapper.simulate("change", { target: { files: test_file } });
+    let wrapper = component
+      .find("#club-poster-file-input")
+      .at(1)
+      .find("#image-prompt");
+
+    wrapper.simulate("input", { target: { files: test_file } });
 
     const clubInfoTabInstance = component
       .find(ClubInfoTab.WrappedComponent)

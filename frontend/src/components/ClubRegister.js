@@ -2,11 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Modal, Button, Form } from "react-bootstrap";
-import {
-  maxSelectFile,
-  checkMimeType,
-  checkFileSize
-} from "../utils/CheckUploadedFile";
+import { ImageSelectPreview } from "react-image-select-pv";
 
 class ClubRegister extends React.Component {
   state = {
@@ -25,23 +21,23 @@ class ClubRegister extends React.Component {
     });
   }
 
-  onChangeHandler = event => {
-    if (
-      // import from utils/CheckUploadedFile
-      maxSelectFile(event) &&
-      checkMimeType(event, 3) &&
-      checkFileSize(event)
-    ) {
-      let file_urls = [];
-      for (let x = 0; x < event.target.files.length; x++) {
-        file_urls.push(URL.createObjectURL(event.target.files[x]));
-      }
-      this.setState({
-        auth_img_file: file_urls,
-        loaded: 0
-      });
-    }
-  };
+  // onChangeHandler = event => {
+  //   if (
+  //     // import from utils/CheckUploadedFile
+  //     maxSelectFile(event) &&
+  //     checkMimeType(event, 3) &&
+  //     checkFileSize(event)
+  //   ) {
+  //     let file_urls = [];
+  //     for (let x = 0; x < event.target.files.length; x++) {
+  //       file_urls.push(URL.createObjectURL(event.target.files[x]));
+  //     }
+  //     this.setState({
+  //       auth_img_file: file_urls,
+  //       loaded: 0
+  //     });
+  //   }
+  // };
 
   render() {
     return (
@@ -96,15 +92,21 @@ class ClubRegister extends React.Component {
                 }
               />
             </Form.Group>
-            <div>
-              <label>동아리 인증사진 첨부</label>
-              <input
-                type="file"
-                id="club-auth-file-input"
-                multiple
-                onChange={this.onChangeHandler}
-              />
-            </div>
+            <Form.Row>
+              <Form.Label>인증 사진 첨부</Form.Label>
+            </Form.Row>
+            <Form.Row>
+              <div>
+                <ImageSelectPreview
+                  id="auth-img-input"
+                  imageTypes="png|jpg|gif"
+                  onChange={data => {
+                    this.imgUploadHandler(data);
+                  }}
+                  max={1}
+                />
+              </div>
+            </Form.Row>
             <Button
               letiant="primary"
               onClick={() => {
