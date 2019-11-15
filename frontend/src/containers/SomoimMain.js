@@ -115,6 +115,7 @@ class SomoimMain extends React.Component {
     if (this.props.recommendedSomoims) {
       recommendedList = this.props.recommendedSomoims.map(item => (
         <SomoimCard
+          className="recommended-somoim-card"
           key={item.id}
           clickHandler={this.somoimCardClickHandler}
           somoim={item}
@@ -211,7 +212,6 @@ class SomoimMain extends React.Component {
                       recommendedListPageNum:
                         this.state.recommendedListPageNum + 1
                     });
-                  console.log(recommendedList.length);
                 }}
               >
                 다음 &raquo;
@@ -306,7 +306,6 @@ class SomoimMain extends React.Component {
                       ...this.state,
                       allListPageNum: this.state.allListPageNum + 1
                     });
-                  console.log(allList.length);
                 }}
               >
                 다음 &raquo;
