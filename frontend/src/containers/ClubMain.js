@@ -146,6 +146,132 @@ class ClubMain extends React.Component {
       }
     }
 
+    let displayRecommendedClubs = null;
+    if (window.innerWidth > 1400) {
+      displayRecommendedClubs = (
+        <div className="card-flex-container">
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 4 + 0 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 4 + 1 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 4 + 2 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 4 + 3 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
+              : ""}
+          </div>
+        </div>
+      );
+    } else if (window.innerWidth > 1000) {
+      displayRecommendedClubs = (
+        <div className="card-flex-container">
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 3 + 0 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 3 + 0]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 3 + 1 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 3 + 1]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 3 + 2 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 3 + 2]
+              : ""}
+          </div>
+        </div>
+      );
+    } else {
+      displayRecommendedClubs = (
+        <div className="card-flex-container">
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 2 + 0 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 2 + 0]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.recommendedListPageNum * 2 + 1 < recommendedList.length
+              ? recommendedList[this.state.recommendedListPageNum * 2 + 1]
+              : ""}
+          </div>
+        </div>
+      );
+    }
+
+    let displayAllClubs = null;
+    if (window.innerWidth > 1400) {
+      displayAllClubs = (
+        <div className="card-flex-container">
+          <div className="ClubCard">
+            {this.state.allListPageNum * 4 + 0 < allList.length
+              ? allList[this.state.allListPageNum * 4 + 0]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.allListPageNum * 4 + 1 < allList.length
+              ? allList[this.state.allListPageNum * 4 + 1]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.allListPageNum * 4 + 2 < allList.length
+              ? allList[this.state.allListPageNum * 4 + 2]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.allListPageNum * 4 + 3 < allList.length
+              ? allList[this.state.allListPageNum * 4 + 3]
+              : ""}
+          </div>
+        </div>
+      );
+    } else if (window.innerWidth > 1000) {
+      displayAllClubs = (
+        <div className="card-flex-container">
+          <div className="ClubCard">
+            {this.state.allListPageNum * 3 + 0 < allList.length
+              ? allList[this.state.allListPageNum * 3 + 0]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.allListPageNum * 3 + 1 < allList.length
+              ? allList[this.state.allListPageNum * 3 + 1]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.allListPageNum * 3 + 2 < allList.length
+              ? allList[this.state.allListPageNum * 3 + 2]
+              : ""}
+          </div>
+        </div>
+      );
+    } else {
+      displayAllClubs = (
+        <div className="card-flex-container">
+          <div className="ClubCard">
+            {this.state.allListPageNum * 2 + 0 < allList.length
+              ? allList[this.state.allListPageNum * 2 + 0]
+              : ""}
+          </div>
+          <div className="ClubCard">
+            {this.state.allListPageNum * 2 + 1 < allList.length
+              ? allList[this.state.allListPageNum * 2 + 1]
+              : ""}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="ClubMain">
         <Header />
@@ -158,32 +284,8 @@ class ClubMain extends React.Component {
             추천 동아리
           </h1>
           <div>
-            <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 0 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 1 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 2 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 3 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-                  : ""}
-              </div>
-            </div>
+            {displayRecommendedClubs}
+            {console.log(window.innerWidth)}
             <div style={{ textAlign: "center" }}>
               <div
                 className="changePage"
@@ -258,28 +360,7 @@ class ClubMain extends React.Component {
           </div>
           <br />
           <div>
-            <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 0 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 1 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 2 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 3 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 3]
-                  : ""}
-              </div>
-            </div>
+            {displayAllClubs}
             <div style={{ textAlign: "center" }}>
               <div
                 className="changePage"
