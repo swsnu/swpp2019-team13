@@ -309,6 +309,7 @@ class ApplicationFormTab extends Component {
             <div>새 항목 추가</div>
             <div style={{ marginTop: "10px" }}>
               <Button
+                className="short-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -318,6 +319,7 @@ class ApplicationFormTab extends Component {
                 짧은 글
               </Button>
               <Button
+                className="long-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -327,6 +329,7 @@ class ApplicationFormTab extends Component {
                 긴 글
               </Button>
               <Button
+                className="multi-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -336,6 +339,7 @@ class ApplicationFormTab extends Component {
                 객관식 문항
               </Button>
               <Button
+                className="image-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
@@ -345,6 +349,7 @@ class ApplicationFormTab extends Component {
                 사진
               </Button>
               <Button
+                className="file-form-button"
                 size="lg"
                 variant="outline-secondary"
                 onClick={() => {
