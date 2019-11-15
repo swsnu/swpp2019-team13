@@ -40,7 +40,7 @@ class ClubManageMain extends Component {
     }
 
     return (
-      <div>
+      <div className="clubManageMain">
         <Header />
         <Container style={{ marginLeft: "16%" }}>
           <Row>
@@ -49,6 +49,7 @@ class ClubManageMain extends Component {
                 <Accordion.Toggle
                   style={{ marginBottom: "5px", marginTop: "13px" }}
                   as={Button}
+                  id="clubmanage-main-clubinfo-button"
                   variant="outline-dark"
                   size="lg"
                   block
@@ -62,6 +63,7 @@ class ClubManageMain extends Component {
                 <Accordion.Toggle
                   style={{ marginBottom: "5px", marginTop: "13px" }}
                   as={Button}
+                  id="clubmanage-main-applicationform-button"
                   variant="outline-dark"
                   size="lg"
                   block
@@ -75,6 +77,7 @@ class ClubManageMain extends Component {
                 <Accordion.Toggle
                   style={{ marginBottom: "5px", marginTop: "13px" }}
                   as={Button}
+                  id="clubmanage-main-applicantstatus-button"
                   variant="outline-dark"
                   size="lg"
                   block

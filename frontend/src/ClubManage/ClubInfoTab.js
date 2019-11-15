@@ -35,34 +35,29 @@ class ClubInfoTab extends Component {
 
   componentDidMount = () => {
     if (this.props.selectedClub) {
-      if (!this.state.firstLoaded) {
+      this.setState({
+        ...this.state,
+        isShow: this.props.selectedClub.isShow,
+        name: this.props.selectedClub.name,
+        summary: this.props.selectedClub.summary,
+        description: this.props.selectedClub.description,
+        category: this.props.selectedClub.category,
+        poster_img: this.props.selectedClub.poster_img,
+        available_semester: this.props.selectedClub.available_semester,
+        available_major: this.props.selectedClub.available_major,
+        session_day: this.props.selectedClub.session_day,
+        tags: this.props.selectedClub.tags
+      });
+      if (this.props.selectedClub.recruit_start_day) {
         this.setState({
-          ...this.state,
-          firstLoaded: true,
-          isShow: this.props.selectedClub.isShow,
-          name: this.props.selectedClub.name,
-          summary: this.props.selectedClub.summary,
-          description: this.props.selectedClub.description,
-          category: this.props.selectedClub.category,
-          poster_img: this.props.selectedClub.poster_img,
-          available_semester: this.props.selectedClub.available_semester,
-          available_major: this.props.selectedClub.available_major,
-          session_day: this.props.selectedClub.session_day,
-          tags: this.props.selectedClub.tags
+          recruit_start_day: new Date(
+            this.props.selectedClub.recruit_start_day + "T15:00:00.000Z"
+          ),
+          recruit_end_day: new Date(
+            this.props.selectedClub.recruit_end_day + "T15:00:00.000Z"
+          )
         });
-        if (this.props.selectedClub.recruit_start_day) {
-          this.setState({
-            recruit_start_day: new Date(
-              this.props.selectedClub.recruit_start_day + "T15:00:00.000Z"
-            ),
-            recruit_end_day: new Date(
-              this.props.selectedClub.recruit_end_day + "T15:00:00.000Z"
-            )
-          });
-        }
       }
-    } else {
-      // this.props.history.push("/club");
     }
   };
 
@@ -157,6 +152,10 @@ class ClubInfoTab extends Component {
   }
 
   render() {
+    let majorList = [];
+
+    if (this.props.majors) majorList = this.props.majors;
+
     let selectedClubName = null;
     let selectedClubSummary = null;
     let selectedClubDescription = null;
@@ -224,7 +223,7 @@ class ClubInfoTab extends Component {
       <div className="ClubInfoTab">
         <Form>
           <Form.Row>
-            <Form.Group as={Col} controlId="formBasicClubname">
+            <Form.Group as={Col}>
               <Form.Label>동아리 이름</Form.Label>
               <Form.Control
                 size="lg"
@@ -235,7 +234,7 @@ class ClubInfoTab extends Component {
                 defaultValue={selectedClubName}
               />
             </Form.Group>
-            <Form.Group as={Col} controlId="formBasicIsShow">
+            <Form.Group as={Col}>
               <Form.Label>메인페이지 표시 여부</Form.Label>
               {this.state.isShow ? (
                 <Button
@@ -260,7 +259,7 @@ class ClubInfoTab extends Component {
               )}
             </Form.Group>
           </Form.Row>
-          <Form.Group controlId="formBasicClubsummary">
+          <Form.Group>
             <Form.Label>요약</Form.Label>
             <Form.Control
               as="textarea"
@@ -272,7 +271,7 @@ class ClubInfoTab extends Component {
               defaultValue={selectedClubSummary}
             />
           </Form.Group>
-          <Form.Group controlId="formBasicClubdesciption">
+          <Form.Group>
             <Form.Label>구체적인 동아리 설명</Form.Label>
             <Form.Control
               as="textarea"
@@ -331,24 +330,26 @@ class ClubInfoTab extends Component {
           </div> */}
 
           <Form.Row>
-            <Form.Group as={Col} controlId="formDept">
+            <Form.Group as={Col}>
               <Form.Label>모집 시작 일자</Form.Label>
               <Form.Row size="lg">
                 <DatePicker
                   selected={this.state.recruit_start_day}
+                  id="clubinfo-startday-input"
                   onChange={date => {
                     this.setState({ recruit_start_day: date });
                   }}
-                  dateFormat="yyyy/MM/d"
+                  dateFormat="yyyy/MM/dd"
                 />
               </Form.Row>
             </Form.Group>
 
-            <Form.Group as={Col} controlId="formDept">
+            <Form.Group as={Col}>
               <Form.Label>모집 마감 일자</Form.Label>
               <Form.Row size="lg">
                 <DatePicker
                   selected={this.state.recruit_end_day}
+                  id="clubinfo-endday-input"
                   onChange={date => this.setState({ recruit_end_day: date })}
                   dateFormat="yyyy/MM/dd"
                 />
@@ -360,19 +361,23 @@ class ClubInfoTab extends Component {
           <h1 align="center">가입 조건</h1>
           <Form.Label>가능 학과</Form.Label>
           <Form.Row>
-            {this.state.available_major.map(major_id => (
-              <Button
-                key={major_id}
-                style={{ marginTop: "3px", marginRight: "3px" }}
-                onClick={() => this.handle_RemoveSpecificMajor(major_id)}
-              >
-                {this.props.majors.filter(major => major.id === major_id)[0]
-                  .name + " X"}
-              </Button>
-            ))}
+            {this.state.available_major.map(
+              major_id =>
+                majorList.filter(major => major.id === major_id).length > 0 && (
+                  <Button
+                    key={major_id}
+                    id="clubinfo-removemajor-button"
+                    style={{ marginTop: "3px", marginRight: "3px" }}
+                    onClick={() => this.handle_RemoveSpecificMajor(major_id)}
+                  >
+                    {majorList.filter(major => major.id === major_id)[0].name +
+                      " X"}
+                  </Button>
+                )
+            )}
           </Form.Row>
           <Form.Row>
-            <Form.Group as={Col} controlId="formDept">
+            <Form.Group as={Col}>
               <Form.Label>단과 대학</Form.Label>
               <Form.Control
                 as="select"
@@ -389,7 +394,7 @@ class ClubInfoTab extends Component {
               </Form.Control>
             </Form.Group>
 
-            <Form.Group as={Col} controlId="formMajor">
+            <Form.Group as={Col}>
               <Form.Label>학과</Form.Label>
               <Form.Control
                 as="select"
@@ -445,12 +450,12 @@ class ClubInfoTab extends Component {
             </Button>
           </Form.Row>
           <Form.Row>
-            <Form.Group as={Col} controlId="formavailable_semester">
+            <Form.Group as={Col}>
               <Form.Label>활동 가능 학기 수</Form.Label>
               <Form.Control
                 as="select"
                 size="lg"
-                id="clubinfo-available-semester-input"
+                id="clubinfo-availablesemester-input"
                 onChange={event => {
                   this.setState({
                     available_semester: Number(event.target.value)
@@ -470,7 +475,7 @@ class ClubInfoTab extends Component {
                 <option value={10}>10</option>
               </Form.Control>
             </Form.Group>
-            <Form.Group as={Col} controlId="formavailable_semester">
+            <Form.Group as={Col}>
               <Form.Label>활동 가능 요일</Form.Label>
               <Form.Row>
                 {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
@@ -499,6 +504,7 @@ class ClubInfoTab extends Component {
           style={{ marginTop: "10px" }}
           variant="dark"
           size="lg"
+          id="clubinfo-confirmedit-button"
           block
           onClick={this.confirmEditHandler}
           disabled={
@@ -511,24 +517,24 @@ class ClubInfoTab extends Component {
             this.state.session_day === 0 ||
             this.state.recruit_start_day === null ||
             this.state.recruit_end_day === null ||
-            this.state.recruit_end_day < this.state.recruit_start_day ||
-            (String(this.state.name) === String(selectedClubName) &&
-              String(this.state.summary) === String(selectedClubSummary) &&
-              String(this.state.description) ===
-                String(selectedClubDescription) &&
-              String(this.state.category) === String(selectedClubCategory) &&
-              String(this.state.available_semester) ===
-                String(selectedClubAvailableSemester) &&
-              String(this.state.available_major) ===
-                String(selectedClubAvailableMajor) &&
-              String(this.state.available_major) ===
-                String(selectedClubSessionDay) &&
-              String(this.state.session_day) ===
-                String(selectedClubAvailableMajor) &&
-              String(this.state.tags) === String(selectedClubTags) &&
-              String(this.state.recruit_start_day) ===
-                String(selectedClubStartDay) &&
-              String(this.state.recruit_end_day) === String(selectedClubEndDay))
+            this.state.recruit_end_day < this.state.recruit_start_day
+            // (String(this.state.name) === String(selectedClubName) &&
+            //   String(this.state.summary) === String(selectedClubSummary) &&
+            //   String(this.state.description) ===
+            //     String(selectedClubDescription) &&
+            //   String(this.state.category) === String(selectedClubCategory) &&
+            //   String(this.state.available_semester) ===
+            //     String(selectedClubAvailableSemester) &&
+            //   String(this.state.available_major) ===
+            //     String(selectedClubAvailableMajor) &&
+            //   String(this.state.available_major) ===
+            //     String(selectedClubSessionDay) &&
+            //   String(this.state.session_day) ===
+            //     String(selectedClubAvailableMajor) &&
+            //   String(this.state.tags) === String(selectedClubTags) &&
+            //   String(this.state.recruit_start_day) ===
+            //     String(selectedClubStartDay) &&
+            //   String(this.state.recruit_end_day) === String(selectedClubEndDay))
           }
         >
           정보 수정
