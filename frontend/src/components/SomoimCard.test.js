@@ -111,14 +111,64 @@ describe("<SomoimCard />", () => {
 
   it("should render without errors", () => {
     const component = mount(somoimCard);
-    const wrapper = component.find("SomoimCard");
+    const wrapper = component.find(".Somoim-Card");
     expect(wrapper.length).toBe(1);
   });
 
   it("should handle clicks", () => {
     const component = mount(somoimCard);
-    const wrapper = component.find("Card");
+    const wrapper = component.find(".Somoim-Card");
     wrapper.simulate("click");
     expect(spyClickHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it("should render empty component", () => {
+    somoimCard = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <SomoimCard somoim={null} clickHandler={spyClickHandler} />
+                );
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(somoimCard);
+    const wrapper = component.find(".Somoim-Card");
+    expect(wrapper.length).toBe(0);
+  });
+
+  it("test branch - no tags", () => {
+    stubInitialState.tags = [];
+    somoimCard = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <SomoimCard
+                    somoim={stubInitialState.somoims[0]}
+                    clickHandler={spyClickHandler}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+    const component = mount(somoimCard);
+    const wrapper = component.find("#secondary");
+    expect(wrapper.length).toBe(0);
   });
 });
