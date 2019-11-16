@@ -158,6 +158,7 @@ class SomoimDetail extends React.Component {
                         size="lg"
                         variant="primary"
                         onClick={this.onClickLikeButton}
+                        className='likebutton'
                       >
                         좋아요!{" "}
                         <span role="img" aria-label="thumb">
@@ -165,29 +166,30 @@ class SomoimDetail extends React.Component {
                         </span>
                       </Button>
                     ) : (
-                      <Button
-                        size="lg"
-                        variant="secondary"
-                        onClick={this.onClickLikeButton}
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
+                        <Button
+                          size="lg"
+                          variant="secondary"
+                          onClick={this.onClickLikeButton}
+                          className='likebutton2'
+                        >
+                          좋아요!{" "}
+                          <span role="img" aria-label="thumb">
+                            👍
                         </span>
-                      </Button>
-                    )}
+                        </Button>
+                      )}
                   </Col>
                   <Col></Col>
                   <Col>
                     {acceptQualification ? (
-                      <Button size="lg" onClick={this.onClickJoinButton}>
+                      <Button className='joinbutton' size="lg" onClick={this.onClickJoinButton} >
                         함께하기
                       </Button>
                     ) : (
-                      <Button size="lg" disabled title={qualificationMessage}>
-                        함께하기
+                        <Button size="lg" disabled title={qualificationMessage}>
+                          함께하기
                       </Button>
-                    )}
+                      )}
                   </Col>
                   <Col></Col>
                 </Row>

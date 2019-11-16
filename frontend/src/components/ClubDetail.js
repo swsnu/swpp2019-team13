@@ -139,6 +139,7 @@ class ClubDetail extends React.Component {
                     ) : (
                         <Button
                           as={Col}
+                          className='prev'
                           size="lg"
                           style={{ marginTop: "3px", marginRight: "3px" }}
                           onClick={() => {
@@ -168,6 +169,7 @@ class ClubDetail extends React.Component {
                           as={Col}
                           size="lg"
                           style={{ marginTop: "3px", marginRight: "3px" }}
+                          className='next'
                           onClick={() => {
                             this.setState({
                               ...this.state,
