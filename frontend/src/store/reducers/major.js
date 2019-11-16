@@ -4,7 +4,6 @@ const initialState = {
   majors: []
 };
 
-// TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_MAJOR_LIST:

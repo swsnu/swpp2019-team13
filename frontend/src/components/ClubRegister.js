@@ -86,7 +86,6 @@ class ClubRegister extends React.Component {
                   imageTypes="png|jpg|gif"
                   onChange={data => {
                     this.setState({ auth_img_file: data[0].blob });
-                    // this.imgUploadHandler(data);
                   }}
                   max={1}
                 />
@@ -94,6 +93,7 @@ class ClubRegister extends React.Component {
             </Form.Row>
             <Button
               letiant="primary"
+              id="confirm-create-button"
               onClick={() => {
                 this.props.postPreClub({
                   name: this.state.name,
