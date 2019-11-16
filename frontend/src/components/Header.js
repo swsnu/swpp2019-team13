@@ -10,38 +10,41 @@ import "./Header.css";
 
 class Header extends Component {
   state = {
-    // isShowing_LoginModal == true : Modal 보여줌.
-    isShowing_LoginModal: false
+    // showLoginModal === true : Modal 보여줌.
+    showLoginModal: false
   };
 
   /* Control Function for Login Modal */
-  handleShow_LoginModal = () => {
-    this.setState({ ...this.state, isShowing_LoginModal: true });
+  loginModalShowHandler = () => {
+    this.setState({ ...this.state, showLoginModal: true });
   };
 
-  handleClose_LoginModal = () => {
-    this.setState({ ...this.state, isShowing_LoginModal: false });
+  loginModalCloseHandler = () => {
+    this.setState({ ...this.state, showLoginModal: false });
   };
 
   /* Do when click Logout Button */
-  onClick_LogoutButton = () => {
+  logoutButtonHandler = () => {
     this.props.signOut();
-    this.props.history.push("/club");
   };
+
+  componentDidMount() {
+    this.props.getLoginInfo();
+  }
 
   /* Render */
   render() {
     /* User 관련 버튼 : 로그인, 회원가입, 마이페이지, 로그아웃 */
-    let login_button = null;
-    let signup_button = null;
-    let mypage_button = null;
-    let logout_button = null;
+    let loginButton = null;
+    let signupButton = null;
+    let mypageButton = null;
+    let logoutButton = null;
 
     /* 로그인이 되어있는지에 따라 User 관련 버튼을 설정해준다. */
-    if (this.props.loggedUser !== null) {
-      login_button = null;
-      signup_button = null;
-      mypage_button = (
+    if (this.props.loggedUser !== null && this.props.loggedUser !== undefined) {
+      loginButton = null;
+      signupButton = null;
+      mypageButton = (
         <div
           className="user-item first-item"
           onClick={() => {
@@ -51,30 +54,30 @@ class Header extends Component {
           마이페이지
         </div>
       );
-      logout_button = (
+      logoutButton = (
         <div
-          className="user-item"
+          className="user-item second-item"
           onClick={() => {
-            this.onClick_LogoutButton();
+            this.logoutButtonHandler();
           }}
         >
           로그아웃
         </div>
       );
     } else {
-      login_button = (
+      loginButton = (
         <div
           className="user-item first-item"
           onClick={() => {
-            this.handleShow_LoginModal();
+            this.loginModalShowHandler();
           }}
         >
           로그인
         </div>
       );
-      signup_button = (
+      signupButton = (
         <div
-          className="user-item"
+          className="user-item second-item"
           onClick={() => {
             this.props.history.push("/signup");
           }}
@@ -82,47 +85,50 @@ class Header extends Component {
           회원가입
         </div>
       );
-      mypage_button = null;
-      logout_button = null;
+      mypageButton = null;
+      logoutButton = null;
     }
 
     /* Render */
     return (
       <div className="Header">
-        {/* Home 로고 */}
-        <div
-          className="home"
-          onClick={() => {
-            this.props.history.push("/club");
-          }}
-        >
-          Club4u
-        </div>
+        <div className="Header-flex-container">
+          {/* Home 로고 */}
+          <div
+            className="logo"
+            onClick={() => {
+              this.props.history.push("/club");
+            }}
+          >
+            Club4u
+          </div>
 
-        {/* 동아리 / 소모임 전환 탭 */}
-        <div
-          className={`menu-item ${
-            this.props.location.pathname === "/club" ? "active" : ""
-          }`}
-          onClick={() => {
-            this.props.history.push("/club");
-          }}
-        >
-          동아리
-        </div>
-        <div
-          className={`menu-item ${
-            this.props.location.pathname === "/somoim" ? "active" : ""
-          }`}
-          onClick={() => {
-            this.props.history.push("/somoim");
-          }}
-        >
-          소모임
-        </div>
+          {/* 동아리 / 소모임 전환 탭 */}
+          <div className="nav">
+            <div
+              className={`nav-item ${
+                this.props.location.pathname === "/club" ? "active" : ""
+              }`}
+              onClick={() => {
+                this.props.history.push("/club");
+              }}
+            >
+              동아리
+            </div>
+            <div
+              className={`nav-item ${
+                this.props.location.pathname === "/somoim" ? "active" : ""
+              }`}
+              onClick={() => {
+                this.props.history.push("/somoim");
+              }}
+            >
+              소모임
+            </div>
+          </div>
 
-        {/* 검색 바 - 제거 됨 */}
-        {/* <div className="search">
+          {/* 검색 바 - 제거 됨 */}
+          {/* <div className="search">
           <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -137,16 +143,19 @@ class Header extends Component {
           </button>
         </div> */}
 
-        {/* 유저 관련 버튼 */}
-        {login_button}
-        {signup_button}
-        {mypage_button}
-        {logout_button}
+          {/* 유저 관련 버튼 */}
+          <div className="user">
+            {loginButton}
+            {signupButton}
+            {mypageButton}
+            {logoutButton}
+          </div>
+        </div>
 
         {/* 로그인 Modal */}
         <Login
-          show={this.state.isShowing_LoginModal}
-          onHide={this.handleClose_LoginModal}
+          show={this.state.showLoginModal}
+          onHide={this.loginModalCloseHandler}
         ></Login>
       </div>
     );
@@ -161,11 +170,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getLoginInfo: () => dispatch(actionCreators.getLoginInfo()),
     signOut: user => dispatch(actionCreators.signOut(user))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

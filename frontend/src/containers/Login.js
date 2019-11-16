@@ -8,29 +8,32 @@ class Login extends Component {
   state = {
     email: "",
     password: "",
-    isLoggedIn: false,
     wrongInput: false
   };
 
-  /* 로그인 버튼을 클릭했을 때 동작 */
-  onClick_LoginButton_Handler = () => {
-    let loggedUser = this.props.storedUsers.filter(user => {
-      return (
-        user.email === this.state.email && user.password === this.state.password
-      );
-    });
-
-    if (loggedUser.length !== 0) {
-      this.props.signIn(loggedUser[0]);
+  componentDidUpdate = () => {
+    if (this.props.loggedUser) {
       this.props.onHide();
-    } else {
-      this.setState({ ...this.state, wrongInput: true });
     }
   };
 
-  /* Modal에서 나갔을 때 동작 */
-  onHide_LoginModal_Handler = () => {
-    this.props.onHide();
+  /* 로그인 버튼을 클릭했을 때 동작 */
+  loginButtonHandler = () => {
+    this.props
+      .signIn({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .catch(e =>
+        this.setState({
+          ...this.state,
+          password: "",
+          wrongInput: true
+        })
+      );
+  };
+
+  UNSAFE_componentWillReceiveProps = () => {
     this.setState({
       ...this.state,
       email: "",
@@ -42,7 +45,12 @@ class Login extends Component {
   /* Render */
   render() {
     return (
-      <div className="Login">
+      <div
+        className="Login"
+        onKeyPress={e => {
+          if (e.key === "Enter") this.loginButtonHandler();
+        }}
+      >
         {/* CSS for React-Bootstrap */}
         <style type="text/css">
           {`
@@ -61,7 +69,7 @@ class Login extends Component {
         {/* 로그인 Modal */}
         <Modal
           show={this.props.show}
-          onHide={this.onHide_LoginModal_Handler}
+          onHide={this.props.onHide}
           // onExited={this.onExit_LoginModal_Handler}
           style={{ opacity: 1 }}
           size="sm"
@@ -116,7 +124,8 @@ class Login extends Component {
             <Button
               variant="dark"
               size="lg"
-              onClick={this.onClick_LoginButton_Handler}
+              onClick={this.loginButtonHandler}
+              disabled={this.state.email === "" || this.state.password === ""}
             >
               로그인 &#x2713;
             </Button>
@@ -129,17 +138,14 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    storedUsers: state.user.users
+    loggedUser: state.user.loggedUser
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    signIn: user => dispatch(actionCreators.signIn(user))
+    signIn: loginInfo => dispatch(actionCreators.signIn(loginInfo))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

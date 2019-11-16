@@ -8,9 +8,11 @@ import SignUp from "./SignUp";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as actionCreators from "../store/actions/user";
+import * as DeptactionCreators from "../store/actions/dept";
+import * as MajoractionCreators from "../store/actions/major";
 
 const stubInitialState = {
-  deptnames: [
+  depts: [
     {
       id: 0,
       name: "TEST_DEPT"
@@ -35,6 +37,7 @@ jest.mock("../components/Header", () => {
 
 describe("<SignUp />", () => {
   let signup;
+  let spyGetMajorList, spyGetDeptList, spySignIn, spySignUp;
 
   beforeEach(() => {
     signup = (
@@ -46,6 +49,26 @@ describe("<SignUp />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyGetMajorList = jest
+      .spyOn(MajoractionCreators, "getMajorList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetDeptList = jest
+      .spyOn(DeptactionCreators, "getDeptList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spySignUp = jest.spyOn(actionCreators, "signUp").mockImplementation(() => {
+      return dispatch => new Promise(resolve => resolve());
+    });
+
+    spySignIn = jest.spyOn(actionCreators, "signIn").mockImplementation(() => {
+      return dispatch => new Promise(resolve => resolve());
+    });
   });
 
   it("should render SignUp", () => {
@@ -57,22 +80,21 @@ describe("<SignUp />", () => {
     expect(wrapper4.length).toBe(1);
     expect(wrapper4.text()).toBe("헤더");
 
-    const wrapper2 = component.find("p");
-    expect(wrapper2.length).toBe(1);
-    expect(wrapper2.text()).toBe("어서 오시게나");
-
     const wrapper3 = component.find("h1");
     expect(wrapper3.length).toBe(1);
     expect(wrapper3.text()).toBe("회원 가입");
+
+    expect(spyGetMajorList).toBeCalledTimes(1);
+    expect(spyGetDeptList).toBeCalledTimes(1);
   });
 
-  it(`should set state properly on username input`, () => {
-    const username = "TEST_USERNAME";
+  it(`should set state properly on name input`, () => {
+    const name = "TEST_USERNAME";
     const component = mount(signup);
     const wrapper = component.find("#formBasicUsername");
-    wrapper.simulate("change", { target: { value: username } });
+    wrapper.simulate("change", { target: { value: name } });
     const signUpInstance = component.find(SignUp.WrappedComponent).instance();
-    expect(signUpInstance.state.username).toEqual(username);
+    expect(signUpInstance.state.name).toEqual(name);
   });
 
   it(`should set state properly on email input`, () => {
@@ -129,31 +151,19 @@ describe("<SignUp />", () => {
     expect(signUpInstance.state.grade).toEqual(grade);
   });
 
-  it(`should set state properly on availableSemester input`, () => {
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+  it(`should set state properly on available_semester input`, () => {
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     const component = mount(signup);
-    const wrapper = component.find("#formAvailableSemester");
-    wrapper.simulate("change", { target: { value: availableSemester } });
+    const wrapper = component.find("#formavailable_semester");
+    wrapper.simulate("change", { target: { value: available_semester } });
     const signUpInstance = component.find(SignUp.WrappedComponent).instance();
-    expect(signUpInstance.state.availableSemester).toEqual(availableSemester);
+    expect(signUpInstance.state.available_semester).toEqual(available_semester);
   });
 
   it(`should signup`, () => {
     const spyHistoryPush = jest
       .spyOn(history, "push")
       .mockImplementation(path => {});
-
-    const spySignUp = jest
-      .spyOn(actionCreators, "signUp")
-      .mockImplementation(() => {
-        return dispatch => {};
-      });
-
-    const spySignIn = jest
-      .spyOn(actionCreators, "signIn")
-      .mockImplementation(() => {
-        return dispatch => {};
-      });
 
     const spyAlert = jest.spyOn(window, "alert").mockImplementation(() => {});
 
@@ -185,17 +195,18 @@ describe("<SignUp />", () => {
     component
       .find("#formGrade")
       .simulate("change", { target: { value: grade } });
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     component
-      .find("#formAvailableSemester")
-      .simulate("change", { target: { value: availableSemester } });
+      .find("#formavailable_semester")
+      .simulate("change", { target: { value: available_semester } });
+    component
+      .find("#signup-sessionday-checkbox")
+      .at(2)
+      .prop("onChange")({ currentTarget: { checked: false } });
 
     const wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
     expect(spySignUp).toBeCalledTimes(1);
-    expect(spyAlert).toHaveBeenCalledTimes(1);
-    expect(spySignIn).toBeCalledTimes(1);
-    expect(spyHistoryPush).toHaveBeenCalledWith("/club");
   });
 
   it(`test : when user didn't select dept or major`, () => {
@@ -227,10 +238,10 @@ describe("<SignUp />", () => {
     component
       .find("#formGrade")
       .simulate("change", { target: { value: grade } });
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     component
-      .find("#formAvailableSemester")
-      .simulate("change", { target: { value: availableSemester } });
+      .find("#formavailable_semester")
+      .simulate("change", { target: { value: available_semester } });
 
     const wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
@@ -251,7 +262,7 @@ describe("<SignUp />", () => {
 
   it(`test : if there is no depts & majors`, () => {
     const mockInitialStore = getMockStore({
-      deptnames: null,
+      depts: null,
       majors: null
     });
     const component = mount(
@@ -298,10 +309,10 @@ describe("<SignUp />", () => {
     component
       .find("#formGrade")
       .simulate("change", { target: { value: grade } });
-    const availableSemester = "TEST_AVAILABLE_SEMESTER";
+    const available_semester = "TEST_AVAILABLE_SEMESTER";
     component
-      .find("#formAvailableSemester")
-      .simulate("change", { target: { value: availableSemester } });
+      .find("#formavailable_semester")
+      .simulate("change", { target: { value: available_semester } });
 
     const wrapper3 = component.find(".btn-dark");
     wrapper3.simulate("click");

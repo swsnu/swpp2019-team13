@@ -7,33 +7,135 @@ import { Route, Switch } from "react-router-dom";
 import SomoimMain from "./SomoimMain";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
-import * as somoimActionCreators from "../store/actions/somoim";
-
+import * as userActions from "../store/actions/user";
+import * as somoimActions from "../store/actions/somoim";
+import * as categoryActions from "../store/actions/category";
+import * as tagActions from "../store/actions/tag";
+import * as deptActions from "../store/actions/dept";
+import * as majorActions from "../store/actions/major";
+let temp_somoims = [
+  {
+    id: 0,
+    title: "Let's LoL!",
+    summary: "Playing LoL together!! :D",
+    description: "LoL\nLoL\nLol",
+    selected_dept: [0, 1],
+    available_semester: 1,
+    tags: [1],
+    goalJoiner: 20,
+    currentJoiner: 7,
+    category: 0,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  },
+  {
+    id: 1,
+    title: "Book lovers",
+    summary: "We read books until we fall asleep..",
+    description: "Actually, it's sleep somoim :)",
+    selected_dept: [0, 1, 3, 4, 5],
+    available_semester: 1,
+    tags: [2, 3],
+    goalJoiner: 10,
+    currentJoiner: 3,
+    category: 2,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  },
+  {
+    id: 2,
+    title: "test somoim",
+    summary: "i am testing the somoim list",
+    description: "Me too bro",
+    selected_dept: [0, 1, 3, 4, 5],
+    available_semester: 3,
+    tags: [4, 5],
+    goalJoiner: 10,
+    currentJoiner: 9,
+    category: 2,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  },
+  {
+    id: 3,
+    title: "301 assa somoim",
+    summary: "We are assa in 301",
+    description: "Sad..",
+    selected_dept: [0, 1, 3, 4, 5],
+    available_semester: 5,
+    tags: [6, 7],
+    goalJoiner: 10,
+    currentJoiner: 1,
+    category: 2,
+    available_major: [0, 1],
+    joiners: [],
+    likers: []
+  }
+];
 let stubInitialState = {
   somoims: [
     {
       id: 0,
-      title: "TEST_SOMOIM_1",
-      summary: "TEST_SUMMARY_1",
-      description: "TEST_DESCRIPTION_1",
-      selected_dept: [0],
-      available_sem: 1,
-      tag: [0],
-      goalJoiner: 10,
+      title: "Let's LoL!",
+      summary: "Playing LoL together!! :D",
+      description: "LoL\nLoL\nLol",
+      selected_dept: [0, 1],
+      available_semester: 1,
+      tags: [1],
+      goalJoiner: 20,
       currentJoiner: 7,
-      likes: 10
+      category: 0,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     },
     {
       id: 1,
-      title: "TEST_SOMOIM_2",
-      summary: "TEST_SUMMARY_2",
-      description: "TEST_DESCRIPTION_2",
-      selected_dept: [0, 1],
-      available_sem: 3,
-      tag: [1],
-      goalJoiner: 1,
-      currentJoiner: 0,
-      likes: 0
+      title: "Book lovers",
+      summary: "We read books until we fall asleep..",
+      description: "Actually, it's sleep somoim :)",
+      selected_dept: [0, 1, 3, 4, 5],
+      available_semester: 1,
+      tags: [2, 3],
+      goalJoiner: 10,
+      currentJoiner: 3,
+      category: 2,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
+    },
+    {
+      id: 2,
+      title: "test somoim",
+      summary: "i am testing the somoim list",
+      description: "Me too bro",
+      selected_dept: [0, 1, 3, 4, 5],
+      available_semester: 3,
+      tags: [4, 5],
+      goalJoiner: 10,
+      currentJoiner: 9,
+      category: 2,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
+    },
+    {
+      id: 3,
+      title: "301 assa somoim",
+      summary: "We are assa in 301",
+      description: "Sad..",
+      selected_dept: [0, 1, 3, 4, 5],
+      available_semester: 5,
+      tags: [6, 7],
+      goalJoiner: 10,
+      currentJoiner: 1,
+      category: 2,
+      available_major: [0, 1],
+      joiners: [],
+      likers: []
     }
   ],
   categories: [
@@ -76,7 +178,12 @@ let stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
-  deptnames: [
+  majors: [
+    { id: 0, name: "cs" },
+    { id: 1, name: "economy" },
+    { id: 2, name: "music" }
+  ],
+  depts: [
     {
       id: 0,
       name: "공과대학"
@@ -137,13 +244,22 @@ let stubInitialState = {
       id: 14,
       name: "자유전공학부"
     }
-  ]
+  ],
+  loggedUser: { id: 1 },
+  recommendedSomoims: null
 };
-
-let mockStore = getMockStore(stubInitialState);
 
 describe("<SomoimMain />", () => {
   let somoimMain;
+  let mockStore = getMockStore(stubInitialState);
+
+  let spyGetLoginInfo,
+    spyGetSomoimList,
+    spyGetCategoryList,
+    spyGetTagList,
+    spyGetDeptList,
+    spyGetMajorList,
+    spyGetRecommendedSomoims;
 
   beforeEach(() => {
     somoimMain = (
@@ -161,6 +277,48 @@ describe("<SomoimMain />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyGetLoginInfo = jest
+      .spyOn(userActions, "getLoginInfo")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetSomoimList = jest
+      .spyOn(somoimActions, "getSomoimList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetCategoryList = jest
+      .spyOn(categoryActions, "getCategoryList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetTagList = jest
+      .spyOn(tagActions, "getTagList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetDeptList = jest
+      .spyOn(deptActions, "getDeptList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetMajorList = jest
+      .spyOn(majorActions, "getMajorList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetRecommendedSomoims = jest
+      .spyOn(userActions, "getRecommendedSomoims")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render Page", () => {
@@ -234,6 +392,7 @@ describe("<SomoimMain />", () => {
   it("when category list info does not loaded yet", () => {
     let savedCategories = stubInitialState.categories;
     stubInitialState.categories = null;
+    stubInitialState.somoims = temp_somoims;
     mockStore = getMockStore(stubInitialState);
     somoimMain = (
       <Provider store={mockStore}>
@@ -256,6 +415,113 @@ describe("<SomoimMain />", () => {
     expect(wrapper.length).toBe(0);
 
     stubInitialState.categories = savedCategories;
+    mockStore = getMockStore(stubInitialState);
+  });
+
+  it("somoim change recommended page button click event handling", () => {
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    let wrapper = component.find(".changePage");
+    wrapper.at(0).simulate("click");
+    mainInstance.setState({ ...mainInstance.state, recommendedListPageNum: 1 });
+    wrapper.at(0).simulate("click");
+    expect(mainInstance.state.recommendedListPageNum).toBe(0);
+    wrapper.at(1).simulate("click");
+    mainInstance.setState({
+      ...mainInstance.state,
+      recommendedListPageNum: -2
+    });
+    wrapper.at(1).simulate("click");
+    expect(mainInstance.state.recommendedListPageNum).toBe(-1);
+  });
+
+  it("somoim change all page button click event handling", () => {
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    let wrapper = component.find(".changePage");
+    wrapper.at(2).simulate("click");
+    mainInstance.setState({ ...mainInstance.state, allListPageNum: 2 });
+    wrapper.at(2).simulate("click");
+    expect(mainInstance.state.allListPageNum).toBe(1);
+    wrapper.at(3).simulate("click");
+    mainInstance.setState({
+      ...mainInstance.state,
+      allListPageNum: -2
+    });
+    wrapper.at(3).simulate("click");
+    expect(mainInstance.state.allListPageNum).toBe(-1);
+  });
+
+  it("category select", () => {
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    let wrapper = component.find(".category-button");
+    wrapper.at(0).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(0);
+    wrapper.at(6).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(2);
+  });
+
+  it("recommended somoim list", () => {
+    let saved = stubInitialState.recommendedSomoims;
+    stubInitialState.recommendedSomoims = temp_somoims;
+    mockStore = getMockStore(stubInitialState);
+    somoimMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <SomoimMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(somoimMain);
+    let mainInstance = component.find("SomoimMain").instance();
+    mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
+    let wrapper = component.find(".recommended-somoim-card");
+    expect(wrapper.length).toBe(12);
+
+    stubInitialState.recommendedSomoims = saved;
+    mockStore = getMockStore(stubInitialState);
+  });
+
+  it("not logged in user", () => {
+    let saved = stubInitialState.loggedUser;
+    stubInitialState.loggedUser = null;
+    mockStore = getMockStore(stubInitialState);
+    somoimMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <SomoimMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    let component = mount(somoimMain);
+    component.update();
+    let mainInstance = component.find("SomoimMain").instance();
+    mainInstance.setState({
+      ...mainInstance.state,
+      isUserInfoLoaded: true
+    });
+    expect(spyGetRecommendedSomoims).toBeCalledTimes(9);
+
+    stubInitialState.loggedUser = saved;
     mockStore = getMockStore(stubInitialState);
   });
 });

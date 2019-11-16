@@ -9,18 +9,24 @@ import Header from "../components/Header";
 
 class SignUp extends React.Component {
   state = {
-    username: "",
     email: "",
+    name: "",
     password: "",
     passwordAgain: "",
     dept: "",
     major: "",
     grade: 1,
-    availableSemester: 1
+    available_semester: 1,
+    available_session_day: 0
   };
 
+  componentDidMount() {
+    this.props.getMajorList();
+    this.props.getDeptList();
+  }
+
   /* 회원가입 버튼을 클릭했을 때 동작 */
-  onClick_SignupButton_Handler = () => {
+  signUpButtonHandler = () => {
     let deptID = -1;
     if (this.props.depts) {
       const dept = this.props.depts.filter(dept => {
@@ -38,24 +44,27 @@ class SignUp extends React.Component {
     }
 
     const newUser = {
-      username: this.state.username,
+      loginID: this.state.loginID,
       email: this.state.email,
+      name: this.state.name,
       password: this.state.password,
       dept: deptID,
       major: majorID,
       grade: this.state.grade,
-      availableSemester: this.state.availableSemester
+      available_semester: this.state.available_semester,
+      available_session_day: this.state.available_session_day
     };
-    this.props.signUp(newUser);
-    alert("어서 오시게나");
-    this.props.signIn(newUser);
-    this.props.history.push("/club");
+    this.props
+      .signUp(newUser)
+      .then(() => alert("회원가입 완료"))
+      .then(() => this.props.signIn(newUser))
+      .then(() => this.props.history.push("/club"));
   };
 
   /* Render */
   render() {
     /* deptOptionList */
-    // ㄴ Redux 에서 deptNames를 받아와서, option list를 만들어줍니다.
+    // ㄴ Redux 에서 depts를 받아와서, option list를 만들어줍니다.
     let deptOptionList = null;
     if (this.props.depts) {
       deptOptionList = this.props.depts.map(dept => (
@@ -64,7 +73,7 @@ class SignUp extends React.Component {
     }
 
     /* majorOptionList */
-    // ㄴ Redux 에서 선택한 deptname에 따른 majorList를 받아와서, option list를 만들어줍니다.
+    // ㄴ Redux 에서 선택한 dept에 따른 majorList를 받아와서, option list를 만들어줍니다.
     let selectedDeptID = null;
     if (this.props.depts) {
       const selectedDept = this.props.depts.filter(dept => {
@@ -85,7 +94,6 @@ class SignUp extends React.Component {
     return (
       <div className="SignUp">
         <Header />
-        <p style={{ textAlign: "center" }}>어서 오시게나</p>
         <h1
           style={{
             textAlign: "center",
@@ -96,20 +104,17 @@ class SignUp extends React.Component {
         >
           회원 가입
         </h1>
-        <div style={{ width: "40%", position: "relative", left: "30%" }}>
+        <div
+          style={{
+            width: "50%",
+            position: "relative",
+            left: "25%",
+            backgroundColor: "white",
+            padding: "15px 30px"
+          }}
+        >
           {/* 유저 정보를 입력받는다 */}
           <Form>
-            {/* 유저 이름 입력 칸 */}
-            <Form.Group controlId="formBasicUsername">
-              <Form.Label>유저 이름</Form.Label>
-              <Form.Control
-                size="lg"
-                type="email"
-                onChange={event => {
-                  this.setState({ username: event.target.value });
-                }}
-              />
-            </Form.Group>
             {/* 이메일 입력 칸 */}
             <Form.Group controlId="formBasicEmail">
               <Form.Label>이메일</Form.Label>
@@ -144,7 +149,17 @@ class SignUp extends React.Component {
                 />
               </Form.Group>
             </Form.Row>
-
+            {/* 유저 이름 입력 칸 */}
+            <Form.Group controlId="formBasicUsername">
+              <Form.Label>이름</Form.Label>
+              <Form.Control
+                size="lg"
+                type="email"
+                onChange={event => {
+                  this.setState({ name: event.target.value });
+                }}
+              />
+            </Form.Group>
             {/* 소속 단과대, 전공 입력 칸*/}
             <Form.Row>
               <Form.Group as={Col} controlId="formDept">
@@ -199,14 +214,14 @@ class SignUp extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formAvailableSemester">
+              <Form.Group as={Col} controlId="formavailable_semester">
                 {/* 활동 가능 학기 수 입력 칸*/}
                 <Form.Label>활동 가능 학기 수</Form.Label>
                 <Form.Control
                   as="select"
                   size="lg"
                   onChange={event => {
-                    this.setState({ availableSemester: event.target.value });
+                    this.setState({ available_semester: event.target.value });
                   }}
                 >
                   <option>1</option>
@@ -222,18 +237,40 @@ class SignUp extends React.Component {
                 </Form.Control>
               </Form.Group>
             </Form.Row>
+            <Form.Row>
+              <Form.Label>활동 가능 요일</Form.Label>
+            </Form.Row>
+            {["월", "화", "수", "목", "금", "토", "일"].map((a, i) => {
+              return (
+                <Form.Check
+                  key={i}
+                  id="signup-sessionday-checkbox"
+                  inline
+                  type={"checkbox"}
+                  label={a}
+                  checked={(this.state.available_session_day & (1 << i)) !== 0}
+                  value={i}
+                  onChange={event => {
+                    this.setState({
+                      available_session_day:
+                        this.state.available_session_day ^ (1 << i)
+                    });
+                  }}
+                />
+              );
+            })}
           </Form>
           <div style={{ marginTop: "5%" }}>
             <Button
               variant="dark"
               size="lg"
               block
-              onClick={this.onClick_SignupButton_Handler}
+              onClick={this.signUpButtonHandler}
               /* 조건을 충족시켜야 회원가입 버튼을 클릭할 수 있다 */
               // ㄴ 모든 칸이 입력되어야 합니다.
               // ㄴ 비밀번호와, 비밀번호 확인이 같아야 합니다.
               disabled={
-                this.state.username === "" ||
+                this.state.name === "" ||
                 this.state.email === "" ||
                 this.state.password === "" ||
                 this.state.password !== this.state.passwordAgain ||
@@ -252,19 +289,18 @@ class SignUp extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    depts: state.deptname.deptnames,
+    depts: state.dept.depts,
     majors: state.major.majors
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
     signUp: user => dispatch(actionCreators.signUp(user)),
     signIn: user => dispatch(actionCreators.signIn(user))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withRouter(SignUp));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SignUp));

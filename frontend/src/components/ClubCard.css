@@ -1,0 +1,53 @@
+.Club-Card {
+  flex: 1;
+  margin: 10px;
+  border: 1px solid #bebebe;
+  padding: 15px 15px;
+  text-align: center;
+  box-shadow: 0px 0px 2px 2px gray;
+}
+
+.club-applicable-term {
+  font-size: 0.9em;
+  color: #6b6b6b;
+  border-bottom: 1px solid #bebebe;
+  position: relative;
+  bottom: 10px;
+}
+
+.club-poster {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.club-user-info {
+  display: flex;
+  justify-content: center;
+}
+
+.club-user-info-item {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.club-user-info-item-img {
+  position: relative;
+  bottom: 4px;
+}
+
+p {
+  color: #6b6b6b;
+}
+
+.club-summary {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.club-tagList {
+  margin-top: 10px;
+}

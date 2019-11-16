@@ -7,8 +7,60 @@ import { Route, Switch } from "react-router-dom";
 import ClubMain from "./ClubMain";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
-import * as clubActionCreators from "../store/actions/club";
+import * as userActions from "../store/actions/user";
+import * as clubActions from "../store/actions/club";
+import * as categoryActions from "../store/actions/category";
+import * as tagActions from "../store/actions/tag";
+import * as deptActions from "../store/actions/dept";
+import * as majorActions from "../store/actions/major";
+let temp_clubs = [
+  {
+    id: 0,
+    name: "SNUStone",
+    content: "SNU Best HearthStone Club",
+    clubmanager: "김지훈",
+    category: 0,
+    auth_img: "1",
+    isRegistered: true,
+    available_major: [1],
+    tags: [1, 2],
+    likers: [],
+    likes: 10,
+    majors: [],
+    poster_img: []
+  },
+  {
+    id: 1,
+    name: "SnuWOD",
+    content: "SNU Best Training Club",
+    clubmanager: "김동우",
+    category: 6,
+    auth_img: "2",
+    isRegistered: true,
+    tags: [2, 3],
+    available_major: [1],
+    likers: [],
+    likes: 15,
+    majors: [],
+    poster_img: []
+  },
 
+  {
+    id: 2,
+    name: "SnuLoL",
+    content: "SNU Best LoL Club",
+    clubmanager: "김도현",
+    category: 6,
+    auth_img: "3",
+    isRegistered: true,
+    tags: [2, 3],
+    available_major: [1],
+    likers: [],
+    likes: 20,
+    majors: [],
+    poster_img: []
+  }
+];
 let stubInitialState = {
   clubs: [
     {
@@ -16,22 +68,30 @@ let stubInitialState = {
       name: "SNUStone",
       content: "SNU Best HearthStone Club",
       clubmanager: "김지훈",
-      selected_category: 0,
-      auth_img_file: "1",
+      category: 0,
+      auth_img: "1",
       isRegistered: true,
-      tag: [0, 1],
-      likes: 10
+      available_major: [1],
+      tags: [1, 2],
+      likers: [],
+      likes: 10,
+      majors: [],
+      poster_img: []
     },
     {
       id: 1,
       name: "SnuWOD",
       content: "SNU Best Training Club",
       clubmanager: "김동우",
-      selected_category: 6,
-      auth_img_file: "2",
+      category: 6,
+      auth_img: "2",
       isRegistered: true,
-      tag: [2, 3],
-      likes: 15
+      tags: [2, 3],
+      available_major: [1],
+      likers: [],
+      likes: 15,
+      majors: [],
+      poster_img: []
     },
 
     {
@@ -39,11 +99,15 @@ let stubInitialState = {
       name: "SnuLoL",
       content: "SNU Best LoL Club",
       clubmanager: "김도현",
-      selected_category: 6,
-      auth_img_file: "3",
+      category: 6,
+      auth_img: "3",
       isRegistered: true,
-      tag: [2, 3],
-      likes: 20
+      tags: [2, 3],
+      available_major: [1],
+      likers: [],
+      likes: 20,
+      majors: [],
+      poster_img: []
     }
   ],
   categories: [
@@ -86,7 +150,12 @@ let stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
-  deptnames: [
+  majors: [
+    { id: 0, name: "cs" },
+    { id: 1, name: "economy" },
+    { id: 2, name: "music" }
+  ],
+  depts: [
     {
       id: 0,
       name: "공과대학"
@@ -147,13 +216,22 @@ let stubInitialState = {
       id: 14,
       name: "자유전공학부"
     }
-  ]
+  ],
+  loggedUser: { id: 1 },
+  recommendedClubs: null
 };
 
 let mockStore = getMockStore(stubInitialState);
 
 describe("<ClubMain />", () => {
   let clubMain;
+  let spyGetLoginInfo,
+    spyGetClubList,
+    spyGetCategoryList,
+    spyGetTagList,
+    spyGetDeptList,
+    spyGetMajorList,
+    spyGetRecommendedClubs;
 
   beforeEach(() => {
     clubMain = (
@@ -171,6 +249,48 @@ describe("<ClubMain />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyGetLoginInfo = jest
+      .spyOn(userActions, "getLoginInfo")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetClubList = jest
+      .spyOn(clubActions, "getClubList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetCategoryList = jest
+      .spyOn(categoryActions, "getCategoryList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetTagList = jest
+      .spyOn(tagActions, "getTagList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetDeptList = jest
+      .spyOn(deptActions, "getDeptList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetMajorList = jest
+      .spyOn(majorActions, "getMajorList")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
+
+    spyGetRecommendedClubs = jest
+      .spyOn(userActions, "getRecommendedClubs")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render Page", () => {
@@ -184,21 +304,21 @@ describe("<ClubMain />", () => {
     const mainInstance = component.find("ClubMain").instance();
     const wrapper = component.find("ClubCard");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.ClubDetailShow).toBe(true);
+    expect(mainInstance.state.clubDetailShow).toBe(true);
   });
 
-  it("club card click event handling", () => {
+  it("club card click event handling2", () => {
     const component = mount(clubMain);
     const mainInstance = component.find("ClubMain").instance();
     let wrapper = component.find("ClubCard");
     wrapper.at(0).simulate("click");
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.ClubDetailShow).toBe(true);
+    expect(mainInstance.state.clubDetailShow).toBe(true);
 
     wrapper = component.find("CloseButton");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.ClubDetailShow).toBe(false);
+    expect(mainInstance.state.clubDetailShow).toBe(false);
   });
 
   it("club create button click event handling", () => {
@@ -206,14 +326,15 @@ describe("<ClubMain />", () => {
     const mainInstance = component.find("ClubMain").instance();
     let wrapper = component.find(".club-create-button");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.ClubRegisterShow).toBe(true);
+    expect(mainInstance.state.clubRegisterShow).toBe(true);
 
     wrapper = component.find("CloseButton");
     wrapper.at(0).simulate("click");
-    expect(mainInstance.state.ClubRegisterShow).toBe(false);
+    expect(mainInstance.state.clubRegisterShow).toBe(false);
   });
 
   it("when club list info does not loaded yet", () => {
+    let savedClubs = stubInitialState.clubs;
     stubInitialState.clubs = null;
     mockStore = getMockStore(stubInitialState);
     clubMain = (
@@ -235,9 +356,13 @@ describe("<ClubMain />", () => {
     const component = mount(clubMain);
     const wrapper = component.find("ClubCard");
     expect(wrapper.length).toBe(0);
+
+    stubInitialState.clubs = savedClubs;
+    mockStore = getMockStore(stubInitialState);
   });
 
   it("when category list info does not loaded yet", () => {
+    let saved = stubInitialState.categories;
     stubInitialState.categories = null;
     mockStore = getMockStore(stubInitialState);
     clubMain = (
@@ -259,5 +384,115 @@ describe("<ClubMain />", () => {
     const component = mount(clubMain);
     const wrapper = component.find("category-button");
     expect(wrapper.length).toBe(0);
+
+    stubInitialState.categories = saved;
+    mockStore = getMockStore(stubInitialState);
+  });
+
+  it("club change recommended page button click event handling", () => {
+    const component = mount(clubMain);
+    let mainInstance = component.find("ClubMain").instance();
+    let wrapper = component.find(".changePage");
+    wrapper.at(0).simulate("click");
+    mainInstance.setState({ ...mainInstance.state, recommendedListPageNum: 1 });
+    wrapper.at(0).simulate("click");
+    expect(mainInstance.state.recommendedListPageNum).toBe(0);
+    wrapper.at(1).simulate("click");
+    mainInstance.setState({
+      ...mainInstance.state,
+      recommendedListPageNum: -2
+    });
+    wrapper.at(1).simulate("click");
+    expect(mainInstance.state.recommendedListPageNum).toBe(-1);
+  });
+
+  it("club change all page button click event handling", () => {
+    const component = mount(clubMain);
+    let mainInstance = component.find("ClubMain").instance();
+    let wrapper = component.find(".changePage");
+    wrapper.at(2).simulate("click");
+    mainInstance.setState({ ...mainInstance.state, allListPageNum: 2 });
+    wrapper.at(2).simulate("click");
+    expect(mainInstance.state.allListPageNum).toBe(1);
+    wrapper.at(3).simulate("click");
+    mainInstance.setState({
+      ...mainInstance.state,
+      allListPageNum: -2
+    });
+    wrapper.at(3).simulate("click");
+    expect(mainInstance.state.allListPageNum).toBe(-1);
+  });
+
+  it("category select", () => {
+    const component = mount(clubMain);
+    let mainInstance = component.find("ClubMain").instance();
+    let wrapper = component.find(".category-button");
+    wrapper.at(0).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(0);
+    wrapper.at(6).simulate("click");
+    expect(mainInstance.state.selected_category).toBe(2);
+  });
+
+  it("recommended club list", () => {
+    let saved = stubInitialState.recommendedClubs;
+    stubInitialState.recommendedClubs = temp_clubs;
+    mockStore = getMockStore(stubInitialState);
+    clubMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <ClubMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(clubMain);
+    let mainInstance = component.find("ClubMain").instance();
+    mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
+    let wrapper = component.find(".recommended-club-card");
+    expect(wrapper.length).toBe(9);
+
+    stubInitialState.recommendedClubs = [];
+    mockStore = getMockStore(stubInitialState);
+  });
+
+  it("not logged in user", () => {
+    let saved = stubInitialState.loggedUser;
+    stubInitialState.loggedUser = null;
+    mockStore = getMockStore(stubInitialState);
+    clubMain = (
+      <Provider store={mockStore}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <ClubMain />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    let component = mount(clubMain);
+    component.update();
+    let mainInstance = component.find("ClubMain").instance();
+    mainInstance.setState({
+      ...mainInstance.state,
+      isUserInfoLoaded: true
+    });
+    expect(spyGetRecommendedClubs).toBeCalledTimes(9);
+
+    stubInitialState.loggedUser = saved;
+    mockStore = getMockStore(stubInitialState);
   });
 });

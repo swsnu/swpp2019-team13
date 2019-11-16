@@ -7,44 +7,32 @@ import { Route, Switch } from "react-router-dom";
 import SomoimCreate from "./SomoimCreate";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
+import * as userActionCreators from "../store/actions/user";
 import * as somoimActionCreators from "../store/actions/somoim";
+import * as deptActions from "../store/actions/dept";
+import * as majorActions from "../store/actions/major";
 
 const stubInitialState = {
-  somoims: [
-    {
-      id: 0,
-      title: "TEST_SOMOIM_1",
-      summary: "TEST_SUMMARY_1",
-      description: "TEST_DESCRIPTION_1",
-      selected_dept: [0],
-      available_sem: 1,
-      tag: [0],
-      goalJoiner: 10,
-      currentJoiner: 7,
-      likes: 10
-    },
-    {
-      id: 1,
-      title: "TEST_SOMOIM_2",
-      summary: "TEST_SUMMARY_2",
-      description: "TEST_DESCRIPTION_2",
-      selected_dept: [0, 1],
-      available_sem: 3,
-      tag: [1],
-      goalJoiner: 1,
-      currentJoiner: 0,
-      likes: 0
-    }
+  somoims: [],
+  majors: [
+    { id: 1, dept_id: 1, name: "MAJOR_1" },
+    { id: 2, dept_id: 2, name: "MAJOR_2" }
   ],
-  deptnames: [{ id: 0, name: "DEPT_1" }, { id: 1, name: "DEPT_2" }],
-  categories: [{ id: 0, name: "CATEGORY_1" }, { id: 1, name: "CATEGORY_2" }]
+  depts: [
+    { id: 1, name: "DEPT_1" },
+    { id: 2, name: "DEPT_2" }
+  ],
+  categories: [
+    { id: 1, name: "CATEGORY_1" },
+    { id: 2, name: "CATEGORY_2" }
+  ]
 };
 
 const mockStore = getMockStore(stubInitialState);
 
 describe("<SomoimCreate />", () => {
   let somoimCreate;
-  let spyPostSomoim;
+  let spyPostSomoim, spygetDeptList, spygetMajorList, spyaddManagingSomoim;
 
   let spyCloseHandler = () => {};
 
@@ -69,6 +57,28 @@ describe("<SomoimCreate />", () => {
 
     spyPostSomoim = jest
       .spyOn(somoimActionCreators, "postSomoim")
+      .mockImplementation(res => {
+        return dispatch => {
+          return new Promise((resolve, reject) => {
+            resolve();
+          });
+        };
+      });
+
+    spygetDeptList = jest
+      .spyOn(deptActions, "getDeptList")
+      .mockImplementation(at => {
+        return dispatch => {};
+      });
+
+    spygetMajorList = jest
+      .spyOn(majorActions, "getMajorList")
+      .mockImplementation(at => {
+        return dispatch => {};
+      });
+
+    spyaddManagingSomoim = jest
+      .spyOn(userActionCreators, "addManagingSomoim")
       .mockImplementation(at => {
         return dispatch => {};
       });
@@ -76,6 +86,25 @@ describe("<SomoimCreate />", () => {
 
   it("should render Page", () => {
     const component = mount(somoimCreate);
+
+    const wrapper = component.find("Bootstrap(Modal)");
+    expect(wrapper.length).toBe(1);
+  });
+
+  it("should render Page when no props", () => {
+    const tempInitialState = {};
+
+    let tempSomoimCreate = (
+      <Provider store={getMockStore(tempInitialState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/" exact component={SomoimCreate} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(tempSomoimCreate);
 
     const wrapper = component.find("Bootstrap(Modal)");
     expect(wrapper.length).toBe(1);
@@ -169,33 +198,6 @@ describe("<SomoimCreate />", () => {
     expect(SomoimCreateInstance.state.goal_number).toEqual(100);
   });
 
-  it(`should set state properly after select new dept name`, () => {
-    const component = mount(somoimCreate);
-
-    // Form.Check made two inputs with same id, so it will have 4 in this case
-    // (deptnames have 2 elements in mockstate)
-    const wrapper = component.find("#somoim-deptname-checkbox").at(1);
-    wrapper.simulate("change", { target: { checked: true } });
-    const SomoimCreateInstance = component
-      .find(SomoimCreate.WrappedComponent)
-      .instance();
-    expect(SomoimCreateInstance.state.selected_dept).toEqual([0]);
-  });
-
-  it(`should set state properly after deselect dept name`, () => {
-    const component = mount(somoimCreate);
-
-    // Form.Check made two inputs with same id, so it will have 4 in this case
-    // (deptnames have 2 elements in mockstate)
-    const wrapper = component.find("#somoim-deptname-checkbox").at(1);
-    wrapper.simulate("change", { target: { checked: true } });
-    wrapper.simulate("change", { target: { checked: false } });
-    const SomoimCreateInstance = component
-      .find(SomoimCreate.WrappedComponent)
-      .instance();
-    expect(SomoimCreateInstance.state.selected_dept).toEqual([]);
-  });
-
   it(`should set state properly on available semester select input`, () => {
     const component = mount(somoimCreate);
 
@@ -205,28 +207,200 @@ describe("<SomoimCreate />", () => {
     const SomoimCreateInstance = component
       .find(SomoimCreate.WrappedComponent)
       .instance();
-    expect(SomoimCreateInstance.state.available_sem).toEqual(5);
+    expect(SomoimCreateInstance.state.available_semester).toEqual(5);
+  });
+
+  it(`should set state properly on session day select input`, () => {
+    const component = mount(somoimCreate);
+
+    // Form.Control made two inputs with same id
+    const wrapper = component.find("#somoim-sessionday-checkbox").at(1);
+    wrapper.simulate("change");
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.session_day).toEqual(1);
+  });
+
+  it(`should set state properly on dept input`, () => {
+    const component = mount(somoimCreate);
+
+    // Form.Control made two inputs with same id
+    const wrapper = component.find("#somoimcreate-dept-input").at(1);
+    wrapper.simulate("change", { target: { value: "" } });
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.current_dept).toEqual("");
+    expect(SomoimCreateInstance.state.current_major).toEqual("");
+
+    wrapper.simulate("change", { target: { value: "DEPT_1" } });
+    expect(SomoimCreateInstance.state.current_dept).toEqual("DEPT_1");
+  });
+
+  it(`should set state properly on major input`, () => {
+    const component = mount(somoimCreate);
+
+    // Form.Control made two inputs with same id
+    const wrapper = component.find("#somoimcreate-major-input").at(1);
+    wrapper.simulate("change", { target: { value: 2 } });
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.current_major).toEqual(2);
+  });
+
+  it(`should handle add major button`, () => {
+    const component = mount(somoimCreate);
+
+    // Form.Control made two inputs with same id
+    let wrapper = component.find("#somoimcreate-dept-input").at(1);
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find("#somoimcreate-major-input").at(1);
+    wrapper.simulate("change", { target: { value: "MAJOR_2" } });
+    wrapper = component.find("#somoimcreate-addmajor-button").at(1);
+    wrapper.simulate("click");
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.available_major).toEqual([2]);
+  });
+
+  it(`should handle add major button if already exist`, () => {
+    const component = mount(somoimCreate);
+
+    // Form.Control made two inputs with same id
+    let wrapper = component.find("#somoimcreate-dept-input").at(1);
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find("#somoimcreate-major-input").at(1);
+    wrapper.simulate("change", { target: { value: "MAJOR_2" } });
+    wrapper = component.find("#somoimcreate-addmajor-button").at(1);
+    wrapper.simulate("click");
+
+    wrapper.simulate("click");
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.available_major).toEqual([2]);
+  });
+
+  it(`should handle add all major button`, () => {
+    const component = mount(somoimCreate);
+
+    const wrapper = component.find("#somoimcreate-addallmajor-button").at(1);
+    wrapper.simulate("click");
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.available_major).toEqual([1, 2]);
+  });
+
+  it(`should handle add all major button when no major props`, () => {
+    const tempInitialState = {};
+
+    let tempSomoimCreate = (
+      <Provider store={getMockStore(tempInitialState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return <SomoimCreate show={true} />;
+              }}
+            />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(tempSomoimCreate);
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+
+    SomoimCreateInstance.setState({ current_dept: "hi", current_major: "hi" });
+
+    let wrapper = component.find("#somoimcreate-addmajor-button").at(1);
+    wrapper.simulate("click");
+
+    wrapper = component.find("#somoimcreate-addallmajor-button").at(1);
+    wrapper.simulate("click");
+
+    expect(SomoimCreateInstance.state.available_major).toEqual([]);
+  });
+
+  it(`should handle remove one major button`, () => {
+    const component = mount(somoimCreate);
+
+    let wrapper = component.find("#somoimcreate-dept-input").at(1);
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find("#somoimcreate-major-input").at(1);
+    wrapper.simulate("change", { target: { value: "MAJOR_2" } });
+    wrapper = component.find("#somoimcreate-addmajor-button").at(1);
+    wrapper.simulate("click");
+
+    wrapper = component.find("#somoimcreate-removemajor-button").at(1);
+    wrapper.simulate("click");
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.available_major).toEqual([]);
+  });
+
+  it(`should handle remove all major button`, () => {
+    const component = mount(somoimCreate);
+
+    let wrapper = component.find("#somoimcreate-addallmajor-button").at(1);
+    wrapper.simulate("click");
+
+    wrapper = component.find("#somoimcreate-removeallmajor-button").at(1);
+    wrapper.simulate("click");
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+    expect(SomoimCreateInstance.state.available_major).toEqual([]);
   });
 
   it(`should handle confirm button`, () => {
     const spyWindowAlert = jest
       .spyOn(window, "alert")
       .mockImplementation(path => {});
+
     const component = mount(somoimCreate);
+
+    const SomoimCreateInstance = component
+      .find(SomoimCreate.WrappedComponent)
+      .instance();
+
+    SomoimCreateInstance.setState({
+      title: "title",
+      summary: "summary",
+      description: "description"
+    });
+
     const wrapper = component.find("#confirm-create-somoim-button").at(1);
     wrapper.simulate("click");
-    expect(spyPostSomoim).toHaveBeenCalledTimes(1);
-    expect(spyWindowAlert).toBeCalledWith("Create Somoim Success!");
+
+    expect(spyWindowAlert).toBeCalledTimes(1);
+    expect(spyPostSomoim).toBeCalledTimes(1);
   });
+
   it(`should set state properly on category select input`, () => {
     const component = mount(somoimCreate);
 
     // Form.Control made two inputs with same id
     const wrapper = component.find("#somoim-category-input").at(1);
-    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper.simulate("change", { target: { value: "CATEGORY_1" } });
     const SomoimCreateInstance = component
       .find(SomoimCreate.WrappedComponent)
       .instance();
-    expect(SomoimCreateInstance.state.selected_category).toEqual(2);
+    expect(SomoimCreateInstance.state.category).toEqual(1);
   });
 });

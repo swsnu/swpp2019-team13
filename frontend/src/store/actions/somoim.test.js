@@ -1,33 +1,59 @@
-// import axios from "axios";
+import axios from "axios";
 // import * as router from 'connected-react-router';
 
 import * as actionCreators from "./somoim";
 import store from "../store";
 
 describe("Category Actions", () => {
-  it("postSomoim", () => {
-    let input = {
-      title: null,
-      summary: null,
-      description: null,
-      selected_dept: null,
-      available_sem: null,
-      goalJoiner: null
-    };
-    store.dispatch(actionCreators.postSomoim(input)).then(() => {
-      done();
+  it("postSomoim", done => {
+    const spypostSomoim = jest.spyOn(axios, "post").mockImplementation(url => {
+      return new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: 1
+        };
+        resolve(result);
+      });
     });
-  });
 
-  it("getSomoimList", () => {
-    store.dispatch(actionCreators.getSomoimList()).then(() => {
+    store.dispatch(actionCreators.postSomoim(1)).then(() => {
+      const newState = store.getState();
+      //expect(newState.somoim.somoims).toBe([1]);
+      expect(spypostSomoim).toHaveBeenCalledTimes(1);
       done();
     });
   });
+  it("getSomoimList", done => {
+    const spygetSomoimList = jest.spyOn(axios, "get").mockImplementation(url => {
+      return new Promise((resolve, reject) => {
+        const result = {
+          status: 200,
+          data: 1
+        };
+        resolve(result);
+      });
+    });
 
-  it("getSomoimByID", () => {
-    store.dispatch(actionCreators.getSomoimByID()).then(() => {
+    store.dispatch(actionCreators.getSomoimList(1)).then(() => {
+      expect(spygetSomoimList).toHaveBeenCalledTimes(1);
       done();
     });
   });
+  /*
+    it("getSomoimByID", done => {
+      const spygetSomoimByID = jest.spyOn(axios, "get").mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: 1
+          };
+          resolve(result);
+        });
+      });
+  
+      store.dispatch(actionCreators.getSomoimByID(1)).then(() => {
+        done();
+      });
+    });
+    */
 });
