@@ -4,7 +4,6 @@ const initialState = {
   preclubs: [],
   selectedClub: null
 };
-// TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.POST_PRECLUB:

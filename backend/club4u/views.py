@@ -169,11 +169,12 @@ def userinfo(request):
 
 def preclub_list(request):
     if request.method == 'POST':
+
         req_data = json.loads(request.body.decode())
         name = req_data['name']
         manager = req_data['manager']
         category = Category.objects.get(id=req_data['category'])
-        auth_img = req_data['auth_img'].FILES['image']
+        auth_img = req_data['auth_img']
         preclub = PreClub(
             name=name, manager=manager, category=category, auth_img=auth_img)
         preclub.save()

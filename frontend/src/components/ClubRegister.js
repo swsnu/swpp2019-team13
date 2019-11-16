@@ -4,11 +4,13 @@ import { withRouter } from "react-router";
 import { Modal, Button, Form } from "react-bootstrap";
 import { ImageSelectPreview } from "react-image-select-pv";
 
+import * as actionCreators from "../store/actions/index";
+
 class ClubRegister extends React.Component {
   state = {
     name: "",
     clubmanager: "",
-    selected_category: 0,
+    selected_category: 1,
     auth_img_file: null
   };
 
@@ -16,28 +18,10 @@ class ClubRegister extends React.Component {
     this.setState({
       name: "",
       clubmanager: "",
-      selected_category: 0,
+      selected_category: 1,
       auth_img_file: null
     });
   }
-
-  // onChangeHandler = event => {
-  //   if (
-  //     // import from utils/CheckUploadedFile
-  //     maxSelectFile(event) &&
-  //     checkMimeType(event, 3) &&
-  //     checkFileSize(event)
-  //   ) {
-  //     let file_urls = [];
-  //     for (let x = 0; x < event.target.files.length; x++) {
-  //       file_urls.push(URL.createObjectURL(event.target.files[x]));
-  //     }
-  //     this.setState({
-  //       auth_img_file: file_urls,
-  //       loaded: 0
-  //     });
-  //   }
-  // };
 
   render() {
     return (
@@ -101,7 +85,8 @@ class ClubRegister extends React.Component {
                   id="auth-img-input"
                   imageTypes="png|jpg|gif"
                   onChange={data => {
-                    this.imgUploadHandler(data);
+                    this.setState({ auth_img_file: data[0].blob });
+                    // this.imgUploadHandler(data);
                   }}
                   max={1}
                 />
@@ -110,16 +95,20 @@ class ClubRegister extends React.Component {
             <Button
               letiant="primary"
               onClick={() => {
-                //   this.props.postClub(
-                //     this.state.name,
-                //     this.state.clubmanager,
-                //     this.state.auth_img_file,
-                //     this.state.selected_category
-                //   );
+                this.props.postPreClub({
+                  name: this.state.name,
+                  manager: this.state.clubmanager,
+                  auth_img: this.state.auth_img_file,
+                  category: this.state.selected_category
+                });
                 alert("Create Club Success!");
                 this.props.closeHandler();
               }}
-              disabled={this.state.name === "" || this.state.clubmanager === ""}
+              disabled={
+                this.state.name === "" ||
+                this.state.clubmanager === "" ||
+                this.state.auth_img_file === null
+              }
             >
               Register
             </Button>
@@ -138,15 +127,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    // postClub: (name, clubmanager, auth_img_file, selected_category) =>
-    //   dispatch(
-    //     actionCreaters.postClub({
-    //       name: name,
-    //       clubmanager: clubmanager,
-    //       auth_img_file: auth_img_file,
-    //       selected_category: selected_category
-    //     })
-    //   )
+    postPreClub: preclub => dispatch(actionCreators.postPreClub(preclub))
   };
 };
 
