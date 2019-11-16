@@ -547,7 +547,7 @@ def application_form(request, club_id=0):
                 file = FileForm(
                     application=form, order=item['order'], title=item['title'])
                 file.save()
-            elif item['type'] == 'image':
+            else:  # if item['type'] == 'image':
                 image = ImageForm(
                     application=form, order=item['order'], title=item['title'])
                 image.save()
