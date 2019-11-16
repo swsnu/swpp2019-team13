@@ -213,75 +213,75 @@ describe("<MyPage />", () => {
     spyGetLoginInfo = jest
       .spyOn(userActions, "getLoginInfo")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetClubList = jest
       .spyOn(clubActions, "getClubList")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetSomoimList = jest
       .spyOn(somoimActions, "getSomoimList")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetCategoryList = jest
       .spyOn(categoryActions, "getCategoryList")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetTagList = jest
       .spyOn(tagActions, "getTagList")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetDeptList = jest
       .spyOn(deptActions, "getDeptList")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetMajorList = jest
       .spyOn(majorActions, "getMajorList")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetManagingClubs = jest
       .spyOn(userActions, "getManagingClubs")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
     spyGetLikedClubs = jest
       .spyOn(userActions, "getLikedClubs")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
     spyGetAppliedClubs = jest
       .spyOn(userActions, "getAppliedClubs")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyGetManagingSomoims = jest
       .spyOn(userActions, "getManagingSomoims")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
     spyGetLikedSomoims = jest
       .spyOn(userActions, "getLikedSomoims")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
     spyGetJoinedSomoims = jest
       .spyOn(userActions, "getJoinedSomoims")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
   });
 

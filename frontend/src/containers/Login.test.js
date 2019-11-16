@@ -94,10 +94,11 @@ describe("<Login />", () => {
       </Provider>
     );
     const component = mount(login_withloggedUser);
+    const mainInstance = component.find("Login").instance();
+    mainInstance.setState({ forceRender: Math.random() });
+    component.update();
 
-    const wrapper = component.find("Login");
-
-    //expect(spyOnHide).toHaveBeenCalledTimes(1);
+    expect(spyOnHide).toHaveBeenCalledTimes(1);
   });
 
   it("should clear inputs when modal reopen", () => {
@@ -159,9 +160,13 @@ describe("<Login />", () => {
       });
     const component = mount(login);
 
-    let wrapper = component.find(".btn-dark");
+    let wrapper = component.find("#formBasicEmail");
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find("#formBasicPassword");
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
-    //expect(spySignIn).toBeCalledTimes(1);
+    expect(spySignIn).toBeCalledTimes(1);
 
     jest.clearAllMocks();
   });
@@ -171,5 +176,19 @@ describe("<Login />", () => {
 
     const wrapper = component.find(".modal-backdrop");
     wrapper.simulate("click");
+  });
+
+  it("Login with press Enter key", () => {
+    const component = mount(login);
+
+    let wrapper = component.find("#formBasicEmail");
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find("#formBasicPassword");
+    wrapper.simulate("change", { target: { value: 2 } });
+    wrapper = component.find(".Login");
+    wrapper.simulate("keypress", { key: "Space" });
+    wrapper.simulate("keypress", { key: "Enter" });
+
+    expect(spySignIn).toBeCalledTimes(1);
   });
 });
