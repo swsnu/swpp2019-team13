@@ -63,15 +63,11 @@ describe("<SignUp />", () => {
       });
 
     spySignUp = jest.spyOn(actionCreators, "signUp").mockImplementation(() => {
-      return dispatch => {
-        return new Promise(() => {});
-      };
+      return dispatch => new Promise(resolve => resolve());
     });
 
     spySignIn = jest.spyOn(actionCreators, "signIn").mockImplementation(() => {
-      return dispatch => {
-        return new Promise(() => {});
-      };
+      return dispatch => new Promise(resolve => resolve());
     });
   });
 
@@ -203,13 +199,14 @@ describe("<SignUp />", () => {
     component
       .find("#formavailable_semester")
       .simulate("change", { target: { value: available_semester } });
+    component
+      .find("#signup-sessionday-checkbox")
+      .at(2)
+      .prop("onChange")({ currentTarget: { checked: false } });
 
     const wrapper = component.find(".btn-dark");
     wrapper.simulate("click");
     expect(spySignUp).toBeCalledTimes(1);
-    //expect(spyAlert).toHaveBeenCalledTimes(1);
-    //expect(spySignIn).toBeCalledTimes(1);
-    //expect(spyHistoryPush).toHaveBeenCalledWith("/club");
   });
 
   it(`test : when user didn't select dept or major`, () => {
