@@ -32,3 +32,5 @@ export {
   addLikedSomoim,
   addJoinedSomoim
 } from "./user";
+
+export { postPreClub } from "./preclub";

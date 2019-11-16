@@ -15,9 +15,6 @@ from .application_models import *
 from .serializers import *
 from .application_serializers import *
 
-from django.core.files import File
-from django.forms.models import model_to_dict
-
 
 def category_list(request):
     if request.method == 'GET':
@@ -169,11 +166,12 @@ def userinfo(request):
 
 def preclub_list(request):
     if request.method == 'POST':
+
         req_data = json.loads(request.body.decode())
         name = req_data['name']
         manager = req_data['manager']
         category = Category.objects.get(id=req_data['category'])
-        auth_img = req_data['auth_img'].FILES['image']
+        auth_img = req_data['auth_img']
         preclub = PreClub(
             name=name, manager=manager, category=category, auth_img=auth_img)
         preclub.save()
@@ -249,13 +247,13 @@ def club(request, club_id=None):
 
 def clubposter(request, club_id=0):
     if request.method == 'POST':
-        selectedClub = Club.objects.get(id=club_id)
-        new_poster = ClubPoster(img=request.FILES['image'], club=selectedClub)
-        new_poster.save()
-
-        # response_dict = {'img': str(model_to_dict(new_poster)['img'])}
-
-        # return JsonResponse(response_dict, safe=False)
+        try:
+            selectedClub = Club.objects.get(id=club_id)
+            new_poster = ClubPoster(
+                img=request.FILES['image'], club=selectedClub)
+            new_poster.save()
+        except ObjectDoesNotExist:
+            return HttpResponseNotFound()
 
         return HttpResponse(status=204)
     else:
@@ -406,9 +404,9 @@ def recommend_club(request, user_id=0):
         recommended_clubs = Club.objects.none()
         for user_like_club in user.like_clubs.all():
             for liker in user_like_club.likers.all():
-                for club in liker.like_clubs.all():
-                    if recommended_clubs.filter(id=club.id).count() == 0:
-                        recommended_clubs |= Club.objects.filter(id=club.id)
+                for c in liker.like_clubs.all():
+                    if recommended_clubs.filter(id=c.id).count() == 0:
+                        recommended_clubs |= Club.objects.filter(id=c.id)
         serializer = ClubSerializer(recommended_clubs, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:
