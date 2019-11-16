@@ -102,6 +102,9 @@ class SomoimCreate extends React.Component {
       ));
     }
 
+    let categoryList = [];
+    if (this.props.categories) categoryList = this.props.categories;
+
     return (
       <Modal
         style={{ fontSize: 10 }}
@@ -138,13 +141,13 @@ class SomoimCreate extends React.Component {
                 id="somoim-category-input"
                 onChange={event =>
                   this.setState({
-                    category: this.props.categories.filter(
+                    category: categoryList.filter(
                       a => a.name === event.target.value
                     )[0].id
                   })
                 }
               >
-                {this.props.categories.map(a => {
+                {categoryList.map(a => {
                   return (
                     <option key={a.id} value={a.name}>
                       {a.name}
@@ -212,6 +215,7 @@ class SomoimCreate extends React.Component {
               {this.state.available_major.map(major_id => (
                 <Button
                   key={major_id}
+                  id="somoimcreate-removemajor-button"
                   onClick={() => this.handle_RemoveSpecificMajor(major_id)}
                 >
                   {this.props.majors.filter(major => major.id === major_id)[0]
@@ -221,11 +225,12 @@ class SomoimCreate extends React.Component {
             </div>
 
             <Form.Row>
-              <Form.Group as={Col} controlId="formDept">
+              <Form.Group as={Col}>
                 <Form.Label>단과 대학</Form.Label>
                 <Form.Control
                   as="select"
                   size="lg"
+                  id="somoimcreate-dept-input"
                   onChange={event => {
                     this.setState({ current_dept: event.target.value });
                   }}
@@ -235,11 +240,12 @@ class SomoimCreate extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formMajor">
+              <Form.Group as={Col}>
                 <Form.Label>학과</Form.Label>
                 <Form.Control
                   as="select"
                   size="lg"
+                  id="somoimcreate-major-input"
                   onChange={event => {
                     this.setState({ current_major: event.target.value });
                   }}
@@ -249,8 +255,9 @@ class SomoimCreate extends React.Component {
                 </Form.Control>
               </Form.Group>
 
-              <Form.Group as={Col} controlId="formMajor">
+              <Form.Group as={Col}>
                 <Button
+                  id="somoimcreate-addmajor-button"
                   onClick={() =>
                     this.handle_SelectSpecificMajor(this.state.current_major)
                   }
@@ -261,10 +268,16 @@ class SomoimCreate extends React.Component {
                 >
                   추가
                 </Button>
-                <Button onClick={() => this.handle_SelectAllMajor()}>
+                <Button
+                  id="somoimcreate-addallmajor-button"
+                  onClick={() => this.handle_SelectAllMajor()}
+                >
                   전체 추가
                 </Button>
-                <Button onClick={() => this.handle_RemoveAllMajor()}>
+                <Button
+                  id="somoimcreate-removeallmajor-button"
+                  onClick={() => this.handle_RemoveAllMajor()}
+                >
                   전체 삭제
                 </Button>
               </Form.Group>
