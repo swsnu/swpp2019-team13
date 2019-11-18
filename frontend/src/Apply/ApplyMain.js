@@ -19,7 +19,7 @@ class ApplyMain extends Component {
 
   componentDidMount() {
     this.props.getClubByID(this.props.match.params.club_id);
-    this.props.getApplicationFormByID(this.props.match.params.club_id);
+    this.props.getApplicationByID(this.props.match.params.club_id);
   }
 
   componentDidUpdate = () => {
@@ -28,21 +28,21 @@ class ApplyMain extends Component {
       // this.props.onGetManagingClubs(this.props.loggedUser);
     }
     if (this.state.isUserInfoLoaded && !this.state.isFormInfoLoaded) {
-      if (this.props.applicationForm) {
+      if (this.props.selectedApplication) {
         let formList = [];
         let formID = 0;
         formList = formList.concat(
-          this.props.applicationForm.short_texts.map(item =>
+          this.props.selectedApplication.short_texts.map(item =>
             this.newForm("shortText", formID++, item.title, item.order)
           )
         );
         formList = formList.concat(
-          this.props.applicationForm.long_texts.map(item =>
+          this.props.selectedApplication.long_texts.map(item =>
             this.newForm("longText", formID++, item.title, item.order)
           )
         );
         formList = formList.concat(
-          this.props.applicationForm.multi_choices.map(item =>
+          this.props.selectedApplication.multi_choices.map(item =>
             this.newForm(
               "multiChoice",
               formID++,
@@ -53,12 +53,12 @@ class ApplyMain extends Component {
           )
         );
         formList = formList.concat(
-          this.props.applicationForm.images.map(item =>
+          this.props.selectedApplication.images.map(item =>
             this.newForm("image", formID++, item.title, item.order)
           )
         );
         formList = formList.concat(
-          this.props.applicationForm.files.map(item =>
+          this.props.selectedApplication.files.map(item =>
             this.newForm("file", formID++, item.title, item.order)
           )
         );
@@ -202,15 +202,14 @@ const mapStateToProps = state => {
   return {
     selectedClub: state.club.selectedClub,
     loggedUser: state.user.loggedUser,
-    applicationForm: state.club.applicationForm
+    selectedApplication: state.club.selectedApplication
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getClubByID: id => dispatch(actionCreators.getClubByID(id)),
-    getApplicationFormByID: id =>
-      dispatch(actionCreators.getApplicationFormByID(id))
+    getApplicationByID: id => dispatch(actionCreators.getApplicationByID(id))
   };
 };
 

@@ -5,7 +5,11 @@ from .models import Club, Somoim, UserProfile
 
 
 class Application(models.Model):
-    club = models.OneToOneField(Club, on_delete=models.CASCADE)
+    club = models.ForeignKey(
+        Club,
+        related_name='application',
+        on_delete=models.CASCADE,
+    )
     user = models.ForeignKey(
         UserProfile,
         related_name='application',

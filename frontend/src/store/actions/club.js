@@ -31,6 +31,21 @@ export const getClubByID = id => {
   };
 };
 
+export const getApplicationByID_ = form => {
+  return {
+    type: actionTypes.GET_APPLICATION_BY_ID,
+    form: form
+  };
+};
+
+export const getApplicationByID = id => {
+  return dispatch => {
+    return axios
+      .get("/api/club/" + id + "/application/")
+      .then(res => dispatch(getApplicationByID_(res.data)));
+  };
+};
+
 export const getApplicationFormByID_ = form => {
   return {
     type: actionTypes.GET_APPLICATION_FORM_BY_ID,

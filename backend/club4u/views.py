@@ -391,11 +391,11 @@ def apply_club(request, user_id=0):
         application = Application(club=Club.objects.get(id=club_id), user=user)
         application.save()
 
-        short_text_forms = ShortTextForm.obejcts.filter(application=form)
-        long_text_forms = LongTextForm.obejcts.filter(application=form)
-        multi_choice_forms = MultiChoiceForm.obejcts.filter(application=form)
-        file_forms = FileForm.obejcts.filter(application=form)
-        image_forms = ImageForm.obejcts.filter(application=form)
+        short_text_forms = ShortTextForm.objects.filter(application=form)
+        long_text_forms = LongTextForm.objects.filter(application=form)
+        multi_choice_forms = MultiChoiceForm.objects.filter(application=form)
+        file_forms = FileForm.objects.filter(application=form)
+        image_forms = ImageForm.objects.filter(application=form)
         for item in short_text_forms:
             short_text = ShortTextForm(
                 application=application, order=item.order, title=item.title)
