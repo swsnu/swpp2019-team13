@@ -388,6 +388,10 @@ def apply_club(request, user_id=0):
             user.apply_clubs.add(Club.objects.get(id=club_id))
 
         form = Application.objects.get(club=club_id, user=None)
+
+        application = Application.objects.get(
+            club=Club.objects.get(id=club_id), user=user)
+        application.delete()
         application = Application(club=Club.objects.get(id=club_id), user=user)
         application.save()
 
@@ -411,7 +415,7 @@ def apply_club(request, user_id=0):
             choices = Choice.objects.filter(multi=item)
             for item_choice in choices:
                 choice = Choice(multi=multi_choice,
-                                content=item_choice.content)
+                                title=item_choice.title, content=item_choice.content)
                 choice.save()
         for item in file_forms:
             file = FileForm(application=application,

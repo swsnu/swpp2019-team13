@@ -5,6 +5,7 @@ import { withRouter } from "react-router";
 import { Container, Row, Col, Button, Card, Form } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
+import savePNG from "../images/save.png";
 
 import Header from "../Header/Header";
 
@@ -29,6 +30,7 @@ class ApplyMain extends Component {
     }
     if (this.state.isUserInfoLoaded && !this.state.isFormInfoLoaded) {
       if (this.props.selectedApplication) {
+        console.log(this.props.selectedApplication);
         let formList = [];
         let formID = 0;
         formList = formList.concat(
@@ -88,7 +90,7 @@ class ApplyMain extends Component {
   shortText = props => {
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>t{props.title}</Card.Header>
+        <Card.Header>{props.title}</Card.Header>
         <Card.Body>
           <div style={{ height: "20px" }}></div>
         </Card.Body>
@@ -99,7 +101,7 @@ class ApplyMain extends Component {
   longText = props => {
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>t{props.title}</Card.Header>
+        <Card.Header>{props.title}</Card.Header>
         <Card.Body>
           <div style={{ height: "100px" }}></div>
         </Card.Body>
@@ -112,18 +114,31 @@ class ApplyMain extends Component {
       .filter(item => !item.isDeleted)
       .map((item, index) => {
         return (
-          <Card key={index}>
-            <Card.Header>{item.content}</Card.Header>
-            <Card.Body>
-              <Form.Control />
-            </Card.Body>
-          </Card>
+          <div key={index}>
+            {index === 0 ? "" : <hr />}
+            <input
+              type="checkbox"
+              style={{ marginRight: "10px" }}
+              checked={item.checked}
+              onChange={() => {}}
+            ></input>
+            {item.title}
+          </div>
         );
       });
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>t{props.title}</Card.Header>
-        <div style={{ margin: "15px" }}>{choices}</div>
+        <Card.Header>{props.title}</Card.Header>
+        <div
+          style={{
+            marginTop: "15px",
+            marginBottom: "15px",
+            marginLeft: "20px",
+            marginRight: "20px"
+          }}
+        >
+          {choices}
+        </div>
       </Card>
     );
   };
@@ -131,7 +146,7 @@ class ApplyMain extends Component {
   image = props => {
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>t{props.title}</Card.Header>
+        <Card.Header>{props.title}</Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
           <img src={imagePNG} width="120" height="120" alt="" />
         </Card.Body>
@@ -142,7 +157,7 @@ class ApplyMain extends Component {
   file = props => {
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>t{props.title}</Card.Header>
+        <Card.Header>{props.title}</Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
           <img src={filePNG} width="120" height="120" alt="" />
         </Card.Body>
@@ -176,9 +191,20 @@ class ApplyMain extends Component {
             <Card.Header>
               <Row>
                 <Col>
-                  {(this.props.selectedClub
-                    ? this.props.selectedClub.name
-                    : "") + " 지원하기"}
+                  <div className="form-save-button" style={{ margin: "10px" }}>
+                    {(this.props.selectedClub
+                      ? this.props.selectedClub.name
+                      : "") + " 지원하기"}{" "}
+                  </div>
+                </Col>
+                <Col style={{ textAlign: "right" }}>
+                  <div
+                    className="form-save-button"
+                    style={{ margin: "10px" }}
+                    onClick={this.saveApplicationFormHandler}
+                  >
+                    <img src={savePNG} width="30" height="30" alt="" /> 저장
+                  </div>
                 </Col>
               </Row>
             </Card.Header>
