@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button } from "react-bootstrap";
 
-import Header from "../components/Header";
-import ClubCard from "../components/ClubCard";
-import ClubDetail from "../components/ClubDetail";
-import ClubRegister from "../components/ClubRegister";
+import Header from "../Header/Header";
+import ClubCard from "../Club/ClubCard";
+import ClubDetail from "../Club/ClubDetail";
+import ClubRegister from "../Club/ClubRegister";
 import * as actionCreators from "../store/actions/index";
 
 import "./ClubMain.css";

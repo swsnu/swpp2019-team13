@@ -15,7 +15,7 @@ import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
 
-// jest.mock("../components/ClubDetail", () => {
+// jest.mock("../Club/ClubDetail", () => {
 //   return jest.fn(props => {
 //     return <div id="spyClubDetail" onClick={props.closeHandler}></div>;
 //   });

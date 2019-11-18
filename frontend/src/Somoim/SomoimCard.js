@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 import { Button } from "react-bootstrap";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import * as actionCreators from "../store/actions/index";
+// import * as actionCreators from "../store/actions/index";
 
 import "./SomoimCard.css";
 import heart from "../images/heart.png";
@@ -14,7 +14,7 @@ import person from "../images/person.png";
 class SomoimCard extends React.Component {
   render() {
     let somoim = this.props.somoim;
-    let acceptQualification = false;
+    // let acceptQualification = false;
 
     if (somoim) {
       // if (this.props.loggedUser) {
