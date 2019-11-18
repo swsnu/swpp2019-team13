@@ -8,6 +8,7 @@ import ClubMain from "./Club/ClubMain";
 import SomoimMain from "./Somoim/SomoimMain";
 import MyPage from "./MyPage/MyPage";
 import ClubManageMain from "./ClubManage/ClubManageMain";
+import ApplyMain from "./Apply/ApplyMain";
 
 import "./App.css";
 
@@ -25,6 +26,7 @@ function App(props) {
           <Route path="/club" exact component={ClubMain} />
           <Route path="/somoim" exact component={SomoimMain} />
           <Route path="/mypage" exact component={MyPage} />
+          <Route path="/apply/:club_id" exact component={ApplyMain} />
           <Redirect exact from="/" to="/club" />
           <Route render={() => <h1>Not Found</h1>} />
         </Switch>

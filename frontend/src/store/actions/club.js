@@ -46,7 +46,7 @@ export const getApplicationFormByID = id => {
   };
 };
 
-export const putApplicationFormByID_ = () => {
+export const putApplicationFormByID_ = data => {
   return {
     type: actionTypes.PUT_APPLICATION_FORM_BY_ID
   };

@@ -39,6 +39,8 @@ urlpatterns = [
     path('user/<int:user_id>/somoim/recommend/',
          views.recommend_somoim, name='recommend_somoim'),
 
+    path('club/<int:club_id>/application/',
+         views.application, name='application'),
     path('club/<int:club_id>/application/form/',
          views.application_form, name='application_form'),
 ]

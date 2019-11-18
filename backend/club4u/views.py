@@ -387,6 +387,10 @@ def apply_club(request, user_id=0):
         except ObjectDoesNotExist:
             user.apply_clubs.add(Club.objects.get(id=club_id))
 
+        form = Application.objects.get(club=club_id, user=None)
+        application = Application(club=Club.objects.get(id=club_id), user=user)
+        application.save()
+
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
@@ -552,6 +556,24 @@ def application_form(request, club_id=0):
                     application=form, order=item['order'], title=item['title'])
                 image.save()
 
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def application(request, club_id=0):
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
+    try:
+        application = Application.objects.get(
+            club=club_id, user=UserProfile.objects.get(id=request.user.id))
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serializer = ApplcationSerializer(application)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    elif request.method == 'PUT':
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
