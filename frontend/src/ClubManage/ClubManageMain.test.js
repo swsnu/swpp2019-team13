@@ -13,7 +13,7 @@ import * as majorActionCreators from "../store/actions/major";
 import * as deptActionCreators from "../store/actions/dept";
 import * as categoryActionCreators from "../store/actions/category";
 
-jest.mock("../Header/Header", () => {
+jest.mock("../components/Header", () => {
   return jest.fn(props => {
     return <div className="Header" />;
   });

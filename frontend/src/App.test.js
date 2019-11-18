@@ -8,7 +8,7 @@ import { history } from "./store/store";
 
 const mockStore = getMockStore({});
 
-jest.mock("./Club/ClubMain", () => {
+jest.mock("./containers/ClubMain", () => {
   return jest.fn(() => {
     return <div className="spyClubMain" />;
   });

@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import Header from "./Header";
+import Header from "../components/Header";
 
 class SignUp extends React.Component {
   state = {

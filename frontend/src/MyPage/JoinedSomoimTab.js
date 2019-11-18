@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Card } from "react-bootstrap";
-import SomoimDetail from "../Somoim/SomoimDetail";
+import SomoimDetail from "../components/SomoimDetail";
 
 class JoinedSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };

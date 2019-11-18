@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Container, Row, Col, Button, Card, Accordion } from "react-bootstrap";
 
-import Header from "../Header/Header";
+import Header from "../components/Header";
 import SelfInfoTab from "./SelfInfoTab";
 import ManagingClubTab from "./ManagingClubTab";
 import LikedClubTab from "./LikedClubTab";
@@ -42,8 +42,6 @@ class MyPage extends Component {
       this.props.onGetLikedSomoims(this.props.loggedUser);
       this.props.onGetJoinedSomoims(this.props.loggedUser);
     }
-
-    if (!this.props.loggedUser) this.props.history.push("/club");
   };
 
   render() {

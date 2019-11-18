@@ -15,7 +15,7 @@ import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
 
-jest.mock("../Somoim/SomoimDetail", () => {
+jest.mock("../components/SomoimDetail", () => {
   return jest.fn(props => {
     return <div id="spySomoimDetail" onClick={props.closeHandler}></div>;
   });

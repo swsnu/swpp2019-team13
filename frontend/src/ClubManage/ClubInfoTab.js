@@ -91,7 +91,6 @@ class ClubInfoTab extends Component {
       const file = new File([image], image.name);
       fd.append("image", file);
       poster_files.push(fd);
-      return true;
     });
 
     this.props
@@ -123,7 +122,7 @@ class ClubInfoTab extends Component {
     let majorList = [];
     if (this.props.majors) {
       let newMajor = this.props.majors.filter(a => a.name === major);
-      if (newMajor.length === 0) return;
+      if (newMajor.length == 0) return;
 
       newMajor = newMajor[0].id;
       if (this.state.available_major.includes(newMajor)) {

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Card } from "react-bootstrap";
-import ClubDetail from "../Club/ClubDetail";
+import ClubDetail from "../components/ClubDetail";
 
 class AppliedClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
