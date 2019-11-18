@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import Login from "../containers/Login";
+import Login from "./Login";
 
 import "./Header.css";
 

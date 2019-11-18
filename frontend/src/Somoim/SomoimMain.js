@@ -4,10 +4,10 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button } from "react-bootstrap";
 
-import Header from "../components/Header";
-import SomoimCard from "../components/SomoimCard";
-import SomoimDetail from "../components/SomoimDetail";
-import SomoimCreate from "../components/SomoimCreate";
+import Header from "../Header/Header";
+import SomoimCard from "../Somoim/SomoimCard";
+import SomoimDetail from "../Somoim/SomoimDetail";
+import SomoimCreate from "../Somoim/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
 
 import "./SomoimMain.css";
