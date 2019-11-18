@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Container, Row, Col, Button, Card, Accordion } from "react-bootstrap";
 
-import Header from "../components/Header";
+import Header from "../Header/Header";
 
 import * as actionCreators from "../store/actions/index";
 import ClubInfoTab from "./ClubInfoTab";

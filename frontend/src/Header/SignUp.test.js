@@ -29,7 +29,7 @@ const stubInitialState = {
 
 const mockStore = getMockStore(stubInitialState);
 
-jest.mock("../components/Header", () => {
+jest.mock("../Header/Header", () => {
   return jest.fn(props => {
     return <div className="spyHeader">헤더</div>;
   });

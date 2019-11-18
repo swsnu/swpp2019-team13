@@ -15,7 +15,7 @@ const stubInitialState = {
 
 const mockStore = getMockStore(stubInitialState);
 
-jest.mock("../containers/Login", () => {
+jest.mock("./Login", () => {
   return jest.fn(props => {
     return (
       <div className="spyLogin">
