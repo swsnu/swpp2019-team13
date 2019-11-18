@@ -408,7 +408,8 @@ def apply_club(request, user_id=0):
             multi_choice = MultiChoiceForm(
                 application=application, order=item.order, title=item.title)
             multi_choice.save()
-            for item_choice in item.choices:
+            choices = Choice.objects.filter(multi=item)
+            for item_choice in choices:
                 choice = Choice(multi=multi_choice,
                                 content=item_choice.content)
                 choice.save()
@@ -596,7 +597,7 @@ def application(request, club_id=0):
     #     return HttpResponse(401)
     try:
         application = Application.objects.get(
-            club=club_id, user=UserProfile.objects.get(id=request.user.id))
+            club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 

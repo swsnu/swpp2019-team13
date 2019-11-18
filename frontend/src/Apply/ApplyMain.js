@@ -87,7 +87,7 @@ class ApplyMain extends Component {
 
   shortText = props => {
     return (
-      <Card style={{ margin: "10px" }}>
+      <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>t{props.title}</Card.Header>
         <Card.Body>
           <div style={{ height: "20px" }}></div>
@@ -98,7 +98,7 @@ class ApplyMain extends Component {
 
   longText = props => {
     return (
-      <Card style={{ margin: "10px" }}>
+      <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>t{props.title}</Card.Header>
         <Card.Body>
           <div style={{ height: "100px" }}></div>
@@ -110,9 +110,9 @@ class ApplyMain extends Component {
   multiChoice = props => {
     let choices = props.choices
       .filter(item => !item.isDeleted)
-      .map(item => {
+      .map((item, index) => {
         return (
-          <Card>
+          <Card key={index}>
             <Card.Header>{item.content}</Card.Header>
             <Card.Body>
               <Form.Control />
@@ -121,7 +121,7 @@ class ApplyMain extends Component {
         );
       });
     return (
-      <Card style={{ margin: "10px" }}>
+      <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>t{props.title}</Card.Header>
         <div style={{ margin: "15px" }}>{choices}</div>
       </Card>
@@ -130,7 +130,7 @@ class ApplyMain extends Component {
 
   image = props => {
     return (
-      <Card style={{ margin: "10px" }}>
+      <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>t{props.title}</Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
           <img src={imagePNG} width="120" height="120" alt="" />
@@ -141,7 +141,7 @@ class ApplyMain extends Component {
 
   file = props => {
     return (
-      <Card style={{ margin: "10px" }}>
+      <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>t{props.title}</Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
           <img src={filePNG} width="120" height="120" alt="" />
@@ -152,21 +152,19 @@ class ApplyMain extends Component {
 
   render() {
     let formList = this.state.formList.map(record => {
-      if (!record.isDeleted) {
-        switch (record.type) {
-          case "shortText":
-            return this.shortText(record);
-          case "longText":
-            return this.longText(record);
-          case "multiChoice":
-            return this.multiChoice(record);
-          case "image":
-            return this.image(record);
-          case "file":
-            return this.file(record);
-          default:
-            return <></>;
-        }
+      switch (record.type) {
+        case "shortText":
+          return this.shortText(record);
+        case "longText":
+          return this.longText(record);
+        case "multiChoice":
+          return this.multiChoice(record);
+        case "image":
+          return this.image(record);
+        case "file":
+          return this.file(record);
+        default:
+          return <></>;
       }
     });
 
@@ -187,7 +185,15 @@ class ApplyMain extends Component {
           </Card>
           <Row>
             <Col>
-              <Card style={{ marginBottom: "5px", marginTop: "13px" }}>
+              <Card
+                style={{
+                  marginBottom: "5px",
+                  marginTop: "13px",
+                  overflowY: "scroll",
+                  height: "700px",
+                  marginTop: "10px"
+                }}
+              >
                 <div style={{ margin: "10px" }}>{formList}</div>
               </Card>
             </Col>
