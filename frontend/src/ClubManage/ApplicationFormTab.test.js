@@ -187,7 +187,7 @@ describe("<ApplicationFormTab />", () => {
     wrapper.at(0).simulate("click");
     wrapper = component.find(".multi-choice-textbox");
     wrapper.at(0).simulate("change", { target: { value: "aa" } });
-    expect(mainInstance.state.formList[2].choices[0].content).toEqual("aa");
+    expect(mainInstance.state.formList[2].choices[0].title).toEqual("aa");
   });
 
   it("form delete button click handle", () => {

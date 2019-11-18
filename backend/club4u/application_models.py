@@ -57,6 +57,7 @@ class Choice (models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+    title = models.CharField(max_length=100)
     content = models.CharField(max_length=100)
     checked = models.BooleanField(default=False)
 

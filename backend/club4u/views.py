@@ -575,7 +575,7 @@ def application_form(request, club_id=0):
                 multi_choice.save()
                 for item_choice in item['choices']:
                     choice = Choice(multi=multi_choice,
-                                    content=item_choice['content'])
+                                    title=item_choice['title'])
                     choice.save()
             elif item['type'] == 'file':
                 file = FileForm(

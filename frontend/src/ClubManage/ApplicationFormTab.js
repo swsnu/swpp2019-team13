@@ -170,7 +170,7 @@ class ApplicationFormTab extends Component {
               className="multi-choice-textbox"
               style={{ width: "100%" }}
               size="md"
-              defaultValue={item.content}
+              defaultValue={item.title}
               onChange={e => {
                 this.setState({
                   ...this.state,
@@ -180,7 +180,7 @@ class ApplicationFormTab extends Component {
                         ...form,
                         choices: form.choices.map(choice => {
                           if (choice.id === item.id)
-                            return { ...choice, content: e.target.value };
+                            return { ...choice, title: e.target.value };
                           else return choice;
                         })
                       };
@@ -256,7 +256,7 @@ class ApplicationFormTab extends Component {
                         ...item,
                         choices: item.choices.concat({
                           id: item.choiceID,
-                          content: item.defaultChoice,
+                          title: item.defaultChoice,
                           isDeleted: false
                         }),
                         choiceID: item.choiceID + 1
