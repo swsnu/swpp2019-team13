@@ -391,6 +391,36 @@ def apply_club(request, user_id=0):
         application = Application(club=Club.objects.get(id=club_id), user=user)
         application.save()
 
+        short_text_forms = ShortTextForm.obejcts.filter(application=form)
+        long_text_forms = LongTextForm.obejcts.filter(application=form)
+        multi_choice_forms = MultiChoiceForm.obejcts.filter(application=form)
+        file_forms = FileForm.obejcts.filter(application=form)
+        image_forms = ImageForm.obejcts.filter(application=form)
+        for item in short_text_forms:
+            short_text = ShortTextForm(
+                application=application, order=item.order, title=item.title)
+            short_text.save()
+        for item in long_text_forms:
+            long_text = LongTextForm(
+                application=application, order=item.order, title=item.title)
+            long_text.save()
+        for item in multi_choice_forms:
+            multi_choice = MultiChoiceForm(
+                application=application, order=item.order, title=item.title)
+            multi_choice.save()
+            for item_choice in item.choices:
+                choice = Choice(multi=multi_choice,
+                                content=item_choice.content)
+                choice.save()
+        for item in file_forms:
+            file = FileForm(application=application,
+                            order=item.order, title=item.title)
+            file.save()
+        for item in image_forms:
+            image = ImageForm(application=application,
+                              order=item.order, title=item.title)
+            image.save()
+
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
