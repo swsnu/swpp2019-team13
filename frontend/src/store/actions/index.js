@@ -3,6 +3,7 @@ export {
   getClubByID,
   putClubInformation,
   postClubPoster,
+  getApplicationByID,
   getApplicationFormByID,
   putApplicationFormByID
 } from "./club";

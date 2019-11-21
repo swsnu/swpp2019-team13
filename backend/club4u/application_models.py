@@ -5,7 +5,11 @@ from .models import Club, Somoim, UserProfile
 
 
 class Application(models.Model):
-    club = models.OneToOneField(Club, on_delete=models.CASCADE)
+    club = models.ForeignKey(
+        Club,
+        related_name='application',
+        on_delete=models.CASCADE,
+    )
     user = models.ForeignKey(
         UserProfile,
         related_name='application',
@@ -57,6 +61,7 @@ class Choice (models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+    title = models.CharField(max_length=100)
     content = models.CharField(max_length=100)
     checked = models.BooleanField(default=False)
 

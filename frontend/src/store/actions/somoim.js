@@ -31,16 +31,18 @@ export const getSomoimList = () => {
       .then(res => dispatch(getSomoimList_(res.data)));
   };
 };
-/*
-export const getSomoimByID_ = id => {
+
+export const getSomoimByID_ = somoim => {
   return {
-    type: actionTypes.GET_SOMOIM_BY_ID
+    type: actionTypes.GET_SOMOIM_BY_ID,
+    selectedSomoim: somoim
   };
 };
 
 export const getSomoimByID = id => {
   return dispatch => {
-    return new Promise(() => dispatch(getSomoimByID_(id)));
+    return axios
+      .get("/api/somoim/" + id + "/")
+      .then(res => dispatch(getSomoimByID_(res.data)));
   };
 };
-*/

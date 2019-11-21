@@ -245,6 +245,19 @@ def club(request, club_id=None):
         return HttpResponse(status=405)
 
 
+def somoim(request, somoim_id=None):
+    if request.method == 'GET':
+        try:
+            selected_somoim = Somoim.objects.get(id=somoim_id)
+            serializer = SomoimSerializer(selected_somoim)
+            response_dict = serializer.data
+            return HttpResponse(JSONRenderer().render(response_dict))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+
 def clubposter(request, club_id=0):
     if request.method == 'POST':
         try:
@@ -386,6 +399,45 @@ def apply_club(request, user_id=0):
             user.apply_clubs.remove(user.apply_clubs.get(id=club_id))
         except ObjectDoesNotExist:
             user.apply_clubs.add(Club.objects.get(id=club_id))
+
+        form = Application.objects.get(club=club_id, user=None)
+
+        application = Application.objects.get(
+            club=Club.objects.get(id=club_id), user=user)
+        application.delete()
+        application = Application(club=Club.objects.get(id=club_id), user=user)
+        application.save()
+
+        short_text_forms = ShortTextForm.objects.filter(application=form)
+        long_text_forms = LongTextForm.objects.filter(application=form)
+        multi_choice_forms = MultiChoiceForm.objects.filter(application=form)
+        file_forms = FileForm.objects.filter(application=form)
+        image_forms = ImageForm.objects.filter(application=form)
+        for item in short_text_forms:
+            short_text = ShortTextForm(
+                application=application, order=item.order, title=item.title)
+            short_text.save()
+        for item in long_text_forms:
+            long_text = LongTextForm(
+                application=application, order=item.order, title=item.title)
+            long_text.save()
+        for item in multi_choice_forms:
+            multi_choice = MultiChoiceForm(
+                application=application, order=item.order, title=item.title)
+            multi_choice.save()
+            choices = Choice.objects.filter(multi=item)
+            for item_choice in choices:
+                choice = Choice(multi=multi_choice,
+                                title=item_choice.title, content=item_choice.content)
+                choice.save()
+        for item in file_forms:
+            file = FileForm(application=application,
+                            order=item.order, title=item.title)
+            file.save()
+        for item in image_forms:
+            image = ImageForm(application=application,
+                              order=item.order, title=item.title)
+            image.save()
 
         return HttpResponse(status=204)
     else:
@@ -541,7 +593,7 @@ def application_form(request, club_id=0):
                 multi_choice.save()
                 for item_choice in item['choices']:
                     choice = Choice(multi=multi_choice,
-                                    content=item_choice['content'])
+                                    title=item_choice['title'])
                     choice.save()
             elif item['type'] == 'file':
                 file = FileForm(
@@ -552,6 +604,24 @@ def application_form(request, club_id=0):
                     application=form, order=item['order'], title=item['title'])
                 image.save()
 
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def application(request, club_id=0):
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
+    try:
+        application = Application.objects.get(
+            club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serializer = ApplcationSerializer(application)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    elif request.method == 'PUT':
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
