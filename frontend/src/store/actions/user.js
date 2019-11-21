@@ -260,7 +260,8 @@ export const addAppliedClub = (newAppliedClub, user) => {
       .put("/api/user/" + user.id + "/club/apply/", newAppliedClub)
       .then(res => dispatch(addAppliedClub_(newAppliedClub)))
       .then(res => dispatch(getClubByID(newAppliedClub.id)))
-      .then(res => dispatch(getRecommendedSomoims(user)));
+      .then(res => dispatch(getRecommendedSomoims(user)))
+      .then(() => dispatch(push("/apply/" + newAppliedClub.id)));
   };
 };
 

@@ -279,8 +279,8 @@ class ApplicationFormTab extends Component {
       <Card style={{ margin: "10px" }}>
         {this.formHeader(props)}
         <Card.Body style={{ textAlign: "center" }}>
-          {/* <Button>Select Image</Button> */}
-          <img src={imagePNG} width="120" height="120" alt="" />
+          <img src={imagePNG} width="100" height="100" alt="" />
+          <div>이미지를 선택하세요.</div>
         </Card.Body>
       </Card>
     );
@@ -291,8 +291,8 @@ class ApplicationFormTab extends Component {
       <Card style={{ margin: "10px" }}>
         {this.formHeader(props)}
         <Card.Body style={{ textAlign: "center" }}>
-          {/* <Button>Select Image</Button> */}
-          <img src={filePNG} width="120" height="120" alt="" />
+          <img src={filePNG} width="100" height="100" alt="" />
+          <div>파일을 선택하세요.</div>
         </Card.Body>
       </Card>
     );

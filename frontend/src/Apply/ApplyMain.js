@@ -18,6 +18,29 @@ class ApplyMain extends Component {
     formList: []
   };
 
+  saveApplicationHandler = () => {};
+
+  fileSelectHandler = (e, props) => {
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    let url = reader.readAsDataURL(file);
+    reader.onloadend = function() {
+      this.setState({
+        ...this.state,
+        formList: this.state.formList.map(item => {
+          if (item.id === props.id)
+            return {
+              ...item,
+              file_data: file,
+              content: [reader.result],
+              fileName: file.name
+            };
+          else return item;
+        })
+      });
+    }.bind(this);
+  };
+
   componentDidMount() {
     this.props.getClubByID(this.props.match.params.club_id);
     this.props.getApplicationByID(this.props.match.params.club_id);
@@ -76,6 +99,12 @@ class ApplyMain extends Component {
       id: id,
       type: type
     };
+    if (item.content && (type === "image" || type === "file")) {
+      newForm = {
+        ...newForm,
+        fileName: item.content.substr(7, item.content.length)
+      };
+    }
     return newForm;
   };
 
@@ -184,7 +213,30 @@ class ApplyMain extends Component {
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
-          <img src={imagePNG} width="120" height="120" alt="" />
+          {props.content ? (
+            <div>
+              <img src={props.content} alt="" />
+              <div style={{ fontSize: 11, marginBottom: "10px" }}>
+                {props.fileName}
+              </div>
+            </div>
+          ) : (
+            <div>
+              <img src={imagePNG} width="100" height="100" alt="" />
+            </div>
+          )}
+          <div>
+            <label htmlFor="image-file-input">이미지를 선택하세요.</label>
+            <input
+              id="image-file-input"
+              type="file"
+              name="file"
+              style={{ display: "none" }}
+              onChange={e => {
+                this.fileSelectHandler(e, props);
+              }}
+            />
+          </div>
         </Card.Body>
       </Card>
     );
@@ -195,7 +247,26 @@ class ApplyMain extends Component {
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
         <Card.Body style={{ textAlign: "center" }}>
-          <img src={filePNG} width="120" height="120" alt="" />
+          <img src={filePNG} width="100" height="100" alt="" />
+          {props.content ? (
+            <div style={{ fontSize: 13, marginBottom: "10px" }}>
+              {props.fileName}
+            </div>
+          ) : (
+            ""
+          )}
+          <div>
+            <label htmlFor="file-file-input">파일을 선택하세요.</label>
+            <input
+              id="file-file-input"
+              type="file"
+              name="file"
+              style={{ display: "none" }}
+              onChange={e => {
+                this.fileSelectHandler(e, props);
+              }}
+            />
+          </div>
         </Card.Body>
       </Card>
     );
@@ -237,7 +308,7 @@ class ApplyMain extends Component {
                   <div
                     className="form-save-button"
                     style={{ margin: "10px" }}
-                    onClick={this.saveApplicationFormHandler}
+                    onClick={this.saveApplicationHandler}
                   >
                     <img src={savePNG} width="30" height="30" alt="" /> 저장
                   </div>
