@@ -35,33 +35,27 @@ class ApplyMain extends Component {
         let formID = 0;
         formList = formList.concat(
           this.props.selectedApplication.short_texts.map(item =>
-            this.newForm("shortText", formID++, item.title, item.order)
+            this.newForm("shortText", formID++, item)
           )
         );
         formList = formList.concat(
           this.props.selectedApplication.long_texts.map(item =>
-            this.newForm("longText", formID++, item.title, item.order)
+            this.newForm("longText", formID++, item)
           )
         );
         formList = formList.concat(
           this.props.selectedApplication.multi_choices.map(item =>
-            this.newForm(
-              "multiChoice",
-              formID++,
-              item.title,
-              item.order,
-              item.choices.map(choice => ({ ...choice, isDeleted: false }))
-            )
+            this.newForm("multiChoice", formID++, item)
           )
         );
         formList = formList.concat(
           this.props.selectedApplication.images.map(item =>
-            this.newForm("image", formID++, item.title, item.order)
+            this.newForm("image", formID++, item)
           )
         );
         formList = formList.concat(
           this.props.selectedApplication.files.map(item =>
-            this.newForm("file", formID++, item.title, item.order)
+            this.newForm("file", formID++, item)
           )
         );
         formList.sort((a, b) => (a.order > b.order ? 1 : -1));
@@ -76,13 +70,11 @@ class ApplyMain extends Component {
     if (!this.props.loggedUser) this.props.history.push("/club");
   };
 
-  newForm = (type, id, title, order, choices = null) => {
+  newForm = (type, id, item) => {
     let newForm = {
+      ...item,
       id: id,
-      type: type,
-      title: title,
-      choices: choices,
-      order: order
+      type: type
     };
     return newForm;
   };
@@ -92,7 +84,21 @@ class ApplyMain extends Component {
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
         <Card.Body>
-          <div style={{ height: "20px" }}></div>
+          <Form.Control
+            className="short-input"
+            size="lg"
+            defaultValue={props.content}
+            onChange={e => {
+              this.setState({
+                ...this.state,
+                formList: this.state.formList.map(item => {
+                  if (item.id === props.id)
+                    return { ...item, content: e.target.value };
+                  else return item;
+                })
+              });
+            }}
+          />
         </Card.Body>
       </Card>
     );
@@ -103,29 +109,59 @@ class ApplyMain extends Component {
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
         <Card.Body>
-          <div style={{ height: "100px" }}></div>
+          <Form.Control
+            className="short-input"
+            size="lg"
+            as="textarea"
+            rows="3"
+            defaultValue={props.content}
+            onChange={e => {
+              this.setState({
+                ...this.state,
+                formList: this.state.formList.map(item => {
+                  if (item.id === props.id)
+                    return { ...item, content: e.target.value };
+                  else return item;
+                })
+              });
+            }}
+          />
         </Card.Body>
       </Card>
     );
   };
 
   multiChoice = props => {
-    let choices = props.choices
-      .filter(item => !item.isDeleted)
-      .map((item, index) => {
-        return (
-          <div key={index}>
-            {index === 0 ? "" : <hr />}
-            <input
-              type="checkbox"
-              style={{ marginRight: "10px" }}
-              checked={item.checked}
-              onChange={() => {}}
-            ></input>
-            {item.title}
-          </div>
-        );
-      });
+    let choices = props.choices.map((item, index) => {
+      return (
+        <div key={index}>
+          {index === 0 ? "" : <hr />}
+          <input
+            type="checkbox"
+            style={{ marginRight: "10px" }}
+            checked={item.checked}
+            onChange={e => {
+              this.setState({
+                ...this.state,
+                formList: this.state.formList.map(form => {
+                  if (form.id === props.id)
+                    return {
+                      ...form,
+                      choices: form.choices.map(choice => {
+                        if (choice.id === item.id)
+                          return { ...choice, checked: !choice.checked };
+                        else return choice;
+                      })
+                    };
+                  else return form;
+                })
+              });
+            }}
+          ></input>
+          {item.title}
+        </div>
+      );
+    });
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
@@ -216,8 +252,7 @@ class ApplyMain extends Component {
                   marginBottom: "5px",
                   marginTop: "13px",
                   overflowY: "scroll",
-                  height: "700px",
-                  marginTop: "10px"
+                  height: "700px"
                 }}
               >
                 <div style={{ margin: "10px" }}>{formList}</div>
