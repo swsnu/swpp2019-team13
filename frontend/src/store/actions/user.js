@@ -1,7 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
 import { getClubList, getClubByID } from "./club";
-import { getSomoimList } from "./somoim";
+import { getSomoimList, getSomoimByID } from "./somoim";
 import { push } from "connected-react-router";
 
 // not used
@@ -259,7 +259,7 @@ export const addAppliedClub = (newAppliedClub, user) => {
     return axios
       .put("/api/user/" + user.id + "/club/apply/", newAppliedClub)
       .then(res => dispatch(addAppliedClub_(newAppliedClub)))
-      .then(res => dispatch(getClubByID(newLikedClub.id)))
+      .then(res => dispatch(getClubByID(newAppliedClub.id)))
       .then(res => dispatch(getRecommendedSomoims(user)));
   };
 };
@@ -276,7 +276,7 @@ export const addJoinedSomoim = (newJoinedSomoim, user) => {
     return axios
       .put("/api/user/" + user.id + "/somoim/join/", newJoinedSomoim)
       .then(res => dispatch(addJoinedSomoim_(newJoinedSomoim)))
-      .then(res => dispatch(getSomoimByID(newLikedSomoim.id)))
+      .then(res => dispatch(getSomoimByID(newJoinedSomoim.id)))
       .then(res => dispatch(getRecommendedSomoims(user)));
   };
 };

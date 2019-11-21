@@ -245,6 +245,19 @@ def club(request, club_id=None):
         return HttpResponse(status=405)
 
 
+def somoim(request, somoim_id=None):
+    if request.method == 'GET':
+        try:
+            selected_somoim = Somoim.objects.get(id=somoim_id)
+            serializer = SomoimSerializer(selected_somoim)
+            response_dict = serializer.data
+            return HttpResponse(JSONRenderer().render(response_dict))
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+
 def clubposter(request, club_id=0):
     if request.method == 'POST':
         try:
