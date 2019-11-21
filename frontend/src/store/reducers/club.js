@@ -12,7 +12,14 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_CLUB_LIST:
       return { ...state, clubs: action.clubs };
     case actionTypes.GET_CLUB_BY_ID:
-      return { ...state, selectedClub: action.selectedClub };
+      return {
+        ...state,
+        selectedClub: action.selectedClub,
+        clubs: state.clubs.map(item => {
+          if (item.id === action.selectedClub.id) return action.selectedClub;
+          else return item;
+        })
+      };
     case actionTypes.GET_APPLICATION_BY_ID:
       return { ...state, selectedApplication: action.form };
     case actionTypes.GET_APPLICATION_FORM_BY_ID:
