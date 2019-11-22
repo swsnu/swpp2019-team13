@@ -96,7 +96,7 @@ def signin(request):
                 userprofile = UserProfile.objects.get(user_id=user)
                 response_dict = {'id': userprofile.id, 'name': user.last_name, 'email': user.username,
                                  'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
-                                 'available_semester': userprofile.available_semester}
+                                 'available_semester': userprofile.available_semester, 'available_session_day' : userprofile.available_session_day}
                 return JsonResponse(response_dict, safe=False)
             else:
                 return HttpResponse(status=401)
