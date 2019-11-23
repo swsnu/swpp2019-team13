@@ -6,6 +6,7 @@ urlpatterns = [
 
     path('category/list/', views.category_list, name='category_list'),
     path('tag/list/', views.tag_list, name='tag_list'),
+    path('tag/extlist/', views.tag_extlist, name='tag_extlist'),
     path('dept/list/', views.dept_list, name='dept_list'),
     path('major/list/', views.major_list, name='major_list'),
 
