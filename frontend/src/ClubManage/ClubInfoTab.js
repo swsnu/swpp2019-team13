@@ -26,7 +26,8 @@ class ClubInfoTab extends Component {
     recruit_end_day: null,
     current_dept: "",
     current_major: "",
-    new_img: []
+    new_img: [],
+    extracted_tag: {}
   };
 
   componentDidMount = () => {
@@ -106,7 +107,11 @@ class ClubInfoTab extends Component {
           });
       });
   };
-
+  tagExtractHandler = () => {
+    this.props.getExtractedTag(this.state.description).then(() => {
+      this.setState({ extracted_tag: this.props.extracted_tag });
+    });
+  }
   handle_SelectAllMajor() {
     let majorList = [];
     if (this.props.majors) {
@@ -222,16 +227,16 @@ class ClubInfoTab extends Component {
                   감추기
                 </Button>
               ) : (
-                <Button
-                  as={Col}
-                  id="clubinfo-isshow-button-false"
-                  variant="outline-primary"
-                  size="lg"
-                  onClick={() => this.setState({ isShow: !this.state.isShow })}
-                >
-                  표시
+                  <Button
+                    as={Col}
+                    id="clubinfo-isshow-button-false"
+                    variant="outline-primary"
+                    size="lg"
+                    onClick={() => this.setState({ isShow: !this.state.isShow })}
+                  >
+                    표시
                 </Button>
-              )}
+                )}
             </Form.Group>
           </Form.Row>
           <Form.Group>
@@ -259,6 +264,17 @@ class ClubInfoTab extends Component {
             />
           </Form.Group>
 
+          <Button
+            as={Col}
+            style={{ marginTop: "10px" }}
+            variant="dark"
+            size="lg"
+            id="tag-extract-button"
+            onClick={this.tagExtractHandler}
+          >
+            태그 추출
+            </Button>
+          <h1>{Object.keys(this.state.extracted_tag).map(item => <h1>{item} : {this.state.extracted_tag[item]}</h1>)}</h1>
           <Form.Label>동아리 분류</Form.Label>
           <Form.Control
             as="select"
@@ -501,7 +517,7 @@ class ClubInfoTab extends Component {
         >
           정보 수정
         </Button>
-      </div>
+      </div >
     );
   }
 }
@@ -512,13 +528,15 @@ const mapStateToProps = state => {
     selectedClub: state.club.selectedClub,
     categories: state.category.categories,
     depts: state.dept.depts,
-    majors: state.major.majors
+    majors: state.major.majors,
+    extracted_tag: state.tag.extracted_tag
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     getClubByID: id => dispatch(actionCreators.getClubByID(id)),
+    getExtractedTag: description => dispatch(actionCreators.getExtractedTag(description)),
     putClubInformation: (id, clubInfo) =>
       dispatch(actionCreators.putClubInformation(id, clubInfo)),
     postClubPoster: (club_id, poster_files) =>
