@@ -41,20 +41,21 @@ def tag_extlist(request):
         #max_length = 10
         #wordrank_extractor = KRWordRank(min_count, max_length)
         req_data = json.loads(request.body.decode())
-        response_tags=req_data['description']
+        response_tags = req_data['description']
         keywords = summarize_with_keywords([response_tags], min_count=5, max_length=10,
-        beta=0.85, max_iter=20, stopwords={}, verbose=True)
+                                           beta=0.85, max_iter=20, stopwords={}, verbose=True)
         arr = sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:10]
-        response_dict={}
+        response_dict = {}
         word = list(map(lambda a: a[0], arr))
         num = list(map(lambda a: a[1], arr))
-        for i in range(0,10):
-            response_dict[word[i]]=num[i]
-        #print(list(keywords.keys()))
-        #print(response_tags)
+        for i in range(0, 10):
+            response_dict[word[i]] = num[i]
+        # print(list(keywords.keys()))
+        # print(response_tags)
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
+
 
 def dept_list(request):
     if request.method == 'GET':
@@ -119,7 +120,7 @@ def signin(request):
                 userprofile = UserProfile.objects.get(user_id=user)
                 response_dict = {'id': userprofile.id, 'name': user.last_name, 'email': user.username,
                                  'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
-                                 'available_semester': userprofile.available_semester, 'available_session_day' : userprofile.available_session_day}
+                                 'available_semester': userprofile.available_semester, 'available_session_day': userprofile.available_session_day}
                 return JsonResponse(response_dict, safe=False)
             else:
                 return HttpResponse(status=401)
@@ -227,6 +228,38 @@ def club(request, club_id=None):
             selected_club = Club.objects.get(id=club_id)
 
             req_data = json.loads(request.body.decode())
+
+            # Handle New Tag and link tag id
+            selected_tag = req_data['selected_tag']
+
+            for text in selected_tag:
+                if Tag.objects.filter(name=text).exists():
+                    tag = Tag.objects.get(name=text)
+                    tag.suggested += 1
+                    tag.selected += 1
+                    tag.save()
+                else:
+                    tag = Tag(name=text, suggested=1, selected=1)
+                    tag.save()
+
+            removed_tag = req_data['removed_tag']
+
+            for text in removed_tag:
+                if Tag.objects.filter(name=text).exists():
+                    tag = Tag.objects.get(name=text)
+                    tag.suggested += 1
+                    tag.save()
+                else:
+                    tag = Tag(name=text, suggested=1, selected=0)
+                    tag.save()
+
+            tags = req_data['tags']
+            selected_club.tags.clear()
+
+            for tag in tags:
+                selected_club.tags.add(Tag.objects.get(name=tag['text']))
+
+            # Edit other information
             selected_club.isShow = req_data['isShow']
             selected_club.name = req_data['name']
             selected_club.summary = req_data['summary']
@@ -251,8 +284,6 @@ def club(request, club_id=None):
                     os.remove(file_path)
 
             poster_club.delete()
-
-            # tags = req_data['tags']
 
             selected_club.recruit_start_day = req_data['recruit_start_day'].split('T')[
                 0]

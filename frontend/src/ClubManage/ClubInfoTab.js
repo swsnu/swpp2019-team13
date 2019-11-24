@@ -41,6 +41,31 @@ class ClubInfoTab extends Component {
     removed_tag: []
   };
 
+  handleDeleteExtractTag(i) {
+    let selectedTag = this.state.selected_tag.find((tag, index) => index === i);
+    this.setState({
+      selected_tag: this.state.selected_tag.filter(tag => tag !== selectedTag),
+      removed_tag: this.state.removed_tag.concat(selectedTag)
+    });
+  }
+
+  handleAddExtractTag() {
+    let newTag = this.state.tags;
+
+    this.state.selected_tag.map(selectedTag => {
+      if (newTag.find(tag => tag.text === selectedTag) === undefined) {
+        newTag = newTag.concat({
+          id: newTag.length.toString(),
+          text: selectedTag
+        });
+      }
+    });
+
+    this.setState({
+      tags: newTag
+    });
+  }
+
   handleDelete(i) {
     this.setState({
       tags: this.state.tags.filter((tag, index) => index !== i)
@@ -84,14 +109,14 @@ class ClubInfoTab extends Component {
         this.props.selectedClub.tags.map(tag_id => {
           let t = this.props.tags.find(tag => tag.id === tag_id);
           tags.push({
-            id: t.id.toString(),
+            id: tags.length.toString(),
             text: t.name
           });
         });
 
-        this.props.tags.map(tag => {
+        this.props.tags.map((tag, i) => {
           suggestions.push({
-            id: tag.id.toString(),
+            id: i.toString(),
             text: tag.name
           });
         });
@@ -132,11 +157,13 @@ class ClubInfoTab extends Component {
       available_semester: this.state.available_semester,
       available_major: this.state.available_major,
       session_day: this.state.session_day,
-      tags: this.state.tags,
       recruit_start_day: this.state.recruit_start_day,
       recruit_end_day: this.state.recruit_end_day,
       current_dept: this.state.current_dept,
-      current_major: this.state.current_major
+      current_major: this.state.current_major,
+      selected_tag: this.state.selected_tag,
+      removed_tag: this.state.removed_tag,
+      tags: this.state.tags
     };
 
     let poster_files = [];
@@ -168,7 +195,8 @@ class ClubInfoTab extends Component {
         selected.push(key);
       }
       this.setState({
-        selected_tag: selected
+        selected_tag: selected,
+        removed_tag: []
       });
     });
   };
@@ -333,7 +361,7 @@ class ClubInfoTab extends Component {
                 key={i}
                 id="clubinfo-removemajor-button"
                 style={{ marginTop: "3px", marginRight: "3px" }}
-                onClick={() => {}}
+                onClick={() => this.handleDeleteExtractTag(i)}
               >
                 {tag + " X"}
               </Button>
@@ -356,8 +384,8 @@ class ClubInfoTab extends Component {
               style={{ marginTop: "10px" }}
               variant="dark"
               size="lg"
-              id="tag-extract-button"
-              onClick={() => {}}
+              id="add-extractedtag-button"
+              onClick={() => this.handleAddExtractTag()}
             >
               추출된 태그 추가
             </Button>

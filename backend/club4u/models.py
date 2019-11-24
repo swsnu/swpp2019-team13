@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 
 class Tag(models.Model):
     name = models.CharField(max_length=64)
+    suggested = models.IntegerField(default=1)
+    selected = models.IntegerField(default=1)
 
 
 class Category(models.Model):
