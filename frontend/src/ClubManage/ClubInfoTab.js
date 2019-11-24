@@ -9,6 +9,7 @@ import { ImageSelectPreview } from "react-image-select-pv";
 import { WithContext as ReactTags } from "react-tag-input";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "./ReactTag.css";
 
 const KeyCodes = {
   comma: 188,
@@ -35,15 +36,14 @@ class ClubInfoTab extends Component {
     current_dept: "",
     current_major: "",
     new_img: [],
+    suggest_tag: [],
     selected_tag: [],
-    removed_tag: [],
-    extracted_tag: {}
+    removed_tag: []
   };
 
   handleDelete(i) {
-    const { tags } = this.state;
     this.setState({
-      tags: tags.filter((tag, index) => index !== i)
+      tags: this.state.tags.filter((tag, index) => index !== i)
     });
   }
 
@@ -54,8 +54,7 @@ class ClubInfoTab extends Component {
   }
 
   handleDrag(tag, currPos, newPos) {
-    const tags = [...this.state.tags];
-    const newTags = tags.slice();
+    const newTags = this.state.tags.slice();
 
     newTags.splice(currPos, 1);
     newTags.splice(newPos, 0, tag);
@@ -77,8 +76,29 @@ class ClubInfoTab extends Component {
         available_semester: this.props.selectedClub.available_semester,
         available_major: this.props.selectedClub.available_major,
         session_day: this.props.selectedClub.session_day
-        // tags: this.props.selectedClub.tags
       });
+
+      if (this.props.tags) {
+        let tags = [];
+        let suggestions = [];
+        this.props.selectedClub.tags.map(tag_id => {
+          let t = this.props.tags.find(tag => tag.id === tag_id);
+          tags.push({
+            id: t.id.toString(),
+            text: t.name
+          });
+        });
+
+        this.props.tags.map(tag => {
+          suggestions.push({
+            id: tag.id.toString(),
+            text: tag.name
+          });
+        });
+
+        this.setState({ tags: tags, suggest_tag: suggestions });
+      }
+
       if (this.props.selectedClub.recruit_start_day) {
         this.setState({
           recruit_start_day: new Date(
@@ -143,7 +163,13 @@ class ClubInfoTab extends Component {
   };
   tagExtractHandler = () => {
     this.props.getExtractedTag(this.state.description).then(() => {
-      this.setState({ extracted_tag: this.props.extracted_tag });
+      let selected = [];
+      for (var key in this.props.extracted_tag) {
+        selected.push(key);
+      }
+      this.setState({
+        selected_tag: selected
+      });
     });
   };
   handle_SelectAllMajor() {
@@ -181,6 +207,8 @@ class ClubInfoTab extends Component {
   }
 
   render() {
+    console.log(this.state);
+    console.log(this.props);
     let majorList = [];
 
     if (this.props.majors) majorList = this.props.majors;
@@ -297,24 +325,58 @@ class ClubInfoTab extends Component {
               defaultValue={selectedClubDescription}
             />
           </Form.Group>
-
-          <Button
-            as={Col}
-            style={{ marginTop: "10px" }}
-            variant="dark"
-            size="lg"
-            id="tag-extract-button"
-            onClick={this.tagExtractHandler}
-          >
-            태그 추출
-          </Button>
-          <h1>
-            {Object.keys(this.state.extracted_tag).map(item => (
-              <h1>
-                {item} : {this.state.extracted_tag[item]}
-              </h1>
+          <br />
+          <Form.Label>추출된 태그</Form.Label>
+          <Form.Row>
+            {this.state.selected_tag.map((tag, i) => (
+              <Button
+                key={i}
+                id="clubinfo-removemajor-button"
+                style={{ marginTop: "3px", marginRight: "3px" }}
+                onClick={() => {}}
+              >
+                {tag + " X"}
+              </Button>
             ))}
-          </h1>
+          </Form.Row>
+          <Form.Row>
+            <Button
+              as={Col}
+              style={{ marginTop: "10px" }}
+              variant="dark"
+              size="lg"
+              id="tag-extract-button"
+              onClick={this.tagExtractHandler}
+            >
+              태그 추출
+            </Button>
+            <Col sm={2} />
+            <Button
+              as={Col}
+              style={{ marginTop: "10px" }}
+              variant="dark"
+              size="lg"
+              id="tag-extract-button"
+              onClick={() => {}}
+            >
+              추출된 태그 추가
+            </Button>
+          </Form.Row>
+          <br />
+          <Form.Label>현재 태그</Form.Label>
+          <div>
+            <ReactTags
+              tags={this.state.tags}
+              suggestions={this.state.suggest_tag}
+              handleDelete={index => this.handleDelete(index)}
+              handleAddition={tag => this.handleAddition(tag)}
+              handleDrag={(tag, curpos, newpos) =>
+                this.handleDrag(tag, curpos, newpos)
+              }
+              delimiters={delimiters}
+            />
+          </div>
+
           <Form.Label>동아리 분류</Form.Label>
           <Form.Control
             as="select"
@@ -528,16 +590,6 @@ class ClubInfoTab extends Component {
             </Form.Group>
           </Form.Row>
         </Form>
-        <div>
-          <ReactTags
-            tags={this.state.tags}
-            suggestions={this.props.suggestions}
-            handleDelete={() => this.handleDelete()}
-            handleAddition={tag => this.handleAddition(tag)}
-            handleDrag={() => this.handleDrag()}
-            delimiters={delimiters}
-          />
-        </div>
         <Button
           style={{ marginTop: "10px" }}
           variant="dark"
