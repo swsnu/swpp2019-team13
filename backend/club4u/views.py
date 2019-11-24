@@ -14,6 +14,8 @@ from .models import *
 from .application_models import *
 from .serializers import *
 from .application_serializers import *
+from krwordrank.word import KRWordRank
+from krwordrank.word import summarize_with_keywords
 
 
 def category_list(request):
@@ -32,6 +34,27 @@ def tag_list(request):
     else:
         return HttpResponse(status=405)
 
+
+def tag_extlist(request):
+    if request.method == 'POST':
+        #min_count = 1
+        #max_length = 10
+        #wordrank_extractor = KRWordRank(min_count, max_length)
+        req_data = json.loads(request.body.decode())
+        response_tags=req_data['description']
+        keywords = summarize_with_keywords([response_tags], min_count=5, max_length=10,
+        beta=0.85, max_iter=20, stopwords={}, verbose=True)
+        arr = sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:10]
+        response_dict={}
+        word = list(map(lambda a: a[0], arr))
+        num = list(map(lambda a: a[1], arr))
+        for i in range(0,10):
+            response_dict[word[i]]=num[i]
+        #print(list(keywords.keys()))
+        #print(response_tags)
+        return JsonResponse(response_dict, safe=False)
+    else:
+        return HttpResponse(status=405)
 
 def dept_list(request):
     if request.method == 'GET':
