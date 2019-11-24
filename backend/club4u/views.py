@@ -48,8 +48,14 @@ def tag_extlist(request):
         response_dict = {}
         word = list(map(lambda a: a[0], arr))
         num = list(map(lambda a: a[1], arr))
+
+        # first select tag with highest value
         for i in range(0, 10):
-            response_dict[word[i]] = num[i]
+            # drop tag if it exists in list and selected ratio is lower than 0.5
+            if Tag.objects.filter(name=word[i]).exists():
+                tag = Tag.objects.get(name=word[i])
+                if tag.selected != 0 and tag.suggested < tag.selected*2:
+                    response_dict[word[i]] = num[i]
         # print(list(keywords.keys()))
         # print(response_tags)
         return JsonResponse(response_dict, safe=False)
