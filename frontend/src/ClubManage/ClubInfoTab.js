@@ -6,8 +6,16 @@ import { Form, Col, Button } from "react-bootstrap";
 import * as actionCreators from "../store/actions/index";
 import DatePicker from "react-datepicker";
 import { ImageSelectPreview } from "react-image-select-pv";
+import { WithContext as ReactTags } from "react-tag-input";
 
 import "react-datepicker/dist/react-datepicker.css";
+
+const KeyCodes = {
+  comma: 188,
+  enter: 13
+};
+
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 class ClubInfoTab extends Component {
   state = {
@@ -26,8 +34,34 @@ class ClubInfoTab extends Component {
     recruit_end_day: null,
     current_dept: "",
     current_major: "",
-    new_img: []
+    new_img: [],
+    selected_tag: [],
+    removed_tag: []
   };
+
+  handleDelete(i) {
+    const { tags } = this.state;
+    this.setState({
+      tags: tags.filter((tag, index) => index !== i)
+    });
+  }
+
+  handleAddition(tag) {
+    this.setState({
+      tags: this.state.tags.concat(tag)
+    });
+  }
+
+  handleDrag(tag, currPos, newPos) {
+    const tags = [...this.state.tags];
+    const newTags = tags.slice();
+
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+
+    // re-render
+    this.setState({ tags: newTags });
+  }
 
   componentDidMount = () => {
     if (this.props.selectedClub) {
@@ -41,8 +75,8 @@ class ClubInfoTab extends Component {
         poster_img: this.props.selectedClub.poster_img,
         available_semester: this.props.selectedClub.available_semester,
         available_major: this.props.selectedClub.available_major,
-        session_day: this.props.selectedClub.session_day,
-        tags: this.props.selectedClub.tags
+        session_day: this.props.selectedClub.session_day
+        // tags: this.props.selectedClub.tags
       });
       if (this.props.selectedClub.recruit_start_day) {
         this.setState({
@@ -290,13 +324,6 @@ class ClubInfoTab extends Component {
             <Form.Label>새로운 사진</Form.Label>
           </Form.Row>
           <Form.Row>
-            {/* <input
-            type="file"
-            id="club-poster-file-input"
-            multiple
-            onChange={this.imgUploadHandler}
-          /> */}
-            {/* TODO : remove when img upload implemented without ImageSelectView */}
             <div>
               <ImageSelectPreview
                 id="club-poster-file-input"
@@ -479,6 +506,16 @@ class ClubInfoTab extends Component {
             </Form.Group>
           </Form.Row>
         </Form>
+        <div>
+          <ReactTags
+            tags={this.state.tags}
+            suggestions={this.props.suggestions}
+            handleDelete={() => this.handleDelete()}
+            handleAddition={tag => this.handleAddition(tag)}
+            handleDrag={() => this.handleDrag()}
+            delimiters={delimiters}
+          />
+        </div>
         <Button
           style={{ marginTop: "10px" }}
           variant="dark"
@@ -512,7 +549,8 @@ const mapStateToProps = state => {
     selectedClub: state.club.selectedClub,
     categories: state.category.categories,
     depts: state.dept.depts,
-    majors: state.major.majors
+    majors: state.major.majors,
+    tags: state.tag.tags
   };
 };
 
