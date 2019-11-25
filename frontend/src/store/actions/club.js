@@ -46,9 +46,10 @@ export const getApplicationByID = id => {
   };
 };
 
-export const putApplicationByID_ = data => {
+export const putApplicationByID_ = form => {
   return {
-    type: actionTypes.PUT_APPLICATION_BY_ID
+    type: actionTypes.PUT_APPLICATION_BY_ID,
+    form: form
   };
 };
 
@@ -57,7 +58,7 @@ export const putApplicationByID = (id, form, fileData) => {
     return axios
       .put("/api/club/" + id + "/application/", form)
       .then(axios.post("/api/club/" + id + "/application/", fileData))
-      .then(res => dispatch(putApplicationByID_(res.data)));
+      .then(res => dispatch(putApplicationByID_(form)));
   };
 };
 
