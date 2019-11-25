@@ -102,6 +102,7 @@ describe("Club Reducer", () => {
     expect(newState).toEqual({
       clubs: [],
       selectedClub: null,
+      selectedApplication: null,
       applicationForm: null
     });
   });
@@ -127,6 +128,7 @@ describe("Club Reducer", () => {
     expect(newState).toEqual({
       clubs: stubClubList,
       selectedClub: null,
+      selectedApplication: null,
       applicationForm: null
     });
   });
@@ -163,19 +165,4 @@ describe("Club Reducer", () => {
       selectedClub: null
     });
   });
-  /*
-  it("should post club", () => {
-    const newState = reducer(undefined, {
-      type: actionTypes.POST_CLUB,
-      name: stubClub.name,
-      clubmanager: stubClub.clubmanager,
-      auth_img_file: stubClub.auth_img_file,
-      selected_category: stubClub.selected_category
-    });
-    expect(newState).toEqual({
-      clubs: initialclubs.concat(stubClub),
-      selectedClub: null
-    });
-  });
-  */
 });

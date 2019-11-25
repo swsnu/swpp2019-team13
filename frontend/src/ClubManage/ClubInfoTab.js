@@ -235,8 +235,6 @@ class ClubInfoTab extends Component {
   }
 
   render() {
-    console.log(this.state);
-    console.log(this.props);
     let majorList = [];
 
     if (this.props.majors) majorList = this.props.majors;
@@ -398,9 +396,9 @@ class ClubInfoTab extends Component {
               suggestions={this.state.suggest_tag}
               handleDelete={index => this.handleDelete(index)}
               handleAddition={tag => this.handleAddition(tag)}
-              handleDrag={(tag, curpos, newpos) =>
-                this.handleDrag(tag, curpos, newpos)
-              }
+              // handleDrag={(tag, curpos, newpos) =>
+              //   this.handleDrag(tag, curpos, newpos)
+              // }
               delimiters={delimiters}
             />
           </div>

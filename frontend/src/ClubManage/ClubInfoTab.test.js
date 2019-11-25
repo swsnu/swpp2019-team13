@@ -8,6 +8,7 @@ import ClubInfoTab from "./ClubInfoTab";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as clubActionCreators from "../store/actions/club";
+import * as tagActionCreators from "../store/actions/tag";
 
 const stubInitialState = {
   selectedClub: {
@@ -42,7 +43,10 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<ClubInfoTab />", () => {
   let clubInfoTab;
-  let spyGetClubByID, spyPutClubInformation, spyPostClubPoster;
+  let spyGetClubByID,
+    spyPutClubInformation,
+    spyPostClubPoster,
+    spyGetExtractedTag;
 
   beforeEach(() => {
     clubInfoTab = (
@@ -77,6 +81,16 @@ describe("<ClubInfoTab />", () => {
 
     spyPostClubPoster = jest
       .spyOn(clubActionCreators, "postClubPoster")
+      .mockImplementation(res => {
+        return dispatch => {
+          return new Promise((resolve, reject) => {
+            resolve();
+          });
+        };
+      });
+
+    spyGetExtractedTag = jest
+      .spyOn(tagActionCreators, "getExtractedTag")
       .mockImplementation(res => {
         return dispatch => {
           return new Promise((resolve, reject) => {
@@ -350,6 +364,20 @@ describe("<ClubInfoTab />", () => {
       .find(ClubInfoTab.WrappedComponent)
       .instance();
     expect(clubInfoTabInstance.state.available_major).toEqual([1, 2]);
+  });
+
+  it(`should handle add tag extract button`, () => {
+    const component = mount(clubInfoTab);
+
+    const wrapper = component.find("#tag-extract-button").at(2);
+    wrapper.simulate("click");
+
+    expect(spyGetExtractedTag).toBeCalledTimes(1);
+
+    // const clubInfoTabInstance = component
+    //   .find(ClubInfoTab.WrappedComponent)
+    //   .instance();
+    // expect(clubInfoTabInstance.state.available_major).toEqual([1, 2]);
   });
 
   it(`should handle add major input when no props`, () => {
