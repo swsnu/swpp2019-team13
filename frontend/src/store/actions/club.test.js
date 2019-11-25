@@ -41,22 +41,6 @@ describe("Category Actions", () => {
       done();
     });
   });
-  // it("getClubByID", done => {
-  //   const spygetClubByID = jest.spyOn(axios, "get").mockImplementation(url => {
-  //     return new Promise((resolve, reject) => {
-  //       const result = {
-  //         status: 200,
-  //         data: 1
-  //       };
-  //       resolve(result);
-  //     });
-  //   });
-
-  //   store.dispatch(actionCreators.getClubByID(1)).then(() => {
-  //     expect(spygetClubByID).toHaveBeenCalled();
-  //     done();
-  //   });
-  // });
 
   it("putClubInformation", done => {
     const spyputClubInformation = jest
@@ -73,6 +57,25 @@ describe("Category Actions", () => {
 
     store.dispatch(actionCreators.putClubInformation(1, 1)).then(() => {
       expect(spyputClubInformation).toHaveBeenCalled();
+      done();
+    });
+  });
+
+  it("putApplicationByID", done => {
+    const spyputApplicationByID = jest
+      .spyOn(axios, "put")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: 1
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.putApplicationByID(1, 1, 1)).then(() => {
+      expect(spyputApplicationByID).toHaveBeenCalled();
       done();
     });
   });
