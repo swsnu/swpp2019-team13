@@ -10,12 +10,12 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 
+from krwordrank.word import summarize_with_keywords
+
 from .models import *
 from .application_models import *
 from .serializers import *
 from .application_serializers import *
-from krwordrank.word import KRWordRank
-from krwordrank.word import summarize_with_keywords
 
 
 def category_list(request):
@@ -369,21 +369,21 @@ def somoim_list(request):
         category = Category.objects.get(id=category_id)
 
         # TODO : Add Tag
-        somoim = Somoim()
-        somoim.title = title
-        somoim.category = category
-        somoim.summary = summary
-        somoim.description = description
-        somoim.goalJoiner = goalJoiner
-        somoim.available_semester = available_semester
-        somoim.session_day = session_day
+        new_somoim = Somoim()
+        new_somoim.title = title
+        new_somoim.category = category
+        new_somoim.summary = summary
+        new_somoim.description = description
+        new_somoim.goalJoiner = goalJoiner
+        new_somoim.available_semester = available_semester
+        new_somoim.session_day = session_day
 
-        somoim.save()
+        new_somoim.save()
 
         for major_id in available_major_id_list:
-            somoim.available_major.add(Major.objects.get(id=major_id))
+            new_somoim.available_major.add(Major.objects.get(id=major_id))
 
-        serializer = SomoimSerializer(Somoim.objects.get(id=somoim.id))
+        serializer = SomoimSerializer(Somoim.objects.get(id=new_somoim.id))
 
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
@@ -460,11 +460,12 @@ def apply_club(request, user_id=0):
 
         form = Application.objects.get(club=club_id, user=None)
 
-        application = Application.objects.get(
+        selected_application = Application.objects.get(
             club=Club.objects.get(id=club_id), user=user)
-        application.delete()
-        application = Application(club=Club.objects.get(id=club_id), user=user)
-        application.save()
+        selected_application.delete()
+        new_application = Application(
+            club=Club.objects.get(id=club_id), user=user)
+        new_application.save()
 
         short_text_forms = ShortTextForm.objects.filter(application=form)
         long_text_forms = LongTextForm.objects.filter(application=form)
@@ -473,15 +474,15 @@ def apply_club(request, user_id=0):
         image_forms = ImageForm.objects.filter(application=form)
         for item in short_text_forms:
             short_text = ShortTextForm(
-                application=application, order=item.order, title=item.title)
+                application=new_application, order=item.order, title=item.title)
             short_text.save()
         for item in long_text_forms:
             long_text = LongTextForm(
-                application=application, order=item.order, title=item.title)
+                application=new_application, order=item.order, title=item.title)
             long_text.save()
         for item in multi_choice_forms:
             multi_choice = MultiChoiceForm(
-                application=application, order=item.order, title=item.title)
+                application=new_application, order=item.order, title=item.title)
             multi_choice.save()
             choices = Choice.objects.filter(multi=item)
             for item_choice in choices:
@@ -489,11 +490,11 @@ def apply_club(request, user_id=0):
                                 title=item_choice.title, content=item_choice.content)
                 choice.save()
         for item in file_forms:
-            file = FileForm(application=application,
+            file = FileForm(application=new_application,
                             order=item.order, title=item.title)
             file.save()
         for item in image_forms:
-            image = ImageForm(application=application,
+            image = ImageForm(application=new_application,
                               order=item.order, title=item.title)
             image.save()
 
@@ -610,10 +611,10 @@ def recommend_somoim(request, user_id=0):
         recommended_somoims = Somoim.objects.none()
         for user_like_somoim in user.like_somoims.all():
             for liker in user_like_somoim.likers.all():
-                for somoim in liker.like_somoims.all():
-                    if recommended_somoims.filter(id=somoim.id).count() == 0:
+                for s in liker.like_somoims.all():
+                    if recommended_somoims.filter(id=s.id).count() == 0:
                         recommended_somoims |= Somoim.objects.filter(
-                            id=somoim.id)
+                            id=s.id)
         serializer = SomoimSerializer(recommended_somoims, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:
@@ -671,13 +672,13 @@ def application(request, club_id=0):
     # if not request.user.is_authenticated:
     #     return HttpResponse(401)
     try:
-        application = Application.objects.get(
+        select_application = Application.objects.get(
             club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serializer = ApplcationSerializer(application)
+        serializer = ApplcationSerializer(select_application)
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         return HttpResponse(status=204)
