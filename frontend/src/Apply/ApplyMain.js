@@ -18,7 +18,25 @@ class ApplyMain extends Component {
     formList: []
   };
 
-  saveApplicationHandler = () => {};
+  saveApplicationHandler = () => {
+    let formData = new FormData();
+
+    this.state.formList
+      .filter(item => item.type === "image" || item.type === "file")
+      .forEach(item => {
+        formData.append("image", item.file_data);
+      });
+
+    console.log(formData.getAll("image"));
+    console.log(formData.getAll("file"));
+    console.log(this.state.formList);
+
+    this.props.putApplicationByID(
+      this.props.match.params.club_id,
+      this.state.formList,
+      formData
+    );
+  };
 
   fileSelectHandler = (e, props) => {
     let file = e.target.files[0];
@@ -347,7 +365,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getClubByID: id => dispatch(actionCreators.getClubByID(id)),
-    getApplicationByID: id => dispatch(actionCreators.getApplicationByID(id))
+    getApplicationByID: id => dispatch(actionCreators.getApplicationByID(id)),
+    putApplicationByID: (id, form, fileData) =>
+      dispatch(actionCreators.putApplicationByID(id, form, fileData))
   };
 };
 

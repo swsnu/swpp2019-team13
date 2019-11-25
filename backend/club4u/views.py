@@ -684,6 +684,37 @@ def application(request, club_id=0):
         serializer = ApplcationSerializer(application)
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
+        application = Application.objects.get(
+            club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
+        body = json.loads(request.body.decode())
+        for item in body:
+            if item['type'] == 'shortText':
+                short_text = ShortTextForm.objects.get(
+                    application=application, order=item['order'])
+                short_text.content = item['content']
+                short_text.save()
+            elif item['type'] == 'longText':
+                long_text = LongTextForm.objects.get(
+                    application=application, order=item['order'])
+                long_text.content = item['content']
+                long_text.save()
+            elif item['type'] == 'multiChoice':
+                multi_choice = MultiChoiceForm.objects.get(
+                    application=application, order=item['order'])
+                multi_choice.save()
+                for item_choice in item['choices']:
+                    choice = Choice.objects.get(multi=multi_choice,
+                                                title=item_choice['title'])
+                    choice.checked = item_choice['checked']
+                    choice.save()
+            else:
+                continue
+
+        return HttpResponse(status=204)
+    elif request.method == "POST":
+        # new_poster = ClubPoster(
+        #     img=request.FILES['image'], club=selectedClub)
+        # new_poster.save()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)

@@ -4,15 +4,13 @@ export {
   putClubInformation,
   postClubPoster,
   getApplicationByID,
+  putApplicationByID,
   getApplicationFormByID,
-  putApplicationFormByID,
+  putApplicationFormByID
 } from "./club";
 export { getSomoimList, postSomoim } from "./somoim";
 export { getCategoryList } from "./category";
-export {
-  getTagList,
-  getExtractedTag
-} from "./tag";
+export { getTagList, getExtractedTag } from "./tag";
 export { getDeptList } from "./dept";
 export { getMajorList } from "./major";
 export {
