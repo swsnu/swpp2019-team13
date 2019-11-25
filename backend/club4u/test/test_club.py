@@ -1,6 +1,6 @@
 import json
 from django.test import TestCase, Client
-from ..models import User, UserProfile, Club, Department, Category, Major, ClubPoster
+from ..models import User, UserProfile, Club, Department, Category, Major, ClubPoster, Tag
 
 class ClubTestCase(TestCase):
     def setUp(self):
@@ -147,21 +147,22 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     # test add, remove both
-    def test_put_apply_club_success(self):
-        client = Client(enforce_csrf_checks=False)
-        club = Club.objects.get(id=1)
+    # TODO : re-implement after applying method is done
+    # def test_put_apply_club_success(self):
+    #     client = Client(enforce_csrf_checks=False)
+    #     club = Club.objects.get(id=1)
 
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
-        response = client.put('/api/user/1/club/apply/', json.dumps(
-            {'id': 1}), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
-        self.assertEqual(len(club.appliers.all()), 1)
+    #     response = client.post('/api/user/signin/', json.dumps(
+    #         {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+    #     response = client.put('/api/user/1/club/apply/', json.dumps(
+    #         {'id': 1}), content_type='application/json')
+    #     self.assertEqual(response.status_code, 204)
+    #     self.assertEqual(len(club.appliers.all()), 1)
 
-        response = client.put('/api/user/1/club/apply/', json.dumps(
-            {'id': 1}), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
-        self.assertEqual(len(club.appliers.all()), 0)
+    #     response = client.put('/api/user/1/club/apply/', json.dumps(
+    #         {'id': 1}), content_type='application/json')
+    #     self.assertEqual(response.status_code, 204)
+    #     self.assertEqual(len(club.appliers.all()), 0)
 
     def test_apply_club_list_wrong_method(self):
         client = Client(enforce_csrf_checks=False)
@@ -234,6 +235,8 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_edit_club_info_success(self):
+        Tag.objects.create(id=1, name='TAG_1')
+        Tag.objects.create(id=2, name='TAG_2')
         client = Client(enforce_csrf_checks=False)
         test_json = json.dumps({
                      'available_major': [1],
@@ -247,9 +250,15 @@ class ClubTestCase(TestCase):
                      'recruit_end_day': '2019-11-16T',
                      'session_day': 3,
                      'summary': 'summary1',
-                     'tags': []})
+                     'selected_tag' : ["TAG_1", "NEW_TAG_1"],
+                     'removed_tag' : ["TAG_2", "NEW_TAG_2"],
+                     'tags': [{'text' : "TAG_1"}, {'text' : "NEW_TAG_1"}]})
         response = client.put('/api/club/1/',
                               test_json, content_type='application/json')
+
+
+        self.assertEqual(len(Tag.objects.all()), 4)
+
         self.assertEqual(response.status_code, 204)
 
     def test_edit_club_info_not_found(self):

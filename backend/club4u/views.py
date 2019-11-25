@@ -10,12 +10,12 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 
+from krwordrank.word import summarize_with_keywords
+
 from .models import *
 from .application_models import *
 from .serializers import *
 from .application_serializers import *
-from krwordrank.word import KRWordRank
-from krwordrank.word import summarize_with_keywords
 
 
 def category_list(request):
@@ -56,8 +56,8 @@ def tag_extlist(request):
                 tag = Tag.objects.get(name=word[i])
                 if tag.selected != 0 and tag.suggested < tag.selected*2:
                     response_dict[word[i]] = num[i]
-        # print(list(keywords.keys()))
-        # print(response_tags)
+            else:
+                response_dict[word[i]] = num[i]
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
@@ -371,21 +371,21 @@ def somoim_list(request):
         category = Category.objects.get(id=category_id)
 
         # TODO : Add Tag
-        somoim = Somoim()
-        somoim.title = title
-        somoim.category = category
-        somoim.summary = summary
-        somoim.description = description
-        somoim.goalJoiner = goalJoiner
-        somoim.available_semester = available_semester
-        somoim.session_day = session_day
+        new_somoim = Somoim()
+        new_somoim.title = title
+        new_somoim.category = category
+        new_somoim.summary = summary
+        new_somoim.description = description
+        new_somoim.goalJoiner = goalJoiner
+        new_somoim.available_semester = available_semester
+        new_somoim.session_day = session_day
 
-        somoim.save()
+        new_somoim.save()
 
         for major_id in available_major_id_list:
-            somoim.available_major.add(Major.objects.get(id=major_id))
+            new_somoim.available_major.add(Major.objects.get(id=major_id))
 
-        serializer = SomoimSerializer(Somoim.objects.get(id=somoim.id))
+        serializer = SomoimSerializer(Somoim.objects.get(id=new_somoim.id))
 
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
@@ -614,10 +614,10 @@ def recommend_somoim(request, user_id=0):
         recommended_somoims = Somoim.objects.none()
         for user_like_somoim in user.like_somoims.all():
             for liker in user_like_somoim.likers.all():
-                for somoim in liker.like_somoims.all():
-                    if recommended_somoims.filter(id=somoim.id).count() == 0:
+                for s in liker.like_somoims.all():
+                    if recommended_somoims.filter(id=s.id).count() == 0:
                         recommended_somoims |= Somoim.objects.filter(
-                            id=somoim.id)
+                            id=s.id)
         serializer = SomoimSerializer(recommended_somoims, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:

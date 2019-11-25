@@ -8,6 +8,7 @@ import ClubInfoTab from "./ClubInfoTab";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as clubActionCreators from "../store/actions/club";
+import * as tagActionCreators from "../store/actions/tag";
 
 const stubInitialState = {
   selectedClub: {
@@ -42,7 +43,10 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<ClubInfoTab />", () => {
   let clubInfoTab;
-  let spyGetClubByID, spyPutClubInformation, spyPostClubPoster;
+  let spyGetClubByID,
+    spyPutClubInformation,
+    spyPostClubPoster,
+    spyGetExtractedTag;
 
   beforeEach(() => {
     clubInfoTab = (
@@ -77,6 +81,16 @@ describe("<ClubInfoTab />", () => {
 
     spyPostClubPoster = jest
       .spyOn(clubActionCreators, "postClubPoster")
+      .mockImplementation(res => {
+        return dispatch => {
+          return new Promise((resolve, reject) => {
+            resolve();
+          });
+        };
+      });
+
+    spyGetExtractedTag = jest
+      .spyOn(tagActionCreators, "getExtractedTag")
       .mockImplementation(res => {
         return dispatch => {
           return new Promise((resolve, reject) => {
@@ -474,5 +488,239 @@ describe("<ClubInfoTab />", () => {
     const component = mount(clubInfoTab);
     const wrapper = component.find("#clubinfo-confirmedit-button").at(1);
     wrapper.simulate("click");
+  });
+
+  it(`should handle add tag extract button`, () => {
+    const tempInitialState = {
+      selectedClub: {
+        isShow: false,
+        name: "Name",
+        summary: "Summary",
+        description: "Description",
+        category: 1,
+        poster_img: ["img1.jpg"],
+        available_semester: 2,
+        available_major: [1],
+        session_day: 3,
+        tags: [],
+        recruit_start_day: null,
+        recruit_end_day: null
+      },
+      majors: [
+        { id: 1, dept_id: 1, name: "MAJOR_1" },
+        { id: 2, dept_id: 2, name: "MAJOR_2" }
+      ],
+      depts: [
+        { id: 1, name: "DEPT_1" },
+        { id: 2, name: "DEPT_2" }
+      ],
+      categories: [
+        { id: 1, name: "CATEGORY_1" },
+        { id: 2, name: "CATEGORY_2" }
+      ],
+      extracted_tag: { TAG_1: "1.0", TAG_2: "0.5" }
+    };
+
+    let tempClubInfoTab = (
+      <Provider store={getMockStore(tempInitialState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/" exact component={ClubInfoTab} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(tempClubInfoTab);
+
+    const wrapper = component.find("#tag-extract-button").at(2);
+    wrapper.simulate("click");
+
+    expect(spyGetExtractedTag).toBeCalledTimes(1);
+  });
+
+  it("should handle confirm add/edit tag", () => {
+    const tempInitialState = {
+      selectedClub: {
+        isShow: false,
+        name: "Name",
+        summary: "Summary",
+        description: "Description",
+        category: 1,
+        poster_img: ["img1.jpg"],
+        available_semester: 2,
+        available_major: [1],
+        session_day: 3,
+        tags: [1],
+        recruit_start_day: null,
+        recruit_end_day: null
+      },
+      majors: [
+        { id: 1, dept_id: 1, name: "MAJOR_1" },
+        { id: 2, dept_id: 2, name: "MAJOR_2" }
+      ],
+      depts: [
+        { id: 1, name: "DEPT_1" },
+        { id: 2, name: "DEPT_2" }
+      ],
+      categories: [
+        { id: 1, name: "CATEGORY_1" },
+        { id: 2, name: "CATEGORY_2" }
+      ],
+      tags: [
+        { id: 1, name: "TAG_1" },
+        { id: 2, name: "TAG_2" }
+      ]
+    };
+
+    let tempClubInfoTab = (
+      <Provider store={getMockStore(tempInitialState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/" exact component={ClubInfoTab} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(tempClubInfoTab);
+
+    const wrapper = component.find("#clubinfo-tag-list").at(1);
+
+    wrapper.props().handleAddition({ id: "2", text: "hi" });
+
+    wrapper.props().handleDelete(0);
+
+    const clubInfoTabInstance = component
+      .find(ClubInfoTab.WrappedComponent)
+      .instance();
+    expect(clubInfoTabInstance.state.tags).toEqual([{ id: "2", text: "hi" }]);
+  });
+
+  it("should handle confirm drag tag", () => {
+    const tempInitialState = {
+      selectedClub: {
+        isShow: false,
+        name: "Name",
+        summary: "Summary",
+        description: "Description",
+        category: 1,
+        poster_img: ["img1.jpg"],
+        available_semester: 2,
+        available_major: [1],
+        session_day: 3,
+        tags: [1, 2],
+        recruit_start_day: null,
+        recruit_end_day: null
+      },
+      majors: [
+        { id: 1, dept_id: 1, name: "MAJOR_1" },
+        { id: 2, dept_id: 2, name: "MAJOR_2" }
+      ],
+      depts: [
+        { id: 1, name: "DEPT_1" },
+        { id: 2, name: "DEPT_2" }
+      ],
+      categories: [
+        { id: 1, name: "CATEGORY_1" },
+        { id: 2, name: "CATEGORY_2" }
+      ],
+      tags: [
+        { id: 1, name: "TAG_1" },
+        { id: 2, name: "TAG_2" }
+      ]
+    };
+
+    let tempClubInfoTab = (
+      <Provider store={getMockStore(tempInitialState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/" exact component={ClubInfoTab} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(tempClubInfoTab);
+
+    const wrapper = component.find("#clubinfo-tag-list").at(1);
+
+    wrapper.props().handleDrag({ id: "1", text: "TAG_2" }, 1, 0);
+  });
+
+  it("should handle Add Extract Tag button", () => {
+    const tempInitialState = {
+      selectedClub: {
+        isShow: false,
+        name: "Name",
+        summary: "Summary",
+        description: "Description",
+        category: 1,
+        poster_img: ["img1.jpg"],
+        available_semester: 2,
+        available_major: [1],
+        session_day: 3,
+        tags: [1],
+        recruit_start_day: null,
+        recruit_end_day: null
+      },
+      majors: [
+        { id: 1, dept_id: 1, name: "MAJOR_1" },
+        { id: 2, dept_id: 2, name: "MAJOR_2" }
+      ],
+      depts: [
+        { id: 1, name: "DEPT_1" },
+        { id: 2, name: "DEPT_2" }
+      ],
+      categories: [
+        { id: 1, name: "CATEGORY_1" },
+        { id: 2, name: "CATEGORY_2" }
+      ],
+      tags: [
+        { id: 1, name: "TAG_1" },
+        { id: 2, name: "TAG_2" }
+      ]
+    };
+
+    let tempClubInfoTab = (
+      <Provider store={getMockStore(tempInitialState)}>
+        <ConnectedRouter history={history}>
+          <Switch>
+            <Route path="/" exact component={ClubInfoTab} />
+          </Switch>
+        </ConnectedRouter>
+      </Provider>
+    );
+
+    const component = mount(tempClubInfoTab);
+
+    const clubInfoTabInstance = component
+      .find(ClubInfoTab.WrappedComponent)
+      .instance();
+
+    clubInfoTabInstance.setState({ selected_tag: ["TAG_1", "NEW_TAG"] });
+    const wrapper = component.find("#add-extractedtag-button").at(1);
+    wrapper.simulate("click");
+
+    expect(clubInfoTabInstance.state.tags).toEqual([
+      { id: "0", text: "TAG_1" },
+      { id: "1", text: "NEW_TAG" }
+    ]);
+  });
+
+  it("should handle Remove Extract Tag button", () => {
+    const component = mount(clubInfoTab);
+
+    const clubInfoTabInstance = component
+      .find(ClubInfoTab.WrappedComponent)
+      .instance();
+
+    clubInfoTabInstance.setState({ selected_tag: ["TAG_1", "TAG_2"] });
+    component.update();
+    const wrapper = component.find("#clubinfo-removetag-button").at(1);
+    wrapper.simulate("click");
+
+    expect(clubInfoTabInstance.state.selected_tag).toEqual(["TAG_2"]);
+    expect(clubInfoTabInstance.state.removed_tag).toEqual(["TAG_1"]);
   });
 });

@@ -249,3 +249,34 @@ class SomoimTestCase(TestCase):
             {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
         response = client.patch('/api/user/1/somoim/recommend/')
         self.assertEqual(response.status_code, 405)
+
+    # Test case for get somoim by ID
+
+    def test_get_specific_somoim_success(self):
+        client = Client(enforce_csrf_checks=False)
+        response = client.get('/api/somoim/1/')
+
+        expected = {'id': 1, 'title': 'somoim1',
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': []}
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
+
+    def test_get_specific_somoim_not_found(self):
+        client = Client(enforce_csrf_checks=False)
+        response = client.get('/api/somoim/100/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_specific_somoim_wrong_method(self):
+        client = Client(enforce_csrf_checks=False)
+        response = client.patch('/api/somoim/1/')
+        self.assertEqual(response.status_code, 405)

@@ -74,7 +74,7 @@ class ApplicationFormTestCase(TestCase):
             'type': 'multiChoice',
             'order': 1,
             'title': 'title',
-            'choices': [{'content': '1'}]
+            'choices': [{'title': 'hi', 'content': '1'}]
         }])
         response = client.put('/api/club/1/application/form/',
                               test_json, content_type='application/json')
