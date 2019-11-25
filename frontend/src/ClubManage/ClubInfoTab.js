@@ -357,7 +357,7 @@ class ClubInfoTab extends Component {
             {this.state.selected_tag.map((tag, i) => (
               <Button
                 key={i}
-                id="clubinfo-removemajor-button"
+                id="clubinfo-removetag-button"
                 style={{ marginTop: "3px", marginRight: "3px" }}
                 onClick={() => this.handleDeleteExtractTag(i)}
               >
@@ -392,13 +392,14 @@ class ClubInfoTab extends Component {
           <Form.Label>현재 태그</Form.Label>
           <div>
             <ReactTags
+              id="clubinfo-tag-list"
               tags={this.state.tags}
               suggestions={this.state.suggest_tag}
               handleDelete={index => this.handleDelete(index)}
               handleAddition={tag => this.handleAddition(tag)}
-              // handleDrag={(tag, curpos, newpos) =>
-              //   this.handleDrag(tag, curpos, newpos)
-              // }
+              handleDrag={(tag, curpos, newpos) =>
+                this.handleDrag(tag, curpos, newpos)
+              }
               delimiters={delimiters}
             />
           </div>

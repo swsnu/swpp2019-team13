@@ -30,4 +30,16 @@ describe("tag Reducer", () => {
       extracted_tag: []
     });
   });
+
+  it("should get extracted tag list", () => {
+    const stubExtracted = { TAG_1: "0.1", TAG_2: "0.2" };
+    const newState = reducer(undefined, {
+      type: actionTypes.GET_EXTRACTED_TAG,
+      extracted_tag: stubExtracted
+    });
+    expect(newState).toEqual({
+      tags: [],
+      extracted_tag: stubExtracted
+    });
+  });
 });

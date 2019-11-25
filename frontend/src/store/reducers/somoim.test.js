@@ -45,34 +45,6 @@ const initialstate = {
       joiners: [],
       likers: [],
       goalJoiner: 20
-    },
-    {
-      id: 2,
-      title: "TEST_TITLE2",
-      summary: "TEST_SUMMARY",
-      description: "TEST_DESCRIPTION",
-      category: 1,
-      available_major: [],
-      session_day: [],
-      available_semester: 1,
-      tags: [],
-      joiners: [],
-      likers: [],
-      goalJoiner: 20
-    },
-    {
-      id: 3,
-      title: "TEST_TITLE3",
-      summary: "TEST_SUMMARY",
-      description: "TEST_DESCRIPTION",
-      category: 1,
-      available_major: [],
-      session_day: [],
-      available_semester: 1,
-      tags: [],
-      joiners: [],
-      likers: [],
-      goalJoiner: 20
     }
   ],
   selectedSomoim: null
@@ -96,34 +68,6 @@ const initialsomoims = [
   {
     id: 1,
     title: "TEST_TITLE1",
-    summary: "TEST_SUMMARY",
-    description: "TEST_DESCRIPTION",
-    category: 1,
-    available_major: [],
-    session_day: [],
-    available_semester: 1,
-    tags: [],
-    joiners: [],
-    likers: [],
-    goalJoiner: 20
-  },
-  {
-    id: 2,
-    title: "TEST_TITLE2",
-    summary: "TEST_SUMMARY",
-    description: "TEST_DESCRIPTION",
-    category: 1,
-    available_major: [],
-    session_day: [],
-    available_semester: 1,
-    tags: [],
-    joiners: [],
-    likers: [],
-    goalJoiner: 20
-  },
-  {
-    id: 3,
-    title: "TEST_TITLE3",
     summary: "TEST_SUMMARY",
     description: "TEST_DESCRIPTION",
     category: 1,
@@ -172,19 +116,64 @@ describe("Somoim Reducer", () => {
       selectedSomoim: null
     });
   });
-  /*
-    it("should get specific somoim", () => {
-      const newState = reducer(initialsomoims, {
-        type: actionTypes.GET_SOMOIM_BY_ID,
-        somoim: stubSomoim
-      });
-      expect(newState).toEqual({
-        somoims: initialsomoims,
-        selectedSomoim: stubSomoim
-      });
+
+  it("should get somoim by ID", () => {
+    const stubSomim = {
+      id: 0,
+      title: "TEST_TITLE4",
+      summary: "TEST_SUMMARY",
+      description: "TEST_DESCRIPTION",
+      category: 1,
+      available_major: [],
+      session_day: [],
+      available_semester: 1,
+      tags: [],
+      joiners: [],
+      likers: [],
+      goalJoiner: 20
+    };
+
+    const newState = reducer(initialstate, {
+      type: actionTypes.GET_SOMOIM_BY_ID,
+      selectedSomoim: stubSomim
     });
-  */
-  it("should post article", () => {
+
+    expect(newState).toEqual({
+      somoims: [
+        {
+          id: 0,
+          title: "TEST_TITLE4",
+          summary: "TEST_SUMMARY",
+          description: "TEST_DESCRIPTION",
+          category: 1,
+          available_major: [],
+          session_day: [],
+          available_semester: 1,
+          tags: [],
+          joiners: [],
+          likers: [],
+          goalJoiner: 20
+        },
+        {
+          id: 1,
+          title: "TEST_TITLE1",
+          summary: "TEST_SUMMARY",
+          description: "TEST_DESCRIPTION",
+          category: 1,
+          available_major: [],
+          session_day: [],
+          available_semester: 1,
+          tags: [],
+          joiners: [],
+          likers: [],
+          goalJoiner: 20
+        }
+      ],
+      selectedSomoim: stubSomim
+    });
+  });
+
+  it("should post somoim", () => {
     const newState = reducer(initialstate, {
       type: actionTypes.POST_SOMOIM,
       id: stubSomoim.id,

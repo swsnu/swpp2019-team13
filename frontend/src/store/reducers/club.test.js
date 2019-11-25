@@ -165,4 +165,16 @@ describe("Club Reducer", () => {
       selectedClub: null
     });
   });
+
+  it("should get club application by ID", () => {
+    const newState = reducer(initialstate, {
+      type: actionTypes.GET_APPLICATION_BY_ID,
+      form: 1
+    });
+    expect(newState).toEqual({
+      clubs: initialclubs,
+      selectedApplication: 1,
+      selectedClub: null
+    });
+  });
 });
