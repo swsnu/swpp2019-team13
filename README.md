@@ -87,5 +87,5 @@ coverage report --show-missing
 ### pylint
 
 ```
-pylint --load-plugins pylint_django */models.py */views.py */test/*.py --disable='C0103, R1705, C0301, R0904, R0801, C0412, C0114, C0115, C0116, W0511, C0330, C0303, W0614, W0401, R1721'
+pylint --load-plugins pylint_django */models.py */views.py */test/*.py --disable='C0103, R1705, C0301, R0904, R0801, C0412, C0114, C0115, C0116, W0511, C0330, C0303, W0614, W0401, R1721, R0912, R0914, R0915, C0200, W0621'
 ```

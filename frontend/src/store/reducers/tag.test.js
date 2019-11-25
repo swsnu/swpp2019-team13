@@ -5,17 +5,8 @@ describe("tag Reducer", () => {
   it("should return default state", () => {
     const newState = reducer(undefined, {}); // initialize
     expect(newState).toEqual({
-      tags: [
-        /*
-        { id: 0, name: "friendship" },
-        { id: 1, name: "love" },
-        { id: 2, name: "sport" },
-        { id: 3, name: "game" },
-        { id: 4, name: "study" },
-        { id: 5, name: "music" },
-        { id: 6, name: "art" },
-        { id: 7, name: "nothing" }*/
-      ]
+      tags: [],
+      extracted_tag: []
     });
   });
 
@@ -35,7 +26,20 @@ describe("tag Reducer", () => {
       tags: stubTagList
     });
     expect(newState).toEqual({
-      tags: stubTagList
+      tags: stubTagList,
+      extracted_tag: []
+    });
+  });
+
+  it("should get extracted tag list", () => {
+    const stubExtracted = { TAG_1: "0.1", TAG_2: "0.2" };
+    const newState = reducer(undefined, {
+      type: actionTypes.GET_EXTRACTED_TAG,
+      extracted_tag: stubExtracted
+    });
+    expect(newState).toEqual({
+      tags: [],
+      extracted_tag: stubExtracted
     });
   });
 });

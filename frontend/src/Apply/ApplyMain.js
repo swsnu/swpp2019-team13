@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col, Button, Card, Form } from "react-bootstrap";
+import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
 import savePNG from "../images/save.png";
@@ -27,10 +27,6 @@ class ApplyMain extends Component {
         formData.append(item.type, item.file_data);
       });
 
-    console.log(formData.getAll("image"));
-    console.log(formData.getAll("file"));
-    console.log(this.state.formList);
-
     this.props.putApplicationByID(
       this.props.match.params.club_id,
       this.state.formList,
@@ -41,7 +37,6 @@ class ApplyMain extends Component {
   fileSelectHandler = (e, props) => {
     let file = e.target.files[0];
     let reader = new FileReader();
-    let url = reader.readAsDataURL(file);
     reader.onloadend = function() {
       this.setState({
         ...this.state,
@@ -250,16 +245,15 @@ class ApplyMain extends Component {
             </div>
           )}
           <div>
-            <label htmlFor={"image-file-input" + " " + props.id}>
+            <label htmlFor={"image-file-input " + props.id}>
               이미지를 선택하세요.
             </label>
             <input
-              id={"image-file-input" + " " + props.id}
+              id={"image-file-input " + props.id}
               type="file"
               name="file"
               style={{ display: "none" }}
               onChange={e => {
-                console.log(props);
                 this.fileSelectHandler(e, props);
               }}
             />
@@ -283,11 +277,11 @@ class ApplyMain extends Component {
             ""
           )}
           <div>
-            <label htmlFor={"file-file-input" + " " + props.id}>
+            <label htmlFor={"file-file-input " + props.id}>
               파일을 선택하세요.
             </label>
             <input
-              id={"file-file-input" + " " + props.id}
+              id={"file-file-input " + props.id}
               type="file"
               name="file"
               style={{ display: "none" }}
