@@ -15,6 +15,8 @@
     "react-bootstrap": "^1.0.0-beta.12",
     "react-circular-progressbar": "^2.0.2",
     "react-datepicker": "^2.10.0",
+    "react-dnd": "^5.0.0",
+    "react-dnd-html5-backend": "^3.0.2",
     "react-dom": "^16.10.1",
     "react-drag-list": "^1.1.0",
     "react-image-select-pv": "^2.1.2",
@@ -22,6 +24,7 @@
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.1",
     "react-scripts": "3.1.2",
+    "react-tag-input": "^6.4.1",
     "reactstrap": "^8.1.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0"

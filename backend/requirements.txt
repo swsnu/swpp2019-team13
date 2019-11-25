@@ -8,3 +8,6 @@ pylint
 pylint-django
 psycopg2
 django_mysql
+numpy
+scipy
+sklearn

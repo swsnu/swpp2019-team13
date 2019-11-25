@@ -1,5 +1,6 @@
 export const GET_CATEGORY_LIST = "GET_CATEGORY_LIST";
 export const GET_TAG_LIST = "GET_TAG_LIST";
+export const GET_EXTRACTED_TAG = "GET_EXTRACTED_TAG";
 export const GET_DEPT_LIST = "GET_DEPT_LIST";
 export const GET_MAJOR_LIST = "GET_MAJOR_LIST";
 
