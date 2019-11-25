@@ -460,44 +460,45 @@ def apply_club(request, user_id=0):
 
         form = Application.objects.get(club=club_id, user=None)
 
-        selected_application = Application.objects.get(
-            club=Club.objects.get(id=club_id), user=user)
-        selected_application.delete()
-        new_application = Application(
-            club=Club.objects.get(id=club_id), user=user)
-        new_application.save()
+        try:
+            application = Application.objects.get(
+                club=Club.objects.get(id=club_id), user=user)
+        except ObjectDoesNotExist:
+            application = Application(
+                club=Club.objects.get(id=club_id), user=user)
+            application.save()
 
-        short_text_forms = ShortTextForm.objects.filter(application=form)
-        long_text_forms = LongTextForm.objects.filter(application=form)
-        multi_choice_forms = MultiChoiceForm.objects.filter(application=form)
-        file_forms = FileForm.objects.filter(application=form)
-        image_forms = ImageForm.objects.filter(application=form)
-        for item in short_text_forms:
-            short_text = ShortTextForm(
-                application=new_application, order=item.order, title=item.title)
-            short_text.save()
-        for item in long_text_forms:
-            long_text = LongTextForm(
-                application=new_application, order=item.order, title=item.title)
-            long_text.save()
-        for item in multi_choice_forms:
-            multi_choice = MultiChoiceForm(
-                application=new_application, order=item.order, title=item.title)
-            multi_choice.save()
-            choices = Choice.objects.filter(multi=item)
-            for item_choice in choices:
-                choice = Choice(multi=multi_choice,
-                                title=item_choice.title, content=item_choice.content)
-                choice.save()
-        for item in file_forms:
-            file = FileForm(application=new_application,
-                            order=item.order, title=item.title)
-            file.save()
-        for item in image_forms:
-            image = ImageForm(application=new_application,
-                              order=item.order, title=item.title)
-            image.save()
-
+            short_text_forms = ShortTextForm.objects.filter(application=form)
+            long_text_forms = LongTextForm.objects.filter(application=form)
+            multi_choice_forms = MultiChoiceForm.objects.filter(
+                application=form)
+            file_forms = FileForm.objects.filter(application=form)
+            image_forms = ImageForm.objects.filter(application=form)
+            for item in short_text_forms:
+                short_text = ShortTextForm(
+                    application=application, order=item.order, title=item.title)
+                short_text.save()
+            for item in long_text_forms:
+                long_text = LongTextForm(
+                    application=application, order=item.order, title=item.title)
+                long_text.save()
+            for item in multi_choice_forms:
+                multi_choice = MultiChoiceForm(
+                    application=application, order=item.order, title=item.title)
+                multi_choice.save()
+                choices = Choice.objects.filter(multi=item)
+                for item_choice in choices:
+                    choice = Choice(multi=multi_choice,
+                                    title=item_choice.title, content=item_choice.content)
+                    choice.save()
+            for item in file_forms:
+                file = FileForm(application=application,
+                                order=item.order, title=item.title)
+                file.save()
+            for item in image_forms:
+                image = ImageForm(application=application,
+                                  order=item.order, title=item.title)
+                image.save()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
@@ -672,15 +673,54 @@ def application(request, club_id=0):
     # if not request.user.is_authenticated:
     #     return HttpResponse(401)
     try:
-        select_application = Application.objects.get(
+        application = Application.objects.get(
             club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        serializer = ApplcationSerializer(select_application)
+        serializer = ApplcationSerializer(application)
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
+        application = Application.objects.get(
+            club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
+        body = json.loads(request.body.decode())
+        for item in body:
+            if item['type'] == 'shortText':
+                short_text = ShortTextForm.objects.get(
+                    application=application, order=item['order'])
+                short_text.content = item['content']
+                short_text.save()
+            elif item['type'] == 'longText':
+                long_text = LongTextForm.objects.get(
+                    application=application, order=item['order'])
+                long_text.content = item['content']
+                long_text.save()
+            elif item['type'] == 'multiChoice':
+                multi_choice = MultiChoiceForm.objects.get(
+                    application=application, order=item['order'])
+                multi_choice.save()
+                for item_choice in item['choices']:
+                    choice = Choice.objects.get(multi=multi_choice,
+                                                title=item_choice['title'])
+                    choice.checked = item_choice['checked']
+                    choice.save()
+            else:
+                continue
+
+        return HttpResponse(status=204)
+    elif request.method == "POST":
+        images = request.FILES.getlist('image')
+        for i in range(len(images)):
+            image = ImageForm.objects.filter(application=application)[i]
+            image.content = images[i]
+            image.save()
+
+        files = request.FILES.getlist('file')
+        for i in range(len(files)):
+            file = FileForm.objects.filter(application=application)[i]
+            file.content = files[i]
+            file.save()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
