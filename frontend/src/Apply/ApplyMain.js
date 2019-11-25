@@ -70,7 +70,13 @@ class ApplyMain extends Component {
       // this.props.onGetManagingClubs(this.props.loggedUser);
     }
     if (this.state.isUserInfoLoaded && !this.state.isFormInfoLoaded) {
-      if (this.props.selectedApplication) {
+      if (this.props.myApplication) {
+        this.setState({
+          ...this.state,
+          isFormInfoLoaded: true,
+          formList: this.props.myApplication
+        });
+      } else if (this.props.selectedApplication) {
         console.log(this.props.selectedApplication);
         let formList = [];
         let formID = 0;
@@ -363,6 +369,7 @@ const mapStateToProps = state => {
   return {
     selectedClub: state.club.selectedClub,
     loggedUser: state.user.loggedUser,
+    myApplication: state.club.myApplication,
     selectedApplication: state.club.selectedApplication
   };
 };

@@ -22,6 +22,8 @@ const reducer = (state = initialState, action) => {
       };
     case actionTypes.GET_APPLICATION_BY_ID:
       return { ...state, selectedApplication: action.form };
+    case actionTypes.PUT_APPLICATION_BY_ID:
+      return { ...state, myApplication: action.form };
     case actionTypes.GET_APPLICATION_FORM_BY_ID:
       return { ...state, applicationForm: action.form };
     case actionTypes.PUT_CLUB_INFORMATION:
