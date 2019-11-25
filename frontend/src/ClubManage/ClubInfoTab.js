@@ -6,8 +6,17 @@ import { Form, Col, Button } from "react-bootstrap";
 import * as actionCreators from "../store/actions/index";
 import DatePicker from "react-datepicker";
 import { ImageSelectPreview } from "react-image-select-pv";
+import { WithContext as ReactTags } from "react-tag-input";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "./ReactTag.css";
+
+const KeyCodes = {
+  comma: 188,
+  enter: 13
+};
+
+const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
 class ClubInfoTab extends Component {
   state = {
@@ -27,8 +36,57 @@ class ClubInfoTab extends Component {
     current_dept: "",
     current_major: "",
     new_img: [],
-    extracted_tag: {}
+    suggest_tag: [],
+    selected_tag: [],
+    removed_tag: []
   };
+
+  handleDeleteExtractTag(i) {
+    let selectedTag = this.state.selected_tag.find((tag, index) => index === i);
+    this.setState({
+      selected_tag: this.state.selected_tag.filter(tag => tag !== selectedTag),
+      removed_tag: this.state.removed_tag.concat(selectedTag)
+    });
+  }
+
+  handleAddExtractTag() {
+    let newTag = this.state.tags;
+
+    this.state.selected_tag.map(selectedTag => {
+      if (newTag.find(tag => tag.text === selectedTag) === undefined) {
+        newTag = newTag.concat({
+          id: newTag.length.toString(),
+          text: selectedTag
+        });
+      }
+    });
+
+    this.setState({
+      tags: newTag
+    });
+  }
+
+  handleDelete(i) {
+    this.setState({
+      tags: this.state.tags.filter((tag, index) => index !== i)
+    });
+  }
+
+  handleAddition(tag) {
+    this.setState({
+      tags: this.state.tags.concat(tag)
+    });
+  }
+
+  handleDrag(tag, currPos, newPos) {
+    const newTags = this.state.tags.slice();
+
+    newTags.splice(currPos, 1);
+    newTags.splice(newPos, 0, tag);
+
+    // re-render
+    this.setState({ tags: newTags });
+  }
 
   componentDidMount = () => {
     if (this.props.selectedClub) {
@@ -42,9 +100,30 @@ class ClubInfoTab extends Component {
         poster_img: this.props.selectedClub.poster_img,
         available_semester: this.props.selectedClub.available_semester,
         available_major: this.props.selectedClub.available_major,
-        session_day: this.props.selectedClub.session_day,
-        tags: this.props.selectedClub.tags
+        session_day: this.props.selectedClub.session_day
       });
+
+      if (this.props.tags) {
+        let tags = [];
+        let suggestions = [];
+        this.props.selectedClub.tags.map(tag_id => {
+          let t = this.props.tags.find(tag => tag.id === tag_id);
+          tags.push({
+            id: tags.length.toString(),
+            text: t.name
+          });
+        });
+
+        this.props.tags.map((tag, i) => {
+          suggestions.push({
+            id: i.toString(),
+            text: tag.name
+          });
+        });
+
+        this.setState({ tags: tags, suggest_tag: suggestions });
+      }
+
       if (this.props.selectedClub.recruit_start_day) {
         this.setState({
           recruit_start_day: new Date(
@@ -78,11 +157,13 @@ class ClubInfoTab extends Component {
       available_semester: this.state.available_semester,
       available_major: this.state.available_major,
       session_day: this.state.session_day,
-      tags: this.state.tags,
       recruit_start_day: this.state.recruit_start_day,
       recruit_end_day: this.state.recruit_end_day,
       current_dept: this.state.current_dept,
-      current_major: this.state.current_major
+      current_major: this.state.current_major,
+      selected_tag: this.state.selected_tag,
+      removed_tag: this.state.removed_tag,
+      tags: this.state.tags
     };
 
     let poster_files = [];
@@ -109,9 +190,16 @@ class ClubInfoTab extends Component {
   };
   tagExtractHandler = () => {
     this.props.getExtractedTag(this.state.description).then(() => {
-      this.setState({ extracted_tag: this.props.extracted_tag });
+      let selected = [];
+      for (var key in this.props.extracted_tag) {
+        selected.push(key);
+      }
+      this.setState({
+        selected_tag: selected,
+        removed_tag: []
+      });
     });
-  }
+  };
   handle_SelectAllMajor() {
     let majorList = [];
     if (this.props.majors) {
@@ -147,6 +235,8 @@ class ClubInfoTab extends Component {
   }
 
   render() {
+    console.log(this.state);
+    console.log(this.props);
     let majorList = [];
 
     if (this.props.majors) majorList = this.props.majors;
@@ -227,16 +317,16 @@ class ClubInfoTab extends Component {
                   감추기
                 </Button>
               ) : (
-                  <Button
-                    as={Col}
-                    id="clubinfo-isshow-button-false"
-                    variant="outline-primary"
-                    size="lg"
-                    onClick={() => this.setState({ isShow: !this.state.isShow })}
-                  >
-                    표시
+                <Button
+                  as={Col}
+                  id="clubinfo-isshow-button-false"
+                  variant="outline-primary"
+                  size="lg"
+                  onClick={() => this.setState({ isShow: !this.state.isShow })}
+                >
+                  표시
                 </Button>
-                )}
+              )}
             </Form.Group>
           </Form.Row>
           <Form.Group>
@@ -263,18 +353,58 @@ class ClubInfoTab extends Component {
               defaultValue={selectedClubDescription}
             />
           </Form.Group>
-
-          <Button
-            as={Col}
-            style={{ marginTop: "10px" }}
-            variant="dark"
-            size="lg"
-            id="tag-extract-button"
-            onClick={this.tagExtractHandler}
-          >
-            태그 추출
+          <br />
+          <Form.Label>추출된 태그</Form.Label>
+          <Form.Row>
+            {this.state.selected_tag.map((tag, i) => (
+              <Button
+                key={i}
+                id="clubinfo-removemajor-button"
+                style={{ marginTop: "3px", marginRight: "3px" }}
+                onClick={() => this.handleDeleteExtractTag(i)}
+              >
+                {tag + " X"}
+              </Button>
+            ))}
+          </Form.Row>
+          <Form.Row>
+            <Button
+              as={Col}
+              style={{ marginTop: "10px" }}
+              variant="dark"
+              size="lg"
+              id="tag-extract-button"
+              onClick={this.tagExtractHandler}
+            >
+              태그 추출
             </Button>
-          <h1>{Object.keys(this.state.extracted_tag).map(item => <h1>{item} : {this.state.extracted_tag[item]}</h1>)}</h1>
+            <Col sm={2} />
+            <Button
+              as={Col}
+              style={{ marginTop: "10px" }}
+              variant="dark"
+              size="lg"
+              id="add-extractedtag-button"
+              onClick={() => this.handleAddExtractTag()}
+            >
+              추출된 태그 추가
+            </Button>
+          </Form.Row>
+          <br />
+          <Form.Label>현재 태그</Form.Label>
+          <div>
+            <ReactTags
+              tags={this.state.tags}
+              suggestions={this.state.suggest_tag}
+              handleDelete={index => this.handleDelete(index)}
+              handleAddition={tag => this.handleAddition(tag)}
+              handleDrag={(tag, curpos, newpos) =>
+                this.handleDrag(tag, curpos, newpos)
+              }
+              delimiters={delimiters}
+            />
+          </div>
+
           <Form.Label>동아리 분류</Form.Label>
           <Form.Control
             as="select"
@@ -306,13 +436,6 @@ class ClubInfoTab extends Component {
             <Form.Label>새로운 사진</Form.Label>
           </Form.Row>
           <Form.Row>
-            {/* <input
-            type="file"
-            id="club-poster-file-input"
-            multiple
-            onChange={this.imgUploadHandler}
-          /> */}
-            {/* TODO : remove when img upload implemented without ImageSelectView */}
             <div>
               <ImageSelectPreview
                 id="club-poster-file-input"
@@ -517,7 +640,7 @@ class ClubInfoTab extends Component {
         >
           정보 수정
         </Button>
-      </div >
+      </div>
     );
   }
 }
@@ -529,6 +652,7 @@ const mapStateToProps = state => {
     categories: state.category.categories,
     depts: state.dept.depts,
     majors: state.major.majors,
+    tags: state.tag.tags,
     extracted_tag: state.tag.extracted_tag
   };
 };
@@ -536,7 +660,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getClubByID: id => dispatch(actionCreators.getClubByID(id)),
-    getExtractedTag: description => dispatch(actionCreators.getExtractedTag(description)),
+    getExtractedTag: description =>
+      dispatch(actionCreators.getExtractedTag(description)),
     putClubInformation: (id, clubInfo) =>
       dispatch(actionCreators.putClubInformation(id, clubInfo)),
     postClubPoster: (club_id, poster_files) =>

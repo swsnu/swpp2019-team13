@@ -23,7 +23,7 @@ export const getExtractedTag_ = extracted_tag => {
   };
 };
 
-export const getExtractedTag = (description) => {
+export const getExtractedTag = description => {
   return dispatch => {
     return axios
       .post("/api/tag/extlist/", { description: description })
