@@ -1,7 +1,7 @@
 import * as actionTypes from "./actionTypes";
 import axios from "axios";
-import { getClubList, getClubByID } from "./club";
-import { getSomoimList, getSomoimByID } from "./somoim";
+import { getClubByID } from "./club";
+import { getSomoimByID } from "./somoim";
 import { push } from "connected-react-router";
 
 // not used

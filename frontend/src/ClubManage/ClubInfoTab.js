@@ -59,6 +59,7 @@ class ClubInfoTab extends Component {
           text: selectedTag
         });
       }
+      return null;
     });
 
     this.setState({
@@ -112,6 +113,7 @@ class ClubInfoTab extends Component {
             id: tags.length.toString(),
             text: t.name
           });
+          return null;
         });
 
         this.props.tags.map((tag, i) => {
@@ -119,6 +121,7 @@ class ClubInfoTab extends Component {
             id: i.toString(),
             text: tag.name
           });
+          return null;
         });
 
         this.setState({ tags: tags, suggest_tag: suggestions });
