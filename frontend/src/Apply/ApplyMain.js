@@ -24,7 +24,7 @@ class ApplyMain extends Component {
     this.state.formList
       .filter(item => item.type === "image" || item.type === "file")
       .forEach(item => {
-        formData.append("image", item.file_data);
+        formData.append(item.type, item.file_data);
       });
 
     console.log(formData.getAll("image"));
@@ -244,13 +244,16 @@ class ApplyMain extends Component {
             </div>
           )}
           <div>
-            <label htmlFor="image-file-input">이미지를 선택하세요.</label>
+            <label htmlFor={"image-file-input" + " " + props.id}>
+              이미지를 선택하세요.
+            </label>
             <input
-              id="image-file-input"
+              id={"image-file-input" + " " + props.id}
               type="file"
               name="file"
               style={{ display: "none" }}
               onChange={e => {
+                console.log(props);
                 this.fileSelectHandler(e, props);
               }}
             />
@@ -274,9 +277,11 @@ class ApplyMain extends Component {
             ""
           )}
           <div>
-            <label htmlFor="file-file-input">파일을 선택하세요.</label>
+            <label htmlFor={"file-file-input" + " " + props.id}>
+              파일을 선택하세요.
+            </label>
             <input
-              id="file-file-input"
+              id={"file-file-input" + " " + props.id}
               type="file"
               name="file"
               style={{ display: "none" }}

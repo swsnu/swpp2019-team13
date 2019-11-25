@@ -712,9 +712,17 @@ def application(request, club_id=0):
 
         return HttpResponse(status=204)
     elif request.method == "POST":
-        # new_poster = ClubPoster(
-        #     img=request.FILES['image'], club=selectedClub)
-        # new_poster.save()
+        images = request.FILES.getlist('image')
+        for i in range(len(images)):
+            image = ImageForm.objects.filter(application=application)[i]
+            image.content = images[i]
+            image.save()
+
+        files = request.FILES.getlist('file')
+        for i in range(len(files)):
+            file = FileForm.objects.filter(application=application)[i]
+            file.content = files[i]
+            file.save()
         return HttpResponse(status=204)
     else:
         return HttpResponse(status=405)
