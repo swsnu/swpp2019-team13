@@ -3,3 +3,4 @@ from .test_user import *
 from .test_club import *
 from .test_somoim import *
 from .test_preclub import *
+from .test_application import *

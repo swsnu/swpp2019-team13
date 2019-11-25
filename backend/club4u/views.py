@@ -56,8 +56,6 @@ def tag_extlist(request):
                 tag = Tag.objects.get(name=word[i])
                 if tag.selected != 0 and tag.suggested < tag.selected*2:
                     response_dict[word[i]] = num[i]
-        # print(list(keywords.keys()))
-        # print(response_tags)
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
