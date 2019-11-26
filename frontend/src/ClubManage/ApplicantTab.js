@@ -26,7 +26,6 @@ class ApplicantTab extends Component {
         let user = this.props.users.filter(
           item_user => item_user.id === item.user
         )[0];
-        console.log(user);
 
         return (
           <Card
@@ -44,6 +43,8 @@ class ApplicantTab extends Component {
               onClick={e => {
                 this.setState({
                   ...this.state,
+                  selectedApplication: item,
+                  selectedUser: user,
                   detailShow: true
                 });
               }}
@@ -51,7 +52,7 @@ class ApplicantTab extends Component {
               <div style={{ display: "inline" }}>
                 <span style={{ fontSize: "25px" }}>{user.user.last_name}</span>
                 &nbsp;&nbsp;&nbsp;
-                <span>
+                <span style={{ fontSize: "15px" }}>
                   {user.dept.name}
                   &nbsp;
                   {user.major.name}
@@ -69,9 +70,8 @@ class ApplicantTab extends Component {
         {list}
         <ApplicationDetail
           show={this.state.detailShow}
-          // club={
-          //   this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
-          // }
+          selectedApplication={this.state.selectedApplication}
+          user={this.state.selectedUser}
           closeHandler={() => {
             this.setState({
               ...this.state,

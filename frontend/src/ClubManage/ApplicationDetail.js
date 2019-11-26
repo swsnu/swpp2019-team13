@@ -5,26 +5,17 @@ import { withRouter } from "react-router";
 import { Container, Row, Col, Card, Form, Modal } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
-import savePNG from "../images/save.png";
-
-import Header from "../Header/Header";
 
 import * as actionCreators from "../store/actions/index";
 
 class ApplicationDetail extends Component {
   state = {
-    isFormInfoLoaded: false,
     formList: []
   };
 
-  componentDidMount() {
-    this.props.getApplicationByID(this.props.match.params.club_id);
-  }
-
   componentDidUpdate = () => {
-    if (!this.state.isFormInfoLoaded) {
+    if (this.state.forceRender !== this.props.forceRender) {
       if (this.props.selectedApplication) {
-        console.log(this.props.selectedApplication);
         let formList = [];
         let formID = 0;
         formList = formList.concat(
@@ -55,7 +46,7 @@ class ApplicationDetail extends Component {
         formList.sort((a, b) => (a.order > b.order ? 1 : -1));
         this.setState({
           ...this.state,
-          isFormInfoLoaded: true,
+          forceRender: this.props.forceRender,
           formList: formList
         });
       }
@@ -81,23 +72,7 @@ class ApplicationDetail extends Component {
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
-        <Card.Body>
-          <Form.Control
-            className="short-input"
-            size="lg"
-            defaultValue={props.content}
-            onChange={e => {
-              this.setState({
-                ...this.state,
-                formList: this.state.formList.map(item => {
-                  if (item.id === props.id)
-                    return { ...item, content: e.target.value };
-                  else return item;
-                })
-              });
-            }}
-          />
-        </Card.Body>
+        <Card.Body>{props.content}</Card.Body>
       </Card>
     );
   };
@@ -106,25 +81,7 @@ class ApplicationDetail extends Component {
     return (
       <Card style={{ margin: "10px" }} key={props.id}>
         <Card.Header>{props.title}</Card.Header>
-        <Card.Body>
-          <Form.Control
-            className="long-input"
-            size="lg"
-            as="textarea"
-            rows="3"
-            defaultValue={props.content}
-            onChange={e => {
-              this.setState({
-                ...this.state,
-                formList: this.state.formList.map(item => {
-                  if (item.id === props.id)
-                    return { ...item, content: e.target.value };
-                  else return item;
-                })
-              });
-            }}
-          />
-        </Card.Body>
+        <Card.Body>{props.content}</Card.Body>
       </Card>
     );
   };
@@ -135,26 +92,10 @@ class ApplicationDetail extends Component {
         <div key={index}>
           {index === 0 ? "" : <hr />}
           <input
+            readOnly
             type="checkbox"
             style={{ marginRight: "10px" }}
             checked={item.checked ? true : false}
-            onChange={e => {
-              this.setState({
-                ...this.state,
-                formList: this.state.formList.map(form => {
-                  if (form.id === props.id)
-                    return {
-                      ...form,
-                      choices: form.choices.map(choice => {
-                        if (choice.id === item.id)
-                          return { ...choice, checked: !choice.checked };
-                        else return choice;
-                      })
-                    };
-                  else return form;
-                })
-              });
-            }}
           ></input>
           {item.title}
         </div>
@@ -194,20 +135,6 @@ class ApplicationDetail extends Component {
               <img src={imagePNG} width="100" height="100" alt="" />
             </div>
           )}
-          <div>
-            <label htmlFor={"image-file-input " + props.id}>
-              이미지를 선택하세요.
-            </label>
-            <input
-              id={"image-file-input " + props.id}
-              type="file"
-              name="file"
-              style={{ display: "none" }}
-              onChange={e => {
-                return this.fileSelectHandler(e, props);
-              }}
-            />
-          </div>
         </Card.Body>
       </Card>
     );
@@ -226,20 +153,6 @@ class ApplicationDetail extends Component {
           ) : (
             ""
           )}
-          <div>
-            <label htmlFor={"file-file-input " + props.id}>
-              파일을 선택하세요.
-            </label>
-            <input
-              id={"file-file-input " + props.id}
-              type="file"
-              name="file"
-              style={{ display: "none" }}
-              onChange={e => {
-                return this.fileSelectHandler(e, props);
-              }}
-            />
-          </div>
         </Card.Body>
       </Card>
     );
@@ -270,6 +183,23 @@ class ApplicationDetail extends Component {
         onHide={this.props.closeHandler}
         style={{ opacity: 1 }}
       >
+        <Card>
+          <Card.Header>
+            <div style={{ display: "inline" }}>
+              <span style={{ fontSize: "25px" }}>
+                {this.props.user ? this.props.user.user.last_name : ""}
+              </span>
+              &nbsp;&nbsp;&nbsp;
+              <span style={{ fontSize: "15px" }}>
+                {this.props.user ? this.props.user.dept.name : ""}
+                &nbsp;
+                {this.props.user ? this.props.user.major.name : ""}
+                &nbsp;
+                {this.props.user ? this.props.user.grade + "학년" : ""}
+              </span>
+            </div>
+          </Card.Header>
+        </Card>
         <Card
           style={{
             marginBottom: "5px",
@@ -286,15 +216,11 @@ class ApplicationDetail extends Component {
 }
 
 const mapStateToProps = state => {
-  return {
-    selectedApplication: state.club.selectedApplication
-  };
+  return {};
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    getApplicationByID: id => dispatch(actionCreators.getApplicationByID(id))
-  };
+  return {};
 };
 
 export default connect(
