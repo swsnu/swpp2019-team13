@@ -728,6 +728,22 @@ def application(request, club_id=0):
         return HttpResponse(status=405)
 
 
+def application_list(request, club_id=0):
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
+    try:
+        application = Application.objects.filter(
+            club=Club.objects.get(id=club_id)).exclude(user=None)
+    except ObjectDoesNotExist:
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        serializer = ApplcationSerializer(application)
+        return HttpResponse(JSONRenderer().render(serializer.data))
+    else:
+        return HttpResponse(status=405)
+
+
 @ensure_csrf_cookie
 def token(request):
     if request.method == 'GET':

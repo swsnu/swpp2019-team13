@@ -20,6 +20,8 @@ const reducer = (state = initialState, action) => {
           else return item;
         })
       };
+    case actionTypes.GET_APPLICATION_LIST:
+      return { ...state, applicationList: action.applicationList };
     case actionTypes.GET_APPLICATION_BY_ID:
       return { ...state, selectedApplication: action.form };
     case actionTypes.PUT_APPLICATION_BY_ID:
