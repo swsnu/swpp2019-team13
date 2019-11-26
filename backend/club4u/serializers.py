@@ -1,9 +1,17 @@
 from rest_framework import serializers
-from .models import Club, Somoim, UserProfile, ClubPoster
+from .models import *
 from .application_models import *
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'last_name')
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = UserProfile
         fields = '__all__'

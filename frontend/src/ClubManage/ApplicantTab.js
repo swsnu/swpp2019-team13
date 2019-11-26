@@ -10,6 +10,8 @@ class ApplicantTab extends Component {
   state = {};
 
   componentDidMount() {
+    this.props.getDeptList();
+    this.props.getMajorList();
     this.props.getUserList();
     this.props.getApplicationList(this.props.match.params.club_id);
   }
@@ -19,14 +21,25 @@ class ApplicantTab extends Component {
     if (
       this.props.applicationList &&
       this.props.users &&
-      this.props.users.length > 0
+      this.props.users.length > 0 &&
+      this.props.depts &&
+      this.props.depts.length > 0 &&
+      this.props.majors &&
+      this.props.majors.length > 0
     ) {
-      console.log(this.props.applicationList);
       list = this.props.applicationList.map((item, idx) => {
         let user = this.props.users.filter(
           item_user => item_user.id === item.user
         )[0];
         console.log(user);
+        // return <></>;
+        let dept = this.props.depts.filter(
+          item_dept => item_dept.id === user.dept
+        )[0];
+        let major = this.props.majors.filter(
+          item_major => item_major.id === user.major
+        )[0];
+
         return (
           <Card
             size="lg"
@@ -47,9 +60,10 @@ class ApplicantTab extends Component {
                 });
               }}
             >
-              <h1>{user.name}</h1>
+              <h1>{user.id}</h1>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {user.major}
+              {dept.name}
+              {major.name}
             </Card.Body>
           </Card>
         );
@@ -61,6 +75,8 @@ class ApplicantTab extends Component {
 
 const mapStateToProps = state => {
   return {
+    depts: state.dept.depts,
+    majors: state.major.majors,
     users: state.user.users,
     applicationList: state.club.applicationList
   };
@@ -68,6 +84,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getDeptList: () => dispatch(actionCreators.getDeptList()),
+    getMajorList: () => dispatch(actionCreators.getMajorList()),
     getUserList: () => dispatch(actionCreators.getUserList()),
     getApplicationList: id => dispatch(actionCreators.getApplicationList(id))
   };

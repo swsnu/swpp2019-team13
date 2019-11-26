@@ -80,9 +80,12 @@ def major_list(request):
 
 
 def user_list(request):
+    users = UserProfile.objects.all()
     if request.method == 'GET':
-        response_dict = [user for user in UserProfile.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        app_array = []
+        for item in users:
+            app_array.append(UserProfileSerializer(item).data)
+        return HttpResponse(JSONRenderer().render(app_array))
     else:
         return HttpResponse(status=405)
 
