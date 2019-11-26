@@ -13,7 +13,7 @@ import ApplicantTab from "./ApplicantTab";
 
 class ClubManageMain extends Component {
   state = {
-    tab: 2,
+    tab: 1,
     isUserInfoLoaded: false
   };
 

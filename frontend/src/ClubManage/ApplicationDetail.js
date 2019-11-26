@@ -200,7 +200,7 @@ class ApplicationDetail extends Component {
             </div>
           </Card.Header>
         </Card>
-        <Card
+        <div
           style={{
             marginBottom: "5px",
             marginTop: "13px",
@@ -209,7 +209,7 @@ class ApplicationDetail extends Component {
           }}
         >
           <div style={{ margin: "10px" }}>{formList}</div>
-        </Card>
+        </div>
       </Modal>
     );
   }

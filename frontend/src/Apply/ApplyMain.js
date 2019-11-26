@@ -76,7 +76,7 @@ class ApplyMain extends Component {
           formList: this.props.myApplication
         });
       } else if (this.props.selectedApplication) {
-        console.log(this.props.selectedApplication);
+        // console.log(this.props.selectedApplication);
         let formList = [];
         let formID = 0;
         formList = formList.concat(
