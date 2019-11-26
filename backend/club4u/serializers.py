@@ -9,8 +9,22 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'last_name')
 
 
+class DeptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+
+class MajorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Major
+        fields = '__all__'
+
+
 class UserProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    dept = DeptSerializer(read_only=True)
+    major = MajorSerializer(read_only=True)
 
     class Meta:
         model = UserProfile

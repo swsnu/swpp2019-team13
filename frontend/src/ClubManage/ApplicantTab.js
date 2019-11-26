@@ -5,13 +5,12 @@ import { withRouter } from "react-router";
 import ReactDragList from "react-drag-list";
 import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import * as actionCreators from "../store/actions/index";
+import ApplicationDetail from "./ApplicationDetail";
 
 class ApplicantTab extends Component {
   state = {};
 
   componentDidMount() {
-    this.props.getDeptList();
-    this.props.getMajorList();
     this.props.getUserList();
     this.props.getApplicationList(this.props.match.params.club_id);
   }
@@ -21,24 +20,13 @@ class ApplicantTab extends Component {
     if (
       this.props.applicationList &&
       this.props.users &&
-      this.props.users.length > 0 &&
-      this.props.depts &&
-      this.props.depts.length > 0 &&
-      this.props.majors &&
-      this.props.majors.length > 0
+      this.props.users.length > 0
     ) {
       list = this.props.applicationList.map((item, idx) => {
         let user = this.props.users.filter(
           item_user => item_user.id === item.user
         )[0];
         console.log(user);
-        // return <></>;
-        let dept = this.props.depts.filter(
-          item_dept => item_dept.id === user.dept
-        )[0];
-        let major = this.props.majors.filter(
-          item_major => item_major.id === user.major
-        )[0];
 
         return (
           <Card
@@ -60,23 +48,45 @@ class ApplicantTab extends Component {
                 });
               }}
             >
-              <h1>{user.id}</h1>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {dept.name}
-              {major.name}
+              <div style={{ display: "inline" }}>
+                <span style={{ fontSize: "25px" }}>{user.user.last_name}</span>
+                &nbsp;&nbsp;&nbsp;
+                <span>
+                  {user.dept.name}
+                  &nbsp;
+                  {user.major.name}
+                  &nbsp;
+                  {user.grade + "학년"}
+                </span>
+              </div>
             </Card.Body>
           </Card>
         );
       });
     }
-    return <div>{list}</div>;
+    return (
+      <div>
+        {list}
+        <ApplicationDetail
+          show={this.state.detailShow}
+          // club={
+          //   this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
+          // }
+          closeHandler={() => {
+            this.setState({
+              ...this.state,
+              detailShow: false
+            });
+          }}
+          forceRender={Math.random()}
+        />
+      </div>
+    );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    depts: state.dept.depts,
-    majors: state.major.majors,
     users: state.user.users,
     applicationList: state.club.applicationList
   };
@@ -84,8 +94,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getDeptList: () => dispatch(actionCreators.getDeptList()),
-    getMajorList: () => dispatch(actionCreators.getMajorList()),
     getUserList: () => dispatch(actionCreators.getUserList()),
     getApplicationList: id => dispatch(actionCreators.getApplicationList(id))
   };
