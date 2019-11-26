@@ -10,6 +10,7 @@ class ApplicantTab extends Component {
   state = {};
 
   componentDidMount() {
+    this.props.getUserList();
     this.props.getApplicationList(this.props.match.params.club_id);
   }
 
@@ -20,10 +21,12 @@ class ApplicantTab extends Component {
       this.props.users &&
       this.props.users.length > 0
     ) {
+      console.log(this.props.applicationList);
       list = this.props.applicationList.map((item, idx) => {
         let user = this.props.users.filter(
           item_user => item_user.id === item.user
         )[0];
+        console.log(user);
         return (
           <Card
             size="lg"
@@ -65,6 +68,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    getUserList: () => dispatch(actionCreators.getUserList()),
     getApplicationList: id => dispatch(actionCreators.getApplicationList(id))
   };
 };
