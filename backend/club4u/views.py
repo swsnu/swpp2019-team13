@@ -526,6 +526,31 @@ def recommend_club(request, user_id=0):
         graph_size = user_counts + club_counts + somoim_counts + tag_counts
         graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
         
+        # make graph
+        for user_profile in UserProfile.objects.all():
+            for user_like_club in user_profile.like_clubs.all():
+                graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
+                graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
+            for user_like_somoim in user_profile.like_somoims.all():
+                graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
+                graph_[user_counts + club_counts +
+                      user_like_somoim.id - 1][user_profile.id-1] = 1
+        for each_club in Club.objects.all():
+            for each_tag in each_club.tags.all():
+                if each_tag.selected is not 0:
+                    graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
+                    graph_[user_counts + club_counts + somoim_counts +
+                        each_tag.id - 1][user_counts + each_club.id - 1] = 1
+        for each_somoim in Somoim.objects.all():
+            for each_tag in each_somoim.tags.all():
+                if each_tag.selected is not 0:
+                    graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
+                    graph_[user_counts + club_counts + somoim_counts +
+                        each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
+        
+        # change graph's data structure: list to numpy
+        graph = np.array(graph_)
+        
         
 
         recommended_clubs = Club.objects.none()
