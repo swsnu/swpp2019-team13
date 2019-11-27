@@ -4,6 +4,12 @@ from ..models import User, UserProfile, Department, Major
 
 
 class UserTestCase(TestCase):
+    def getLoggedInClient(self):
+        client = Client(enforce_csrf_checks=False)
+        client.post('/api/user/signin/', json.dumps(
+            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        return client
+
     def setUp(self):
         dept = Department.objects.create(id=1, name='dept1')
         major = Major.objects.create(id=1, dept=dept, name='major1')
@@ -80,9 +86,7 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
 
     def test_signout_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = self.getLoggedInClient()
         response = client.get('/api/user/signout/')
         self.assertEqual(response.status_code, 204)
 
@@ -97,9 +101,7 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
 
     def test_get_login_info_when_logged_in(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = self.getLoggedInClient()
         response = client.get('/api/user/logininfo/')
         expected = {'id': 1, 'name': 'name1', 'email': 'user1',
                     'dept': 1, 'major': 1, 'grade': 1,
@@ -119,9 +121,7 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
 
     def test_put_user_info_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = self.getLoggedInClient()
         test_json = json.dumps(
             {'name': 'name2', 'dept': 1, 'major': 1,
              'grade': 2, 'available_semester': 2, 'available_session_day': 3})
@@ -143,8 +143,6 @@ class UserTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_user_info_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = self.getLoggedInClient()
         response = client.patch('/api/user/info/')
         self.assertEqual(response.status_code, 405)
