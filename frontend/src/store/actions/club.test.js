@@ -136,4 +136,23 @@ describe("Category Actions", () => {
       done();
     });
   });
+
+  it("getApplicationList", done => {
+    const spygetApplicationList = jest
+      .spyOn(axios, "get")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200,
+            data: 1
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.getApplicationList(1)).then(() => {
+      expect(spygetApplicationList).toHaveBeenCalled();
+      done();
+    });
+  });
 });

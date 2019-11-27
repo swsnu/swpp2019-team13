@@ -186,7 +186,10 @@ class ApplicationDetail extends Component {
         <Card>
           <Card.Header>
             <div style={{ display: "inline" }}>
-              <span style={{ fontSize: "25px" }}>
+              <span
+                className="application-user-name"
+                style={{ fontSize: "25px" }}
+              >
                 {this.props.user ? this.props.user.user.last_name : ""}
               </span>
               &nbsp;&nbsp;&nbsp;
