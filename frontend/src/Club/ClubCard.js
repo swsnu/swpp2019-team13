@@ -11,7 +11,7 @@ import person from "../images/person.png";
 class ClubCard extends React.Component {
   render() {
     let club = this.props.club;
-    
+
     if (club) {
       let image = (
         <img
