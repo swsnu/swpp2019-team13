@@ -51,6 +51,9 @@ def tag_extlist(request):
 
         # first select tag with highest value
         for i in range(0, 10):
+            if len(word) == i:
+                break
+            print(word[i])
             # drop tag if it exists in list and selected ratio is lower than 0.5
             if Tag.objects.filter(name=word[i]).exists():
                 tag = Tag.objects.get(name=word[i])
