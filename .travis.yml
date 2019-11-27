@@ -5,8 +5,8 @@ matrix:
     node_js:
     - "10" # node_js version
     dist: trusty
-    env:
-    - COVERALLS_PARALLEL=true
+    # env:
+    # - COVERALLS_PARALLEL=true
     addons:
       sonarcloud:
         organization: "swsnu"
