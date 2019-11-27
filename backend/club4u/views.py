@@ -17,6 +17,7 @@ from .application_models import *
 from .serializers import *
 from .application_serializers import *
 
+import numpy as np
 
 def category_list(request):
     if request.method == 'GET':
@@ -515,6 +516,18 @@ def recommend_club(request, user_id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
+        # calculate the number of nodes
+        user_counts = UserProfile.objects.count()
+        club_counts = Club.objects.count()
+        somoim_counts = Somoim.objects.count()
+        tag_counts = Tag.objects.count()
+        
+        # initialize graph
+        graph_size = user_counts + club_counts + somoim_counts + tag_counts
+        graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
+        
+        
+
         recommended_clubs = Club.objects.none()
         for user_like_club in user.like_clubs.all():
             for liker in user_like_club.likers.all():
