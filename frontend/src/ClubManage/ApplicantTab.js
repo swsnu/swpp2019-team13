@@ -29,6 +29,7 @@ class ApplicantTab extends Component {
 
         return (
           <Card
+            className="applicant-card"
             size="lg"
             key={idx}
             border="primary"
