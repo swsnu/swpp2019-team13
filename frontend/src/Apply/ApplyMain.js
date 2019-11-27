@@ -35,23 +35,27 @@ class ApplyMain extends Component {
   };
 
   fileSelectHandler = (e, props) => {
-    let file = e.target.files[0];
-    let reader = new FileReader();
-    reader.onloadend = function() {
-      this.setState({
-        ...this.state,
-        formList: this.state.formList.map(item => {
-          if (item.id === props.id)
-            return {
-              ...item,
-              file_data: file,
-              content: [reader.result],
-              fileName: file.name
-            };
-          else return item;
-        })
-      });
-    }.bind(this);
+    return new Promise((resolve, reject) => {
+      let file = e.target.files[0];
+      let reader = new FileReader();
+      reader.onloadend = function() {
+        this.setState({
+          ...this.state,
+          formList: this.state.formList.map(item => {
+            if (item.id === props.id)
+              return {
+                ...item,
+                file_data: file,
+                content: [reader.result],
+                fileName: file.name
+              };
+            else return item;
+          })
+        });
+        resolve();
+      }.bind(this);
+      reader.readAsDataURL(file);
+    });
   };
 
   componentDidMount() {
@@ -72,7 +76,7 @@ class ApplyMain extends Component {
           formList: this.props.myApplication
         });
       } else if (this.props.selectedApplication) {
-        console.log(this.props.selectedApplication);
+        // console.log(this.props.selectedApplication);
         let formList = [];
         let formID = 0;
         formList = formList.concat(
@@ -158,7 +162,7 @@ class ApplyMain extends Component {
         <Card.Header>{props.title}</Card.Header>
         <Card.Body>
           <Form.Control
-            className="short-input"
+            className="long-input"
             size="lg"
             as="textarea"
             rows="3"
@@ -187,7 +191,7 @@ class ApplyMain extends Component {
           <input
             type="checkbox"
             style={{ marginRight: "10px" }}
-            checked={item.checked}
+            checked={item.checked ? true : false}
             onChange={e => {
               this.setState({
                 ...this.state,
@@ -254,7 +258,7 @@ class ApplyMain extends Component {
               name="file"
               style={{ display: "none" }}
               onChange={e => {
-                this.fileSelectHandler(e, props);
+                return this.fileSelectHandler(e, props);
               }}
             />
           </div>
@@ -286,7 +290,7 @@ class ApplyMain extends Component {
               name="file"
               style={{ display: "none" }}
               onChange={e => {
-                this.fileSelectHandler(e, props);
+                return this.fileSelectHandler(e, props);
               }}
             />
           </div>
@@ -309,7 +313,7 @@ class ApplyMain extends Component {
         case "file":
           return this.file(record);
         default:
-          return <></>;
+          return <div key={record.id}></div>;
       }
     });
 
@@ -321,10 +325,13 @@ class ApplyMain extends Component {
             <Card.Header>
               <Row>
                 <Col>
-                  <div className="form-save-button" style={{ margin: "10px" }}>
+                  <div
+                    className="club-name-indicator"
+                    style={{ margin: "10px" }}
+                  >
                     {(this.props.selectedClub
                       ? this.props.selectedClub.name
-                      : "") + " 지원하기"}{" "}
+                      : "") + " 지원하기"}
                   </div>
                 </Col>
                 <Col style={{ textAlign: "right" }}>
