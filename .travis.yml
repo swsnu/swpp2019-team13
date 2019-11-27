@@ -5,8 +5,8 @@ matrix:
     node_js:
     - "10" # node_js version
     dist: trusty
-    env:
-    - COVERALLS_PARALLEL=true
+    # env:
+    # - COVERALLS_PARALLEL=true
     addons:
       sonarcloud:
         organization: "swsnu"
@@ -23,6 +23,7 @@ matrix:
     - sonar-scanner
     after_success:
     - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+    - npm run coveralls
   - language: python
     cache:
     pip: true
@@ -31,8 +32,8 @@ matrix:
     dist: trusty
     services:
     - mysql
-    env:
-    - COVERALLS_PARALLEL=true
+    # env:
+    # - COVERALLS_PARALLEL=true
     addons:
       sonarcloud:
         organization: "swsnu"
