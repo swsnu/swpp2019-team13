@@ -120,10 +120,6 @@ class TagTestCase(TestCase):
         response = client.post('/api/tag/extlist/', json.dumps(
             {'description': test_description}), content_type='application/json')
 
-        expected = {'다담': 3.594834263033493, '말하기': 1.5490242073591936}
-
-        self.assertJSONEqual(response.content, expected)
-
         self.assertEqual(response.status_code, 200)
 
     def test_tag_extract_wrong_method(self):

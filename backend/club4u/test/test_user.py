@@ -14,13 +14,19 @@ class UserTestCase(TestCase):
     def test_get_user_list(self):
         client = Client(enforce_csrf_checks=False)
         response = client.get('/api/user/list/')
-        expected = [{'available_semester': 1,
-                     'available_session_day': 0,
-                     'dept_id': 1,
+        expected = [{'id': 1,
                      'grade': 1,
-                     'id': 1,
-                     'major_id': 1,
-                     'user_id': 1}]
+                     'dept': {'id': 1, 'name': 'dept1'},
+                     'major': {'dept': 1, 'id': 1, 'name': 'major1'},
+                     'join_somoims': [],
+                     'like_clubs':[],
+                     'like_somoims':[],
+                     'manage_clubs': [],
+                     'manage_somoims':[],
+                     'user':{'last_name': 'name1', 'username': 'user1'},
+                     'available_semester': 1,
+                     'available_session_day': 0,
+                     'apply_clubs': []}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
