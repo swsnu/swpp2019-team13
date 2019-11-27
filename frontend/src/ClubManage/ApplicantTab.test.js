@@ -11,7 +11,7 @@ import * as userActionCreators from "../store/actions/user";
 import * as clubActionCreators from "../store/actions/club";
 import * as tagActionCreators from "../store/actions/tag";
 
-jest.mock("./ApplicationDetail", () => {
+jest.mock("../Apply/ApplicationDetail", () => {
   return jest.fn(props => {
     return <div className="spyDetail" onClick={props.closeHandler} />;
   });

@@ -16,7 +16,8 @@ class MaxScoreTokenizer:
         return self.tokenize(sentence, flatten)
 
     def tokenize(self, sentence, flatten=True):
-        tokens = [self._recursive_tokenize(token) for token in sentence.split()]
+        tokens = [self._recursive_tokenize(token)
+                  for token in sentence.split()]
         if flatten:
             tokens = [subtoken[0] for token in tokens for subtoken in token]
         return tokens
@@ -32,7 +33,7 @@ class MaxScoreTokenizer:
 
         scores = self._initialize(token, range_l, length)
         if debug:
-            pprint(scores)
+            print(scores)
 
         result = self._find(scores)
 
@@ -44,7 +45,7 @@ class MaxScoreTokenizer:
         if result[0][1] != 0:
             adds += self._add_first_subtoken(token, result)
 
-        return sorted(result + adds, key=lambda x:x[1])
+        return sorted(result + adds, key=lambda x: x[1])
 
     def _initialize(self, token, range_l, length):
         scores = []
@@ -59,7 +60,7 @@ class MaxScoreTokenizer:
                 score = self._scores.get(subtoken, self._ds)
                 scores.append((subtoken, b, e, score, r))
 
-        return sorted(scores, key=lambda x:(-x[3], -x[4], x[1]))
+        return sorted(scores, key=lambda x: (-x[3], -x[4], x[1]))
 
     def _find(self, scores):
         result = []
@@ -81,9 +82,10 @@ class MaxScoreTokenizer:
                 del scores[i]
 
             num_iter += 1
-            if num_iter > 100: break
+            if num_iter > 100:
+                break
 
-        return sorted(result, key=lambda x:x[1])
+        return sorted(result, key=lambda x: x[1])
 
     def _add_inter_subtokens(self, token, result):
         adds = []

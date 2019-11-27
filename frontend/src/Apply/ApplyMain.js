@@ -10,6 +10,7 @@ import savePNG from "../images/save.png";
 import Header from "../Header/Header";
 
 import * as actionCreators from "../store/actions/index";
+import { formMaker } from "./ApplyUtil";
 
 class ApplyMain extends Component {
   state = {
@@ -76,35 +77,7 @@ class ApplyMain extends Component {
           formList: this.props.myApplication
         });
       } else if (this.props.selectedApplication) {
-        // console.log(this.props.selectedApplication);
-        let formList = [];
-        let formID = 0;
-        formList = formList.concat(
-          this.props.selectedApplication.short_texts.map(item =>
-            this.newForm("shortText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.long_texts.map(item =>
-            this.newForm("longText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.multi_choices.map(item =>
-            this.newForm("multiChoice", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.images.map(item =>
-            this.newForm("image", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.files.map(item =>
-            this.newForm("file", formID++, item)
-          )
-        );
-        formList.sort((a, b) => (a.order > b.order ? 1 : -1));
+        let formList = formMaker(this.props.selectedApplication);
         this.setState({
           ...this.state,
           isFormInfoLoaded: true,
@@ -114,21 +87,6 @@ class ApplyMain extends Component {
     }
 
     if (!this.props.loggedUser) this.props.history.push("/club");
-  };
-
-  newForm = (type, id, item) => {
-    let newForm = {
-      ...item,
-      id: id,
-      type: type
-    };
-    if (item.content && (type === "image" || type === "file")) {
-      newForm = {
-        ...newForm,
-        fileName: item.content.substr(7, item.content.length)
-      };
-    }
-    return newForm;
   };
 
   shortText = props => {
