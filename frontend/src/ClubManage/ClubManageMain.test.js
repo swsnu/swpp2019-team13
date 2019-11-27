@@ -31,6 +31,12 @@ jest.mock("./ApplicationFormTab", () => {
   });
 });
 
+jest.mock("./ApplicantTab", () => {
+  return jest.fn(props => {
+    return <div className="ApplicantTab" />;
+  });
+});
+
 const stubInitialState = {
   selectedClub: {
     isShow: false,
