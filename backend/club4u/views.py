@@ -129,7 +129,7 @@ def signin(request):
             user = authenticate(request, username=email, password=user_pw)
             if user is not None:
                 login(request, user)
-                userprofile = UserProfile.objects.get(user_id=user)
+                userprofile = UserProfile.objects.get(user_id=user.id)
                 response_dict = {'id': userprofile.id, 'name': user.last_name, 'email': user.username,
                                  'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
                                  'available_semester': userprofile.available_semester, 'available_session_day': userprofile.available_session_day}
@@ -157,7 +157,7 @@ def logininfo(request):
     if request.method == 'GET':
         if request.user.is_authenticated:
             current_user = request.user
-            userprofile = UserProfile.objects.get(user_id=current_user)
+            userprofile = UserProfile.objects.get(user_id=current_user.id)
             response_dict = {'id': userprofile.id, 'name': current_user.last_name, 'email': current_user.username,
                              'dept': userprofile.dept.id, 'major': userprofile.major.id, 'grade': userprofile.grade,
                              'available_semester': userprofile.available_semester, 'available_session_day': userprofile.available_session_day}
@@ -181,7 +181,7 @@ def userinfo(request):
         available_semester = json.loads(body)['available_semester']
         available_session_day = json.loads(body)['available_session_day']
 
-        user_profile = UserProfile.objects.get(user_id=request.user)
+        user_profile = UserProfile.objects.get(user_id=request.user.id)
         user_profile.user.last_name = name
         user_profile.user.save()
         user_profile.dept = Department.objects.get(id=dept)
@@ -223,7 +223,7 @@ def club(request, club_id=None):
             serializer = ClubSerializer(selected_club)
 
             poster_list = ClubPoster.objects.filter(
-                club=selected_club).values()
+                club_id=selected_club.id).values()
 
             poster_img_list = []
 
@@ -288,7 +288,7 @@ def club(request, club_id=None):
                     Major.objects.get(id=major_id))
 
             # delete existing poster before add new poster
-            poster_club = ClubPoster.objects.filter(club=selected_club)
+            poster_club = ClubPoster.objects.filter(club_id=selected_club.id)
 
             for poster in poster_club.values():
                 file_path = os.getcwd() + "/media/" + str(poster['img'])
@@ -347,7 +347,7 @@ def club_list(request):
 
         for c in response_dict:
             poster_list = ClubPoster.objects.filter(
-                club=Club.objects.get(id=c['id'])).values()
+                club_id=c['id']).values()
 
             poster_img_list = []
             for poster in poster_list:
@@ -466,7 +466,7 @@ def apply_club(request, user_id=0):
         except ObjectDoesNotExist:
             user.apply_clubs.add(Club.objects.get(id=club_id))
 
-        form = Application.objects.get(club=club_id, user=None)
+        form = Application.objects.get(club_id=club_id, user=None)
 
         try:
             application = Application.objects.get(
@@ -476,23 +476,25 @@ def apply_club(request, user_id=0):
                 club=Club.objects.get(id=club_id), user=user)
             application.save()
 
-            short_text_forms = ShortTextForm.objects.filter(application=form)
-            long_text_forms = LongTextForm.objects.filter(application=form)
+            short_text_forms = ShortTextForm.objects.filter(
+                application_id=form.id)
+            long_text_forms = LongTextForm.objects.filter(
+                application_id=form.id)
             multi_choice_forms = MultiChoiceForm.objects.filter(
-                application=form)
-            file_forms = FileForm.objects.filter(application=form)
-            image_forms = ImageForm.objects.filter(application=form)
+                application_id=form.id)
+            file_forms = FileForm.objects.filter(application_id=form.id)
+            image_forms = ImageForm.objects.filter(application_id=form.id)
             for item in short_text_forms:
                 short_text = ShortTextForm(
-                    application=application, order=item.order, title=item.title)
+                    application_id=application.id, order=item.order, title=item.title)
                 short_text.save()
             for item in long_text_forms:
                 long_text = LongTextForm(
-                    application=application, order=item.order, title=item.title)
+                    application_id=application.id, order=item.order, title=item.title)
                 long_text.save()
             for item in multi_choice_forms:
                 multi_choice = MultiChoiceForm(
-                    application=application, order=item.order, title=item.title)
+                    application_id=application.id, order=item.order, title=item.title)
                 multi_choice.save()
                 choices = Choice.objects.filter(multi=item)
                 for item_choice in choices:
@@ -500,11 +502,11 @@ def apply_club(request, user_id=0):
                                     title=item_choice.title, content=item_choice.content)
                     choice.save()
             for item in file_forms:
-                file = FileForm(application=application,
+                file = FileForm(application_id=application.id,
                                 order=item.order, title=item.title)
                 file.save()
             for item in image_forms:
-                image = ImageForm(application=application,
+                image = ImageForm(application_id=application.id,
                                   order=item.order, title=item.title)
                 image.save()
         return HttpResponse(status=204)
@@ -634,7 +636,7 @@ def application_form(request, club_id=0):
     # if not request.user.is_authenticated:
     #     return HttpResponse(401)
     try:
-        form = Application.objects.get(club=club_id, user=None)
+        form = Application.objects.get(club_id=club_id, user=None)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
@@ -682,7 +684,7 @@ def application(request, club_id=0):
     #     return HttpResponse(401)
     try:
         application = Application.objects.get(
-            club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
+            club_id=club_id, user_id=request.user.id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
@@ -691,22 +693,22 @@ def application(request, club_id=0):
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         application = Application.objects.get(
-            club=Club.objects.get(id=club_id), user=UserProfile.objects.get(user_id=request.user.id))
+            club_id=club_id, user_id=request.user.id)
         body = json.loads(request.body.decode())
         for item in body:
             if item['type'] == 'shortText':
                 short_text = ShortTextForm.objects.get(
-                    application=application, order=item['order'])
+                    application_id=application.id, order=item['order'])
                 short_text.content = item['content']
                 short_text.save()
             elif item['type'] == 'longText':
                 long_text = LongTextForm.objects.get(
-                    application=application, order=item['order'])
+                    application_id=application.id, order=item['order'])
                 long_text.content = item['content']
                 long_text.save()
             elif item['type'] == 'multiChoice':
                 multi_choice = MultiChoiceForm.objects.get(
-                    application=application, order=item['order'])
+                    application_id=application.id, order=item['order'])
                 multi_choice.save()
                 for item_choice in item['choices']:
                     choice = Choice.objects.get(multi=multi_choice,
@@ -720,13 +722,13 @@ def application(request, club_id=0):
     elif request.method == "POST":
         images = request.FILES.getlist('image')
         for i in range(len(images)):
-            image = ImageForm.objects.filter(application=application)[i]
+            image = ImageForm.objects.filter(application_id=application.id)[i]
             image.content = images[i]
             image.save()
 
         files = request.FILES.getlist('file')
         for i in range(len(files)):
-            file = FileForm.objects.filter(application=application)[i]
+            file = FileForm.objects.filter(application_id=application.id)[i]
             file.content = files[i]
             file.save()
         return HttpResponse(status=204)
@@ -738,7 +740,7 @@ def application_list(request, club_id=0):
     # if not request.user.is_authenticated:
     #     return HttpResponse(401)
     applications = Application.objects.filter(
-        club=Club.objects.get(id=club_id)).exclude(user=None)
+        club_id=club_id).exclude(user=None)
     if request.method == 'GET':
         app_array = []
         for item in applications:
