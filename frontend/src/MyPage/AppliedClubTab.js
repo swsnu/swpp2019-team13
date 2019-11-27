@@ -2,45 +2,27 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Card } from "react-bootstrap";
 import ClubDetail from "../Club/ClubDetail";
+import { cardFactory } from "./MyPageTabFactory";
 
 class AppliedClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
+
+  onClickCard = (e, item) => {
+    if (e.target.className === "card-body") {
+      this.setState({
+        ...this.state,
+        clubDetailShow: true,
+        selectedClubID: item.id
+      });
+    }
+  };
 
   render() {
     let list = null;
     if (this.props.appliedClubs) {
       list = this.props.appliedClubs.map((item, idx) => {
-        return (
-          <Card
-            size="lg"
-            key={idx}
-            border="primary"
-            style={{
-              textAlign: "left",
-              marginTop: "10px",
-              marginBottom: "10px"
-            }}
-          >
-            <Card.Body
-              id="list-item-body"
-              onClick={e => {
-                if (e.target.className === "card-body") {
-                  this.setState({
-                    ...this.state,
-                    clubDetailShow: true,
-                    selectedClubID: item.id
-                  });
-                }
-              }}
-            >
-              <h1>{item.name}</h1>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {item.summary}
-            </Card.Body>
-          </Card>
-        );
+        return cardFactory(item, idx, this.onClickCard);
       });
     }
     return (

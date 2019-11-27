@@ -4,43 +4,26 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Card } from "react-bootstrap";
 import SomoimDetail from "../Somoim/SomoimDetail";
+import { cardFactory } from "./MyPageTabFactory";
 
 class JoinedSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
+
+  onClickCard = (e, item) => {
+    if (e.target.className === "card-body") {
+      this.setState({
+        ...this.state,
+        somoimDetailShow: true,
+        selectedSomoimID: item.id
+      });
+    }
+  };
 
   render() {
     let list = null;
     if (this.props.joinedSomoims) {
       list = this.props.joinedSomoims.map((item, idx) => {
-        return (
-          <Card
-            size="lg"
-            key={idx}
-            border="primary"
-            style={{
-              textAlign: "left",
-              marginTop: "10px",
-              marginBottom: "10px"
-            }}
-          >
-            <Card.Body
-              id="list-item-body"
-              onClick={e => {
-                if (e.target.className === "card-body") {
-                  this.setState({
-                    ...this.state,
-                    somoimDetailShow: true,
-                    selectedSomoimID: item.id
-                  });
-                }
-              }}
-            >
-              <h1>{item.title}</h1>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              {item.summary}
-            </Card.Body>
-          </Card>
-        );
+        return cardFactory(item, idx, this.onClickCard);
       });
     }
     return (

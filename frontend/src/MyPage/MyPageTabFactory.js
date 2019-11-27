@@ -15,10 +15,10 @@ export const cardFactory = (item, idx, onClickHandler, button = null) => {
       }}
     >
       <Card.Body id="list-item-body" onClick={e => onClickHandler(e, item)}>
-        <h1>{item.title}</h1>
+        {item.title && <h1>{item.title}</h1>}
+        {item.name && <h1>{item.name}</h1>}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        {item.summary}
-        {button}
+        {item.summary} {button}
       </Card.Body>
     </Card>
   );
