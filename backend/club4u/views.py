@@ -1,6 +1,8 @@
 import json
 import os
 
+from django.core.cache import cache
+
 from json import JSONDecodeError
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
@@ -20,9 +22,9 @@ from .application_serializers import *
 
 def category_list(request):
     if request.method == 'GET':
-        response_dict = [
-            category for category in Category.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        cached_category=cache.get_or_set('category_list',[
+            category for category in Category.objects.all().values()])
+        return JsonResponse(cached_category, safe=False)
     else:
         return HttpResponse(status=405)
 

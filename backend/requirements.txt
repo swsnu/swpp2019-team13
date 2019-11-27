@@ -11,3 +11,4 @@ django_mysql
 numpy
 scipy
 sklearn
+django-redis

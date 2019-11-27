@@ -132,3 +132,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # drop session when browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
