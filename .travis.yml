@@ -32,8 +32,8 @@ matrix:
     dist: trusty
     services:
     - mysql
-    env:
-    - COVERALLS_PARALLEL=true
+    # env:
+    # - COVERALLS_PARALLEL=true
     addons:
       sonarcloud:
         organization: "swsnu"
