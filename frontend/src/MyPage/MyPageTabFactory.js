@@ -1,6 +1,5 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import SomoimDetail from "../Somoim/SomoimDetail";
 
 export const cardFactory = (item, idx, onClickHandler, button = null) => {
   return (

@@ -2,11 +2,9 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col, Card, Form, Modal } from "react-bootstrap";
+import { Card, Modal } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
-
-import * as actionCreators from "../store/actions/index";
 
 class ApplicationDetail extends Component {
   state = {
