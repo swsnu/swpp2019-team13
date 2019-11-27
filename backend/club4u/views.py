@@ -551,7 +551,22 @@ def recommend_club(request, user_id=0):
         # change graph's data structure: list to numpy
         graph = np.array(graph_)
         
-        
+        # calculate recommedation score
+        ## prepare
+        clubs_recommendation_score = np.zeros(club_counts)
+        start_index = user_counts
+        end_index = start_index + club_counts
+        graph_2 = np.matmul(graph, graph)
+        multed_graph = graph
+
+        ## calculate
+        for i in range(5):
+            prev_counts = multed_graph[user_id-1][start_index:end_index]
+            multed_graph = np.matmul(multed_graph, graph_2)
+            cur_counts = multed_graph[user_id-1][start_index:end_index]
+            counts = cur_counts - prev_counts
+            clubs_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
+            print(clubs_recommendation_score)
 
         recommended_clubs = Club.objects.none()
         for user_like_club in user.like_clubs.all():
