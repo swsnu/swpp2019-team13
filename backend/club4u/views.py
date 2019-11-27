@@ -18,6 +18,7 @@ from .serializers import *
 from .application_serializers import *
 
 import numpy as np
+import itertools
 
 def category_list(request):
     if request.method == 'GET':
@@ -566,14 +567,26 @@ def recommend_club(request, user_id=0):
             cur_counts = multed_graph[user_id-1][start_index:end_index]
             counts = cur_counts - prev_counts
             clubs_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
-            print(clubs_recommendation_score)
+        
 
+        # make recommedation clubs list by using recommenation score
+        ## get liked clubs' id
+        already_liked_clubs = graph[user_id-1][start_index:end_index]
+        already_liked_clubs_id = []
+        for i in range(club_counts):
+            if already_liked_clubs[i].item() is 1:
+                already_liked_clubs_id.append(i)
+        
+        ## make recommedation list
         recommended_clubs = Club.objects.none()
-        for user_like_club in user.like_clubs.all():
-            for liker in user_like_club.likers.all():
-                for c in liker.like_clubs.all():
-                    if recommended_clubs.filter(id=c.id).count() == 0:
-                        recommended_clubs |= Club.objects.filter(id=c.id)
+        score_cut = 150
+        for i in range(club_counts):
+            index = clubs_recommendation_score.argmax()
+            if index not in already_liked_clubs_id and clubs_recommendation_score[index] > score_cut:
+                # recommended_clubs |= Club.objects.filter(id=index+1)
+                recommended_clubs = itertools.chain(recommended_clubs, Club.objects.filter(id=index+1))
+            clubs_recommendation_score[index] = -1
+        
         serializer = ClubSerializer(recommended_clubs, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:
