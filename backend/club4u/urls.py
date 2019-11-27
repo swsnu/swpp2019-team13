@@ -45,4 +45,6 @@ urlpatterns = [
          views.application, name='application'),
     path('club/<int:club_id>/application/form/',
          views.application_form, name='application_form'),
+    path('club/<int:club_id>/application/list/',
+         views.application_list, name='application_list'),
 ]

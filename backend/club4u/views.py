@@ -37,9 +37,9 @@ def tag_list(request):
 
 def tag_extlist(request):
     if request.method == 'POST':
-        #min_count = 1
-        #max_length = 10
-        #wordrank_extractor = KRWordRank(min_count, max_length)
+        # min_count = 1
+        # max_length = 10
+        # wordrank_extractor = KRWordRank(min_count, max_length)
         req_data = json.loads(request.body.decode())
         response_tags = req_data['description']
         keywords = summarize_with_keywords([response_tags], min_count=5, max_length=10,
@@ -80,9 +80,12 @@ def major_list(request):
 
 
 def user_list(request):
+    users = UserProfile.objects.all()
     if request.method == 'GET':
-        response_dict = [user for user in UserProfile.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        app_array = []
+        for item in users:
+            app_array.append(UserProfileSerializer(item).data)
+        return HttpResponse(JSONRenderer().render(app_array))
     else:
         return HttpResponse(status=405)
 
@@ -724,6 +727,21 @@ def application(request, club_id=0):
             file.content = files[i]
             file.save()
         return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=405)
+
+
+def application_list(request, club_id=0):
+    # if not request.user.is_authenticated:
+    #     return HttpResponse(401)
+    applications = Application.objects.filter(
+        club=Club.objects.get(id=club_id)).exclude(user=None)
+    if request.method == 'GET':
+        app_array = []
+        for item in applications:
+            app_array.append(ApplcationSerializer(item).data)
+
+        return HttpResponse(JSONRenderer().render(app_array))
     else:
         return HttpResponse(status=405)
 

@@ -9,6 +9,7 @@ import Header from "../Header/Header";
 import * as actionCreators from "../store/actions/index";
 import ClubInfoTab from "./ClubInfoTab";
 import ApplicationFormTab from "./ApplicationFormTab";
+import ApplicantTab from "./ApplicantTab";
 
 class ClubManageMain extends Component {
   state = {
@@ -34,6 +35,9 @@ class ClubManageMain extends Component {
         break;
       case 1:
         tab = <ApplicationFormTab />;
+        break;
+      case 2:
+        tab = <ApplicantTab />;
         break;
       default:
         tab = null;
@@ -72,7 +76,7 @@ class ClubManageMain extends Component {
                     this.setState({ ...this.state, tab: 1 });
                   }}
                 >
-                  지원서 작성
+                  지원서 양식 수정
                 </Accordion.Toggle>
                 <Accordion.Toggle
                   style={{ marginBottom: "5px", marginTop: "13px" }}
@@ -86,7 +90,7 @@ class ClubManageMain extends Component {
                     this.setState({ ...this.state, tab: 2 });
                   }}
                 >
-                  지원자 현황
+                  지원자 목록
                 </Accordion.Toggle>
               </Accordion>
             </Col>
