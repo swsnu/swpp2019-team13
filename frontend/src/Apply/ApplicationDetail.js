@@ -5,6 +5,7 @@ import { withRouter } from "react-router";
 import { Card, Modal } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
+import { formMaker } from "./ApplyUtil";
 
 class ApplicationDetail extends Component {
   state = {
@@ -14,34 +15,7 @@ class ApplicationDetail extends Component {
   componentDidUpdate = () => {
     if (this.state.forceRender !== this.props.forceRender) {
       if (this.props.selectedApplication) {
-        let formList = [];
-        let formID = 0;
-        formList = formList.concat(
-          this.props.selectedApplication.short_texts.map(item =>
-            this.newForm("shortText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.long_texts.map(item =>
-            this.newForm("longText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.multi_choices.map(item =>
-            this.newForm("multiChoice", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.images.map(item =>
-            this.newForm("image", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.files.map(item =>
-            this.newForm("file", formID++, item)
-          )
-        );
-        formList.sort((a, b) => (a.order > b.order ? 1 : -1));
+        let formList = formMaker(this.props.selectedApplication);
         this.setState({
           ...this.state,
           forceRender: this.props.forceRender,
@@ -49,21 +23,6 @@ class ApplicationDetail extends Component {
         });
       }
     }
-  };
-
-  newForm = (type, id, item) => {
-    let newForm = {
-      ...item,
-      id: id,
-      type: type
-    };
-    if (item.content && (type === "image" || type === "file")) {
-      newForm = {
-        ...newForm,
-        fileName: item.content.substr(7, item.content.length)
-      };
-    }
-    return newForm;
   };
 
   shortText = props => {
