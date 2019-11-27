@@ -2,8 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import SomoimDetail from "../Somoim/SomoimDetail";
-import { cardFactory } from "./MyPageTabFactory";
+import { cardFactory, SomoimDetailFactory } from "./MyPageTabFactory";
 
 class JoinedSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
@@ -18,6 +17,13 @@ class JoinedSomoimTab extends Component {
     }
   };
 
+  onCloseDetail = () => {
+    this.setState({
+      ...this.state,
+      somoimDetailShow: false
+    });
+  };
+
   render() {
     let list = null;
     if (this.props.joinedSomoims) {
@@ -25,25 +31,11 @@ class JoinedSomoimTab extends Component {
         return cardFactory(item, idx, this.onClickCard);
       });
     }
-    return (
-      <div>
-        {list}
-        <SomoimDetail
-          show={this.state.somoimDetailShow}
-          somoim={
-            this.props.somoims.filter(
-              a => a.id === this.state.selectedSomoimID
-            )[0]
-          }
-          closeHandler={() => {
-            this.setState({
-              ...this.state,
-              somoimDetailShow: false
-            });
-          }}
-          forceRender={Math.random()}
-        />
-      </div>
+    return SomoimDetailFactory(
+      list,
+      this.state.somoimDetailShow,
+      this.props.somoims.filter(a => a.id === this.state.selectedSomoimID)[0],
+      this.onCloseDetail
     );
   }
 }

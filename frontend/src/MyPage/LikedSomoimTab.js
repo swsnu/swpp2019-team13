@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 import { Button } from "react-bootstrap";
 import SomoimDetail from "../Somoim/SomoimDetail";
 import * as actionCreators from "../store/actions/index";
-import { cardFactory } from "./MyPageTabFactory";
+import { cardFactory, SomoimDetailFactory } from "./MyPageTabFactory";
 
 class LikedSomoimTab extends Component {
   state = { somoimDetailShow: false, selectedSomoimID: null };
@@ -18,6 +18,13 @@ class LikedSomoimTab extends Component {
         selectedSomoimID: item.id
       });
     }
+  };
+
+  onCloseDetail = () => {
+    this.setState({
+      ...this.state,
+      somoimDetailShow: false
+    });
   };
 
   render() {
@@ -39,25 +46,11 @@ class LikedSomoimTab extends Component {
         );
       });
     }
-    return (
-      <div>
-        {list}
-        <SomoimDetail
-          show={this.state.somoimDetailShow}
-          somoim={
-            this.props.somoims.filter(
-              a => a.id === this.state.selectedSomoimID
-            )[0]
-          }
-          closeHandler={() => {
-            this.setState({
-              ...this.state,
-              somoimDetailShow: false
-            });
-          }}
-          forceRender={Math.random()}
-        />
-      </div>
+    return SomoimDetailFactory(
+      list,
+      this.state.somoimDetailShow,
+      this.props.somoims.filter(a => a.id === this.state.selectedSomoimID)[0],
+      this.onCloseDetail
     );
   }
 }

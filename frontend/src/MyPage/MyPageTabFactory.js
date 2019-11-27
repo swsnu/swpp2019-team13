@@ -1,5 +1,7 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import ClubDetail from "../Club/ClubDetail";
+import SomoimDetail from "../Somoim/SomoimDetail";
 
 export const cardFactory = (item, idx, onClickHandler, button = null) => {
   return (
@@ -20,5 +22,33 @@ export const cardFactory = (item, idx, onClickHandler, button = null) => {
         {item.summary} {button}
       </Card.Body>
     </Card>
+  );
+};
+
+export const ClubDetailFactory = (list, show, club, closeHandler) => {
+  return (
+    <div>
+      {list}
+      <ClubDetail
+        show={show}
+        club={club}
+        closeHandler={closeHandler}
+        forceRender={Math.random()}
+      />
+    </div>
+  );
+};
+
+export const SomoimDetailFactory = (list, show, somoim, closeHandler) => {
+  return (
+    <div>
+      {list}
+      <SomoimDetail
+        show={show}
+        somoim={somoim}
+        closeHandler={closeHandler}
+        forceRender={Math.random()}
+      />
+    </div>
   );
 };

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import ClubDetail from "../Club/ClubDetail";
-import { cardFactory } from "./MyPageTabFactory";
+import { cardFactory, ClubDetailFactory } from "./MyPageTabFactory";
 
 class AppliedClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
@@ -18,6 +17,13 @@ class AppliedClubTab extends Component {
     }
   };
 
+  onCloseDetail = () => {
+    this.setState({
+      ...this.state,
+      clubDetailShow: false
+    });
+  };
+
   render() {
     let list = null;
     if (this.props.appliedClubs) {
@@ -25,23 +31,11 @@ class AppliedClubTab extends Component {
         return cardFactory(item, idx, this.onClickCard);
       });
     }
-    return (
-      <div>
-        {list}
-        <ClubDetail
-          show={this.state.clubDetailShow}
-          club={
-            this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
-          }
-          closeHandler={() => {
-            this.setState({
-              ...this.state,
-              clubDetailShow: false
-            });
-          }}
-          forceRender={Math.random()}
-        />
-      </div>
+    return ClubDetailFactory(
+      list,
+      this.state.clubDetailShow,
+      this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0],
+      this.onCloseDetail
     );
   }
 }

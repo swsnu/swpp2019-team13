@@ -3,8 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button } from "react-bootstrap";
-import ClubDetail from "../Club/ClubDetail";
-import { cardFactory } from "./MyPageTabFactory";
+import { cardFactory, ClubDetailFactory } from "./MyPageTabFactory";
 
 class ManagingClubTab extends Component {
   state = { clubDetailShow: false, selectedClubID: null };
@@ -17,6 +16,13 @@ class ManagingClubTab extends Component {
         selectedClubID: item.id
       });
     }
+  };
+
+  onCloseDetail = () => {
+    this.setState({
+      ...this.state,
+      clubDetailShow: false
+    });
   };
 
   render() {
@@ -38,23 +44,11 @@ class ManagingClubTab extends Component {
         );
       });
     }
-    return (
-      <div>
-        {list}
-        <ClubDetail
-          show={this.state.clubDetailShow}
-          club={
-            this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0]
-          }
-          closeHandler={() => {
-            this.setState({
-              ...this.state,
-              clubDetailShow: false
-            });
-          }}
-          forceRender={Math.random()}
-        />
-      </div>
+    return ClubDetailFactory(
+      list,
+      this.state.clubDetailShow,
+      this.props.clubs.filter(a => a.id === this.state.selectedClubID)[0],
+      this.onCloseDetail
     );
   }
 }
