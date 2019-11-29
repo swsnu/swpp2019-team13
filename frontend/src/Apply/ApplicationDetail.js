@@ -5,7 +5,11 @@ import { withRouter } from "react-router";
 import { Card, Modal } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
-import { formMaker } from "./ApplyUtil";
+import {
+  formMaker,
+  multiChoiceCardFactory,
+  imageCardFactory
+} from "./ApplyUtil";
 
 class ApplicationDetail extends Component {
   state = {
@@ -58,42 +62,16 @@ class ApplicationDetail extends Component {
         </div>
       );
     });
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <div
-          style={{
-            marginTop: "15px",
-            marginBottom: "15px",
-            marginLeft: "20px",
-            marginRight: "20px"
-          }}
-        >
-          {choices}
-        </div>
-      </Card>
-    );
+    return multiChoiceCardFactory(props.id, props.title, choices);
   };
 
   image = props => {
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <Card.Body style={{ textAlign: "center" }}>
-          {props.content ? (
-            <div>
-              <img src={props.content} alt="" />
-              <div style={{ fontSize: 11, marginBottom: "10px" }}>
-                {props.fileName}
-              </div>
-            </div>
-          ) : (
-            <div>
-              <img src={imagePNG} width="100" height="100" alt="" />
-            </div>
-          )}
-        </Card.Body>
-      </Card>
+    return imageCardFactory(
+      props.id,
+      props.title,
+      props.content,
+      props.fileName,
+      imagePNG
     );
   };
 

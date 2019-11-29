@@ -1,3 +1,6 @@
+import React from "react";
+import { Card } from "react-bootstrap";
+
 const newForm = (type, id, item) => {
   let newForm = {
     ...item,
@@ -39,4 +42,50 @@ export const formMaker = selectedApplication => {
   );
   formList.sort((a, b) => (a.order > b.order ? 1 : -1));
   return formList;
+};
+
+export const multiChoiceCardFactory = (key, title, choices) => {
+  return (
+    <Card style={{ margin: "10px" }} key={key}>
+      <Card.Header>{title}</Card.Header>
+      <div
+        style={{
+          marginTop: "15px",
+          marginBottom: "15px",
+          marginLeft: "20px",
+          marginRight: "20px"
+        }}
+      >
+        {choices}
+      </div>
+    </Card>
+  );
+};
+
+export const imageCardFactory = (
+  key,
+  title,
+  content,
+  fileName,
+  src,
+  option = null
+) => {
+  return (
+    <Card style={{ margin: "10px" }} key={key}>
+      <Card.Header>{title}</Card.Header>
+      <Card.Body style={{ textAlign: "center" }}>
+        {content ? (
+          <div>
+            <img src={content} alt="" />
+            <div style={{ fontSize: 11, marginBottom: "10px" }}>{fileName}</div>
+          </div>
+        ) : (
+          <div>
+            <img src={src} width="100" height="100" alt="" />
+          </div>
+        )}
+        {option}
+      </Card.Body>
+    </Card>
+  );
 };

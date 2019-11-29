@@ -10,7 +10,11 @@ import savePNG from "../images/save.png";
 import Header from "../Header/Header";
 
 import * as actionCreators from "../store/actions/index";
-import { formMaker } from "./ApplyUtil";
+import {
+  formMaker,
+  multiChoiceCardFactory,
+  imageCardFactory
+} from "./ApplyUtil";
 
 class ApplyMain extends Component {
   state = {
@@ -172,56 +176,30 @@ class ApplyMain extends Component {
         </div>
       );
     });
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <div
-          style={{
-            marginTop: "15px",
-            marginBottom: "15px",
-            marginLeft: "20px",
-            marginRight: "20px"
-          }}
-        >
-          {choices}
-        </div>
-      </Card>
-    );
+    return multiChoiceCardFactory(props.id, props.title, choices);
   };
 
   image = props => {
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <Card.Body style={{ textAlign: "center" }}>
-          {props.content ? (
-            <div>
-              <img src={props.content} alt="" />
-              <div style={{ fontSize: 11, marginBottom: "10px" }}>
-                {props.fileName}
-              </div>
-            </div>
-          ) : (
-            <div>
-              <img src={imagePNG} width="100" height="100" alt="" />
-            </div>
-          )}
-          <div>
-            <label htmlFor={"image-file-input " + props.id}>
-              이미지를 선택하세요.
-            </label>
-            <input
-              id={"image-file-input " + props.id}
-              type="file"
-              name="file"
-              style={{ display: "none" }}
-              onChange={e => {
-                return this.fileSelectHandler(e, props);
-              }}
-            />
-          </div>
-        </Card.Body>
-      </Card>
+    return imageCardFactory(
+      props.id,
+      props.title,
+      props.content,
+      props.fileName,
+      imagePNG,
+      <div>
+        <label htmlFor={"image-file-input " + props.id}>
+          이미지를 선택하세요.
+        </label>
+        <input
+          id={"image-file-input " + props.id}
+          type="file"
+          name="file"
+          style={{ display: "none" }}
+          onChange={e => {
+            return this.fileSelectHandler(e, props);
+          }}
+        />
+      </div>
     );
   };
 
