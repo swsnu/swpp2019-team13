@@ -1,7 +1,10 @@
 import json
 import os
 
+import itertools
 from json import JSONDecodeError
+import numpy as np
+
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -17,8 +20,7 @@ from .application_models import *
 from .serializers import *
 from .application_serializers import *
 
-import numpy as np
-import itertools
+
 
 def category_list(request):
     if request.method == 'GET':
@@ -519,7 +521,7 @@ def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse([])
     try:
-        user = UserProfile.objects.get(id=user_id)
+        UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
@@ -545,13 +547,13 @@ def recommend_club(request, user_id=0):
                       user_like_somoim.id - 1][user_profile.id-1] = 1
         for each_club in Club.objects.all():
             for each_tag in each_club.tags.all():
-                if each_tag.selected is not 0:
+                if each_tag.selected != 0:
                     graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
                     graph_[user_counts + club_counts + somoim_counts +
                         each_tag.id - 1][user_counts + each_club.id - 1] = 1
         for each_somoim in Somoim.objects.all():
             for each_tag in each_somoim.tags.all():
-                if each_tag.selected is not 0:
+                if each_tag.selected != 0:
                     graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
                     graph_[user_counts + club_counts + somoim_counts +
                         each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
@@ -581,7 +583,7 @@ def recommend_club(request, user_id=0):
         already_liked_clubs = graph[user_id-1][start_index:end_index]
         already_liked_clubs_id = []
         for i in range(club_counts):
-            if already_liked_clubs[i].item() is 1:
+            if already_liked_clubs[i].item() == 1:
                 already_liked_clubs_id.append(i)
         
         ## make recommedation list
@@ -679,7 +681,7 @@ def recommend_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse([])
     try:
-        user = UserProfile.objects.get(id=user_id)
+        UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
@@ -705,13 +707,13 @@ def recommend_somoim(request, user_id=0):
                       user_like_somoim.id - 1][user_profile.id-1] = 1
         for each_club in Club.objects.all():
             for each_tag in each_club.tags.all():
-                if each_tag.selected is not 0:
+                if each_tag.selected != 0:
                     graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
                     graph_[user_counts + club_counts + somoim_counts +
                         each_tag.id - 1][user_counts + each_club.id - 1] = 1
         for each_somoim in Somoim.objects.all():
             for each_tag in each_somoim.tags.all():
-                if each_tag.selected is not 0:
+                if each_tag.selected != 0:
                     graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
                     graph_[user_counts + club_counts + somoim_counts +
                         each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
@@ -741,7 +743,7 @@ def recommend_somoim(request, user_id=0):
         already_liked_somoims = graph[user_id-1][start_index:end_index]
         already_liked_somoims_id = []
         for i in range(somoim_counts):
-            if already_liked_somoims[i].item() is 1:
+            if already_liked_somoims[i].item() == 1:
                 already_liked_somoims_id.append(i)
         
         ## make recommedation list
