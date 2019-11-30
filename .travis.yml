@@ -15,7 +15,7 @@ matrix:
         sonarcloud:
           organization: "swsnu"
           token:
-            secure: "J60TSPUi8FY37NcYj7T/V+t7dhPN92qjPIb9TE44YzeBcV8Gea3v8TjdqEARowyy15uOLQHsivrV/6WRiVLyF4J0en8KwOg5CrxT1IR5icNRU06bSoCLBe84+33YFHfyIs53CcE128UEVNYCrv2NqTyvkI0CVyIFC2OJCQ6B56AGvLJCpInYGlGJXVJReqROgUAm0q5LH6iy4s2TDbfFdUut5ITlf6mPoMm51WikwppNIACgIveH+l0gKbAfx+wYCW6aST/yEplsXzF61RmygsNvfjTXh642Od9erlNFJUwU0twh+N+O1HkZjXz2PVYnKDLgEk8WtyxtAm03qySBIwSDZDtDfEUZFGUZz+dN9uVnsUL/6ob5laKU/d3kYSOkaVu32wuIcMfa4qYCGNevbr/a9MimAmwaW0T/rBS/TQoILNt7s6MROuQEaAWOe6SxuNLKzYX5sqCibcnpLVQedEE+DDoQKa5YdeQlfY/W/eBpa1Hx7Vu0TtfVv0TVxmzogfo/hVqAR1W25H/eGBCUlzXl5T0ZarHZySgCXO0+zV7WmhYYOFXcbPzP1hjwbgYxfzdhwR7E6Kj642MGTWULn7/k6uGJqjWLWqy3vXpRMfflmTrC2MZ+IlYj5rqW3rE9MO5IXCMgyGG6qsU6weMHrwpBcekWJM4ywNPW2NNWeWM="
+            secure: "dr8vmmWu7oOsPGRG5lfdVJ6O9rIBoH+g8wY0vpyRI++Tpt7zSIlgUppVjJYDeGD8rv9OxGU7Z0C4hkrtTh6iWxDILWVNreWTpXymRjQe00eRamD1v7fvBAcvPC3o0bjUY2EITGwOPf11Ss6/gL90pHQZXp7wlg/tEJd3L0khac4Z6CMv0f0yDk1ZNVtMvd2iW+rj2TNAZPnH7JPux/7oNoyWdFez3qH8UXJMtKl/Kyo4uBlgiR9xZujHRh9cC5IBOOkNMtxttLJJD2ty7mvhN/79M0AtyS+6YU+K0xMqL1iU/q3recFSyqLmCHT9dhvw6M9xjTUQHgR0zr5g60JDUoDjxNmPguIIexZuGLq1gjJ12iicWcBRbLQTeplIy/l7/zotDV82o9lMhxVnuiO66nUCyuQuB/67/O2+DCxnRxV4Oq9SjeL6olwTXw0C09q7bRuJY40U4xAE2JNktwxB/gzKkSYo8SdqjtQCAiD50j+oAgHSSJ0tff7Ng75fvzsMameO0KJvNokuUmD8kidlZbEryDQlsqo8cMA9jlFoLm5iWWqNpjFTbThZQXQTMR5tbGTKuGc/MShtlHCvctFKZWzUUc27kuZdTLcsKFTxw7I6+4wFqm9Ok2u9fi/7mBFeD90OPk55kNOtlEg66OIKwe/xDgwJujTXiehyFwYsgv8="
       before_install:
         - mysql -e "CREATE DATABASE club4u;"
       install:
