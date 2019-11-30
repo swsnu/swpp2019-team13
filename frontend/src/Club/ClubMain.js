@@ -80,6 +80,57 @@ class ClubMain extends React.Component {
     );
   };
 
+  listPageChangeBarGenerator = (page, list) => {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page === 0) {
+              if (this.state.recommendedListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum - 1
+                });
+            } else {
+              if (this.state.allListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum - 1
+                });
+            }
+          }}
+        >
+          &laquo; 이전
+        </div>
+        <div className="bar">|</div>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page === 0) {
+              if (
+                this.state.recommendedListPageNum <
+                Math.ceil(list.length / 4) - 1
+              )
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum + 1
+                });
+            } else {
+              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum + 1
+                });
+            }
+          }}
+        >
+          다음 &raquo;
+        </div>
+      </div>
+    );
+  };
+
   render() {
     let categoryList, RegisterButton, selected_club;
     if (this.props.clubs) {
@@ -182,38 +233,8 @@ class ClubMain extends React.Component {
                 this.state.recommendedListPageNum * 4 + 3
               )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.recommendedListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.recommendedListPageNum <
-                    Math.ceil(recommendedList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+
+            {this.listPageChangeBarGenerator(0, recommendedList)}
           </div>
         </div>
         <br />
@@ -274,36 +295,7 @@ class ClubMain extends React.Component {
                 this.state.allListPageNum * 4 + 3
               )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.allListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.allListPageNum <
-                    Math.ceil(allList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+            {this.listPageChangeBarGenerator(1, allList)}
           </div>
         </div>
 
