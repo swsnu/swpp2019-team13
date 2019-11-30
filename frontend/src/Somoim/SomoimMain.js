@@ -75,6 +75,12 @@ class SomoimMain extends React.Component {
     });
   };
 
+  somoimCardGenerator = (list, index) => {
+    return (
+      <div className="SomoimCard">{index < list.length ? list[index] : ""}</div>
+    );
+  };
+
   render() {
     let categoryList, somoim_create, selectedSomoim;
     if (this.props.somoims) {
@@ -160,30 +166,22 @@ class SomoimMain extends React.Component {
           </h1>
           <div>
             <div className="card-flex-container">
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 0 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 1 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 2 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 3 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 0
+              )}
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 1
+              )}
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 2
+              )}
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 3
+              )}
             </div>
             <div style={{ textAlign: "center" }}>
               <div
@@ -260,26 +258,22 @@ class SomoimMain extends React.Component {
           <br />
           <div>
             <div className="card-flex-container">
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 0 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 1 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 2 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 3 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 0
+              )}
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 1
+              )}
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 2
+              )}
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 3
+              )}
             </div>
             <div style={{ textAlign: "center" }}>
               <div

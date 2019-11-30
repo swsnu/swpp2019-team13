@@ -74,6 +74,12 @@ class ClubMain extends React.Component {
     });
   };
 
+  clubCardGenerator = (list, index) => {
+    return (
+      <div className="ClubCard">{index < list.length ? list[index] : ""}</div>
+    );
+  };
+
   render() {
     let categoryList, RegisterButton, selected_club;
     if (this.props.clubs) {
@@ -159,30 +165,22 @@ class ClubMain extends React.Component {
           </h1>
           <div>
             <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 0 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 1 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 2 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 3 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 0
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 1
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 2
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 3
+              )}
             </div>
             <div style={{ textAlign: "center" }}>
               <div
@@ -259,26 +257,22 @@ class ClubMain extends React.Component {
           <br />
           <div>
             <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 0 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 1 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 2 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 3 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 0
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 1
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 2
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 3
+              )}
             </div>
             <div style={{ textAlign: "center" }}>
               <div
