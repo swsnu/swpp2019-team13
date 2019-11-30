@@ -1,9 +1,9 @@
 import json
 import os
 
-import itertools
+# import itertools
 from json import JSONDecodeError
-import numpy as np
+# import numpy as np
 
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
