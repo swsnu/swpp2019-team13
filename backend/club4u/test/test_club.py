@@ -4,6 +4,13 @@ from ..models import User, UserProfile, Club, Department, Category, Major, ClubP
 from ..application_models import *
 
 
+def getLoggedInClient():
+    client = Client(enforce_csrf_checks=False)
+    client.post('/api/user/signin/', json.dumps(
+        {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+    return client
+
+
 class ClubTestCase(TestCase):
     def setUp(self):
         category = Category.objects.create(id=1, name='category1')
@@ -75,9 +82,7 @@ class ClubTestCase(TestCase):
     #
 
     def test_get_manage_club_list_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/1/club/manage/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, [])
@@ -88,16 +93,12 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_manage_club_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/club/manage/')
         self.assertEqual(response.status_code, 404)
 
     def test_get_manage_club_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/club/manage/')
         self.assertEqual(response.status_code, 405)
 
@@ -106,9 +107,7 @@ class ClubTestCase(TestCase):
     #
 
     def test_get_like_club_list_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/1/club/like/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, [])
@@ -119,19 +118,15 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_like_club_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/club/like/')
         self.assertEqual(response.status_code, 404)
 
     # test add, remove both
     def test_put_like_club_success(self):
-        client = Client(enforce_csrf_checks=False)
         club = Club.objects.get(id=1)
 
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.put('/api/user/1/club/like/', json.dumps(
             {'id': 1}), content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -143,9 +138,7 @@ class ClubTestCase(TestCase):
         self.assertEqual(len(club.likers.all()), 0)
 
     def test_like_club_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/club/like/')
         self.assertEqual(response.status_code, 405)
 
@@ -154,9 +147,7 @@ class ClubTestCase(TestCase):
     #
 
     def test_get_apply_club_list_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/1/club/apply/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, [])
@@ -167,52 +158,26 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_apply_club_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/club/apply/')
         self.assertEqual(response.status_code, 404)
 
     def test_put_apply_club(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
-        response = client.put('/api/user/1/club/apply/', json.dumps(
+        client = getLoggedInClient()
+        client.put('/api/user/1/club/apply/', json.dumps(
             {'id': 1}), content_type='application/json')
         response = client.put('/api/user/1/club/apply/', json.dumps(
             {'id': 1}), content_type='application/json')
         self.assertEqual(response.status_code, 204)
 
     def test_put_apply_club_without_existing_one(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user2', 'password': 'pw2'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.put('/api/user/2/club/apply/', json.dumps(
             {'id': 1}), content_type='application/json')
         self.assertEqual(response.status_code, 204)
 
-    # test add, remove both
-    # TODO : re-implement after applying method is done
-    # def test_put_apply_club_success(self):
-    #     client = Client(enforce_csrf_checks=False)
-    #     club = Club.objects.get(id=1)
-
-    #     response = client.post('/api/user/signin/', json.dumps(
-    #         {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
-    #     response = client.put('/api/user/1/club/apply/', json.dumps(
-    #         {'id': 1}), content_type='application/json')
-    #     self.assertEqual(response.status_code, 204)
-    #     self.assertEqual(len(club.appliers.all()), 1)
-
-    #     response = client.put('/api/user/1/club/apply/', json.dumps(
-    #         {'id': 1}), content_type='application/json')
-    #     self.assertEqual(response.status_code, 204)
-    #     self.assertEqual(len(club.appliers.all()), 0)
-
     def test_apply_club_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/club/apply/')
         self.assertEqual(response.status_code, 405)
 
@@ -221,11 +186,9 @@ class ClubTestCase(TestCase):
     #
 
     def test_get_recommend_club_list_success(self):
-        client = Client(enforce_csrf_checks=False)
+        client = getLoggedInClient()
         club = Club.objects.get(id=1)
         club.likers.set([1, 2])
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
         response = client.get('/api/user/1/club/recommend/')
         self.assertEqual(response.status_code, 200)
 
@@ -236,16 +199,12 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.content, b'')
 
     def test_get_recommend_club_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/club/recommend/')
         self.assertEqual(response.status_code, 404)
 
     def test_get_recommend_club_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/club/recommend/')
         self.assertEqual(response.status_code, 405)
 
@@ -337,23 +296,17 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
 
     def test_get_application(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/club/1/application/')
         self.assertEqual(response.status_code, 200)
 
     def test_get_application_invalid(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/club/2/application/')
         self.assertEqual(response.status_code, 404)
 
     def test_put_application(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.put('/api/club/1/application/', json.dumps([
             {'type': 'shortText', 'order': 0, 'content': 'test'},
             {'type': 'longText', 'order': 1, 'content': 'test'},
@@ -366,29 +319,21 @@ class ClubTestCase(TestCase):
         self.assertEqual(response.status_code, 204)
 
     def test_post_application(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.post('/api/club/1/application/')
         self.assertEqual(response.status_code, 204)
 
     def test_application_invalid(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/club/1/application/')
         self.assertEqual(response.status_code, 405)
 
     def test_get_application_list(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/club/1/application/list/')
         self.assertEqual(response.status_code, 200)
 
     def test_application_list_invalid(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/club/1/application/list/')
         self.assertEqual(response.status_code, 405)
