@@ -1,9 +1,9 @@
 import json
 import os
 
-import itertools
+# import itertools
 from json import JSONDecodeError
-import numpy as np
+# import numpy as np
 
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
@@ -521,80 +521,87 @@ def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse([])
     try:
-        UserProfile.objects.get(id=user_id)
+        user = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # calculate the number of nodes
-        user_counts = UserProfile.objects.count()
-        club_counts = Club.objects.count()
-        somoim_counts = Somoim.objects.count()
-        tag_counts = Tag.objects.count()
+        # # calculate the number of nodes
+        # user_counts = UserProfile.objects.count()
+        # club_counts = Club.objects.count()
+        # somoim_counts = Somoim.objects.count()
+        # tag_counts = Tag.objects.count()
         
-        # initialize graph
-        graph_size = user_counts + club_counts + somoim_counts + tag_counts
-        graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
+        # # initialize graph
+        # graph_size = user_counts + club_counts + somoim_counts + tag_counts
+        # graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
         
-        # make graph
-        for user_profile in UserProfile.objects.all():
-            for user_like_club in user_profile.like_clubs.all():
-                graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
-                graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
-            for user_like_somoim in user_profile.like_somoims.all():
-                graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
-                graph_[user_counts + club_counts +
-                      user_like_somoim.id - 1][user_profile.id-1] = 1
-        for each_club in Club.objects.all():
-            for each_tag in each_club.tags.all():
-                if each_tag.selected != 0:
-                    graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-                    graph_[user_counts + club_counts + somoim_counts +
-                        each_tag.id - 1][user_counts + each_club.id - 1] = 1
-        for each_somoim in Somoim.objects.all():
-            for each_tag in each_somoim.tags.all():
-                if each_tag.selected != 0:
-                    graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-                    graph_[user_counts + club_counts + somoim_counts +
-                        each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
+        # # make graph
+        # for user_profile in UserProfile.objects.all():
+        #     for user_like_club in user_profile.like_clubs.all():
+        #         graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
+        #         graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
+        #     for user_like_somoim in user_profile.like_somoims.all():
+        #         graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
+        #         graph_[user_counts + club_counts +
+        #               user_like_somoim.id - 1][user_profile.id-1] = 1
+        # for each_club in Club.objects.all():
+        #     for each_tag in each_club.tags.all():
+        #         if each_tag.selected != 0:
+        #             graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
+        #             graph_[user_counts + club_counts + somoim_counts +
+        #                 each_tag.id - 1][user_counts + each_club.id - 1] = 1
+        # for each_somoim in Somoim.objects.all():
+        #     for each_tag in each_somoim.tags.all():
+        #         if each_tag.selected != 0:
+        #             graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
+        #             graph_[user_counts + club_counts + somoim_counts +
+        #                 each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
         
-        # change graph's data structure: list to numpy
-        graph = np.array(graph_)
+        # # change graph's data structure: list to numpy
+        # graph = np.array(graph_)
         
-        # calculate recommedation score
-        ## prepare
-        clubs_recommendation_score = np.zeros(club_counts)
-        start_index = user_counts
-        end_index = start_index + club_counts
-        graph_2 = np.matmul(graph, graph)
-        multed_graph = graph
+        # # calculate recommedation score
+        # ## prepare
+        # clubs_recommendation_score = np.zeros(club_counts)
+        # start_index = user_counts
+        # end_index = start_index + club_counts
+        # graph_2 = np.matmul(graph, graph)
+        # multed_graph = graph
 
-        ## calculate
-        for i in range(5):
-            prev_counts = multed_graph[user_id-1][start_index:end_index]
-            multed_graph = np.matmul(multed_graph, graph_2)
-            cur_counts = multed_graph[user_id-1][start_index:end_index]
-            counts = cur_counts - prev_counts
-            clubs_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
+        # ## calculate
+        # for i in range(5):
+        #     prev_counts = multed_graph[user_id-1][start_index:end_index]
+        #     multed_graph = np.matmul(multed_graph, graph_2)
+        #     cur_counts = multed_graph[user_id-1][start_index:end_index]
+        #     counts = cur_counts - prev_counts
+        #     clubs_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
         
 
-        # make recommedation clubs list by using recommenation score
-        ## get liked clubs' id
-        already_liked_clubs = graph[user_id-1][start_index:end_index]
-        already_liked_clubs_id = []
-        for i in range(club_counts):
-            if already_liked_clubs[i].item() == 1:
-                already_liked_clubs_id.append(i)
+        # # make recommedation clubs list by using recommenation score
+        # ## get liked clubs' id
+        # already_liked_clubs = graph[user_id-1][start_index:end_index]
+        # already_liked_clubs_id = []
+        # for i in range(club_counts):
+        #     if already_liked_clubs[i].item() == 1:
+        #         already_liked_clubs_id.append(i)
         
-        ## make recommedation list
+        # ## make recommedation list
+        # recommended_clubs = Club.objects.none()
+        # score_cut = 150
+        # for i in range(club_counts):
+        #     index = clubs_recommendation_score.argmax()
+        #     if index not in already_liked_clubs_id and clubs_recommendation_score[index] > score_cut:
+        #         # recommended_clubs |= Club.objects.filter(id=index+1)
+        #         recommended_clubs = itertools.chain(recommended_clubs, Club.objects.filter(id=index+1))
+        #     clubs_recommendation_score[index] = -1
+        
         recommended_clubs = Club.objects.none()
-        score_cut = 150
-        for i in range(club_counts):
-            index = clubs_recommendation_score.argmax()
-            if index not in already_liked_clubs_id and clubs_recommendation_score[index] > score_cut:
-                # recommended_clubs |= Club.objects.filter(id=index+1)
-                recommended_clubs = itertools.chain(recommended_clubs, Club.objects.filter(id=index+1))
-            clubs_recommendation_score[index] = -1
+        for user_like_club in user.like_clubs.all():
+            for liker in user_like_club.likers.all():
+                for c in liker.like_clubs.all():
+                    if recommended_clubs.filter(id=c.id).count() == 0:
+                        recommended_clubs |= Club.objects.filter(id=c.id)
         
         serializer = ClubSerializer(recommended_clubs, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))
@@ -681,80 +688,88 @@ def recommend_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         return HttpResponse([])
     try:
-        UserProfile.objects.get(id=user_id)
+        user = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # calculate the number of nodes
-        user_counts = UserProfile.objects.count()
-        club_counts = Club.objects.count()
-        somoim_counts = Somoim.objects.count()
-        tag_counts = Tag.objects.count()
+        # # calculate the number of nodes
+        # user_counts = UserProfile.objects.count()
+        # club_counts = Club.objects.count()
+        # somoim_counts = Somoim.objects.count()
+        # tag_counts = Tag.objects.count()
         
-        # initialize graph
-        graph_size = user_counts + club_counts + somoim_counts + tag_counts
-        graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
+        # # initialize graph
+        # graph_size = user_counts + club_counts + somoim_counts + tag_counts
+        # graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
         
-        # make graph
-        for user_profile in UserProfile.objects.all():
-            for user_like_club in user_profile.like_clubs.all():
-                graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
-                graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
-            for user_like_somoim in user_profile.like_somoims.all():
-                graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
-                graph_[user_counts + club_counts +
-                      user_like_somoim.id - 1][user_profile.id-1] = 1
-        for each_club in Club.objects.all():
-            for each_tag in each_club.tags.all():
-                if each_tag.selected != 0:
-                    graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-                    graph_[user_counts + club_counts + somoim_counts +
-                        each_tag.id - 1][user_counts + each_club.id - 1] = 1
-        for each_somoim in Somoim.objects.all():
-            for each_tag in each_somoim.tags.all():
-                if each_tag.selected != 0:
-                    graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-                    graph_[user_counts + club_counts + somoim_counts +
-                        each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
+        # # make graph
+        # for user_profile in UserProfile.objects.all():
+        #     for user_like_club in user_profile.like_clubs.all():
+        #         graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
+        #         graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
+        #     for user_like_somoim in user_profile.like_somoims.all():
+        #         graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
+        #         graph_[user_counts + club_counts +
+        #               user_like_somoim.id - 1][user_profile.id-1] = 1
+        # for each_club in Club.objects.all():
+        #     for each_tag in each_club.tags.all():
+        #         if each_tag.selected != 0:
+        #             graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
+        #             graph_[user_counts + club_counts + somoim_counts +
+        #                 each_tag.id - 1][user_counts + each_club.id - 1] = 1
+        # for each_somoim in Somoim.objects.all():
+        #     for each_tag in each_somoim.tags.all():
+        #         if each_tag.selected != 0:
+        #             graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
+        #             graph_[user_counts + club_counts + somoim_counts +
+        #                 each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
         
-        # change graph's data structure: list to numpy
-        graph = np.array(graph_)
+        # # change graph's data structure: list to numpy
+        # graph = np.array(graph_)
         
-        # calculate recommedation score
-        ## prepare
-        somoims_recommendation_score = np.zeros(somoim_counts)
-        start_index = user_counts + club_counts
-        end_index = start_index + somoim_counts
-        graph_2 = np.matmul(graph, graph)
-        multed_graph = graph
+        # # calculate recommedation score
+        # ## prepare
+        # somoims_recommendation_score = np.zeros(somoim_counts)
+        # start_index = user_counts + club_counts
+        # end_index = start_index + somoim_counts
+        # graph_2 = np.matmul(graph, graph)
+        # multed_graph = graph
 
-        ## calculate
-        for i in range(5):
-            prev_counts = multed_graph[user_id-1][start_index:end_index]
-            multed_graph = np.matmul(multed_graph, graph_2)
-            cur_counts = multed_graph[user_id-1][start_index:end_index]
-            counts = cur_counts - prev_counts
-            somoims_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
-        print(somoims_recommendation_score)
+        # ## calculate
+        # for i in range(5):
+        #     prev_counts = multed_graph[user_id-1][start_index:end_index]
+        #     multed_graph = np.matmul(multed_graph, graph_2)
+        #     cur_counts = multed_graph[user_id-1][start_index:end_index]
+        #     counts = cur_counts - prev_counts
+        #     somoims_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
+        # print(somoims_recommendation_score)
         
-        # make recommedation clubs list by using recommenation score
-        ## get liked clubs' id
-        already_liked_somoims = graph[user_id-1][start_index:end_index]
-        already_liked_somoims_id = []
-        for i in range(somoim_counts):
-            if already_liked_somoims[i].item() == 1:
-                already_liked_somoims_id.append(i)
+        # # make recommedation clubs list by using recommenation score
+        # ## get liked clubs' id
+        # already_liked_somoims = graph[user_id-1][start_index:end_index]
+        # already_liked_somoims_id = []
+        # for i in range(somoim_counts):
+        #     if already_liked_somoims[i].item() == 1:
+        #         already_liked_somoims_id.append(i)
         
-        ## make recommedation list
+        # ## make recommedation list
+        # recommended_somoims = Somoim.objects.none()
+        # score_cut = 150
+        # for i in range(somoim_counts):
+        #     index = somoims_recommendation_score.argmax()
+        #     if index not in already_liked_somoims_id and somoims_recommendation_score[index] > score_cut:
+        #         # recommended_somoims |= Somoim.objects.filter(id=index+1)
+        #         recommended_somoims = itertools.chain(recommended_somoims, Somoim.objects.filter(id=index+1))
+        #     somoims_recommendation_score[index] = -1
+
         recommended_somoims = Somoim.objects.none()
-        score_cut = 150
-        for i in range(somoim_counts):
-            index = somoims_recommendation_score.argmax()
-            if index not in already_liked_somoims_id and somoims_recommendation_score[index] > score_cut:
-                # recommended_somoims |= Somoim.objects.filter(id=index+1)
-                recommended_somoims = itertools.chain(recommended_somoims, Somoim.objects.filter(id=index+1))
-            somoims_recommendation_score[index] = -1
+        for user_like_somoim in user.like_somoims.all():
+            for liker in user_like_somoim.likers.all():
+                for s in liker.like_somoims.all():
+                    if recommended_somoims.filter(id=s.id).count() == 0:
+                        recommended_somoims |= Somoim.objects.filter(
+                            id=s.id)
         
         serializer = SomoimSerializer(recommended_somoims, many=True)
         return HttpResponse(JSONRenderer().render(serializer.data))

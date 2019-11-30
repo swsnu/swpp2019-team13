@@ -74,6 +74,63 @@ class ClubMain extends React.Component {
     });
   };
 
+  clubCardGenerator = (list, index) => {
+    return (
+      <div className="ClubCard">{index < list.length ? list[index] : ""}</div>
+    );
+  };
+
+  listPageChangeBarGenerator = (page, list) => {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page === 0) {
+              if (this.state.recommendedListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum - 1
+                });
+            } else {
+              if (this.state.allListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum - 1
+                });
+            }
+          }}
+        >
+          &laquo; 이전
+        </div>
+        <div className="bar">|</div>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page === 0) {
+              if (
+                this.state.recommendedListPageNum <
+                Math.ceil(list.length / 4) - 1
+              )
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum + 1
+                });
+            } else {
+              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum + 1
+                });
+            }
+          }}
+        >
+          다음 &raquo;
+        </div>
+      </div>
+    );
+  };
+
   render() {
     let categoryList, RegisterButton, selected_club;
     if (this.props.clubs) {
@@ -159,63 +216,25 @@ class ClubMain extends React.Component {
           </h1>
           <div>
             <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 0 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 1 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 2 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 3 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 0
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 1
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 2
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 3
+              )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.recommendedListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.recommendedListPageNum <
-                    Math.ceil(recommendedList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+
+            {this.listPageChangeBarGenerator(0, recommendedList)}
           </div>
         </div>
         <br />
@@ -259,57 +278,24 @@ class ClubMain extends React.Component {
           <br />
           <div>
             <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 0 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 1 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 2 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 3 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 0
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 1
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 2
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 3
+              )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.allListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.allListPageNum <
-                    Math.ceil(allList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+            {this.listPageChangeBarGenerator(1, allList)}
           </div>
         </div>
 
