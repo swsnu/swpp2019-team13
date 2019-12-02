@@ -236,6 +236,50 @@ class ClubDetail extends React.Component {
               </div>
               {club.description}
             </div>
+            <div className="detail-gallery">
+              <div
+                style={{
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                  fontStyle: "italic"
+                }}
+              >
+                갤러리
+              </div>
+              <div className="detail-gallery-container">
+                <button
+                  className="detail-gallery-button"
+                  onClick={() => {
+                    if (this.state.selected_gallery !== 1) {
+                      this.setState({
+                        selected_gallery: this.state.selected_gallery - 1
+                      });
+                    }
+                  }}
+                >
+                  &laquo;
+                </button>
+                <div className="detail-gallery-item">{image[0]}</div>
+                <div className="detail-gallery-item">{image[1]}</div>
+                <div className="detail-gallery-item">{image[2]}</div>
+                <div className="detail-gallery-item">{image[3]}</div>
+                <button
+                  className="detail-gallery-button"
+                  onClick={() => {
+                    if (
+                      club.poster_img.length >
+                      this.state.selected_gallery + 4
+                    ) {
+                      this.setState({
+                        selected_gallery: this.state.selected_gallery + 1
+                      });
+                    }
+                  }}
+                >
+                  &raquo;
+                </button>
+              </div>
+            </div>
             <div className="detail-footer">
               {this.props.loggedUser &&
                 (isLoggedUserLike ? (

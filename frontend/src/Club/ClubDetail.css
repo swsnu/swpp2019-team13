@@ -56,6 +56,25 @@
   font-size: 15px;
 }
 
+.detail-gallery {
+  padding: 5px 15px 15px 15px;
+  font-size: 15px;
+}
+
+.detail-gallery-container {
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.detail-gallery-item {
+  box-shadow: 0px 0px 5px 0px gray;
+}
+
+.detail-gallery-button {
+  border: none;
+}
+
 .detail-footer {
   display: flex;
   justify-content: space-around;
