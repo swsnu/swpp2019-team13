@@ -157,34 +157,34 @@ class ClubDetail extends React.Component {
                   <h1 style={{ fontSize: "5em", paddingRight: "20px" }}>
                     {club.name}
                   </h1>
-                  <div className="club-detail-user-info-container">
+                  <div className="detail-user-info-container">
                     <div
-                      className="club-detail-user-info-item"
+                      className="detail-user-info-item"
                       style={{ paddingRight: "9px" }}
                     >
                       <img
                         src={person}
-                        className="club-detail-user-info-item-img"
+                        className="detail-user-info-item-img"
                         width="18px"
                         height="18px"
                         alt="person"
                       ></img>
                       <p>&nbsp;25</p>
                     </div>
-                    <div className="club-detail-user-info-item">
+                    <div className="detail-user-info-item">
                       <img
                         src={views}
-                        className="club-detail-user-info-item-img"
+                        className="detail-user-info-item-img"
                         width="23px"
                         height="23px"
                         alt="views"
                       ></img>
                       <p>&nbsp;50</p>
                     </div>
-                    <div className="club-detail-user-info-item">
+                    <div className="detail-user-info-item">
                       <img
                         src={heart}
-                        className="club-detail-user-info-item-img"
+                        className="detail-user-info-item-img"
                         width="28px"
                         height="31px"
                         alt="heart"
@@ -193,31 +193,27 @@ class ClubDetail extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="club-detail-tagList">{tagList}</div>
-                <div className="club-detail-short-info">
-                  <span className="club-detail-short-info-title">
-                    지원 기간
-                  </span>
+                <div className="detail-tagList">{tagList}</div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">지원 기간</span>
                   <span>
                     {" "}
                     : {club.recruit_start_day} ~ {club.recruit_end_day}
                   </span>
                 </div>
-                <div className="club-detail-short-info">
-                  <span className="club-detail-short-info-title">
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">
                     최소 활동 학기 수
                   </span>
                   <span> : {club.available_semester}</span>
                   <span>학기</span>
                 </div>
-                <div className="club-detail-short-info">
-                  <span className="club-detail-short-info-title">
-                    활동 요일
-                  </span>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">활동 요일</span>
                   <span> : {session_day_string}</span>
                 </div>
-                <div className="club-detail-short-info">
-                  <span className="club-detail-short-info-title">
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">
                     가입 가능 학과
                   </span>
                   <span>{available_major_string}</span>

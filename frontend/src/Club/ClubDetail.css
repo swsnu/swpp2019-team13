@@ -22,13 +22,13 @@
   justify-content: space-between;
 }
 
-.club-detail-user-info-container {
+.detail-user-info-container {
   display: flex;
   position: relative;
   top: 13px;
 }
 
-.club-detail-user-info-item {
+.detail-user-info-item {
   display: flex;
   align-items: center;
   padding-left: 5px;
@@ -36,18 +36,18 @@
   font-size: 20px;
 }
 
-.club-detail-user-info-item-img {
+.detail-user-info-item-img {
   position: relative;
   bottom: 4px;
 }
 
-.club-detail-short-info {
+.detail-short-info {
   padding-top: 15px;
   font-size: 17px;
   font-style: italic;
 }
 
-.club-detail-short-info-title {
+.detail-short-info-title {
   font-weight: bold;
 }
 
