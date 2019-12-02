@@ -1,15 +1,20 @@
 .detail-header {
   display: flex;
   justify-content: center;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.detail-header-left {
+.detail-header-right {
   flex-grow: 1;
-  padding-right: 15px;
+  padding-left: 25px;
+  padding-right: 7px;
 }
 
 .detail_poster {
   flex-grow: 0;
+  box-shadow: 0px 0px 5px 0px gray;
 }
 
 .detail-title {
@@ -36,7 +41,12 @@
   bottom: 4px;
 }
 
-.club-detail-applicable-term {
+.club-detail-short-info {
   padding-top: 15px;
   font-size: 17px;
+  font-style: italic;
+}
+
+.club-detail-short-info-title {
+  font-weight: bold;
 }

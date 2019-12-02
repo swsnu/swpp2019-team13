@@ -9,11 +9,13 @@ import "./ClubDetail.css";
 import heart from "../images/heart.png";
 import views from "../images/views.png";
 import person from "../images/person.png";
+import club4u from "../images/club4u.png";
 
 class ClubDetail extends React.Component {
   state = {
-    selected_image: 0
+    selected_gallery: 1
   };
+
   onClickLikeButton = () => {
     this.props.addLikedClub(this.props.club, this.props.loggedUser);
   };
@@ -66,16 +68,26 @@ class ClubDetail extends React.Component {
           .includes(this.props.loggedUser.id);
       }
 
-      if (club.available_major.length === this.props.majors.length) {
-        available_major_string = "제한 없음";
+      if (this.props.loggedUser) {
+        available_major_string = " : ";
+        available_major_string += this.props.majors.filter(
+          a => a.id === this.props.loggedUser.major
+        )[0].name;
+        if (club.available_major.includes(this.props.loggedUser.major)) {
+          available_major_string += "가 포함되어 있습니다.";
+        } else {
+          available_major_string += "가 없습니다.";
+        }
       } else {
-        club.available_major.map(major_id => {
-          available_major_string += this.props.majors.filter(
-            a => a.id === major_id
-          )[0].name;
-          available_major_string += " ";
-          return 0;
-        });
+        available_major_string = " : ";
+        if (club.available_major.length === this.props.majors.length) {
+          available_major_string += "제한 없음";
+        } else {
+          available_major_string += club.managers[0].major.name;
+          available_major_string += " 외  ";
+          available_major_string += String(club.available_major.length - 1);
+          available_major_string += "개 학과";
+        }
       }
 
       for (var i = 0; i < 7; i++) {
@@ -86,7 +98,7 @@ class ClubDetail extends React.Component {
       }
 
       let mainImage = <img src={null} width="300" height="300" alt="" />;
-      let image = <img src={null} width="300" height="300" alt="" />;
+      let image = new Array();
 
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
@@ -97,6 +109,29 @@ class ClubDetail extends React.Component {
             alt=""
           />
         );
+
+      if (club.poster_img && club.poster_img.length > 0) {
+        let count = 0;
+        let index = this.state.selected_gallery;
+        while (count < 4) {
+          if (club.poster_img.length > index) {
+            image[count] = (
+              <img
+                src={"media/" + club.poster_img[index]}
+                width="150px"
+                height="150px"
+                alt=""
+              />
+            );
+          } else {
+            image[count] = (
+              <img src={club4u} width="150px" height="150px" alt="club4u"></img>
+            );
+          }
+          count++;
+          index++;
+        }
+      }
 
       let tagList;
       if (this.props.tags.length !== 0) {
@@ -116,7 +151,8 @@ class ClubDetail extends React.Component {
         >
           <Modal.Body>
             <div className="detail-header">
-              <div className="detail-header-left">
+              <div className="detail_poster">{mainImage}</div>
+              <div className="detail-header-right">
                 <div className="detail-title">
                   <h1 style={{ fontSize: "5em", paddingRight: "20px" }}>
                     {club.name}
@@ -158,151 +194,36 @@ class ClubDetail extends React.Component {
                   </div>
                 </div>
                 <div className="club-detail-tagList">{tagList}</div>
-                <div className="club-detail-applicable-term">
-                  <span style={{ fontWeight: "bold" }}>지원 기간: </span>
-                  <span>01/07 ~ 01/20</span>
+                <div className="club-detail-short-info">
+                  <span className="club-detail-short-info-title">
+                    지원 기간
+                  </span>
+                  <span>
+                    {" "}
+                    : {club.recruit_start_day} ~ {club.recruit_end_day}
+                  </span>
+                </div>
+                <div className="club-detail-short-info">
+                  <span className="club-detail-short-info-title">
+                    최소 활동 학기 수
+                  </span>
+                  <span> : {club.available_semester}</span>
+                  <span>학기</span>
+                </div>
+                <div className="club-detail-short-info">
+                  <span className="club-detail-short-info-title">
+                    활동 요일
+                  </span>
+                  <span> : {session_day_string}</span>
+                </div>
+                <div className="club-detail-short-info">
+                  <span className="club-detail-short-info-title">
+                    가입 가능 학과
+                  </span>
+                  <span>{available_major_string}</span>
                 </div>
               </div>
-              <div className="detail_poster">{mainImage}</div>
             </div>
-            {/* <Container>
-              <Row>
-                <Col>
-                  {image}
-                  <Row>
-                    <Col sm={1}></Col>
-                    {this.state.selected_image === 0 ? (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        disabled={true}
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                      >
-                        prev
-                      </Button>
-                    ) : (
-                      <Button
-                        as={Col}
-                        className="prev"
-                        size="lg"
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                        onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            selected_image: this.state.selected_image - 1
-                          });
-                        }}
-                      >
-                        prev
-                      </Button>
-                    )}
-
-                    <Col sm={5}></Col>
-                    {club.poster_img.length === 0 ||
-                    this.state.selected_image === club.poster_img.length - 1 ? (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        disabled={true}
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                      >
-                        next
-                      </Button>
-                    ) : (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                        className="next"
-                        onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            selected_image: this.state.selected_image + 1
-                          });
-                        }}
-                      >
-                        next
-                      </Button>
-                    )}
-
-                    <Col sm={1}></Col>
-                  </Row>
-                </Col>
-                <Col>
-                  <Row>{tagList}</Row>
-                  <br />
-                  <Row>
-                    <h3>{club.description}</h3>
-                  </Row>
-                </Col>
-              </Row>
-              <br />
-              <br />
-              <h2>가입 조건</h2>
-              <Row>
-                <h3>- 가능 학과</h3>
-              </Row>
-              <h4>{available_major_string}</h4>
-              <Row>
-                <h3>- 활동 요일</h3>
-              </Row>
-              <h4>{session_day_string}</h4>
-              <Row>
-                <h3>- 최소 활동 학기 수</h3>
-              </Row>
-              <h4>{club.available_semester + "학기"}</h4>
-              <br />
-              <br />
-              {this.props.loggedUser && (
-                <Row>
-                  <Col></Col>
-                  <Col>
-                    {isLoggedUserLike ? (
-                      <Button
-                        className="likebutton"
-                        size="lg"
-                        variant="primary"
-                        onClick={this.onClickLikeButton}
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                      </Button>
-                    ) : (
-                      <Button
-                        className="likebutton2"
-                        size="lg"
-                        variant="secondary"
-                        onClick={this.onClickLikeButton}
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                      </Button>
-                    )}
-                  </Col>
-                  <Col></Col>
-                  <Col>
-                    {acceptQualification ? (
-                      <Button
-                        onClick={this.onClickApplyButton}
-                        size="lg"
-                        className="applybutton"
-                      >
-                        지원하기
-                      </Button>
-                    ) : (
-                      <Button disabled title={qualificationMessage} size="lg">
-                        지원하기
-                      </Button>
-                    )}
-                  </Col>
-                  <Col></Col>
-                </Row>
-              )}
-            </Container> */}
           </Modal.Body>
         </Modal>
       );
