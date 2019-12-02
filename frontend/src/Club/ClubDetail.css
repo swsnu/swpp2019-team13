@@ -1,0 +1,42 @@
+.detail-header {
+  display: flex;
+  justify-content: center;
+}
+
+.detail-header-left {
+  flex-grow: 1;
+  padding-right: 15px;
+}
+
+.detail_poster {
+  flex-grow: 0;
+}
+
+.detail-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.club-detail-user-info-container {
+  display: flex;
+  position: relative;
+  top: 13px;
+}
+
+.club-detail-user-info-item {
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 20px;
+}
+
+.club-detail-user-info-item-img {
+  position: relative;
+  bottom: 4px;
+}
+
+.club-detail-applicable-term {
+  padding-top: 15px;
+  font-size: 17px;
+}

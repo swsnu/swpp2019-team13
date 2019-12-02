@@ -3,7 +3,12 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
+
+import "./ClubDetail.css";
+import heart from "../images/heart.png";
+import views from "../images/views.png";
+import person from "../images/person.png";
 
 class ClubDetail extends React.Component {
   state = {
@@ -80,14 +85,15 @@ class ClubDetail extends React.Component {
         }
       }
 
-      let image = <img src={null} width="400" height="400" alt="" />;
+      let mainImage = <img src={null} width="300" height="300" alt="" />;
+      let image = <img src={null} width="300" height="300" alt="" />;
 
       if (club.poster_img && club.poster_img.length > 0)
-        image = (
+        mainImage = (
           <img
-            src={"media/" + club.poster_img[this.state.selected_image]}
-            width="400"
-            height="500"
+            src={"media/" + club.poster_img[0]}
+            width="300"
+            height="300"
             alt=""
           />
         );
@@ -95,11 +101,12 @@ class ClubDetail extends React.Component {
       let tagList;
       if (this.props.tags.length !== 0) {
         tagList = club.tags.map(item => (
-          <Button size="lg" key={item} variant="outline-primary">
+          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
       }
+
       return (
         <Modal
           size="lg"
@@ -107,21 +114,58 @@ class ClubDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton>
-            <Col sm={10}>
-              <h1>{club.name}</h1>
-            </Col>
-            <Col sm={2}>
-              <h1>
-                <span role="img" aria-label="thumb">
-                  👍
-                </span>
-                &nbsp;{club.likers.length}
-              </h1>
-            </Col>
-          </Modal.Header>
           <Modal.Body>
-            <Container>
+            <div className="detail-header">
+              <div className="detail-header-left">
+                <div className="detail-title">
+                  <h1 style={{ fontSize: "5em", paddingRight: "20px" }}>
+                    {club.name}
+                  </h1>
+                  <div className="club-detail-user-info-container">
+                    <div
+                      className="club-detail-user-info-item"
+                      style={{ paddingRight: "9px" }}
+                    >
+                      <img
+                        src={person}
+                        className="club-detail-user-info-item-img"
+                        width="18px"
+                        height="18px"
+                        alt="person"
+                      ></img>
+                      <p>&nbsp;25</p>
+                    </div>
+                    <div className="club-detail-user-info-item">
+                      <img
+                        src={views}
+                        className="club-detail-user-info-item-img"
+                        width="23px"
+                        height="23px"
+                        alt="views"
+                      ></img>
+                      <p>&nbsp;50</p>
+                    </div>
+                    <div className="club-detail-user-info-item">
+                      <img
+                        src={heart}
+                        className="club-detail-user-info-item-img"
+                        width="28px"
+                        height="31px"
+                        alt="heart"
+                      ></img>
+                      <p>{club.likers.length}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="club-detail-tagList">{tagList}</div>
+                <div className="club-detail-applicable-term">
+                  <span style={{ fontWeight: "bold" }}>지원 기간: </span>
+                  <span>01/07 ~ 01/20</span>
+                </div>
+              </div>
+              <div className="detail_poster">{mainImage}</div>
+            </div>
+            {/* <Container>
               <Row>
                 <Col>
                   {image}
@@ -258,7 +302,7 @@ class ClubDetail extends React.Component {
                   <Col></Col>
                 </Row>
               )}
-            </Container>
+            </Container> */}
           </Modal.Body>
         </Modal>
       );
