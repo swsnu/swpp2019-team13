@@ -224,6 +224,53 @@ class ClubDetail extends React.Component {
                 </div>
               </div>
             </div>
+            <div className="detail-description">
+              <div
+                style={{
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                  fontStyle: "italic"
+                }}
+              >
+                우리 동아리는...
+              </div>
+              {club.description}
+            </div>
+            <div className="detail-footer">
+              {this.props.loggedUser &&
+                (isLoggedUserLike ? (
+                  <button
+                    className="liked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요!
+                  </button>
+                ) : (
+                  <button
+                    className="unliked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요!
+                  </button>
+                ))}
+              {this.props.loggedUser &&
+                (acceptQualification ? (
+                  <button
+                    className="applybutton"
+                    onClick={this.onClickApplyButton}
+                  >
+                    지원하기
+                  </button>
+                ) : (
+                  <button
+                    className="disabled-applybutton"
+                    title={qualificationMessage}
+                    disabled
+                  >
+                    지원하기
+                  </button>
+                ))}
+            </div>
           </Modal.Body>
         </Modal>
       );

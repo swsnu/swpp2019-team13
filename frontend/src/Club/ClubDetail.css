@@ -50,3 +50,59 @@
 .club-detail-short-info-title {
   font-weight: bold;
 }
+
+.detail-description {
+  padding: 20px 15px 15px 15px;
+  font-size: 15px;
+}
+
+.detail-footer {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 20px;
+  padding-bottom: 15px;
+}
+
+.liked-likebutton {
+  width: 40%;
+  height: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(238, 104, 122);
+  border: none;
+  border-radius: 12px;
+}
+
+.unliked-likebutton {
+  width: 40%;
+  height: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(126, 126, 126);
+  border: none;
+  border-radius: 12px;
+}
+
+.applybutton {
+  width: 40%;
+  height: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(91, 141, 235);
+  border: none;
+  border-radius: 12px;
+}
+
+.disabled-applybutton {
+  width: 40%;
+  height: 35px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: rgb(126, 126, 126);
+  border: none;
+  border-radius: 12px;
+}
