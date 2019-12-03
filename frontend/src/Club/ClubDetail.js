@@ -154,7 +154,7 @@ class ClubDetail extends React.Component {
               <div className="detail_poster">{mainImage}</div>
               <div className="detail-header-right">
                 <div className="detail-title">
-                  <h1 style={{ fontSize: "5em", paddingRight: "20px" }}>
+                  <h1 style={{ fontSize: "3em", paddingRight: "20px" }}>
                     {club.name}
                   </h1>
                   <div className="detail-user-info-container">
