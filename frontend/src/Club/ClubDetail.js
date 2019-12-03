@@ -81,10 +81,10 @@ class ClubDetail extends React.Component {
       } else {
         available_major_string = " : ";
         if (club.available_major.length === this.props.majors.length) {
-          available_major_string += "제한 없음";
+          available_major_string += "제한 없음.";
         } else {
           available_major_string += club.managers[0].major.name;
-          available_major_string += " 외  ";
+          available_major_string += " 외 ";
           available_major_string += String(club.available_major.length - 1);
           available_major_string += "개 학과";
         }
@@ -98,7 +98,7 @@ class ClubDetail extends React.Component {
       }
 
       let mainImage = <img src={null} width="300" height="300" alt="" />;
-      let image = new Array();
+      let image = [];
 
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
@@ -216,7 +216,9 @@ class ClubDetail extends React.Component {
                   <span className="detail-short-info-title">
                     가입 가능 학과
                   </span>
-                  <span>{available_major_string}</span>
+                  <span id="available_major_string">
+                    {available_major_string}
+                  </span>
                 </div>
               </div>
             </div>
@@ -280,14 +282,14 @@ class ClubDetail extends React.Component {
               {this.props.loggedUser &&
                 (isLoggedUserLike ? (
                   <button
-                    className="liked-likebutton"
+                    className="unliked-likebutton"
                     onClick={this.onClickLikeButton}
                   >
                     좋아요!
                   </button>
                 ) : (
                   <button
-                    className="unliked-likebutton"
+                    className="liked-likebutton"
                     onClick={this.onClickLikeButton}
                   >
                     좋아요!
