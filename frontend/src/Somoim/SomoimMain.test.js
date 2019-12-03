@@ -13,131 +13,125 @@ import * as categoryActions from "../store/actions/category";
 import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
+
 let temp_somoims = [
   {
     id: 0,
-    title: "Let's LoL!",
-    summary: "Playing LoL together!! :D",
-    description: "LoL\nLoL\nLol",
-    selected_dept: [0, 1],
+    title: "title0",
+    summary: "summary0",
+    description: "description0",
+    managers: [
+      {
+        name: "manager0",
+        major: { id: 0, name: "major0" }
+      }
+    ],
     available_semester: 1,
     tags: [1],
     goalJoiner: 20,
-    currentJoiner: 7,
-    category: 0,
     available_major: [0, 1],
     joiners: [],
-    likers: []
+    likers: [],
+    session_day: 0
   },
   {
     id: 1,
-    title: "Book lovers",
-    summary: "We read books until we fall asleep..",
-    description: "Actually, it's sleep somoim :)",
-    selected_dept: [0, 1, 3, 4, 5],
+    title: "title1",
+    summary: "summary1",
+    description: "description1",
+    managers: [
+      {
+        name: "manager1",
+        major: { id: 1, name: "major1" }
+      }
+    ],
     available_semester: 1,
-    tags: [2, 3],
+    tags: [2],
     goalJoiner: 10,
-    currentJoiner: 3,
-    category: 2,
     available_major: [0, 1],
     joiners: [],
-    likers: []
+    likers: [{ id: 0 }],
+    session_day: 1
   },
   {
     id: 2,
-    title: "test somoim",
-    summary: "i am testing the somoim list",
-    description: "Me too bro",
-    selected_dept: [0, 1, 3, 4, 5],
+    title: "title2",
+    summary: "summary2",
+    description: "description2",
+    managers: [
+      {
+        name: "manager2",
+        major: { id: 2, name: "major2" }
+      }
+    ],
     available_semester: 3,
-    tags: [4, 5],
+    tags: [3],
     goalJoiner: 10,
-    currentJoiner: 9,
-    category: 2,
-    available_major: [0, 1],
+    available_major: [2],
     joiners: [],
-    likers: []
-  },
-  {
-    id: 3,
-    title: "301 assa somoim",
-    summary: "We are assa in 301",
-    description: "Sad..",
-    selected_dept: [0, 1, 3, 4, 5],
-    available_semester: 5,
-    tags: [6, 7],
-    goalJoiner: 10,
-    currentJoiner: 1,
-    category: 2,
-    available_major: [0, 1],
-    joiners: [],
-    likers: []
+    likers: [{ id: 0 }]
   }
 ];
 let stubInitialState = {
   somoims: [
     {
       id: 0,
-      title: "Let's LoL!",
-      summary: "Playing LoL together!! :D",
-      description: "LoL\nLoL\nLol",
-      selected_dept: [0, 1],
+      title: "title0",
+      summary: "summary0",
+      description: "description0",
+      managers: [
+        {
+          name: "manager0",
+          major: { id: 0, name: "major0" }
+        }
+      ],
       available_semester: 1,
       tags: [1],
       goalJoiner: 20,
-      currentJoiner: 7,
-      category: 0,
       available_major: [0, 1],
       joiners: [],
-      likers: []
+      likers: [],
+      session_day: 0
     },
     {
       id: 1,
-      title: "Book lovers",
-      summary: "We read books until we fall asleep..",
-      description: "Actually, it's sleep somoim :)",
-      selected_dept: [0, 1, 3, 4, 5],
+      title: "title1",
+      summary: "summary1",
+      description: "description1",
+      managers: [
+        {
+          name: "manager1",
+          major: { id: 1, name: "major1" }
+        }
+      ],
       available_semester: 1,
-      tags: [2, 3],
+      tags: [2],
       goalJoiner: 10,
-      currentJoiner: 3,
-      category: 2,
       available_major: [0, 1],
       joiners: [],
-      likers: []
+      likers: [{ id: 0 }],
+      session_day: 1
     },
     {
       id: 2,
-      title: "test somoim",
-      summary: "i am testing the somoim list",
-      description: "Me too bro",
-      selected_dept: [0, 1, 3, 4, 5],
+      title: "title2",
+      summary: "summary2",
+      description: "description2",
+      managers: [
+        {
+          name: "manager2",
+          major: { id: 2, name: "major2" }
+        }
+      ],
       available_semester: 3,
-      tags: [4, 5],
+      tags: [3],
       goalJoiner: 10,
-      currentJoiner: 9,
-      category: 2,
-      available_major: [0, 1],
+      available_major: [2],
       joiners: [],
-      likers: []
-    },
-    {
-      id: 3,
-      title: "301 assa somoim",
-      summary: "We are assa in 301",
-      description: "Sad..",
-      selected_dept: [0, 1, 3, 4, 5],
-      available_semester: 5,
-      tags: [6, 7],
-      goalJoiner: 10,
-      currentJoiner: 1,
-      category: 2,
-      available_major: [0, 1],
-      joiners: [],
-      likers: []
+      likers: [{ id: 0 }]
     }
   ],
+
   categories: [
     {
       id: 0,
@@ -168,6 +162,7 @@ let stubInitialState = {
       name: "운동부"
     }
   ],
+
   tags: [
     { id: 0, name: "friendship" },
     { id: 1, name: "love" },
@@ -178,11 +173,13 @@ let stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
+
   majors: [
     { id: 0, name: "cs" },
     { id: 1, name: "economy" },
     { id: 2, name: "music" }
   ],
+
   depts: [
     {
       id: 0,
@@ -245,7 +242,19 @@ let stubInitialState = {
       name: "자유전공학부"
     }
   ],
-  loggedUser: { id: 1 },
+
+  loggedUser: {
+    id: 0,
+    name: "test",
+    email: "test@test.com",
+    password: "test",
+    dept: 0,
+    major: 1,
+    grade: 3,
+    available_semester: 2,
+    available_session_day: 1
+  },
+
   recommendedSomoims: null
 };
 
@@ -343,10 +352,6 @@ describe("<SomoimMain />", () => {
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimDetailShow).toBe(true);
-
-    wrapper = component.find("CloseButton");
-    wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimDetailShow).toBe(false);
   });
 
   it("somoim create button click event handling", () => {
@@ -486,7 +491,7 @@ describe("<SomoimMain />", () => {
     let mainInstance = component.find("SomoimMain").instance();
     mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
     let wrapper = component.find(".recommended-somoim-card");
-    expect(wrapper.length).toBe(12);
+    expect(wrapper.length).toBe(9);
 
     stubInitialState.recommendedSomoims = saved;
     mockStore = getMockStore(stubInitialState);
