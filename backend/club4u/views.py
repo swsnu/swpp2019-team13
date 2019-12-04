@@ -602,7 +602,7 @@ def recommend_club(request, user_id=0):
         if len(recommended_clubs) is not 0:
             serializer = ClubSerializer(recommended_clubs, many=True)
         else:
-            unsorted_clubs = Club.objects.all()
+            unsorted_clubs = Club.objects.all().exclude(id__in=target_already_liked)
             sorted_clubs = sorted(unsorted_clubs, key= lambda c: -c.likers.count())
             serializer = ClubSerializer(sorted_clubs, many=True)
 
