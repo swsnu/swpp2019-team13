@@ -151,31 +151,31 @@ class SomoimDetail extends React.Component {
                       style={{ paddingRight: "9px" }}
                     >
                       <img
-                        src={person}
                         className="detail-user-info-item-img"
+                        src={person}
+                        alt="person"
                         width="18px"
                         height="18px"
-                        alt="person"
                       ></img>
                       <p>&nbsp;25</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
-                        src={views}
                         className="detail-user-info-item-img"
+                        src={views}
+                        alt="views"
                         width="23px"
                         height="23px"
-                        alt="views"
                       ></img>
                       <p>&nbsp;50</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
-                        src={heart}
                         className="detail-user-info-item-img"
+                        alt="heart"
+                        src={heart}
                         width="28px"
                         height="31px"
-                        alt="heart"
                       ></img>
                       <p>{somoim.likers.length}</p>
                     </div>
