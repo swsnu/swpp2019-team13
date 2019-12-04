@@ -29,7 +29,9 @@ class ClubMain extends React.Component {
     this.props.getTagList();
     this.props.getDeptList();
     this.props.getMajorList();
+  }
 
+  componentDidUpdate = () => {
     if (this.props.loggedUser) {
       if (!this.state.isUserInfoLoaded) {
         this.setState({ ...this.state, isUserInfoLoaded: true });
@@ -41,9 +43,7 @@ class ClubMain extends React.Component {
         this.setState({ ...this.state, isUserInfoLoaded: false });
       }
     }
-  }
-
-  componentDidUpdate = () => {};
+  };
 
   clubCardClickHandler = id => {
     this.setState({
