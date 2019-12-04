@@ -519,7 +519,20 @@ def apply_club(request, user_id=0):
 
 def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
-        return HttpResponse([])
+        serializer = ClubSerializer(Club.objects.order_by('?'), many=True)
+
+        response_dict = serializer.data
+
+        for c in response_dict:
+            poster_list = ClubPoster.objects.filter(
+                club_id=c['id']).values()
+
+            poster_img_list = []
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            c['poster_img'] = poster_img_list
+        return HttpResponse(JSONRenderer().render(serializer.data))
     try:
         user = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
