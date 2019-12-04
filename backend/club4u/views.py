@@ -570,7 +570,6 @@ def recommend_club(request, user_id=0):
                 candidate_info[candidate_like_club.id - 1] = 1
 
             (temp1, temp2, temp3) = (0, 0, 0)
-            print(candidate_info)
             for i in range(club_counts):
                 x = target_info[i]
                 y = candidate_info[i]
