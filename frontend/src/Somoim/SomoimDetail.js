@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 import "./SomoimDetail.css";
-import heart from "../images/heart.png";
 import views from "../images/views.png";
+import heart from "../images/heart.png";
 import person from "../images/person.png";
 
 class SomoimDetail extends React.Component {

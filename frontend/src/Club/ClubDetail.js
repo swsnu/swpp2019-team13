@@ -6,10 +6,10 @@ import * as actionCreators from "../store/actions/index";
 import { Modal, Button } from "react-bootstrap";
 
 import "./ClubDetail.css";
+import club4u from "../images/club4u.png";
 import heart from "../images/heart.png";
 import views from "../images/views.png";
 import person from "../images/person.png";
-import club4u from "../images/club4u.png";
 
 class ClubDetail extends React.Component {
   state = {
@@ -163,30 +163,30 @@ class ClubDetail extends React.Component {
                       style={{ paddingRight: "9px" }}
                     >
                       <img
-                        src={person}
                         className="detail-user-info-item-img"
-                        width="18px"
+                        src={person}
                         height="18px"
+                        width="18px"
                         alt="person"
                       ></img>
                       <p>&nbsp;25</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
-                        src={views}
                         className="detail-user-info-item-img"
-                        width="23px"
+                        src={views}
                         height="23px"
+                        width="23px"
                         alt="views"
                       ></img>
                       <p>&nbsp;50</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
-                        src={heart}
                         className="detail-user-info-item-img"
-                        width="28px"
+                        src={heart}
                         height="31px"
+                        width="28px"
                         alt="heart"
                       ></img>
                       <p>{club.likers.length}</p>
