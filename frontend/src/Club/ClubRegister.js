@@ -32,12 +32,12 @@ class ClubRegister extends React.Component {
         backdrop={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Register Club</Modal.Title>
+          <Modal.Title>동아리 등록 신청</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group>
-              <Form.Label>Club Name</Form.Label>
+              <Form.Label>동아리 이름</Form.Label>
               <Form.Control
                 type="clubname"
                 placeholder="Enter club name"
@@ -65,7 +65,7 @@ class ClubRegister extends React.Component {
               })}
             </Form.Control>
             <Form.Group controlId="formClubManager">
-              <Form.Label>Club Manager</Form.Label>
+              <Form.Label>동아리 관리자</Form.Label>
               <Form.Control
                 type="manager"
                 placeholder="Enter Club Manger Name"

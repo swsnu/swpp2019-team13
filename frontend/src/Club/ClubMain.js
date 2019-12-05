@@ -20,7 +20,8 @@ class ClubMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isUserInfoLoaded: false
+    isUserInfoLoaded: false,
+    isEmptyUserRecommendationLoaded: false
   };
 
   componentDidMount() {
@@ -34,13 +35,20 @@ class ClubMain extends React.Component {
   componentDidUpdate = () => {
     if (this.props.loggedUser) {
       if (!this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: true });
+        this.setState({
+          ...this.state,
+          isUserInfoLoaded: true,
+          isEmptyUserRecommendationLoaded: false
+        });
         this.props.onGetRecommendedClubs(this.props.loggedUser);
       }
     } else {
-      this.props.onGetRecommendedClubs({ id: 0 });
-      if (this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: false });
+      if (!this.state.isEmptyUserRecommendationLoaded) {
+        this.props.onGetRecommendedClubs({ id: 0 });
+        this.setState({
+          ...this.state,
+          isEmptyUserRecommendationLoaded: true
+        });
       }
     }
   };

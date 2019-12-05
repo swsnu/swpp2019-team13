@@ -3,12 +3,19 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import { Container, Row, Col, Modal, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
+
+import "./ClubDetail.css";
+import club4u from "../images/club4u.png";
+import heart from "../images/heart.png";
+import views from "../images/views.png";
+import person from "../images/person.png";
 
 class ClubDetail extends React.Component {
   state = {
-    selected_image: 0
+    selected_gallery: 1
   };
+
   onClickLikeButton = () => {
     this.props.addLikedClub(this.props.club, this.props.loggedUser);
   };
@@ -61,16 +68,26 @@ class ClubDetail extends React.Component {
           .includes(this.props.loggedUser.id);
       }
 
-      if (club.available_major.length === this.props.majors.length) {
-        available_major_string = "제한 없음";
+      if (this.props.loggedUser) {
+        available_major_string = " : ";
+        available_major_string += this.props.majors.filter(
+          a => a.id === this.props.loggedUser.major
+        )[0].name;
+        if (club.available_major.includes(this.props.loggedUser.major)) {
+          available_major_string += "가 포함되어 있습니다.";
+        } else {
+          available_major_string += "가 없습니다.";
+        }
       } else {
-        club.available_major.map(major_id => {
-          available_major_string += this.props.majors.filter(
-            a => a.id === major_id
-          )[0].name;
-          available_major_string += " ";
-          return 0;
-        });
+        available_major_string = " : ";
+        if (club.available_major.length === this.props.majors.length) {
+          available_major_string += "제한 없음.";
+        } else {
+          available_major_string += club.managers[0].major.name;
+          available_major_string += " 외 ";
+          available_major_string += String(club.available_major.length - 1);
+          available_major_string += "개 학과";
+        }
       }
 
       for (var i = 0; i < 7; i++) {
@@ -80,26 +97,51 @@ class ClubDetail extends React.Component {
         }
       }
 
-      let image = <img src={null} width="400" height="400" alt="" />;
+      let mainImage = <img src={null} width="300" height="300" alt="" />;
+      let image = [];
 
       if (club.poster_img && club.poster_img.length > 0)
-        image = (
+        mainImage = (
           <img
-            src={"media/" + club.poster_img[this.state.selected_image]}
-            width="400"
-            height="500"
+            src={"media/" + club.poster_img[0]}
+            width="300"
+            height="300"
             alt=""
           />
         );
 
+      if (club.poster_img && club.poster_img.length > 0) {
+        let count = 0;
+        let index = this.state.selected_gallery;
+        while (count < 4) {
+          if (club.poster_img.length > index) {
+            image[count] = (
+              <img
+                src={"media/" + club.poster_img[index]}
+                width="150px"
+                height="150px"
+                alt=""
+              />
+            );
+          } else {
+            image[count] = (
+              <img src={club4u} width="150px" height="150px" alt="club4u"></img>
+            );
+          }
+          count++;
+          index++;
+        }
+      }
+
       let tagList;
       if (this.props.tags.length !== 0) {
         tagList = club.tags.map(item => (
-          <Button size="lg" key={item} variant="outline-primary">
+          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
       }
+
       return (
         <Modal
           size="lg"
@@ -107,158 +149,170 @@ class ClubDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton>
-            <Col sm={10}>
-              <h1>{club.name}</h1>
-            </Col>
-            <Col sm={2}>
-              <h1>
-                <span role="img" aria-label="thumb">
-                  👍
-                </span>
-                &nbsp;{club.likers.length}
-              </h1>
-            </Col>
-          </Modal.Header>
           <Modal.Body>
-            <Container>
-              <Row>
-                <Col>
-                  {image}
-                  <Row>
-                    <Col sm={1}></Col>
-                    {this.state.selected_image === 0 ? (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        disabled={true}
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                      >
-                        prev
-                      </Button>
-                    ) : (
-                      <Button
-                        as={Col}
-                        className="prev"
-                        size="lg"
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                        onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            selected_image: this.state.selected_image - 1
-                          });
-                        }}
-                      >
-                        prev
-                      </Button>
-                    )}
-
-                    <Col sm={5}></Col>
-                    {club.poster_img.length === 0 ||
-                    this.state.selected_image === club.poster_img.length - 1 ? (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        disabled={true}
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                      >
-                        next
-                      </Button>
-                    ) : (
-                      <Button
-                        as={Col}
-                        size="lg"
-                        style={{ marginTop: "3px", marginRight: "3px" }}
-                        className="next"
-                        onClick={() => {
-                          this.setState({
-                            ...this.state,
-                            selected_image: this.state.selected_image + 1
-                          });
-                        }}
-                      >
-                        next
-                      </Button>
-                    )}
-
-                    <Col sm={1}></Col>
-                  </Row>
-                </Col>
-                <Col>
-                  <Row>{tagList}</Row>
-                  <br />
-                  <Row>
-                    <h3>{club.description}</h3>
-                  </Row>
-                </Col>
-              </Row>
-              <br />
-              <br />
-              <h2>가입 조건</h2>
-              <Row>
-                <h3>- 가능 학과</h3>
-              </Row>
-              <h4>{available_major_string}</h4>
-              <Row>
-                <h3>- 활동 요일</h3>
-              </Row>
-              <h4>{session_day_string}</h4>
-              <Row>
-                <h3>- 최소 활동 학기 수</h3>
-              </Row>
-              <h4>{club.available_semester + "학기"}</h4>
-              <br />
-              <br />
-              {this.props.loggedUser && (
-                <Row>
-                  <Col></Col>
-                  <Col>
-                    {isLoggedUserLike ? (
-                      <Button
-                        className="likebutton"
-                        size="lg"
-                        variant="primary"
-                        onClick={this.onClickLikeButton}
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                      </Button>
-                    ) : (
-                      <Button
-                        className="likebutton2"
-                        size="lg"
-                        variant="secondary"
-                        onClick={this.onClickLikeButton}
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                      </Button>
-                    )}
-                  </Col>
-                  <Col></Col>
-                  <Col>
-                    {acceptQualification ? (
-                      <Button
-                        onClick={this.onClickApplyButton}
-                        size="lg"
-                        className="applybutton"
-                      >
-                        지원하기
-                      </Button>
-                    ) : (
-                      <Button disabled title={qualificationMessage} size="lg">
-                        지원하기
-                      </Button>
-                    )}
-                  </Col>
-                  <Col></Col>
-                </Row>
-              )}
-            </Container>
+            <div className="detail-header">
+              <div className="detail_poster">{mainImage}</div>
+              <div className="detail-header-right">
+                <div className="detail-title">
+                  <h1 style={{ fontSize: "3em", paddingRight: "20px" }}>
+                    {club.name}
+                  </h1>
+                  <div className="detail-user-info-container">
+                    <div
+                      className="detail-user-info-item"
+                      style={{ paddingRight: "9px" }}
+                    >
+                      <img
+                        className="detail-user-info-item-img"
+                        src={person}
+                        height="18px"
+                        width="18px"
+                        alt="person"
+                      ></img>
+                      <p>&nbsp;25</p>
+                    </div>
+                    <div className="detail-user-info-item">
+                      <img
+                        className="detail-user-info-item-img"
+                        src={views}
+                        height="23px"
+                        width="23px"
+                        alt="views"
+                      ></img>
+                      <p>&nbsp;50</p>
+                    </div>
+                    <div className="detail-user-info-item">
+                      <img
+                        className="detail-user-info-item-img"
+                        src={heart}
+                        height="31px"
+                        width="28px"
+                        alt="heart"
+                      ></img>
+                      <p>{club.likers.length}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="detail-tagList">{tagList}</div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">지원 기간</span>
+                  <span>
+                    {" "}
+                    : {club.recruit_start_day} ~ {club.recruit_end_day}
+                  </span>
+                </div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">
+                    최소 활동 학기 수
+                  </span>
+                  <span> : {club.available_semester}</span>
+                  <span>학기</span>
+                </div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">활동 요일</span>
+                  <span> : {session_day_string}</span>
+                </div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">
+                    가입 가능 학과
+                  </span>
+                  <span id="available_major_string">
+                    {available_major_string}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="detail-description">
+              <div
+                style={{
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                  fontStyle: "italic"
+                }}
+              >
+                우리 동아리는...
+              </div>
+              {club.description}
+            </div>
+            <div className="detail-gallery">
+              <div
+                style={{
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                  fontStyle: "italic"
+                }}
+              >
+                갤러리
+              </div>
+              <div className="detail-gallery-container">
+                <button
+                  className="detail-gallery-button"
+                  onClick={() => {
+                    if (this.state.selected_gallery !== 1) {
+                      this.setState({
+                        selected_gallery: this.state.selected_gallery - 1
+                      });
+                    }
+                  }}
+                >
+                  &laquo;
+                </button>
+                <div className="detail-gallery-item">{image[0]}</div>
+                <div className="detail-gallery-item">{image[1]}</div>
+                <div className="detail-gallery-item">{image[2]}</div>
+                <div className="detail-gallery-item">{image[3]}</div>
+                <button
+                  className="detail-gallery-button"
+                  onClick={() => {
+                    if (
+                      club.poster_img.length >
+                      this.state.selected_gallery + 4
+                    ) {
+                      this.setState({
+                        selected_gallery: this.state.selected_gallery + 1
+                      });
+                    }
+                  }}
+                >
+                  &raquo;
+                </button>
+              </div>
+            </div>
+            <div className="detail-footer">
+              {this.props.loggedUser &&
+                (isLoggedUserLike ? (
+                  <button
+                    className="unliked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요!
+                  </button>
+                ) : (
+                  <button
+                    className="liked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요!
+                  </button>
+                ))}
+              {this.props.loggedUser &&
+                (acceptQualification ? (
+                  <button
+                    className="applybutton"
+                    onClick={this.onClickApplyButton}
+                  >
+                    지원하기
+                  </button>
+                ) : (
+                  <button
+                    className="disabled-applybutton"
+                    title={qualificationMessage}
+                    disabled
+                  >
+                    지원하기
+                  </button>
+                ))}
+            </div>
           </Modal.Body>
         </Modal>
       );
