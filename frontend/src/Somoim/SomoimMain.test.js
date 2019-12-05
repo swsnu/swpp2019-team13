@@ -524,7 +524,7 @@ describe("<SomoimMain />", () => {
       ...mainInstance.state,
       isUserInfoLoaded: true
     });
-    expect(spyGetRecommendedSomoims).toBeCalledTimes(9);
+    expect(spyGetRecommendedSomoims).toBeCalledTimes(8);
 
     stubInitialState.loggedUser = saved;
     mockStore = getMockStore(stubInitialState);
