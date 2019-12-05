@@ -1,9 +1,7 @@
 import json
 import os
 
-# import itertools
 from json import JSONDecodeError
-# import numpy as np
 
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
@@ -20,7 +18,7 @@ from .application_models import *
 from .serializers import *
 from .application_serializers import *
 
-
+import math
 
 def category_list(request):
     if request.method == 'GET':
@@ -519,91 +517,106 @@ def apply_club(request, user_id=0):
 
 def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
-        return HttpResponse([])
+        unsorted_clubs = Club.objects.all()
+        sorted_clubs = sorted(unsorted_clubs, key= lambda c: -c.likers.count())
+        serializer = ClubSerializer(sorted_clubs, many=True)
+
+        # ADD POSTER IMAGES TO EACH CLUB DATA
+        response_dict = serializer.data
+        for c in response_dict:
+            poster_list = ClubPoster.objects.filter(
+                club_id=c['id']).values()
+
+            poster_img_list = []
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            c['poster_img'] = poster_img_list
+
+        return HttpResponse(JSONRenderer().render(serializer.data))
+
     try:
         user = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # # calculate the number of nodes
-        # user_counts = UserProfile.objects.count()
-        # club_counts = Club.objects.count()
-        # somoim_counts = Somoim.objects.count()
-        # tag_counts = Tag.objects.count()
-        
-        # # initialize graph
-        # graph_size = user_counts + club_counts + somoim_counts + tag_counts
-        # graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
-        
-        # # make graph
-        # for user_profile in UserProfile.objects.all():
-        #     for user_like_club in user_profile.like_clubs.all():
-        #         graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
-        #         graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
-        #     for user_like_somoim in user_profile.like_somoims.all():
-        #         graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
-        #         graph_[user_counts + club_counts +
-        #               user_like_somoim.id - 1][user_profile.id-1] = 1
-        # for each_club in Club.objects.all():
-        #     for each_tag in each_club.tags.all():
-        #         if each_tag.selected != 0:
-        #             graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-        #             graph_[user_counts + club_counts + somoim_counts +
-        #                 each_tag.id - 1][user_counts + each_club.id - 1] = 1
-        # for each_somoim in Somoim.objects.all():
-        #     for each_tag in each_somoim.tags.all():
-        #         if each_tag.selected != 0:
-        #             graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-        #             graph_[user_counts + club_counts + somoim_counts +
-        #                 each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
-        
-        # # change graph's data structure: list to numpy
-        # graph = np.array(graph_)
-        
-        # # calculate recommedation score
-        # ## prepare
-        # clubs_recommendation_score = np.zeros(club_counts)
-        # start_index = user_counts
-        # end_index = start_index + club_counts
-        # graph_2 = np.matmul(graph, graph)
-        # multed_graph = graph
+        # 1. get clubs which user likes
+        target_liked_clubs = user.like_clubs.all()
 
-        # ## calculate
-        # for i in range(5):
-        #     prev_counts = multed_graph[user_id-1][start_index:end_index]
-        #     multed_graph = np.matmul(multed_graph, graph_2)
-        #     cur_counts = multed_graph[user_id-1][start_index:end_index]
-        #     counts = cur_counts - prev_counts
-        #     clubs_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
-        
+        # 2. get users who likes club in above list
+        candidates = set()
+        for target_like_club in target_liked_clubs:
+            for candidate in target_like_club.likers.all():
+                if candidate.id is user.id:
+                    continue
+                candidates.add(candidate)
 
-        # # make recommedation clubs list by using recommenation score
-        # ## get liked clubs' id
-        # already_liked_clubs = graph[user_id-1][start_index:end_index]
-        # already_liked_clubs_id = []
-        # for i in range(club_counts):
-        #     if already_liked_clubs[i].item() == 1:
-        #         already_liked_clubs_id.append(i)
+        # 3. calculate similarity between target user and each candidate user
+        # by user-based collaborate filtering (CF)
+        # use cosine similarity
+        similarity_score = []
+        target_already_liked = []
+        club_counts = Club.objects.count()
+
+        target_info = [0 for x in range(club_counts)]
+        for target_like_club in target_liked_clubs:
+            target_info[target_like_club.id - 1] = 1
+            target_already_liked.append(target_like_club.id)
+
+        for candidate in candidates:
+            candidate_info = [0 for x in range(club_counts)]
+            for candidate_like_club in candidate.like_clubs.all():
+                candidate_info[candidate_like_club.id - 1] = 1
+
+            (temp1, temp2, temp3) = (0, 0, 0)
+            for i in range(club_counts):
+                x = target_info[i]
+                y = candidate_info[i]
+
+                temp1 += (x * x)
+                temp2 += (y * y)
+                temp3 += (x * y)
+            
+            similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
+
+        # 4. calculate recommendation score of club by using above information
+        recommendation_scores = [0 for x in range(club_counts)]
+        candidate_index = 0
+        for candidate in candidates:
+            for candidate_like_club in candidate.like_clubs.all():
+                if candidate_like_club.id in target_already_liked:
+                    continue
+                recommendation_scores[candidate_like_club.id - 1] += similarity_score[candidate_index]
+            candidate_index += 1
         
-        # ## make recommedation list
-        # recommended_clubs = Club.objects.none()
-        # score_cut = 150
-        # for i in range(club_counts):
-        #     index = clubs_recommendation_score.argmax()
-        #     if index not in already_liked_clubs_id and clubs_recommendation_score[index] > score_cut:
-        #         # recommended_clubs |= Club.objects.filter(id=index+1)
-        #         recommended_clubs = itertools.chain(recommended_clubs, Club.objects.filter(id=index+1))
-        #     clubs_recommendation_score[index] = -1
-        
+        # 5. make recommendation list
         recommended_clubs = Club.objects.none()
-        for user_like_club in user.like_clubs.all():
-            for liker in user_like_club.likers.all():
-                for c in liker.like_clubs.all():
-                    if recommended_clubs.filter(id=c.id).count() == 0:
-                        recommended_clubs |= Club.objects.filter(id=c.id)
-        
-        serializer = ClubSerializer(recommended_clubs, many=True)
+        for x in range(club_counts // 2):
+            index = recommendation_scores.index(max(recommendation_scores))
+            if recommendation_scores[index] > 0:
+                recommended_clubs |= Club.objects.filter(id=index+1)
+            recommendation_scores[index] = 0
+
+        if len(recommended_clubs) is not 0:
+            serializer = ClubSerializer(recommended_clubs, many=True)
+        else:
+            unsorted_clubs = Club.objects.all().exclude(id__in=target_already_liked)
+            sorted_clubs = sorted(unsorted_clubs, key= lambda c: -c.likers.count())
+            serializer = ClubSerializer(sorted_clubs, many=True)
+
+        # ADD POSTER IMAGES TO EACH CLUB DATA
+        response_dict = serializer.data
+        for c in response_dict:
+            poster_list = ClubPoster.objects.filter(
+                club_id=c['id']).values()
+
+            poster_img_list = []
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            c['poster_img'] = poster_img_list
+
         return HttpResponse(JSONRenderer().render(serializer.data))
     else:
         return HttpResponse(status=405)

@@ -526,7 +526,7 @@ describe("<ClubMain />", () => {
       ...mainInstance.state,
       isUserInfoLoaded: true
     });
-    expect(spyGetRecommendedClubs).toBeCalledTimes(9);
+    expect(spyGetRecommendedClubs).toBeCalledTimes(8);
 
     stubInitialState.loggedUser = saved;
     mockStore = getMockStore(stubInitialState);
