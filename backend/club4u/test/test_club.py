@@ -224,6 +224,10 @@ class ClubTestCase(TestCase):
         client = getLoggedInClient()
 
         club = Club.objects.get(id=1)
+        club2 = Club.objects.create(id=2, name='club2', summary='summary2', description='description2',
+                                   category=Category.objects.get(id=1))
+        
+        club2.likers.set([1, 2])
         
         response = client.get('/api/user/1/club/recommend/')
         expected = [{'id':1,'managers':[],
