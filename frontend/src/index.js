@@ -9,6 +9,11 @@ import { Provider } from "react-redux";
 
 import store, { history } from "./store/store";
 import axios from "axios";
+import Cookie from 'js-cookie';
+
+if (Cookie.get().csrftoken === undefined) {
+  axios.get('/api/token/')
+}
 
 ReactDOM.render(
   <Provider store={store}>
