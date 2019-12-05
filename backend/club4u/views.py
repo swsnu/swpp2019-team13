@@ -1,5 +1,6 @@
 import json
 import os
+import math
 
 from json import JSONDecodeError
 
@@ -17,8 +18,6 @@ from .models import *
 from .application_models import *
 from .serializers import *
 from .application_serializers import *
-
-import math
 
 def category_list(request):
     if request.method == 'GET':
@@ -518,7 +517,7 @@ def apply_club(request, user_id=0):
 def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
         unsorted_clubs = Club.objects.all()
-        sorted_clubs = sorted(unsorted_clubs, key= lambda c: -c.likers.count())
+        sorted_clubs = sorted(unsorted_clubs, key=lambda c: -c.likers.count())
         serializer = ClubSerializer(sorted_clubs, many=True)
 
         # ADD POSTER IMAGES TO EACH CLUB DATA
@@ -598,11 +597,11 @@ def recommend_club(request, user_id=0):
                 recommended_clubs |= Club.objects.filter(id=index+1)
             recommendation_scores[index] = 0
 
-        if len(recommended_clubs) is not 0:
+        if len(recommended_clubs) != 0:
             serializer = ClubSerializer(recommended_clubs, many=True)
         else:
             unsorted_clubs = Club.objects.all().exclude(id__in=target_already_liked)
-            sorted_clubs = sorted(unsorted_clubs, key= lambda c: -c.likers.count())
+            sorted_clubs = sorted(unsorted_clubs, key=lambda c: -c.likers.count())
             serializer = ClubSerializer(sorted_clubs, many=True)
 
         # ADD POSTER IMAGES TO EACH CLUB DATA
@@ -700,7 +699,7 @@ def join_somoim(request, user_id=0):
 def recommend_somoim(request, user_id=0):
     if not request.user.is_authenticated:
         unsorted_somoims = Somoim.objects.all()
-        sorted_somoims = sorted(unsorted_somoims, key= lambda c: -c.likers.count())
+        sorted_somoims = sorted(unsorted_somoims, key=lambda c: -c.likers.count())
         serializer = SomoimSerializer(sorted_somoims, many=True)
 
         return HttpResponse(JSONRenderer().render(serializer.data))
@@ -768,7 +767,7 @@ def recommend_somoim(request, user_id=0):
                 recommended_somoims |= Somoim.objects.filter(id=index+1)
             recommendation_scores[index] = 0
 
-        if len(recommended_somoims) is not 0:
+        if len(recommended_somoims) != 0:
             serializer = SomoimSerializer(recommended_somoims, many=True)
         else:
             unsorted_somoims = Somoim.objects.all().exclude(id__in=target_already_liked)

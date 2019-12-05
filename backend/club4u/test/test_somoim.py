@@ -224,20 +224,20 @@ class SomoimTestCase(TestCase):
                                  'major': {'id': 1, 'name': 'major1', 'dept': 1},
                                  'grade': 1, 'available_semester': 1,
                                  'available_session_day': 0,
-                                 'manage_clubs': [], 'like_clubs':[1, 2],
+                                 'manage_clubs': [], 'like_clubs':[],
                                  'apply_clubs':[], 'manage_somoims':[],
-                                 'like_somoims':[], 'join_somoims':[]}],
+                                 'like_somoims':[1, 2], 'join_somoims':[]}],
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
                      'tags': []}]
-
+        
         self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
 
     def test_get_recommend_somoim_list_success_but_no_list(self):
         client = getLoggedInClient()
 
-        somoim = Somoim.objects.get(id=1)
         somoim2 = Somoim.objects.create(id=2, title='somoim2', summary='summary2', description='description2',
                                         goalJoiner=2, category=Category.objects.get(id=1))
 
