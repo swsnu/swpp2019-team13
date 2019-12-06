@@ -94,17 +94,17 @@ class SomoimMain extends React.Component {
         <div
           className="changePage"
           onClick={() => {
-            if (page === 0) {
-              if (this.state.recommendedListPageNum > 0)
-                this.setState({
-                  ...this.state,
-                  recommendedListPageNum: this.state.recommendedListPageNum - 1
-                });
-            } else {
+            if (page !== 0) {
               if (this.state.allListPageNum > 0)
                 this.setState({
                   ...this.state,
                   allListPageNum: this.state.allListPageNum - 1
+                });
+            } else {
+              if (this.state.recommendedListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum - 1
                 });
             }
           }}
@@ -115,7 +115,13 @@ class SomoimMain extends React.Component {
         <div
           className="changePage"
           onClick={() => {
-            if (page === 0) {
+            if (page !== 0) {
+              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum + 1
+                });
+            } else {
               if (
                 this.state.recommendedListPageNum <
                 Math.ceil(list.length / 4) - 1
@@ -123,12 +129,6 @@ class SomoimMain extends React.Component {
                 this.setState({
                   ...this.state,
                   recommendedListPageNum: this.state.recommendedListPageNum + 1
-                });
-            } else {
-              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
-                this.setState({
-                  ...this.state,
-                  allListPageNum: this.state.allListPageNum + 1
                 });
             }
           }}
