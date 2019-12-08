@@ -7,6 +7,8 @@ import { Route, Switch } from "react-router-dom";
 import ClubCard from "./ClubCard";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
+import * as clubActions from "../store/actions/club";
+
 const stubInitialState = {
   tags: [
     { id: 0, name: "friendship" },
@@ -31,7 +33,10 @@ const stubInitialState = {
       available_major: [1],
       tags: [1, 2],
       likers: [],
-      likes: 10,
+      recruit_start_day: "2019-12-8",
+      recruit_end_day: "2019-12-16",
+      member: 50,
+      hits: 1,
       poster_img: ["test.jpg"]
     },
     {
@@ -45,7 +50,10 @@ const stubInitialState = {
       tags: [2, 3],
       available_major: [1],
       likers: [],
-      likes: 15,
+      recruit_start_day: "2019-12-8",
+      recruit_end_day: "2019-12-16",
+      member: 50,
+      hits: 1,
       poster_img: null
     },
 
@@ -60,7 +68,10 @@ const stubInitialState = {
       tags: [2, 3],
       available_major: [1],
       likers: [],
-      likes: 20,
+      recruit_start_day: "2019-12-8",
+      recruit_end_day: "2019-12-16",
+      member: 50,
+      hits: 1,
       poster_img: []
     }
   ]
@@ -70,7 +81,7 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<ClubCard />", () => {
   let clubCard;
-  let spyClickHandler;
+  let spyClickHandler, spyAddClubHitCount;
   beforeEach(() => {
     clubCard = (
       <Provider store={mockStore}>
@@ -94,6 +105,12 @@ describe("<ClubCard />", () => {
     );
 
     spyClickHandler = jest.fn();
+
+    spyAddClubHitCount = jest
+      .spyOn(clubActions, "addClubHitCount")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render without errors", () => {

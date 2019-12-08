@@ -44,15 +44,17 @@ class ClubCard extends React.Component {
       }
 
       let recruit_period = "";
-      recruit_period +=
-        club.recruit_start_day.split("-")[1] +
-        "/" +
-        club.recruit_start_day.split("-")[2];
-      recruit_period += " ~ ";
-      recruit_period +=
-        club.recruit_end_day.split("-")[1] +
-        "/" +
-        club.recruit_end_day.split("-")[2];
+      if (club.recruit_start_day) {
+        recruit_period +=
+          club.recruit_start_day.split("-")[1] +
+          "/" +
+          club.recruit_start_day.split("-")[2];
+        recruit_period += " ~ ";
+        recruit_period +=
+          club.recruit_end_day.split("-")[1] +
+          "/" +
+          club.recruit_end_day.split("-")[2];
+      }
 
       return (
         <div
