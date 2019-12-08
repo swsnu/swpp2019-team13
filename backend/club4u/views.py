@@ -221,7 +221,7 @@ def clubhit(request, club_id=None):
             selected_club = Club.objects.get(id=club_id)
 
             if 'club{}'.format(club_id) not in request.session:
-                request.session['club{}'.format(club_id)] = 1;
+                request.session['club{}'.format(club_id)] = 1
                 selected_club.hits += 1
                 selected_club.save()
                 return HttpResponse(status=200)
@@ -236,7 +236,7 @@ def somoimhit(request, somoim_id=None):
     if request.method == 'PUT':
         try:
             if 'somoim{}'.format(somoim_id) not in request.session:
-                request.session['somoim{}'.format(somoim_id)] = 1;
+                request.session['somoim{}'.format(somoim_id)] = 1
                 selected_somoim = Somoim.objects.get(id=somoim_id)
                 selected_somoim.hits += 1
                 selected_somoim.save()
