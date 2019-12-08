@@ -241,6 +241,8 @@ def club(request, club_id=None):
 
             req_data = json.loads(request.body.decode())
 
+            print(req_data)
+
             # Handle New Tag and link tag id
             selected_tag = req_data['selected_tag']
 
@@ -265,7 +267,14 @@ def club(request, club_id=None):
                     tag = Tag(name=text, suggested=1, selected=0)
                     tag.save()
 
+            # Handle New Tag in tags
+
             tags = req_data['tags']
+            for tag in tags:
+                if not Tag.objects.filter(name=tag['text']).exists():
+                    tag = Tag(name=tag['text'], suggested=1, selected=1)
+                    tag.save()
+
             selected_club.tags.clear()
 
             for tag in tags:
@@ -305,7 +314,8 @@ def club(request, club_id=None):
             selected_club.save()
 
             return HttpResponse(status=204)
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as e:
+            print(e)
             return HttpResponse(status=404)
     else:
         return HttpResponse(status=405)
