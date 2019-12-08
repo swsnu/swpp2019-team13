@@ -285,7 +285,7 @@ class ClubDetail extends React.Component {
                     className="unliked-likebutton"
                     onClick={this.onClickLikeButton}
                   >
-                    좋아요!
+                    좋아요 취소
                   </button>
                 ) : (
                   <button

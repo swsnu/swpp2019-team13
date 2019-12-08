@@ -198,24 +198,24 @@ class ClubTestCase(TestCase):
         club2.likers.set([1, 2])
         
         response = client.get('/api/user/1/club/recommend/')
-        expected = [{'id':1,'managers':[],
-                    'likers':[{'id':2,'user':{'username':'user2','last_name':'name2'},
-                    'dept':{'id':1,'name':'dept1'},
-                    'major':{'id':1,'name':'major1','dept':1},
-                    'grade':1,'available_semester':1,
-                    'available_session_day':0,
-                    'manage_clubs':[],'like_clubs':[1,2],
-                    'apply_clubs':[],'manage_somoims':[],
-                    'like_somoims':[],'join_somoims':[]}],
-                    'appliers':[],'name':'club1',
-                    'isShow':False,'summary':'summary1',
-                    'description':'description1',
-                    'available_semester':0,
-                    'session_day':0,
-                    'recruit_start_day':None,
-                    'recruit_end_day':None,
-                    'category':1,'available_major':[],
-                    'tags':[],'poster_img':["img"]}]
+        expected = [{'id': 1, 'managers': [],
+                    'likers': [{'id': 2, 'user': {'username': 'user2', 'last_name': 'name2'},
+                    'dept': {'id': 1, 'name': 'dept1'},
+                    'major': {'id': 1, 'name': 'major1', 'dept': 1},
+                    'grade': 1, 'available_semester': 1,
+                    'available_session_day': 0,
+                    'manage_clubs': [], 'like_clubs': [1, 2],
+                    'apply_clubs': [], 'manage_somoims': [],
+                    'like_somoims': [], 'join_somoims': []}],
+                    'appliers': [], 'name': 'club1',
+                    'isShow': False, 'summary': 'summary1',
+                    'description': 'description1',
+                    'available_semester': 0,
+                    'session_day': 0,
+                    'recruit_start_day': None,
+                    'recruit_end_day': None,
+                    'category': 1, 'available_major': [],
+                    'tags': [], 'poster_img': ["img"]}]
         
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
@@ -223,20 +223,23 @@ class ClubTestCase(TestCase):
     def test_get_recommend_club_list_success_but_no_list(self):
         client = getLoggedInClient()
 
-        club = Club.objects.get(id=1)
+        club2 = Club.objects.create(id=2, name='club2', summary='summary2', description='description2',
+                                   category=Category.objects.get(id=1))
+        
+        club2.likers.set([1, 2])
         
         response = client.get('/api/user/1/club/recommend/')
-        expected = [{'id':1,'managers':[],
-                    'likers':[],'appliers':[],
-                    'name':'club1','isShow':False,
-                    'summary':'summary1',
-                    'description':'description1',
-                    'available_semester':0,
-                    'session_day':0,
-                    'recruit_start_day':None,
-                    'recruit_end_day':None,
-                    'category':1,
-                    'available_major':[],'tags':[],
+        expected = [{'id': 1, 'managers': [],
+                    'likers': [], 'appliers': [],
+                    'name': 'club1', 'isShow': False,
+                    'summary': 'summary1',
+                    'description': 'description1',
+                    'available_semester': 0,
+                    'session_day': 0,
+                    'recruit_start_day': None,
+                    'recruit_end_day': None,
+                    'category': 1,
+                    'available_major': [], 'tags': [],
                     'poster_img': ['img']}]
         
         self.assertEqual(response.status_code, 200)
@@ -245,17 +248,17 @@ class ClubTestCase(TestCase):
     def test_get_recommend_club_list_not_logged_in(self):
         client = Client(enforce_csrf_checks=False)
         response = client.get('/api/user/1/club/recommend/')
-        expected = [{'id':1,'managers':[],
-                    'likers':[],'appliers':[],
-                    'name':'club1','isShow':False,
-                    'summary':'summary1',
-                    'description':'description1',
-                    'available_semester':0,
-                    'session_day':0,
-                    'recruit_start_day':None,
-                    'recruit_end_day':None,
-                    'category':1,
-                    'available_major':[],'tags':[],
+        expected = [{'id': 1, 'managers': [],
+                    'likers': [], 'appliers': [],
+                    'name': 'club1', 'isShow': False,
+                    'summary': 'summary1',
+                    'description': 'description1',
+                    'available_semester': 0,
+                    'session_day': 0,
+                    'recruit_start_day': None,
+                    'recruit_end_day': None,
+                    'category': 1,
+                    'available_major': [], 'tags': [],
                     'poster_img': ['img']}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)

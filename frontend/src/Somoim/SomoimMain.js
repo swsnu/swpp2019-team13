@@ -20,12 +20,12 @@ class SomoimMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isUserInfoLoaded: false
+    isUserInfoLoaded: false,
+    isEmptyUserRecommendationLoaded: false
   };
 
   componentDidMount() {
     this.props.getSomoimList();
-
     this.props.getCategoryList();
     this.props.getTagList();
     this.props.getDeptList();
@@ -35,13 +35,20 @@ class SomoimMain extends React.Component {
   componentDidUpdate = () => {
     if (this.props.loggedUser) {
       if (!this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: true });
+        this.setState({
+          ...this.state,
+          isUserInfoLoaded: true,
+          isEmptyUserRecommendationLoaded: false
+        });
         this.props.onGetRecommendedSomoims(this.props.loggedUser);
       }
     } else {
-      this.props.onGetRecommendedSomoims({ id: 0 });
-      if (this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: false });
+      if (!this.state.isEmptyUserRecommendationLoaded) {
+        this.props.onGetRecommendedSomoims({ id: 0 });
+        this.setState({
+          ...this.state,
+          isEmptyUserRecommendationLoaded: true
+        });
       }
     }
   };
@@ -87,17 +94,17 @@ class SomoimMain extends React.Component {
         <div
           className="changePage"
           onClick={() => {
-            if (page === 0) {
-              if (this.state.recommendedListPageNum > 0)
-                this.setState({
-                  ...this.state,
-                  recommendedListPageNum: this.state.recommendedListPageNum - 1
-                });
-            } else {
+            if (page !== 0) {
               if (this.state.allListPageNum > 0)
                 this.setState({
                   ...this.state,
                   allListPageNum: this.state.allListPageNum - 1
+                });
+            } else {
+              if (this.state.recommendedListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum - 1
                 });
             }
           }}
@@ -108,7 +115,13 @@ class SomoimMain extends React.Component {
         <div
           className="changePage"
           onClick={() => {
-            if (page === 0) {
+            if (page !== 0) {
+              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum + 1
+                });
+            } else {
               if (
                 this.state.recommendedListPageNum <
                 Math.ceil(list.length / 4) - 1
@@ -116,12 +129,6 @@ class SomoimMain extends React.Component {
                 this.setState({
                   ...this.state,
                   recommendedListPageNum: this.state.recommendedListPageNum + 1
-                });
-            } else {
-              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
-                this.setState({
-                  ...this.state,
-                  allListPageNum: this.state.allListPageNum + 1
                 });
             }
           }}
