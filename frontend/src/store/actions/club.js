@@ -129,7 +129,7 @@ export const addClubHitCount_ = id => {
 
 export const addClubHitCount = id => {
   return dispatch => {
-    return axios.put("/api/club/" + id + "/hits").then(res => {
+    return axios.put("/api/club/" + id + "/hits/").then(res => {
       if (res.status === 200) dispatch(addClubHitCount_(id));
     });
   };

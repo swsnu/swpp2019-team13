@@ -56,7 +56,7 @@ export const addSomoimHitCount_ = id => {
 
 export const addSomoimHitCount = id => {
   return dispatch => {
-    return axios.put("/api/somoim/" + id + "/hits").then(res => {
+    return axios.put("/api/somoim/" + id + "/hits/").then(res => {
       if (res.status === 200) dispatch(addSomoimHitCount_(id));
     });
   };

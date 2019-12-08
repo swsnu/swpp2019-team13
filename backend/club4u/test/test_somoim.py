@@ -38,7 +38,9 @@ class SomoimTestCase(TestCase):
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
-                     'tags': []}]
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -230,8 +232,10 @@ class SomoimTestCase(TestCase):
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
-                     'tags': []}]
-        
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
+
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -245,17 +249,19 @@ class SomoimTestCase(TestCase):
 
         response = client.get('/api/user/1/somoim/recommend/')
         expected = [{'id': 1, 'title': 'somoim1',
-                    'joiners': [],
-                    'available_major': [],
-                    'available_semester': 0,
-                    'category': 1,
-                    'description': 'description1',
-                    'goalJoiner': 2,
-                    'likers': [],
-                    'managers': [],
-                    'session_day': 0,
-                    'summary': 'summary1',
-                    'tags': []}]
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
@@ -275,7 +281,9 @@ class SomoimTestCase(TestCase):
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
-                     'tags': []}]
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
 
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
@@ -307,7 +315,9 @@ class SomoimTestCase(TestCase):
                     'managers': [],
                     'session_day': 0,
                     'summary': 'summary1',
-                    'tags': []}
+                    'tags': [],
+                    'member': 0,
+                    'hits': 0}
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -319,4 +329,22 @@ class SomoimTestCase(TestCase):
     def test_get_specific_somoim_wrong_method(self):
         client = Client(enforce_csrf_checks=False)
         response = client.patch('/api/somoim/1/')
+        self.assertEqual(response.status_code, 405)
+
+    def test_somoim_hit_success(self):
+        client = getLoggedInClient()
+        response = client.put('/api/somoim/1/hits/')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/somoim/1/hits/')
+        self.assertEqual(response.status_code, 204)
+
+    def test_somoim_hit_not_found(self):
+        client = getLoggedInClient()
+        response = client.put('/api/somoim/10/hits/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_somoim_hit_wrong_method(self):
+        client = getLoggedInClient()
+        response = client.patch('/api/somoim/1/hits/')
         self.assertEqual(response.status_code, 405)
