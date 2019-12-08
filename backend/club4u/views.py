@@ -383,7 +383,6 @@ def somoim_list(request):
 
         category = Category.objects.get(id=category_id)
 
-        # TODO : Add Tag
         new_somoim = Somoim()
         new_somoim.title = title
         new_somoim.category = category
@@ -647,6 +646,7 @@ def manage_somoim(request, user_id=0):
             user.manage_somoims.get(id=somoim_id)
             user.manage_somoims.remove(user.manage_somoims.get(id=somoim_id))
         except ObjectDoesNotExist:
+            user.join_somoims.add(Somoim.objects.get(id=somoim_id))
             user.manage_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
     else:

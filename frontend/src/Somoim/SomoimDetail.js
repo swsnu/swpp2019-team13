@@ -213,7 +213,7 @@ class SomoimDetail extends React.Component {
               >
                 이 소모임은...
               </div>
-              {somoim.description &&
+              {somoim.description !== null &&
                 somoim.description.split("\n").map((line, i) => {
                   return (
                     <span key={i}>
