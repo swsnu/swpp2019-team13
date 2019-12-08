@@ -169,7 +169,7 @@ class ClubDetail extends React.Component {
                         width="18px"
                         alt="person"
                       ></img>
-                      <p>&nbsp;25</p>
+                      <p>&nbsp;{club.member}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -179,7 +179,7 @@ class ClubDetail extends React.Component {
                         width="23px"
                         alt="views"
                       ></img>
-                      <p>&nbsp;50</p>
+                      <p>&nbsp;{club.hits}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img

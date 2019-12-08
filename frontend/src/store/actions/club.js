@@ -120,6 +120,21 @@ export const putClubInformation = (id, clubInfo) => {
   };
 };
 
+export const addClubHitCount_ = id => {
+  return {
+    type: actionTypes.ADD_CLUB_HITCOUNT,
+    club_id: id
+  };
+};
+
+export const addClubHitCount = id => {
+  return dispatch => {
+    return axios.put("/api/club/" + id + "/hits").then(res => {
+      if (res.status === 200) dispatch(addClubHitCount_(id));
+    });
+  };
+};
+
 export const postClubPoster_ = () => {
   return {
     type: actionTypes.POST_CLUB_POSTER

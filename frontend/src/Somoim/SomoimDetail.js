@@ -157,7 +157,7 @@ class SomoimDetail extends React.Component {
                         width="18px"
                         height="18px"
                       ></img>
-                      <p>&nbsp;25</p>
+                      <p>&nbsp;{somoim.member}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -167,7 +167,7 @@ class SomoimDetail extends React.Component {
                         width="23px"
                         height="23px"
                       ></img>
-                      <p>&nbsp;50</p>
+                      <p>&nbsp;{somoim.hits}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
