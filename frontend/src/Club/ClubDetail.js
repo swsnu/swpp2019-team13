@@ -232,7 +232,15 @@ class ClubDetail extends React.Component {
               >
                 우리 동아리는...
               </div>
-              {club.description}
+              {club.description &&
+                club.description.split("\n").map((line, i) => {
+                  return (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  );
+                })}
             </div>
             <div className="detail-gallery">
               <div
