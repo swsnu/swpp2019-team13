@@ -7,6 +7,7 @@ import "./ClubCard.css";
 import heart from "../images/heart.png";
 import views from "../images/views.png";
 import person from "../images/person.png";
+import * as actionCreators from "../store/actions/index";
 
 class ClubCard extends React.Component {
   render() {
@@ -42,18 +43,32 @@ class ClubCard extends React.Component {
         ));
       }
 
+      let recruit_period = "";
+      if (club.recruit_start_day) {
+        recruit_period +=
+          club.recruit_start_day.split("-")[1] +
+          "/" +
+          club.recruit_start_day.split("-")[2];
+        recruit_period += " ~ ";
+        recruit_period +=
+          club.recruit_end_day.split("-")[1] +
+          "/" +
+          club.recruit_end_day.split("-")[2];
+      }
+
       return (
         <div
           className="Club-Card"
           onClick={() => {
             this.props.clickHandler(club.id);
+            this.props.addClubHitCount(club.id);
           }}
         >
           <div className="club-title">
             <h2>{club.name}</h2>
           </div>
           <div className="club-applicable-term">
-            <p>01/07 ~ 01/20</p>
+            <p>{recruit_period}</p>
           </div>
           <div className="club-poster">{image}</div>
           <div className="club-user-info">
@@ -65,7 +80,7 @@ class ClubCard extends React.Component {
                 height="15px"
                 alt="person"
               ></img>
-              <p>&nbsp;25</p>
+              <p>&nbsp;{club.member}</p>
             </div>
             <div className="club-user-info-item">
               <img
@@ -75,7 +90,7 @@ class ClubCard extends React.Component {
                 height="20px"
                 alt="views"
               ></img>
-              <p>&nbsp;50</p>
+              <p>&nbsp;{club.hits}</p>
             </div>
             <div className="club-user-info-item">
               <img
@@ -103,7 +118,10 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    addClubHitCount: club_id =>
+      dispatch(actionCreators.addClubHitCount(club_id))
+  };
 };
 export default connect(
   mapStateToProps,

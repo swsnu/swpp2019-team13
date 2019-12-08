@@ -68,6 +68,8 @@ class Club(models.Model):
         related_name="clubs",
         blank=True
     )
+    member = models.IntegerField(default=0)
+    hits = models.IntegerField(default=0)
 
 
 class ClubPoster(models.Model):
@@ -101,6 +103,8 @@ class Somoim(models.Model):
         related_name="somoims",
         blank=True
     )
+    member = models.IntegerField(default=0)
+    hits = models.IntegerField(default=0)
 
 
 class UserProfile(models.Model):

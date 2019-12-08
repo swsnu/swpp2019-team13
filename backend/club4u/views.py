@@ -215,6 +215,38 @@ def preclub_list(request):
     else:
         return HttpResponse(status=405)
 
+def clubhit(request, club_id=None):
+    if request.method == 'PUT':
+        try:
+            selected_club = Club.objects.get(id=club_id)
+
+            if 'club{}'.format(club_id) not in request.session:
+                request.session['club{}'.format(club_id)] = 1
+                selected_club.hits += 1
+                selected_club.save()
+                return HttpResponse(status=200)
+
+            return HttpResponse(status=204)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+def somoimhit(request, somoim_id=None):
+    if request.method == 'PUT':
+        try:
+            if 'somoim{}'.format(somoim_id) not in request.session:
+                request.session['somoim{}'.format(somoim_id)] = 1
+                selected_somoim = Somoim.objects.get(id=somoim_id)
+                selected_somoim.hits += 1
+                selected_somoim.save()
+                return HttpResponse(status=200)
+
+            return HttpResponse(status=204)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
 
 def club(request, club_id=None):
     if request.method == 'GET':
@@ -265,7 +297,14 @@ def club(request, club_id=None):
                     tag = Tag(name=text, suggested=1, selected=0)
                     tag.save()
 
+            # Handle New Tag in tags
+
             tags = req_data['tags']
+            for tag in tags:
+                if not Tag.objects.filter(name=tag['text']).exists():
+                    tag = Tag(name=tag['text'], suggested=1, selected=1)
+                    tag.save()
+
             selected_club.tags.clear()
 
             for tag in tags:
@@ -376,7 +415,6 @@ def somoim_list(request):
 
         category = Category.objects.get(id=category_id)
 
-        # TODO : Add Tag
         new_somoim = Somoim()
         new_somoim.title = title
         new_somoim.category = category
@@ -640,6 +678,7 @@ def manage_somoim(request, user_id=0):
             user.manage_somoims.get(id=somoim_id)
             user.manage_somoims.remove(user.manage_somoims.get(id=somoim_id))
         except ObjectDoesNotExist:
+            user.join_somoims.add(Somoim.objects.get(id=somoim_id))
             user.manage_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
     else:

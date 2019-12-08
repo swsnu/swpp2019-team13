@@ -46,3 +46,18 @@ export const getSomoimByID = id => {
       .then(res => dispatch(getSomoimByID_(res.data)));
   };
 };
+
+export const addSomoimHitCount_ = id => {
+  return {
+    type: actionTypes.ADD_SOMOIM_HITCOUNT,
+    somoim_id: id
+  };
+};
+
+export const addSomoimHitCount = id => {
+  return dispatch => {
+    return axios.put("/api/somoim/" + id + "/hits/").then(res => {
+      if (res.status === 200) dispatch(addSomoimHitCount_(id));
+    });
+  };
+};

@@ -169,7 +169,7 @@ class ClubDetail extends React.Component {
                         width="18px"
                         alt="person"
                       ></img>
-                      <p>&nbsp;25</p>
+                      <p>&nbsp;{club.member}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -179,7 +179,7 @@ class ClubDetail extends React.Component {
                         width="23px"
                         alt="views"
                       ></img>
-                      <p>&nbsp;50</p>
+                      <p>&nbsp;{club.hits}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -232,7 +232,15 @@ class ClubDetail extends React.Component {
               >
                 우리 동아리는...
               </div>
-              {club.description}
+              {club.description &&
+                club.description.split("\n").map((line, i) => {
+                  return (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  );
+                })}
             </div>
             <div className="detail-gallery">
               <div

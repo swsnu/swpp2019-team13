@@ -594,7 +594,7 @@ describe("<ClubInfoTab />", () => {
     const clubInfoTabInstance = component
       .find(ClubInfoTab.WrappedComponent)
       .instance();
-    expect(clubInfoTabInstance.state.tags).toEqual([{ id: "2", text: "hi" }]);
+    expect(clubInfoTabInstance.state.tags).toEqual([{ id: "1", text: "hi" }]);
   });
 
   it("should handle confirm drag tag", () => {

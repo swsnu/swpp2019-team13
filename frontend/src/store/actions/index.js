@@ -7,9 +7,10 @@ export {
   getApplicationByID,
   putApplicationByID,
   getApplicationFormByID,
-  putApplicationFormByID
+  putApplicationFormByID,
+  addClubHitCount
 } from "./club";
-export { getSomoimList, postSomoim } from "./somoim";
+export { getSomoimList, postSomoim, addSomoimHitCount } from "./somoim";
 export { getCategoryList } from "./category";
 export { getTagList, getExtractedTag } from "./tag";
 export { getDeptList } from "./dept";

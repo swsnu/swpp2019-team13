@@ -89,6 +89,7 @@ let stubInitialState = {
       tags: [1],
       goalJoiner: 20,
       available_major: [0, 1],
+      category: 0,
       joiners: [],
       likers: [],
       session_day: 0
@@ -105,6 +106,7 @@ let stubInitialState = {
         }
       ],
       available_semester: 1,
+      category: 2,
       tags: [2],
       goalJoiner: 10,
       available_major: [0, 1],
@@ -124,6 +126,7 @@ let stubInitialState = {
         }
       ],
       available_semester: 3,
+      category: 6,
       tags: [3],
       goalJoiner: 10,
       available_major: [2],
@@ -352,6 +355,10 @@ describe("<SomoimMain />", () => {
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimDetailShow).toBe(true);
+
+    const detailInstance = component.find("SomoimDetail").instance();
+    detailInstance.props.closeHandler();
+    expect(mainInstance.state.somoimDetailShow).toBe(false);
   });
 
   it("somoim create button click event handling", () => {

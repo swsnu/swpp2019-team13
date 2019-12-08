@@ -75,7 +75,10 @@ class ClubInfoTab extends Component {
 
   handleAddition(tag) {
     this.setState({
-      tags: this.state.tags.concat(tag)
+      tags: this.state.tags.concat({
+        id: this.state.tags.length.toString(),
+        text: tag.text
+      })
     });
   }
 

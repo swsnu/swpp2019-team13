@@ -30,6 +30,7 @@ const initialstate = {
       tags: [],
       joiners: [],
       likers: [],
+      hits: 0,
       goalJoiner: 20
     },
     {
@@ -44,6 +45,7 @@ const initialstate = {
       tags: [],
       joiners: [],
       likers: [],
+      hits: 0,
       goalJoiner: 20
     }
   ],
@@ -63,6 +65,7 @@ const initialsomoims = [
     tags: [],
     joiners: [],
     likers: [],
+    hits: 0,
     goalJoiner: 20
   },
   {
@@ -77,6 +80,7 @@ const initialsomoims = [
     tags: [],
     joiners: [],
     likers: [],
+    hits: 0,
     goalJoiner: 20
   }
 ];
@@ -104,6 +108,7 @@ describe("Somoim Reducer", () => {
         tags: [],
         joiners: [],
         likers: [],
+        hits: 0,
         goalJoiner: 20
       }
     ];
@@ -130,6 +135,7 @@ describe("Somoim Reducer", () => {
       tags: [],
       joiners: [],
       likers: [],
+      hits: 0,
       goalJoiner: 20
     };
 
@@ -152,6 +158,7 @@ describe("Somoim Reducer", () => {
           tags: [],
           joiners: [],
           likers: [],
+          hits: 0,
           goalJoiner: 20
         },
         {
@@ -166,6 +173,7 @@ describe("Somoim Reducer", () => {
           tags: [],
           joiners: [],
           likers: [],
+          hits: 0,
           goalJoiner: 20
         }
       ],
@@ -189,6 +197,49 @@ describe("Somoim Reducer", () => {
     });
     expect(newState).toEqual({
       somoims: initialsomoims.concat(stubSomoim),
+      selectedSomoim: null
+    });
+  });
+
+  it("should add hits", () => {
+    const newState = reducer(initialstate, {
+      type: actionTypes.ADD_SOMOIM_HITCOUNT,
+      somoim_id: 1
+    });
+
+    expect(newState).toEqual({
+      somoims: [
+        {
+          id: 0,
+          title: "TEST_TITLE0",
+          summary: "TEST_SUMMARY",
+          description: "TEST_DESCRIPTION",
+          category: 1,
+          available_major: [],
+          session_day: [],
+          available_semester: 1,
+          tags: [],
+          joiners: [],
+          likers: [],
+          hits: 0,
+          goalJoiner: 20
+        },
+        {
+          id: 1,
+          title: "TEST_TITLE1",
+          summary: "TEST_SUMMARY",
+          description: "TEST_DESCRIPTION",
+          category: 1,
+          available_major: [],
+          session_day: [],
+          available_semester: 1,
+          tags: [],
+          joiners: [],
+          likers: [],
+          hits: 1,
+          goalJoiner: 20
+        }
+      ],
       selectedSomoim: null
     });
   });
