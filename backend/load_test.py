@@ -21,7 +21,7 @@ class LoadTask(TaskSet):
 
     @task
     def somoim_list(self):
-        self.client.get("/api/club/list/")
+        self.client.get("/api/somoim/list/")
 
 
 class WebSiteUser(HttpLocust):

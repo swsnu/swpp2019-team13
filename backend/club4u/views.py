@@ -21,23 +21,29 @@ from .application_models import *
 from .serializers import *
 from .application_serializers import *
 
+
 def category_list(request):
     if request.method == 'GET':
-        # cached_category=cache.get_or_set('category_list',[
-        #     category for category in Category.objects.all().values()])
-        # return JsonResponse(cached_category, safe=False)
-        response_dict = [category for category in Category.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        cached_category = cache.get('cached_category')
+        if not cached_category:
+            cached_category = [category for category in Category.objects.all().values()]
+            cache.set('cached_category',cached_category)
+        return JsonResponse(cached_category, safe = False)
     else:
-        return HttpResponse(status=405)
+        return HttpResponse(status = 405)
 
 
 def tag_list(request):
     if request.method == 'GET':
-        response_dict = [tag for tag in Tag.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        # response_dict=[tag for tag in Tag.objects.all().values()]
+        # return JsonResponse(response_dict, safe = False)
+        cached_tag = cache.get('cached_tag')
+        if not cached_tag:
+            cached_tag = [tag for tag in Tag.objects.all().values()]
+            cache.set('cached_tag',cached_tag)
+        return JsonResponse(cached_tag, safe = False)
     else:
-        return HttpResponse(status=405)
+        return HttpResponse(status = 405)
 
 
 def tag_extlist(request):
@@ -45,14 +51,14 @@ def tag_extlist(request):
         # min_count = 1
         # max_length = 10
         # wordrank_extractor = KRWordRank(min_count, max_length)
-        req_data = json.loads(request.body.decode())
-        response_tags = req_data['description']
-        keywords = summarize_with_keywords([response_tags], min_count=5, max_length=10,
-                                           beta=0.85, max_iter=20, stopwords={}, verbose=True)
-        arr = sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:10]
+        req_data=json.loads(request.body.decode())
+        response_tags=req_data['description']
+        keywords=summarize_with_keywords([response_tags], min_count = 5, max_length = 10,
+                                           beta = 0.85, max_iter = 20, stopwords = {}, verbose = True)
+        arr=sorted(keywords.items(), key = lambda x: x[1], reverse=True)[:10]
         response_dict = {}
         word = list(map(lambda a: a[0], arr))
-        num = list(map(lambda a: a[1], arr))
+        num=list(map(lambda a: a[1], arr))
 
         # first select tag with highest value
         for i in range(0, 10):
@@ -60,11 +66,11 @@ def tag_extlist(request):
                 break
             # drop tag if it exists in list and selected ratio is lower than 0.5
             if Tag.objects.filter(name=word[i]).exists():
-                tag = Tag.objects.get(name=word[i])
+                tag=Tag.objects.get(name=word[i])
                 if tag.selected != 0 and tag.suggested < tag.selected*2:
-                    response_dict[word[i]] = num[i]
+                    response_dict[word[i]]=num[i]
             else:
-                response_dict[word[i]] = num[i]
+                response_dict[word[i]]=num[i]
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
@@ -72,24 +78,34 @@ def tag_extlist(request):
 
 def dept_list(request):
     if request.method == 'GET':
-        response_dict = [dept for dept in Department.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        # response_dict=[dept for dept in Department.objects.all().values()]
+        # return JsonResponse(response_dict, safe=False)
+        cached_dept = cache.get('cached_dept')
+        if not cached_dept:
+            cached_dept = [dept for dept in Department.objects.all().values()]
+            cache.set('cached_dept',cached_dept)
+        return JsonResponse(cached_dept, safe = False)
     else:
         return HttpResponse(status=405)
 
 
 def major_list(request):
     if request.method == 'GET':
-        response_dict = [major for major in Major.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        # response_dict=[major for major in Major.objects.all().values()]
+        # return JsonResponse(response_dict, safe=False)
+        cached_major = cache.get('cached_major')
+        if not cached_major:
+            cached_major = [major for major in Major.objects.all().values()]
+            cache.set('cached_major',cached_major)
+        return JsonResponse(cached_major, safe = False)
     else:
         return HttpResponse(status=405)
 
 
 def user_list(request):
-    users = UserProfile.objects.all()
+    users=UserProfile.objects.all()
     if request.method == 'GET':
-        app_array = []
+        app_array=[]
         for item in users:
             app_array.append(UserProfileSerializer(item).data)
         return HttpResponse(JSONRenderer().render(app_array))
@@ -100,17 +116,17 @@ def user_list(request):
 def signup(request):
     if request.method == 'POST':
         try:
-            req_data = json.loads(request.body.decode())
-            email = req_data['email']
-            password = req_data['password']
+            req_data=json.loads(request.body.decode())
+            email=req_data['email']
+            password=req_data['password']
             # use last name to save whole name
-            name = req_data['name']
-            dept = Department.objects.get(id=req_data['dept'])
-            major = Major.objects.get(id=req_data['major'])
-            grade = req_data['grade']
-            available_semester = req_data['available_semester']
-            available_session_day = req_data['available_session_day']
-            user = User.objects.create_user(
+            name=req_data['name']
+            dept=Department.objects.get(id=req_data['dept'])
+            major=Major.objects.get(id=req_data['major'])
+            grade=req_data['grade']
+            available_semester=req_data['available_semester']
+            available_session_day=req_data['available_session_day']
+            user=User.objects.create_user(
                 username=email, password=password, last_name=name)
             user.save()
             userprofile = UserProfile(user=user, dept=dept,
@@ -384,28 +400,33 @@ def clubposter(request, club_id=0):
 
 def club_list(request):
     if request.method == 'GET':
-        serializer = ClubSerializer(Club.objects.all(), many=True)
-
-        response_dict = serializer.data
-
-        for c in response_dict:
-            poster_list = ClubPoster.objects.filter(
-                club_id=c['id']).values()
-
-            poster_img_list = []
-            for poster in poster_list:
-                poster_img_list.append(poster['img'])
-
-            c['poster_img'] = poster_img_list
-        return HttpResponse(JSONRenderer().render(serializer.data))
+        cached_club = cache.get('cached_club')
+        if not cached_club:
+            serializer = ClubSerializer(Club.objects.all(), many=True)
+            response_dict = serializer.data
+            for c in response_dict:
+                poster_list = ClubPoster.objects.filter(
+                    club_id=c['id']).values()
+                poster_img_list = []
+                for poster in poster_list:
+                    poster_img_list.append(poster['img'])
+                c['poster_img'] = poster_img_list
+            cached_club = JSONRenderer().render(serializer.data)
+            cache.set('cached_club', cached_club)
+            # return HttpResponse(JSONRenderer().render(serializer.data))
+        return HttpResponse(cached_club)
     else:
         return HttpResponse(status=405)
 
 
 def somoim_list(request):
     if request.method == 'GET':
-        serializer = SomoimSerializer(Somoim.objects.all(), many=True)
-        return HttpResponse(JSONRenderer().render(serializer.data))
+        cached_somoim = cache.get('cached_somoim')
+        if not cached_somoim:
+            serializer = SomoimSerializer(Somoim.objects.all(), many=True)
+            cached_somoim = JSONRenderer().render(serializer.data)
+            cache.set('cached_somoim', cached_somoim)
+        return HttpResponse(cached_somoim)
     elif request.method == 'POST':
         req_data = json.loads(request.body.decode())
         title = req_data['title']
