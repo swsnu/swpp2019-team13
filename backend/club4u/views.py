@@ -23,9 +23,11 @@ from .application_serializers import *
 
 def category_list(request):
     if request.method == 'GET':
-        cached_category=cache.get_or_set('category_list',[
-            category for category in Category.objects.all().values()])
-        return JsonResponse(cached_category, safe=False)
+        # cached_category=cache.get_or_set('category_list',[
+        #     category for category in Category.objects.all().values()])
+        # return JsonResponse(cached_category, safe=False)
+        response_dict = [category for category in Category.objects.all().values()]
+        return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
 

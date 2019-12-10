@@ -82,7 +82,10 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '3306',
+        'OPTIONS': {
+            "init_command": "SET GLOBAL max_connections = 100000",  # <-- The fix
+        }
     }
 }
 

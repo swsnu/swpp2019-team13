@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.cache import cache
+
 
 # Create your models here.
 
@@ -12,6 +14,14 @@ class Tag(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
+
+    # def save(self, *args, **kwargs):
+    #     cache.delete('category_list')
+    #     super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('category_list')
+    #     super().delete(*args, **kwargs)
 
 
 class Department(models.Model):
