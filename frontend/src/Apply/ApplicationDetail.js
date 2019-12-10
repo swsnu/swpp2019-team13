@@ -2,11 +2,14 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
-import { Container, Row, Col, Card, Form, Modal } from "react-bootstrap";
+import { Card, Modal } from "react-bootstrap";
 import filePNG from "../images/file.png";
 import imagePNG from "../images/image.png";
-
-import * as actionCreators from "../store/actions/index";
+import {
+  formMaker,
+  multiChoiceCardFactory,
+  imageCardFactory
+} from "./ApplyUtil";
 
 class ApplicationDetail extends Component {
   state = {
@@ -16,34 +19,7 @@ class ApplicationDetail extends Component {
   componentDidUpdate = () => {
     if (this.state.forceRender !== this.props.forceRender) {
       if (this.props.selectedApplication) {
-        let formList = [];
-        let formID = 0;
-        formList = formList.concat(
-          this.props.selectedApplication.short_texts.map(item =>
-            this.newForm("shortText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.long_texts.map(item =>
-            this.newForm("longText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.multi_choices.map(item =>
-            this.newForm("multiChoice", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.images.map(item =>
-            this.newForm("image", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.files.map(item =>
-            this.newForm("file", formID++, item)
-          )
-        );
-        formList.sort((a, b) => (a.order > b.order ? 1 : -1));
+        let formList = formMaker(this.props.selectedApplication);
         this.setState({
           ...this.state,
           forceRender: this.props.forceRender,
@@ -51,21 +27,6 @@ class ApplicationDetail extends Component {
         });
       }
     }
-  };
-
-  newForm = (type, id, item) => {
-    let newForm = {
-      ...item,
-      id: id,
-      type: type
-    };
-    if (item.content && (type === "image" || type === "file")) {
-      newForm = {
-        ...newForm,
-        fileName: item.content.substr(7, item.content.length)
-      };
-    }
-    return newForm;
   };
 
   shortText = props => {
@@ -101,42 +62,16 @@ class ApplicationDetail extends Component {
         </div>
       );
     });
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <div
-          style={{
-            marginTop: "15px",
-            marginBottom: "15px",
-            marginLeft: "20px",
-            marginRight: "20px"
-          }}
-        >
-          {choices}
-        </div>
-      </Card>
-    );
+    return multiChoiceCardFactory(props.id, props.title, choices);
   };
 
   image = props => {
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <Card.Body style={{ textAlign: "center" }}>
-          {props.content ? (
-            <div>
-              <img src={props.content} alt="" />
-              <div style={{ fontSize: 11, marginBottom: "10px" }}>
-                {props.fileName}
-              </div>
-            </div>
-          ) : (
-            <div>
-              <img src={imagePNG} width="100" height="100" alt="" />
-            </div>
-          )}
-        </Card.Body>
-      </Card>
+    return imageCardFactory(
+      props.id,
+      props.title,
+      props.content,
+      props.fileName,
+      imagePNG
     );
   };
 

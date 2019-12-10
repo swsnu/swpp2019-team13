@@ -21,9 +21,11 @@ urlpatterns = [
     path('preclub/list/', views.preclub_list, name='preclub'),
     path('club/<int:club_id>/poster/', views.clubposter, name='clubposter'),
     path('club/<int:club_id>/', views.club, name='club'),
+    path('club/<int:club_id>/hits/', views.clubhit, name='clubhit'),
     path('club/list/', views.club_list, name='club_list'),
     path('somoim/list/', views.somoim_list, name='somoim_list'),
     path('somoim/<int:somoim_id>/', views.somoim, name='somoim'),
+    path('somoim/<int:somoim_id>/hits/', views.somoimhit, name='somoimhit'),
 
     path('user/<int:user_id>/club/manage/',
          views.manage_club, name='manage_club'),

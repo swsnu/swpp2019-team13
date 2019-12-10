@@ -20,7 +20,8 @@ class ClubMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isUserInfoLoaded: false
+    isUserInfoLoaded: false,
+    isEmptyUserRecommendationLoaded: false
   };
 
   componentDidMount() {
@@ -34,13 +35,20 @@ class ClubMain extends React.Component {
   componentDidUpdate = () => {
     if (this.props.loggedUser) {
       if (!this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: true });
+        this.setState({
+          ...this.state,
+          isUserInfoLoaded: true,
+          isEmptyUserRecommendationLoaded: false
+        });
         this.props.onGetRecommendedClubs(this.props.loggedUser);
       }
     } else {
-      this.props.onGetRecommendedClubs({ id: 0 });
-      if (this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: false });
+      if (!this.state.isEmptyUserRecommendationLoaded) {
+        this.props.onGetRecommendedClubs({ id: 0 });
+        this.setState({
+          ...this.state,
+          isEmptyUserRecommendationLoaded: true
+        });
       }
     }
   };
@@ -72,6 +80,63 @@ class ClubMain extends React.Component {
       ...this.state,
       clubRegisterShow: false
     });
+  };
+
+  clubCardGenerator = (list, index) => {
+    return (
+      <div className="ClubCard">{index < list.length ? list[index] : ""}</div>
+    );
+  };
+
+  listPageChangeBarGenerator = (page, list) => {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page === 0) {
+              if (this.state.recommendedListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum - 1
+                });
+            } else {
+              if (this.state.allListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum - 1
+                });
+            }
+          }}
+        >
+          &laquo; 이전
+        </div>
+        <div className="bar">|</div>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page === 0) {
+              if (
+                this.state.recommendedListPageNum <
+                Math.ceil(list.length / 4) - 1
+              )
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum + 1
+                });
+            } else {
+              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum + 1
+                });
+            }
+          }}
+        >
+          다음 &raquo;
+        </div>
+      </div>
+    );
   };
 
   render() {
@@ -146,132 +211,6 @@ class ClubMain extends React.Component {
       }
     }
 
-    // let displayRecommendedClubs = null;
-    // if (window.innerWidth > 1400) {
-    //   displayRecommendedClubs = (
-    //     <div className="card-flex-container">
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 4 + 0 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 4 + 1 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 4 + 2 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 4 + 3 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-    //           : ""}
-    //       </div>
-    //     </div>
-    //   );
-    // } else if (window.innerWidth > 1000) {
-    //   displayRecommendedClubs = (
-    //     <div className="card-flex-container">
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 3 + 0 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 3 + 0]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 3 + 1 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 3 + 1]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 3 + 2 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 3 + 2]
-    //           : ""}
-    //       </div>
-    //     </div>
-    //   );
-    // } else {
-    //   displayRecommendedClubs = (
-    //     <div className="card-flex-container">
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 2 + 0 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 2 + 0]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.recommendedListPageNum * 2 + 1 < recommendedList.length
-    //           ? recommendedList[this.state.recommendedListPageNum * 2 + 1]
-    //           : ""}
-    //       </div>
-    //     </div>
-    //   );
-    // }
-
-    // let displayAllClubs = null;
-    // if (window.innerWidth > 1400) {
-    //   displayAllClubs = (
-    //     <div className="card-flex-container">
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 4 + 0 < allList.length
-    //           ? allList[this.state.allListPageNum * 4 + 0]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 4 + 1 < allList.length
-    //           ? allList[this.state.allListPageNum * 4 + 1]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 4 + 2 < allList.length
-    //           ? allList[this.state.allListPageNum * 4 + 2]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 4 + 3 < allList.length
-    //           ? allList[this.state.allListPageNum * 4 + 3]
-    //           : ""}
-    //       </div>
-    //     </div>
-    //   );
-    // } else if (window.innerWidth > 1000) {
-    //   displayAllClubs = (
-    //     <div className="card-flex-container">
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 3 + 0 < allList.length
-    //           ? allList[this.state.allListPageNum * 3 + 0]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 3 + 1 < allList.length
-    //           ? allList[this.state.allListPageNum * 3 + 1]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 3 + 2 < allList.length
-    //           ? allList[this.state.allListPageNum * 3 + 2]
-    //           : ""}
-    //       </div>
-    //     </div>
-    //   );
-    // } else {
-    //   displayAllClubs = (
-    //     <div className="card-flex-container">
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 2 + 0 < allList.length
-    //           ? allList[this.state.allListPageNum * 2 + 0]
-    //           : ""}
-    //       </div>
-    //       <div className="ClubCard">
-    //         {this.state.allListPageNum * 2 + 1 < allList.length
-    //           ? allList[this.state.allListPageNum * 2 + 1]
-    //           : ""}
-    //       </div>
-    //     </div>
-    //   );
-    // }
-
     return (
       <div className="ClubMain">
         <Header />
@@ -284,66 +223,26 @@ class ClubMain extends React.Component {
             추천 동아리
           </h1>
           <div>
-            {/* {displayRecommendedClubs} */}
-            {/* {console.log(window.innerWidth)} */}
             <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 0 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 1 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 2 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.recommendedListPageNum * 4 + 3 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 0
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 1
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 2
+              )}
+              {this.clubCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 3
+              )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.recommendedListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.recommendedListPageNum <
-                    Math.ceil(recommendedList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+
+            {this.listPageChangeBarGenerator(0, recommendedList)}
           </div>
         </div>
         <br />
@@ -386,59 +285,25 @@ class ClubMain extends React.Component {
           </div>
           <br />
           <div>
-            {/* {displayAllClubs} */}
             <div className="card-flex-container">
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 0 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 1 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 2 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="ClubCard">
-                {this.state.allListPageNum * 4 + 3 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 0
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 1
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 2
+              )}
+              {this.clubCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 3
+              )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.allListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.allListPageNum <
-                    Math.ceil(allList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+            {this.listPageChangeBarGenerator(1, allList)}
           </div>
         </div>
 

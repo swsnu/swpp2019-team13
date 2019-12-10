@@ -27,7 +27,6 @@ class Login extends Component {
       .catch(e =>
         this.setState({
           ...this.state,
-          password: "",
           wrongInput: true
         })
       );

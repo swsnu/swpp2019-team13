@@ -20,12 +20,12 @@ class SomoimMain extends React.Component {
     selected_category: 0,
     recommendedListPageNum: 0,
     allListPageNum: 0,
-    isUserInfoLoaded: false
+    isUserInfoLoaded: false,
+    isEmptyUserRecommendationLoaded: false
   };
 
   componentDidMount() {
     this.props.getSomoimList();
-
     this.props.getCategoryList();
     this.props.getTagList();
     this.props.getDeptList();
@@ -35,13 +35,20 @@ class SomoimMain extends React.Component {
   componentDidUpdate = () => {
     if (this.props.loggedUser) {
       if (!this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: true });
+        this.setState({
+          ...this.state,
+          isUserInfoLoaded: true,
+          isEmptyUserRecommendationLoaded: false
+        });
         this.props.onGetRecommendedSomoims(this.props.loggedUser);
       }
     } else {
-      this.props.onGetRecommendedSomoims({ id: 0 });
-      if (this.state.isUserInfoLoaded) {
-        this.setState({ ...this.state, isUserInfoLoaded: false });
+      if (!this.state.isEmptyUserRecommendationLoaded) {
+        this.props.onGetRecommendedSomoims({ id: 0 });
+        this.setState({
+          ...this.state,
+          isEmptyUserRecommendationLoaded: true
+        });
       }
     }
   };
@@ -73,6 +80,63 @@ class SomoimMain extends React.Component {
       ...this.state,
       somoimCreateShow: false
     });
+  };
+
+  somoimCardGenerator = (list, index) => {
+    return (
+      <div className="SomoimCard">{index < list.length ? list[index] : ""}</div>
+    );
+  };
+
+  listPageChangeBarGenerator = (page, list) => {
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page !== 0) {
+              if (this.state.allListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum - 1
+                });
+            } else {
+              if (this.state.recommendedListPageNum > 0)
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum - 1
+                });
+            }
+          }}
+        >
+          &laquo; 이전
+        </div>
+        <div className="bar">|</div>
+        <div
+          className="changePage"
+          onClick={() => {
+            if (page !== 0) {
+              if (this.state.allListPageNum < Math.ceil(list.length / 4) - 1)
+                this.setState({
+                  ...this.state,
+                  allListPageNum: this.state.allListPageNum + 1
+                });
+            } else {
+              if (
+                this.state.recommendedListPageNum <
+                Math.ceil(list.length / 4) - 1
+              )
+                this.setState({
+                  ...this.state,
+                  recommendedListPageNum: this.state.recommendedListPageNum + 1
+                });
+            }
+          }}
+        >
+          다음 &raquo;
+        </div>
+      </div>
+    );
   };
 
   render() {
@@ -160,63 +224,24 @@ class SomoimMain extends React.Component {
           </h1>
           <div>
             <div className="card-flex-container">
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 0 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 1 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 2 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.recommendedListPageNum * 4 + 3 <
-                recommendedList.length
-                  ? recommendedList[this.state.recommendedListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 0
+              )}
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 1
+              )}
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 2
+              )}
+              {this.somoimCardGenerator(
+                recommendedList,
+                this.state.recommendedListPageNum * 4 + 3
+              )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.recommendedListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.recommendedListPageNum <
-                    Math.ceil(recommendedList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      recommendedListPageNum:
-                        this.state.recommendedListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+            {this.listPageChangeBarGenerator(0, recommendedList)}
           </div>
         </div>
         <br />
@@ -260,57 +285,24 @@ class SomoimMain extends React.Component {
           <br />
           <div>
             <div className="card-flex-container">
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 0 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 0]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 1 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 1]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 2 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 2]
-                  : ""}
-              </div>
-              <div className="SomoimCard">
-                {this.state.allListPageNum * 4 + 3 < allList.length
-                  ? allList[this.state.allListPageNum * 4 + 3]
-                  : ""}
-              </div>
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 0
+              )}
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 1
+              )}
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 2
+              )}
+              {this.somoimCardGenerator(
+                allList,
+                this.state.allListPageNum * 4 + 3
+              )}
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (this.state.allListPageNum > 0)
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum - 1
-                    });
-                }}
-              >
-                &laquo; 이전
-              </div>
-              <div className="bar">|</div>
-              <div
-                className="changePage"
-                onClick={() => {
-                  if (
-                    this.state.allListPageNum <
-                    Math.ceil(allList.length / 4) - 1
-                  )
-                    this.setState({
-                      ...this.state,
-                      allListPageNum: this.state.allListPageNum + 1
-                    });
-                }}
-              >
-                다음 &raquo;
-              </div>
-            </div>
+            {this.listPageChangeBarGenerator(1, allList)}
           </div>
         </div>
 

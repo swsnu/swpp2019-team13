@@ -6,7 +6,6 @@ const initialState = {
   selectedApplication: null,
   applicationForm: null
 };
-// TODO : implement reducer actions
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_CLUB_LIST:
@@ -18,6 +17,16 @@ const reducer = (state = initialState, action) => {
         clubs: state.clubs.map(item => {
           if (item.id === action.selectedClub.id) return action.selectedClub;
           else return item;
+        })
+      };
+    case actionTypes.ADD_CLUB_HITCOUNT:
+      return {
+        ...state,
+        clubs: state.clubs.map(a => {
+          if (a.id === action.club_id) {
+            a.hits += 1;
+          }
+          return a;
         })
       };
     case actionTypes.GET_APPLICATION_LIST:

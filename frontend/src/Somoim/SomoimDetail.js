@@ -3,9 +3,14 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import * as actionCreators from "../store/actions/index";
 
-import { Container, Row, Col, Modal, Button, Form } from "react-bootstrap";
-import { CircularProgressbar } from "react-circular-progressbar";
+import { Modal, Button } from "react-bootstrap";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+
+import "./SomoimDetail.css";
+import views from "../images/views.png";
+import heart from "../images/heart.png";
+import person from "../images/person.png";
 
 class SomoimDetail extends React.Component {
   onClickLikeButton = () => {
@@ -59,16 +64,26 @@ class SomoimDetail extends React.Component {
           .includes(this.props.loggedUser.id);
       }
 
-      if (somoim.available_major.length === this.props.majors.length) {
-        available_major_string = "제한 없음";
+      if (this.props.loggedUser) {
+        available_major_string = " : ";
+        available_major_string += this.props.majors.filter(
+          a => a.id === this.props.loggedUser.major
+        )[0].name;
+        if (somoim.available_major.includes(this.props.loggedUser.major)) {
+          available_major_string += "가 포함되어 있습니다.";
+        } else {
+          available_major_string += "가 없습니다.";
+        }
       } else {
-        somoim.available_major.map(major_id => {
-          available_major_string += this.props.majors.filter(
-            a => a.id === major_id
-          )[0].name;
-          available_major_string += " ";
-          return 0;
-        });
+        available_major_string = " : ";
+        if (somoim.available_major.length === this.props.majors.length) {
+          available_major_string += "제한 없음.";
+        } else {
+          available_major_string += somoim.managers[0].major.name;
+          available_major_string += " 외 ";
+          available_major_string += String(somoim.available_major.length - 1);
+          available_major_string += "개 학과";
+        }
       }
 
       for (var i = 0; i < 7; i++) {
@@ -77,17 +92,19 @@ class SomoimDetail extends React.Component {
           session_day_string += " ";
         }
       }
+
       let percentage =
         Math.round((somoim.joiners.length / somoim.goalJoiner) * 1000) / 10;
 
       let tagList;
       if (this.props.tags.length !== 0) {
         tagList = somoim.tags.map(item => (
-          <Button size="lg" key={item} variant="outline-primary">
+          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
       }
+
       return (
         <Modal
           size="lg"
@@ -95,106 +112,152 @@ class SomoimDetail extends React.Component {
           onHide={this.props.closeHandler}
           style={{ opacity: 1 }}
         >
-          <Modal.Header closeButton>
-            <Col sm={10}>
-              <h1>{somoim.title}</h1>
-            </Col>
-            <Col sm={2}>
-              <h1>
-                <span role="img" aria-label="thumb">
-                  👍
-                </span>
-                {somoim.likers.length}
-              </h1>
-            </Col>
-          </Modal.Header>
           <Modal.Body>
-            <Container>
-              <Row>
-                <Col>
-                  <CircularProgressbar
-                    value={percentage}
-                    text={percentage + "%"}
-                  />
-                </Col>
-                <Col>
-                  <Row>
-                    <Col md={{ offset: 1 }}></Col>
-                  </Row>
-                  <Row>{tagList}</Row>
-                  <br />
-                  <Row>
-                    <h3>{somoim.description}</h3>
-                  </Row>
-                </Col>
-              </Row>
-              <br />
-              <br />
-              <Form.Label>
-                <h2>가입 조건</h2>
-              </Form.Label>
-              <Row>
-                <Form.Label>
-                  <h3>- 가능 학과</h3>
-                </Form.Label>
-              </Row>
-              <h4>{available_major_string}</h4>
-              <Row>
-                <h3>- 활동 요일</h3>
-              </Row>
-              <h4>{session_day_string}</h4>
-              <Row>
-                <h3>- 최소 활동 학기 수</h3>
-              </Row>
-              <h4>{somoim.available_semester + "학기"}</h4>
-              <br />
-              <br />
-              {this.props.loggedUser && (
-                <Row>
-                  <Col></Col>
-                  <Col>
-                    {isLoggedUserLike ? (
-                      <Button
-                        size="lg"
-                        variant="primary"
-                        onClick={this.onClickLikeButton}
-                        className='likebutton'
-                      >
-                        좋아요!{" "}
-                        <span role="img" aria-label="thumb">
-                          👍
-                        </span>
-                      </Button>
-                    ) : (
-                        <Button
-                          size="lg"
-                          variant="secondary"
-                          onClick={this.onClickLikeButton}
-                          className='likebutton2'
-                        >
-                          좋아요!{" "}
-                          <span role="img" aria-label="thumb">
-                            👍
-                        </span>
-                        </Button>
-                      )}
-                  </Col>
-                  <Col></Col>
-                  <Col>
-                    {acceptQualification ? (
-                      <Button className='joinbutton' size="lg" onClick={this.onClickJoinButton} >
-                        함께하기
-                      </Button>
-                    ) : (
-                        <Button size="lg" disabled title={qualificationMessage}>
-                          함께하기
-                      </Button>
-                      )}
-                  </Col>
-                  <Col></Col>
-                </Row>
-              )}
-            </Container>
+            <div className="detail-header">
+              <div
+                className="detail-percentage"
+                style={{ width: "220px", height: "220px" }}
+              >
+                <CircularProgressbar
+                  value={percentage}
+                  text={percentage + "%"}
+                  styles={buildStyles({
+                    rotation: 0.25,
+                    strokeLinecap: "round",
+                    textSize: "16px",
+
+                    pathTransitionDuration: 0.5,
+                    pathColor: "#c890cf",
+                    textColor: "#f88",
+                    trailColor: "#d6d6d6",
+                    backgroundColor: "#3e98c7"
+                  })}
+                />
+              </div>
+              <div className="detail-header-right">
+                <div className="detail-title">
+                  <h1
+                    style={{
+                      fontSize: "3em",
+                      paddingRight: "20px",
+                      fontWeight: "bold"
+                    }}
+                  >
+                    {somoim.title}
+                  </h1>
+                  <div className="detail-user-info-container">
+                    <div
+                      className="detail-user-info-item"
+                      style={{ paddingRight: "9px" }}
+                    >
+                      <img
+                        className="detail-user-info-item-img"
+                        src={person}
+                        alt="person"
+                        width="18px"
+                        height="18px"
+                      ></img>
+                      <p>&nbsp;{somoim.member}</p>
+                    </div>
+                    <div className="detail-user-info-item">
+                      <img
+                        className="detail-user-info-item-img"
+                        src={views}
+                        alt="views"
+                        width="23px"
+                        height="23px"
+                      ></img>
+                      <p>&nbsp;{somoim.hits}</p>
+                    </div>
+                    <div className="detail-user-info-item">
+                      <img
+                        className="detail-user-info-item-img"
+                        alt="heart"
+                        src={heart}
+                        width="28px"
+                        height="31px"
+                      ></img>
+                      <p>{somoim.likers.length}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="detail-tagList">{tagList}</div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">
+                    최소 활동 학기 수
+                  </span>
+                  <span> : {somoim.available_semester}</span>
+                  <span>학기</span>
+                </div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">활동 요일</span>
+                  <span> : {session_day_string}</span>
+                </div>
+                <div className="detail-short-info">
+                  <span className="detail-short-info-title">
+                    가입 가능 학과
+                  </span>
+                  <span id="available_major_string">
+                    {available_major_string}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="detail-description">
+              <div
+                style={{
+                  fontSize: "1.5em",
+                  fontWeight: "bold",
+                  fontStyle: "italic"
+                }}
+              >
+                이 소모임은...
+              </div>
+              {somoim.description !== null &&
+                somoim.description.split("\n").map((line, i) => {
+                  return (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  );
+                })}
+            </div>
+            <div className="detail-footer">
+              {this.props.loggedUser &&
+                (isLoggedUserLike ? (
+                  <button
+                    className="unliked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요 취소
+                  </button>
+                ) : (
+                  <button
+                    className="liked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요!
+                  </button>
+                ))}
+              {this.props.loggedUser &&
+                (acceptQualification ? (
+                  <button
+                    className="joinbutton"
+                    onClick={this.onClickJoinButton}
+                  >
+                    지원하기
+                  </button>
+                ) : (
+                  <button
+                    className="disabled-joinbutton"
+                    title={qualificationMessage}
+                    disabled
+                  >
+                    지원하기
+                  </button>
+                ))}
+            </div>
           </Modal.Body>
         </Modal>
       );

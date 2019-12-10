@@ -29,8 +29,10 @@ class KeywordVectorizer:
 
     def __init__(self, tokenize, vocab_score):
         self.tokenize = tokenize
-        self.idx_to_vocab = [vocab for vocab in sorted(vocab_score, key=lambda x:-vocab_score[x])]
-        self.vocab_to_idx = {vocab:idx for idx, vocab in enumerate(self.idx_to_vocab)}
+        self.idx_to_vocab = [vocab for vocab in sorted(
+            vocab_score, key=lambda x:-vocab_score[x])]
+        self.vocab_to_idx = {vocab: idx for idx,
+                             vocab in enumerate(self.idx_to_vocab)}
         self.keyword_vector = np.asarray(
             [score for _, score in sorted(vocab_score.items(), key=lambda x:-x[1])])
         self.keyword_vector = self._L2_normalize(self.keyword_vector)
@@ -66,7 +68,7 @@ class KeywordVectorizer:
 
 
 def summarize_with_sentences(texts, num_keywords=100, num_keysents=10, diversity=0.3, stopwords=None, scaling=None,
-    penalty=None, min_count=5, max_length=10, beta=0.85, max_iter=10, num_rset=-1, verbose=False):
+                             penalty=None, min_count=5, max_length=10, beta=0.85, max_iter=10, num_rset=-1, verbose=False):
     """
     It train KR-WordRank to extract keywords and selects key-sentences to summzriaze inserted texts.
 
@@ -136,30 +138,33 @@ def summarize_with_sentences(texts, num_keywords=100, num_keysents=10, diversity
 
     # train KR-WordRank
     wordrank_extractor = KRWordRank(
-        min_count = min_count,
-        max_length = max_length,
-        verbose = verbose
-        )
+        min_count=min_count,
+        max_length=max_length,
+        verbose=verbose
+    )
 
     num_keywords_ = num_keywords
     if stopwords is not None:
         num_keywords_ += len(stopwords)
 
     keywords, rank, graph = wordrank_extractor.extract(texts,
-        beta, max_iter, num_keywords=num_keywords_, num_rset=num_rset)
+                                                       beta, max_iter, num_keywords=num_keywords_, num_rset=num_rset)
 
     # build tokenizer
     if scaling is None:
-        scaling = lambda x:np.sqrt(x)
+        def scaling(x): return np.sqrt(x)
     if stopwords is None:
         stopwords = {}
-    vocab_score = make_vocab_score(keywords, stopwords, scaling=scaling, topk=num_keywords)
+    vocab_score = make_vocab_score(
+        keywords, stopwords, scaling=scaling, topk=num_keywords)
     tokenizer = MaxScoreTokenizer(scores=vocab_score)
 
     # find key-sentences
-    sents = keysentence(vocab_score, texts, tokenizer.tokenize, num_keysents, diversity, penalty)
-    keywords_ = {vocab:keywords[vocab] for vocab in vocab_score}
+    sents = keysentence(vocab_score, texts, tokenizer.tokenize,
+                        num_keysents, diversity, penalty)
+    keywords_ = {vocab: keywords[vocab] for vocab in vocab_score}
     return keywords_, sents
+
 
 def keysentence(vocab_score, texts, tokenize, topk=10, diversity=0.3, penalty=None):
     """
@@ -191,17 +196,18 @@ def keysentence(vocab_score, texts, tokenize, topk=10, diversity=0.3, penalty=No
     keysentences : list of str
     """
     if not callable(penalty):
-        penalty = lambda x: 0
+        def penalty(x): return 0
 
     if not 0 <= diversity <= 1:
         raise ValueError('Diversity must be [0, 1] float value')
 
     vectorizer = KeywordVectorizer(tokenize, vocab_score)
     x = vectorizer.vectorize(texts)
-    keyvec = vectorizer.keyword_vector.reshape(1,-1)
+    keyvec = vectorizer.keyword_vector.reshape(1, -1)
     initial_penalty = np.asarray([penalty(sent) for sent in texts])
     idxs = select(x, keyvec, texts, initial_penalty, topk, diversity)
     return [texts[idx] for idx in idxs]
+
 
 def select(x, keyvec, texts, initial_penalty, topk=10, diversity=0.3):
     """
@@ -235,15 +241,16 @@ def select(x, keyvec, texts, initial_penalty, topk=10, diversity=0.3):
     for _ in range(topk):
         idx = dist.argmin()
         idxs.append(idx)
-        dist[idx] += 2 # maximum distance of cosine is 2
+        dist[idx] += 2  # maximum distance of cosine is 2
         idx_all_distance = pairwise_distances(
-            x, x[idx].reshape(1,-1), metric='cosine').reshape(-1)
+            x, x[idx].reshape(1, -1), metric='cosine').reshape(-1)
         penalty = np.zeros(idx_all_distance.shape[0])
         penalty[np.where(idx_all_distance < diversity)[0]] = 2
         dist += penalty
     return idxs
 
-def make_vocab_score(keywords, stopwords, negatives=None, scaling=lambda x:x, topk=100):
+
+def make_vocab_score(keywords, stopwords, negatives=None, scaling=lambda x: x, topk=100):
     """
     Arguments
     ---------
@@ -266,16 +273,17 @@ def make_vocab_score(keywords, stopwords, negatives=None, scaling=lambda x:x, to
     if negatives is None:
         negatives = {}
     keywords_ = {}
-    for word, rank in sorted(keywords.items(), key=lambda x:-x[1]):
+    for word, rank in sorted(keywords.items(), key=lambda x: -x[1]):
         if len(keywords_) >= topk:
             break
         if word in stopwords:
             continue
         if word in negatives:
-            keywords_[word] = negative[word]
+            keywords_[word] = negatives[word]
         else:
             keywords_[word] = scaling(rank)
     return keywords_
+
 
 def highlight_keyword(sent, keywords):
     for keyword, score in keywords.items():

@@ -10,6 +10,11 @@ import savePNG from "../images/save.png";
 import Header from "../Header/Header";
 
 import * as actionCreators from "../store/actions/index";
+import {
+  formMaker,
+  multiChoiceCardFactory,
+  imageCardFactory
+} from "./ApplyUtil";
 
 class ApplyMain extends Component {
   state = {
@@ -76,35 +81,7 @@ class ApplyMain extends Component {
           formList: this.props.myApplication
         });
       } else if (this.props.selectedApplication) {
-        // console.log(this.props.selectedApplication);
-        let formList = [];
-        let formID = 0;
-        formList = formList.concat(
-          this.props.selectedApplication.short_texts.map(item =>
-            this.newForm("shortText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.long_texts.map(item =>
-            this.newForm("longText", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.multi_choices.map(item =>
-            this.newForm("multiChoice", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.images.map(item =>
-            this.newForm("image", formID++, item)
-          )
-        );
-        formList = formList.concat(
-          this.props.selectedApplication.files.map(item =>
-            this.newForm("file", formID++, item)
-          )
-        );
-        formList.sort((a, b) => (a.order > b.order ? 1 : -1));
+        let formList = formMaker(this.props.selectedApplication);
         this.setState({
           ...this.state,
           isFormInfoLoaded: true,
@@ -114,21 +91,6 @@ class ApplyMain extends Component {
     }
 
     if (!this.props.loggedUser) this.props.history.push("/club");
-  };
-
-  newForm = (type, id, item) => {
-    let newForm = {
-      ...item,
-      id: id,
-      type: type
-    };
-    if (item.content && (type === "image" || type === "file")) {
-      newForm = {
-        ...newForm,
-        fileName: item.content.substr(7, item.content.length)
-      };
-    }
-    return newForm;
   };
 
   shortText = props => {
@@ -214,56 +176,30 @@ class ApplyMain extends Component {
         </div>
       );
     });
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <div
-          style={{
-            marginTop: "15px",
-            marginBottom: "15px",
-            marginLeft: "20px",
-            marginRight: "20px"
-          }}
-        >
-          {choices}
-        </div>
-      </Card>
-    );
+    return multiChoiceCardFactory(props.id, props.title, choices);
   };
 
   image = props => {
-    return (
-      <Card style={{ margin: "10px" }} key={props.id}>
-        <Card.Header>{props.title}</Card.Header>
-        <Card.Body style={{ textAlign: "center" }}>
-          {props.content ? (
-            <div>
-              <img src={props.content} alt="" />
-              <div style={{ fontSize: 11, marginBottom: "10px" }}>
-                {props.fileName}
-              </div>
-            </div>
-          ) : (
-            <div>
-              <img src={imagePNG} width="100" height="100" alt="" />
-            </div>
-          )}
-          <div>
-            <label htmlFor={"image-file-input " + props.id}>
-              이미지를 선택하세요.
-            </label>
-            <input
-              id={"image-file-input " + props.id}
-              type="file"
-              name="file"
-              style={{ display: "none" }}
-              onChange={e => {
-                return this.fileSelectHandler(e, props);
-              }}
-            />
-          </div>
-        </Card.Body>
-      </Card>
+    return imageCardFactory(
+      props.id,
+      props.title,
+      props.content,
+      props.fileName,
+      imagePNG,
+      <div>
+        <label htmlFor={"image-file-input " + props.id}>
+          이미지를 선택하세요.
+        </label>
+        <input
+          id={"image-file-input " + props.id}
+          type="file"
+          name="file"
+          style={{ display: "none" }}
+          onChange={e => {
+            return this.fileSelectHandler(e, props);
+          }}
+        />
+      </div>
     );
   };
 

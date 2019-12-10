@@ -3,6 +3,13 @@ from django.test import TestCase, Client
 from ..models import User, UserProfile, Somoim, Department, Category, Major
 
 
+def getLoggedInClient():
+    client = Client(enforce_csrf_checks=False)
+    client.post('/api/user/signin/', json.dumps(
+        {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+    return client
+
+
 class SomoimTestCase(TestCase):
     def setUp(self):
         category = Category.objects.create(id=1, name='category1')
@@ -31,7 +38,9 @@ class SomoimTestCase(TestCase):
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
-                     'tags': []}]
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -70,9 +79,7 @@ class SomoimTestCase(TestCase):
     #
 
     def test_get_manage_somoim_list_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/1/somoim/manage/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, [])
@@ -83,26 +90,20 @@ class SomoimTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_manage_somoim_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/somoim/manage/')
         self.assertEqual(response.status_code, 404)
 
     def test_get_manage_somoim_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/somoim/manage/')
         self.assertEqual(response.status_code, 405)
 
     # test add, remove both
     def test_put_manage_somoim_success(self):
-        client = Client(enforce_csrf_checks=False)
+        client = getLoggedInClient()
         somoim = Somoim.objects.get(id=1)
 
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
         response = client.put('/api/user/1/somoim/manage/', json.dumps(
             {'id': 1}), content_type='application/json')
         self.assertEqual(response.status_code, 204)
@@ -114,9 +115,7 @@ class SomoimTestCase(TestCase):
         self.assertEqual(len(somoim.managers.all()), 0)
 
     def test_manage_somoim_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/somoim/manage/')
         self.assertEqual(response.status_code, 405)
 
@@ -125,9 +124,7 @@ class SomoimTestCase(TestCase):
     #
 
     def test_get_like_somoim_list_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/1/somoim/like/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, [])
@@ -138,19 +135,15 @@ class SomoimTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_like_somoim_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/somoim/like/')
         self.assertEqual(response.status_code, 404)
 
     # test add, remove both
     def test_put_like_somoim_success(self):
-        client = Client(enforce_csrf_checks=False)
+        client = getLoggedInClient()
         somoim = Somoim.objects.get(id=1)
 
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
         response = client.put('/api/user/1/somoim/like/', json.dumps(
             {'id': 1}), content_type='application/json')
         self.assertEqual(response.status_code, 204)
@@ -162,9 +155,7 @@ class SomoimTestCase(TestCase):
         self.assertEqual(len(somoim.likers.all()), 0)
 
     def test_like_somoim_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/somoim/like/')
         self.assertEqual(response.status_code, 405)
 
@@ -173,9 +164,7 @@ class SomoimTestCase(TestCase):
     #
 
     def test_get_join_somoim_list_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/1/somoim/join/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, [])
@@ -186,19 +175,15 @@ class SomoimTestCase(TestCase):
         self.assertEqual(response.status_code, 401)
 
     def test_get_join_somoim_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.get('/api/user/10/somoim/join/')
         self.assertEqual(response.status_code, 404)
 
     # test add, remove both
     def test_put_join_somoim_success(self):
-        client = Client(enforce_csrf_checks=False)
+        client = getLoggedInClient()
         somoim = Somoim.objects.get(id=1)
 
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
         response = client.put('/api/user/1/somoim/join/', json.dumps(
             {'id': 1}), content_type='application/json')
         self.assertEqual(response.status_code, 204)
@@ -210,9 +195,7 @@ class SomoimTestCase(TestCase):
         self.assertEqual(len(somoim.joiners.all()), 0)
 
     def test_join_somoim_list_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        client = getLoggedInClient()
         response = client.patch('/api/user/1/somoim/join/')
         self.assertEqual(response.status_code, 405)
 
@@ -221,42 +204,51 @@ class SomoimTestCase(TestCase):
     #
 
     def test_get_recommend_somoim_list_success(self):
-        client = Client(enforce_csrf_checks=False)
+        client = getLoggedInClient()
+
         somoim = Somoim.objects.get(id=1)
-        somoim.likers.set([1, 2])
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
+        somoim2 = Somoim.objects.create(id=2, title='somoim2', summary='summary2', description='description2',
+                                        goalJoiner=2, category=Category.objects.get(id=1))
+
+        somoim.likers.set([2])
+        somoim2.likers.set([1, 2])
+
         response = client.get('/api/user/1/somoim/recommend/')
+        expected = [{'id': 1, 'title': 'somoim1',
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [{'id': 2, 'user': {'username': 'user2', 'last_name': 'name2'},
+                                 'dept': {'id': 1, 'name': 'dept1'},
+                                 'major': {'id': 1, 'name': 'major1', 'dept': 1},
+                                 'grade': 1, 'available_semester': 1,
+                                 'available_session_day': 0,
+                                 'manage_clubs': [], 'like_clubs':[],
+                                 'apply_clubs':[], 'manage_somoims':[],
+                                 'like_somoims':[1, 2], 'join_somoims':[]}],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
 
         self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
 
-    def test_get_recommend_somoim_list_not_logged_in(self):
-        client = Client(enforce_csrf_checks=False)
+    def test_get_recommend_somoim_list_success_but_no_list(self):
+        client = getLoggedInClient()
+
+        somoim2 = Somoim.objects.create(id=2, title='somoim2', summary='summary2', description='description2',
+                                        goalJoiner=2, category=Category.objects.get(id=1))
+
+        somoim2.likers.set([1, 2])
+
         response = client.get('/api/user/1/somoim/recommend/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, b'')
-
-    def test_get_recommend_somoim_list_user_not_found(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
-        response = client.get('/api/user/10/somoim/recommend/')
-        self.assertEqual(response.status_code, 404)
-
-    def test_get_recommend_somoim_wrong_method(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.post('/api/user/signin/', json.dumps(
-            {'email': 'user1', 'password': 'pw1'}), content_type='application/json')
-        response = client.patch('/api/user/1/somoim/recommend/')
-        self.assertEqual(response.status_code, 405)
-
-    # Test case for get somoim by ID
-
-    def test_get_specific_somoim_success(self):
-        client = Client(enforce_csrf_checks=False)
-        response = client.get('/api/somoim/1/')
-
-        expected = {'id': 1, 'title': 'somoim1',
+        expected = [{'id': 1, 'title': 'somoim1',
                      'joiners': [],
                      'available_major': [],
                      'available_semester': 0,
@@ -267,7 +259,65 @@ class SomoimTestCase(TestCase):
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
-                     'tags': []}
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
+
+    def test_get_recommend_somoim_list_not_logged_in(self):
+        client = Client(enforce_csrf_checks=False)
+        response = client.get('/api/user/1/somoim/recommend/')
+
+        expected = [{'id': 1, 'title': 'somoim1',
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
+
+    def test_get_recommend_somoim_list_user_not_found(self):
+        client = getLoggedInClient()
+        response = client.get('/api/user/10/somoim/recommend/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_get_recommend_somoim_wrong_method(self):
+        client = getLoggedInClient()
+        response = client.patch('/api/user/1/somoim/recommend/')
+        self.assertEqual(response.status_code, 405)
+
+    # Test case for get somoim by ID
+
+    def test_get_specific_somoim_success(self):
+        client = Client(enforce_csrf_checks=False)
+        response = client.get('/api/somoim/1/')
+
+        expected = {'id': 1, 'title': 'somoim1',
+                    'joiners': [],
+                    'available_major': [],
+                    'available_semester': 0,
+                    'category': 1,
+                    'description': 'description1',
+                    'goalJoiner': 2,
+                    'likers': [],
+                    'managers': [],
+                    'session_day': 0,
+                    'summary': 'summary1',
+                    'tags': [],
+                    'member': 0,
+                    'hits': 0}
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -279,4 +329,22 @@ class SomoimTestCase(TestCase):
     def test_get_specific_somoim_wrong_method(self):
         client = Client(enforce_csrf_checks=False)
         response = client.patch('/api/somoim/1/')
+        self.assertEqual(response.status_code, 405)
+
+    def test_somoim_hit_success(self):
+        client = getLoggedInClient()
+        response = client.put('/api/somoim/1/hits/')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/somoim/1/hits/')
+        self.assertEqual(response.status_code, 204)
+
+    def test_somoim_hit_not_found(self):
+        client = getLoggedInClient()
+        response = client.put('/api/somoim/10/hits/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_somoim_hit_wrong_method(self):
+        client = getLoggedInClient()
+        response = client.patch('/api/somoim/1/hits/')
         self.assertEqual(response.status_code, 405)
