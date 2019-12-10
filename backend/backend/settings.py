@@ -84,7 +84,8 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
-            "init_command": "SET GLOBAL max_connections = 100000",  # <-- The fix
+            "init_command": "SET GLOBAL max_connections = 100000",
+            "connect_timeout": 20
         }
     }
 }
