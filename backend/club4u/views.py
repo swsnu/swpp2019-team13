@@ -597,14 +597,16 @@ def recommend_club(request, user_id=0):
         club_counts = Club.objects.count()
 
         target_info = [0 for x in range(club_counts)]
-        for target_like_club in target_liked_clubs:
-            target_info[target_like_club.id - 1] = 1
-            target_already_liked.append(target_like_club.id)
+
+        for (idx, val) in enumerate(target_liked_clubs):
+            target_info[idx - 1] = 1
+            target_already_liked.append(target_liked_clubs[idx].id - 1)
 
         for candidate in candidates:
             candidate_info = [0 for x in range(club_counts)]
-            for candidate_like_club in candidate.like_clubs.all():
-                candidate_info[candidate_like_club.id - 1] = 1
+
+            for (idx, val) in enumerate(candidate.like_clubs.all()):
+                candidate_info[idx - 1] = 1
 
             (temp1, temp2, temp3) = (0, 0, 0)
             for i in range(club_counts):
@@ -621,10 +623,11 @@ def recommend_club(request, user_id=0):
         recommendation_scores = [0 for x in range(club_counts)]
         candidate_index = 0
         for candidate in candidates:
-            for candidate_like_club in candidate.like_clubs.all():
-                if candidate_like_club.id in target_already_liked:
+            cand_clubs_arr = candidate.like_clubs.all()
+            for (idx, val) in enumerate(cand_clubs_arr):
+                if cand_clubs_arr[idx].id in target_already_liked:
                     continue
-                recommendation_scores[candidate_like_club.id - 1] += similarity_score[candidate_index]
+                recommendation_scores[idx - 1] += similarity_score[candidate_index]
             candidate_index += 1
         
         # 5. make recommendation list
@@ -767,14 +770,16 @@ def recommend_somoim(request, user_id=0):
         somoim_counts = Somoim.objects.count()
 
         target_info = [0 for x in range(somoim_counts)]
-        for target_like_somoim in target_liked_somoims:
-            target_info[target_like_somoim.id - 1] = 1
-            target_already_liked.append(target_like_somoim.id)
+
+        for (idx, val) in enumerate(target_liked_somoims):
+            target_info[idx - 1] = 1
+            target_already_liked.append(target_liked_somoims[idx].id - 1)
 
         for candidate in candidates:
             candidate_info = [0 for x in range(somoim_counts)]
-            for candidate_like_somoim in candidate.like_somoims.all():
-                candidate_info[candidate_like_somoim.id - 1] = 1
+
+            for (idx, val) in enumerate(candidate.like_somoims.all()):
+                candidate_info[idx - 1] = 1
 
             (temp1, temp2, temp3) = (0, 0, 0)
             for i in range(somoim_counts):
@@ -791,11 +796,11 @@ def recommend_somoim(request, user_id=0):
         recommendation_scores = [0 for x in range(somoim_counts)]
         candidate_index = 0
         for candidate in candidates:
-            for candidate_like_somoim in candidate.like_somoims.all():
-                if candidate_like_somoim.id in target_already_liked:
+            cand_somoim_arr = candidate.like_somoims.all()
+            for (idx, val) in enumerate(cand_somoim_arr):
+                if cand_somoim_arr[idx].id in target_already_liked:
                     continue
-                recommendation_scores[candidate_like_somoim.id -
-                                      1] += similarity_score[candidate_index]
+                recommendation_scores[idx - 1] += similarity_score[candidate_index]
             candidate_index += 1
 
         # 5. make recommendation list

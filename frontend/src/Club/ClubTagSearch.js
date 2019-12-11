@@ -98,6 +98,14 @@ class ClubTagSearch extends React.Component {
       )[0];
     }
 
+    let selected_tag = "";
+
+    if (this.props.tags) {
+      selected_tag = this.props.tags.filter(
+        tag => tag.id == this.props.match.params.search_key
+      )[0].name;
+    }
+
     return (
       <div className="ClubTagSearch">
         <Header />
@@ -110,7 +118,7 @@ class ClubTagSearch extends React.Component {
               }}
             >
               &apos;
-              {this.props.tags[this.props.match.params.search_key - 1].name}
+              {selected_tag}
               &apos; 태그 검색 결과:
             </h1>
           </div>

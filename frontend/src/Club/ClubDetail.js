@@ -140,14 +140,14 @@ class ClubDetail extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = club.tags.map(item => (
+        tagList = club.tags.map(tag_id => (
           <Button
-            key={item}
+            key={tag_id}
             variant="secondary"
-            onClick={() => this.onClickClubTag(this.props.tags[item - 1].id)}
+            onClick={() => this.onClickClubTag(tag_id)}
             style={{ marginRight: "5px" }}
           >
-            {"#" + this.props.tags[item - 1].name}
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
       }

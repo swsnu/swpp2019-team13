@@ -103,14 +103,14 @@ class SomoimDetail extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = somoim.tags.map(item => (
+        tagList = somoim.tags.map(tag_id => (
           <Button
-            onClick={() => this.onClickSomoimTag(this.props.tags[item - 1].id)}
-            key={item}
+            onClick={() => this.onClickSomoimTag(tag_id)}
+            key={tag_id}
             variant="secondary"
             style={{ marginRight: "5px" }}
           >
-            {"#" + this.props.tags[item - 1].name}
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
       }

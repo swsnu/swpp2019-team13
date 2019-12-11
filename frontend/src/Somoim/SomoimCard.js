@@ -21,9 +21,13 @@ class SomoimCard extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = somoim.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
-            {"#" + this.props.tags[item - 1].name}
+        tagList = somoim.tags.map(tag_id => (
+          <Button
+            key={tag_id}
+            variant="secondary"
+            style={{ marginRight: "5px" }}
+          >
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
       }

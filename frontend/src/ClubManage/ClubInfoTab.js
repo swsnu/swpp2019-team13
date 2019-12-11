@@ -338,6 +338,7 @@ class ClubInfoTab extends Component {
             <Form.Control
               as="textarea"
               size="lg"
+              rows={1}
               id="clubinfo-summary-input"
               onChange={event => {
                 this.setState({ summary: event.target.value });
@@ -350,6 +351,7 @@ class ClubInfoTab extends Component {
             <Form.Control
               as="textarea"
               size="lg"
+              rows={15}
               id="clubinfo-description-input"
               onChange={event => {
                 this.setState({ description: event.target.value });
