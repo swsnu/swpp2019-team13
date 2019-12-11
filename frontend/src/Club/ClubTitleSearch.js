@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 import Header from "../Header/Header";
 import ClubCard from "../Club/ClubCard";
 import ClubDetail from "../Club/ClubDetail";
+import ClubTitleSearchBar from "./ClubTitleSearchBar";
 
 import "./ClubTitleSearch.css";
 
@@ -45,11 +46,6 @@ class ClubTitleSearch extends React.Component {
         ));
     }
 
-    let searchMessage = <div></div>;
-    if (clubTitleSearchResultList !== []) {
-      searchMessage = <div>검색하신 동아리가 없습니다.</div>;
-    }
-
     let selected_club;
     if (this.props.clubs) {
       selected_club = this.props.clubs.filter(
@@ -60,6 +56,7 @@ class ClubTitleSearch extends React.Component {
     return (
       <div className="ClubTitleSearch">
         <Header />
+        <ClubTitleSearchBar />
         <div className="ClubTitleSearchResult" style={{ marginBottom: "25px" }}>
           <div>
             <h1
@@ -100,7 +97,6 @@ class ClubTitleSearch extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    tags: state.tag.tags,
     clubs: state.club.clubs
   };
 };

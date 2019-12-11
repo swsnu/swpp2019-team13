@@ -9,6 +9,7 @@ import ClubTagSearch from "./Club/ClubTagSearch";
 import ClubTitleSearch from "./Club/ClubTitleSearch";
 import SomoimMain from "./Somoim/SomoimMain";
 import SomoimTagSearch from "./Somoim/SomoimTagSearch";
+import SomoimTitleSearch from "./Somoim/SomoimTitleSearch";
 import MyPage from "./MyPage/MyPage";
 import ClubManageMain from "./ClubManage/ClubManageMain";
 import ApplyMain from "./Apply/ApplyMain";
@@ -38,6 +39,11 @@ function App(props) {
             path="/somoim/tag/:search_key"
             exact
             component={SomoimTagSearch}
+          />
+          <Route
+            path="/somoim/title/:search_key"
+            exact
+            component={SomoimTitleSearch}
           />
           <Route path="/mypage" exact component={MyPage} />
           <Route path="/apply/:club_id" exact component={ApplyMain} />
