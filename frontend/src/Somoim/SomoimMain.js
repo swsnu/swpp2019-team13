@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 import Header from "../Header/Header";
 import SomoimCard from "../Somoim/SomoimCard";
 import SomoimDetail from "../Somoim/SomoimDetail";
+import SomoimTitleSearchBar from "./SomoimTitleSearchBar";
 import SomoimCreate from "../Somoim/SomoimCreate";
 import * as actionCreators from "../store/actions/index";
 
@@ -214,6 +215,7 @@ class SomoimMain extends React.Component {
     return (
       <div className="SomoimMain">
         <Header />
+        <SomoimTitleSearchBar />
         <div className="SomoimList">
           <h1
             style={{
