@@ -25,9 +25,9 @@ class ClubDetail extends React.Component {
     this.props.addAppliedClub(newAppliedClub, this.props.loggedUser);
   };
 
-  onClickClubTag = name => {
+  onClickClubTag = id => {
     this.props.closeHandler();
-    this.props.history.push("/club/tag/" + name);
+    this.props.history.push("/club/tag/" + id);
   };
 
   render() {
@@ -108,7 +108,7 @@ class ClubDetail extends React.Component {
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
           <img
-            src={"media/" + club.poster_img[0]}
+            src={"/media/" + club.poster_img[0]}
             width="300"
             height="300"
             alt=""
@@ -144,7 +144,7 @@ class ClubDetail extends React.Component {
           <Button
             key={item}
             variant="secondary"
-            onClick={() => this.onClickClubTag(this.props.tags[item - 1].name)}
+            onClick={() => this.onClickClubTag(this.props.tags[item - 1].id)}
             style={{ marginRight: "5px" }}
           >
             {"#" + this.props.tags[item - 1].name}

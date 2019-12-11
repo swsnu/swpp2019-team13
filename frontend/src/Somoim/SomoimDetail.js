@@ -21,9 +21,9 @@ class SomoimDetail extends React.Component {
     this.props.addJoinedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
-  onClickSomoimTag = name => {
+  onClickSomoimTag = id => {
     this.props.closeHandler();
-    this.props.history.push("/somoim/tag/" + name);
+    this.props.history.push("/somoim/tag/" + id);
   };
 
   render() {
@@ -105,9 +105,7 @@ class SomoimDetail extends React.Component {
       if (this.props.tags.length !== 0) {
         tagList = somoim.tags.map(item => (
           <Button
-            onClick={() =>
-              this.onClickSomoimTag(this.props.tags[item - 1].name)
-            }
+            onClick={() => this.onClickSomoimTag(this.props.tags[item - 1].id)}
             key={item}
             variant="secondary"
             style={{ marginRight: "5px" }}
