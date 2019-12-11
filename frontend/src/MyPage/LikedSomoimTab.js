@@ -35,12 +35,15 @@ class LikedSomoimTab extends Component {
           idx,
           this.onClickCard,
           <Button
+            variant="dark"
             id="somoim-unlike-button"
+            style={{ height: "100%" }}
             onClick={() => {
               this.props.addLikedSomoim(item, this.props.loggedUser);
             }}
+            block
           >
-            Unlike
+            좋아요 취소
           </Button>
         );
       });
