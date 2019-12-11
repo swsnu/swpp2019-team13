@@ -212,6 +212,8 @@ class UserProfile(models.Model):
 
 def user_changed(sender, **kwargs):
     cache.delete('cached_recommended_club')
+    cache.delete('cached_recommended_somoim')
 
 
 m2m_changed.connect(user_changed, sender=UserProfile.like_clubs.through)
+m2m_changed.connect(user_changed, sender=UserProfile.like_somoims.through)

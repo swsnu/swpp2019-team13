@@ -782,74 +782,80 @@ def recommend_somoim(request, user_id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # 1. get somoims which user likes
-        target_liked_somoims = user.like_somoims.all()
+        cached_recommended_somoim = cache.get('cached_recommended_somoim')
+        if not cached_recommended_somoim:
+            # 1. get somoims which user likes
+            target_liked_somoims = user.like_somoims.all()
 
-        # 2. get users who likes somoim in above list
-        candidates = set()
-        for target_like_somoim in target_liked_somoims:
-            for candidate in target_like_somoim.likers.all():
-                if candidate.id is user.id:
-                    continue
-                candidates.add(candidate)
+            # 2. get users who likes somoim in above list
+            candidates = set()
+            for target_like_somoim in target_liked_somoims:
+                for candidate in target_like_somoim.likers.all():
+                    if candidate.id is user.id:
+                        continue
+                    candidates.add(candidate)
 
-        # 3. calculate similarity between target user and each candidate user
-        # by user-based collaborate filtering (CF)
-        # use cosine similarity
-        similarity_score = []
-        target_already_liked = []
-        somoim_counts = Somoim.objects.count()
+            # 3. calculate similarity between target user and each candidate user
+            # by user-based collaborate filtering (CF)
+            # use cosine similarity
+            similarity_score = []
+            target_already_liked = []
+            somoim_counts = Somoim.objects.count()
 
-        target_info = [0 for x in range(somoim_counts)]
+            target_info = [0 for x in range(somoim_counts)]
 
-        for (idx, val) in enumerate(target_liked_somoims):
-            target_info[idx - 1] = 1
-            target_already_liked.append(target_liked_somoims[idx].id - 1)
+            for (idx, val) in enumerate(target_liked_somoims):
+                target_info[idx - 1] = 1
+                target_already_liked.append(target_liked_somoims[idx].id - 1)
 
-        for candidate in candidates:
-            candidate_info = [0 for x in range(somoim_counts)]
+            for candidate in candidates:
+                candidate_info = [0 for x in range(somoim_counts)]
 
-            for (idx, val) in enumerate(candidate.like_somoims.all()):
-                candidate_info[idx - 1] = 1
+                for (idx, val) in enumerate(candidate.like_somoims.all()):
+                    candidate_info[idx - 1] = 1
 
-            (temp1, temp2, temp3) = (0, 0, 0)
-            for i in range(somoim_counts):
-                x = target_info[i]
-                y = candidate_info[i]
+                (temp1, temp2, temp3) = (0, 0, 0)
+                for i in range(somoim_counts):
+                    x = target_info[i]
+                    y = candidate_info[i]
 
-                temp1 += (x * x)
-                temp2 += (y * y)
-                temp3 += (x * y)
+                    temp1 += (x * x)
+                    temp2 += (y * y)
+                    temp3 += (x * y)
 
-            similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
+                similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
 
-        # 4. calculate recommendation score of somoim by using above information
-        recommendation_scores = [0 for x in range(somoim_counts)]
-        candidate_index = 0
-        for candidate in candidates:
-            cand_somoim_arr = candidate.like_somoims.all()
-            for (idx, val) in enumerate(cand_somoim_arr):
-                if cand_somoim_arr[idx].id in target_already_liked:
-                    continue
-                recommendation_scores[idx - 1] += similarity_score[candidate_index]
-            candidate_index += 1
+            # 4. calculate recommendation score of somoim by using above information
+            recommendation_scores = [0 for x in range(somoim_counts)]
+            candidate_index = 0
+            for candidate in candidates:
+                cand_somoim_arr = candidate.like_somoims.all()
+                for (idx, val) in enumerate(cand_somoim_arr):
+                    if cand_somoim_arr[idx].id in target_already_liked:
+                        continue
+                    recommendation_scores[idx - 1] += similarity_score[candidate_index]
+                candidate_index += 1
 
-        # 5. make recommendation list
-        recommended_somoims = Somoim.objects.none()
-        for x in range(somoim_counts // 2):
-            index = recommendation_scores.index(max(recommendation_scores))
-            if recommendation_scores[index] > 0:
-                recommended_somoims |= Somoim.objects.filter(id=index+1)
-            recommendation_scores[index] = 0
+            # 5. make recommendation list
+            recommended_somoims = Somoim.objects.none()
+            for x in range(somoim_counts // 2):
+                index = recommendation_scores.index(max(recommendation_scores))
+                if recommendation_scores[index] > 0:
+                    recommended_somoims |= Somoim.objects.filter(id=index+1)
+                recommendation_scores[index] = 0
 
-        if len(recommended_somoims) != 0:
-            serializer = SomoimSerializer(recommended_somoims, many=True)
-        else:
-            unsorted_somoims = Somoim.objects.all().exclude(id__in=target_already_liked)
-            sorted_somoims = sorted(unsorted_somoims, key=lambda c: -c.likers.count())
-            serializer = SomoimSerializer(sorted_somoims, many=True)
+            if len(recommended_somoims) != 0:
+                serializer = SomoimSerializer(recommended_somoims, many=True)
+            else:
+                unsorted_somoims = Somoim.objects.all().exclude(id__in=target_already_liked)
+                sorted_somoims = sorted(unsorted_somoims, key=lambda c: -c.likers.count())
+                serializer = SomoimSerializer(sorted_somoims, many=True)
 
-        return HttpResponse(JSONRenderer().render(serializer.data))
+            # return HttpResponse(JSONRenderer().render(serializer.data))
+
+            cached_recommended_somoim = JSONRenderer().render(serializer.data)
+            cache.set('cached_recommended_somoim', cached_recommended_somoim)
+        return HttpResponse(cached_recommended_somoim)
     else:
         return HttpResponse(status=405)
 
