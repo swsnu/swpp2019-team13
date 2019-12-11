@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.cache import cache
+
 
 # Create your models here.
 
@@ -9,13 +11,37 @@ class Tag(models.Model):
     suggested = models.IntegerField(default=1)
     selected = models.IntegerField(default=1)
 
+    def save(self, *args, **kwargs):
+        cache.delete('cached_tag')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('cached_tag')
+        super().delete(*args, **kwargs)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
 
+    def save(self, *args, **kwargs):
+        cache.delete('cached_category')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('cached_category')
+        super().delete(*args, **kwargs)
+
 
 class Department(models.Model):
     name = models.CharField(max_length=64)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_dept')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('cached_dept')
+        super().delete(*args, **kwargs)
 
 
 class Major(models.Model):
@@ -26,6 +52,14 @@ class Major(models.Model):
         null=True
     )
     name = models.CharField(max_length=64)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_major')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('cached_major')
+        super().delete(*args, **kwargs)
 
 
 class PreClub(models.Model):
@@ -71,6 +105,14 @@ class Club(models.Model):
     member = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        cache.delete('cached_club')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('cached_club')
+        super().delete(*args, **kwargs)
+
 
 class ClubPoster(models.Model):
     img = models.ImageField()
@@ -105,6 +147,14 @@ class Somoim(models.Model):
     )
     member = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_somoim')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        cache.delete('cached_somoim')
+        super().delete(*args, **kwargs)
 
 
 class UserProfile(models.Model):

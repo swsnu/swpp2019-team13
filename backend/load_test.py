@@ -10,6 +10,7 @@ class LoadTask(TaskSet):
 
     @task
     def load_additional_info(self):
+        self.client.get("/api/category/list/")
         self.client.get("/api/tag/list/")
         self.client.get("/api/dept/list/")
         self.client.get("/api/major/list/")
@@ -20,7 +21,7 @@ class LoadTask(TaskSet):
 
     @task
     def somoim_list(self):
-        self.client.get("/api/club/list/")
+        self.client.get("/api/somoim/list/")
 
 
 class WebSiteUser(HttpLocust):
