@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.cache import cache
 
+from django.db.models.signals import m2m_changed
+
 
 # Create your models here.
 
@@ -206,3 +208,10 @@ class UserProfile(models.Model):
         related_name="joiners",
         blank=True
     )
+
+
+def user_changed(sender, **kwargs):
+    cache.delete('cached_recommended_club')
+
+
+m2m_changed.connect(user_changed, sender=UserProfile.like_clubs.through)

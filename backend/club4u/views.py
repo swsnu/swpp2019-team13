@@ -603,86 +603,92 @@ def recommend_club(request, user_id=0):
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # 1. get clubs which user likes
-        target_liked_clubs = user.like_clubs.all()
+        cached_recommended_club = cache.get('cached_recommended_club')
+        if not cached_recommended_club:
+            # 1. get clubs which user likes
+            target_liked_clubs = user.like_clubs.all()
 
-        # 2. get users who likes club in above list
-        candidates = set()
-        for target_like_club in target_liked_clubs:
-            for candidate in target_like_club.likers.all():
-                if candidate.id is user.id:
-                    continue
-                candidates.add(candidate)
+            # 2. get users who likes club in above list
+            candidates = set()
+            for target_like_club in target_liked_clubs:
+                for candidate in target_like_club.likers.all():
+                    if candidate.id is user.id:
+                        continue
+                    candidates.add(candidate)
 
-        # 3. calculate similarity between target user and each candidate user
-        # by user-based collaborate filtering (CF)
-        # use cosine similarity
-        similarity_score = []
-        target_already_liked = []
-        club_counts = Club.objects.count()
+            # 3. calculate similarity between target user and each candidate user
+            # by user-based collaborate filtering (CF)
+            # use cosine similarity
+            similarity_score = []
+            target_already_liked = []
+            club_counts = Club.objects.count()
 
-        target_info = [0 for x in range(club_counts)]
+            target_info = [0 for x in range(club_counts)]
 
-        for (idx, val) in enumerate(target_liked_clubs):
-            target_info[idx - 1] = 1
-            target_already_liked.append(target_liked_clubs[idx].id - 1)
+            for (idx, val) in enumerate(target_liked_clubs):
+                target_info[idx - 1] = 1
+                target_already_liked.append(target_liked_clubs[idx].id - 1)
 
-        for candidate in candidates:
-            candidate_info = [0 for x in range(club_counts)]
+            for candidate in candidates:
+                candidate_info = [0 for x in range(club_counts)]
 
-            for (idx, val) in enumerate(candidate.like_clubs.all()):
-                candidate_info[idx - 1] = 1
+                for (idx, val) in enumerate(candidate.like_clubs.all()):
+                    candidate_info[idx - 1] = 1
 
-            (temp1, temp2, temp3) = (0, 0, 0)
-            for i in range(club_counts):
-                x = target_info[i]
-                y = candidate_info[i]
+                (temp1, temp2, temp3) = (0, 0, 0)
+                for i in range(club_counts):
+                    x = target_info[i]
+                    y = candidate_info[i]
 
-                temp1 += (x * x)
-                temp2 += (y * y)
-                temp3 += (x * y)
+                    temp1 += (x * x)
+                    temp2 += (y * y)
+                    temp3 += (x * y)
+                
+                similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
+
+            # 4. calculate recommendation score of club by using above information
+            recommendation_scores = [0 for x in range(club_counts)]
+            candidate_index = 0
+            for candidate in candidates:
+                cand_clubs_arr = candidate.like_clubs.all()
+                for (idx, val) in enumerate(cand_clubs_arr):
+                    if cand_clubs_arr[idx].id in target_already_liked:
+                        continue
+                    recommendation_scores[idx - 1] += similarity_score[candidate_index]
+                candidate_index += 1
             
-            similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
+            # 5. make recommendation list
+            recommended_clubs = Club.objects.none()
+            for x in range(club_counts // 2):
+                index = recommendation_scores.index(max(recommendation_scores))
+                if recommendation_scores[index] > 0:
+                    recommended_clubs |= Club.objects.filter(id=index+1)
+                recommendation_scores[index] = 0
 
-        # 4. calculate recommendation score of club by using above information
-        recommendation_scores = [0 for x in range(club_counts)]
-        candidate_index = 0
-        for candidate in candidates:
-            cand_clubs_arr = candidate.like_clubs.all()
-            for (idx, val) in enumerate(cand_clubs_arr):
-                if cand_clubs_arr[idx].id in target_already_liked:
-                    continue
-                recommendation_scores[idx - 1] += similarity_score[candidate_index]
-            candidate_index += 1
-        
-        # 5. make recommendation list
-        recommended_clubs = Club.objects.none()
-        for x in range(club_counts // 2):
-            index = recommendation_scores.index(max(recommendation_scores))
-            if recommendation_scores[index] > 0:
-                recommended_clubs |= Club.objects.filter(id=index+1)
-            recommendation_scores[index] = 0
+            if len(recommended_clubs) != 0:
+                serializer = ClubSerializer(recommended_clubs, many=True)
+            else:
+                unsorted_clubs = Club.objects.all().exclude(id__in=target_already_liked)
+                sorted_clubs = sorted(unsorted_clubs, key=lambda c: -c.likers.count())
+                serializer = ClubSerializer(sorted_clubs, many=True)
 
-        if len(recommended_clubs) != 0:
-            serializer = ClubSerializer(recommended_clubs, many=True)
-        else:
-            unsorted_clubs = Club.objects.all().exclude(id__in=target_already_liked)
-            sorted_clubs = sorted(unsorted_clubs, key=lambda c: -c.likers.count())
-            serializer = ClubSerializer(sorted_clubs, many=True)
+            # ADD POSTER IMAGES TO EACH CLUB DATA
+            response_dict = serializer.data
+            for c in response_dict:
+                poster_list = ClubPoster.objects.filter(
+                    club_id=c['id']).values()
 
-        # ADD POSTER IMAGES TO EACH CLUB DATA
-        response_dict = serializer.data
-        for c in response_dict:
-            poster_list = ClubPoster.objects.filter(
-                club_id=c['id']).values()
+                poster_img_list = []
+                for poster in poster_list:
+                    poster_img_list.append(poster['img'])
 
-            poster_img_list = []
-            for poster in poster_list:
-                poster_img_list.append(poster['img'])
+                c['poster_img'] = poster_img_list
 
-            c['poster_img'] = poster_img_list
+            # return HttpResponse(JSONRenderer().render(serializer.data))
 
-        return HttpResponse(JSONRenderer().render(serializer.data))
+            cached_recommended_club = JSONRenderer().render(serializer.data)
+            cache.set('cached_recommended_club', cached_recommended_club)
+        return HttpResponse(cached_recommended_club)
     else:
         return HttpResponse(status=405)
 
