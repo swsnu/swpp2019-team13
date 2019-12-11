@@ -25,6 +25,11 @@ class ClubDetail extends React.Component {
     this.props.addAppliedClub(newAppliedClub, this.props.loggedUser);
   };
 
+  onClickClubTag = id => {
+    this.props.closeHandler();
+    this.props.history.push("/club/tag/" + id);
+  };
+
   render() {
     let acceptQualification = false;
     let isLoggedUserLike = false;
@@ -103,7 +108,7 @@ class ClubDetail extends React.Component {
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
           <img
-            src={"media/" + club.poster_img[0]}
+            src={"/media/" + club.poster_img[0]}
             width="300"
             height="300"
             alt=""
@@ -135,9 +140,14 @@ class ClubDetail extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = club.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
-            {"#" + this.props.tags[item - 1].name}
+        tagList = club.tags.map(tag_id => (
+          <Button
+            key={tag_id}
+            variant="secondary"
+            onClick={() => this.onClickClubTag(tag_id)}
+            style={{ marginRight: "5px" }}
+          >
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
       }
@@ -169,7 +179,7 @@ class ClubDetail extends React.Component {
                         width="18px"
                         alt="person"
                       ></img>
-                      <p>&nbsp;25</p>
+                      <p>&nbsp;{club.member}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -179,7 +189,7 @@ class ClubDetail extends React.Component {
                         width="23px"
                         alt="views"
                       ></img>
-                      <p>&nbsp;50</p>
+                      <p>&nbsp;{club.hits}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -232,7 +242,15 @@ class ClubDetail extends React.Component {
               >
                 우리 동아리는...
               </div>
-              {club.description}
+              {club.description &&
+                club.description.split("\n").map((line, i) => {
+                  return (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  );
+                })}
             </div>
             <div className="detail-gallery">
               <div
@@ -285,7 +303,7 @@ class ClubDetail extends React.Component {
                     className="unliked-likebutton"
                     onClick={this.onClickLikeButton}
                   >
-                    좋아요!
+                    좋아요 취소
                   </button>
                 ) : (
                   <button

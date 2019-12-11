@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import SomoimCard from "./SomoimCard";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
+import * as somoimActions from "../store/actions/somoim";
 
 const stubInitialState = {
   tags: [
@@ -83,7 +84,7 @@ const mockStore = getMockStore(stubInitialState);
 
 describe("<SomoimCard />", () => {
   let somoimCard;
-  let spyClickHandler;
+  let spyClickHandler, spyAddSomoimHitCount;
   beforeEach(() => {
     somoimCard = (
       <Provider store={mockStore}>
@@ -107,6 +108,12 @@ describe("<SomoimCard />", () => {
     );
 
     spyClickHandler = jest.fn();
+
+    spyAddSomoimHitCount = jest
+      .spyOn(somoimActions, "addSomoimHitCount")
+      .mockImplementation(() => {
+        return dispatch => {};
+      });
   });
 
   it("should render without errors", () => {

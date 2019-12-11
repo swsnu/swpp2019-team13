@@ -30,7 +30,7 @@ describe("Category Actions", () => {
       return new Promise((resolve, reject) => {
         const result = {
           status: 200,
-          data: 1
+          data: []
         };
         resolve(result);
       });
@@ -152,6 +152,42 @@ describe("Category Actions", () => {
 
     store.dispatch(actionCreators.getApplicationList(1)).then(() => {
       expect(spygetApplicationList).toHaveBeenCalled();
+      done();
+    });
+  });
+
+  it("addClubHitCount success", done => {
+    const spyaddClubHitCount = jest
+      .spyOn(axios, "put")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 200
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.addClubHitCount(1)).then(() => {
+      expect(spyaddClubHitCount).toBeCalledTimes(4);
+      done();
+    });
+  });
+
+  it("addSomoimHitCount fail", done => {
+    const spyaddClubHitCount = jest
+      .spyOn(axios, "put")
+      .mockImplementation(url => {
+        return new Promise((resolve, reject) => {
+          const result = {
+            status: 204
+          };
+          resolve(result);
+        });
+      });
+
+    store.dispatch(actionCreators.addClubHitCount(1)).then(() => {
+      expect(spyaddClubHitCount).toBeCalledTimes(5);
       done();
     });
   });

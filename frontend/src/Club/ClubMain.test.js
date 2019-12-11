@@ -31,7 +31,10 @@ let temp_clubs = [
     available_major: [1],
     tags: [1, 2],
     likers: [],
-    likes: 10,
+    recruit_start_day: "2019-12-8",
+    recruit_end_day: "2019-12-16",
+    member: 50,
+    hits: 1,
     poster_img: []
   },
   {
@@ -50,7 +53,10 @@ let temp_clubs = [
     tags: [2, 3],
     available_major: [1],
     likers: [],
-    likes: 15,
+    recruit_start_day: "2019-12-8",
+    recruit_end_day: "2019-12-16",
+    member: 50,
+    hits: 1,
     poster_img: []
   },
   {
@@ -69,7 +75,10 @@ let temp_clubs = [
     tags: [2, 3],
     available_major: [1],
     likers: [],
-    likes: 20,
+    recruit_start_day: "2019-12-8",
+    recruit_end_day: "2019-12-16",
+    member: 50,
+    hits: 1,
     poster_img: []
   }
 ];
@@ -338,7 +347,6 @@ describe("<ClubMain />", () => {
     const wrapper = component.find("ClubMain");
     expect(wrapper.length).toBe(1);
   });
-
   it("club card click event handling", () => {
     const component = mount(clubMain);
     const mainInstance = component.find("ClubMain").instance();
@@ -355,6 +363,10 @@ describe("<ClubMain />", () => {
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(true);
+
+    const detailInstance = component.find("ClubDetail").instance();
+    detailInstance.props.closeHandler();
+    expect(mainInstance.state.clubDetailShow).toBe(false);
   });
 
   it("club create button click event handling", () => {

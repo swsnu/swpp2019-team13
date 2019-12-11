@@ -82,7 +82,7 @@
   padding-bottom: 15px;
 }
 
-.liked-likebutton {
+.unliked-likebutton {
   width: 40%;
   height: 35px;
   font-size: 18px;
@@ -93,7 +93,7 @@
   border-radius: 12px;
 }
 
-.unliked-likebutton {
+.liked-likebutton {
   width: 40%;
   height: 35px;
   font-size: 18px;

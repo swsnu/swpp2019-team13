@@ -21,6 +21,11 @@ class SomoimDetail extends React.Component {
     this.props.addJoinedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
+  onClickSomoimTag = id => {
+    this.props.closeHandler();
+    this.props.history.push("/somoim/tag/" + id);
+  };
+
   render() {
     let acceptQualification = false;
     let isLoggedUserLike = false;
@@ -98,9 +103,14 @@ class SomoimDetail extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = somoim.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
-            {"#" + this.props.tags[item - 1].name}
+        tagList = somoim.tags.map(tag_id => (
+          <Button
+            onClick={() => this.onClickSomoimTag(tag_id)}
+            key={tag_id}
+            variant="secondary"
+            style={{ marginRight: "5px" }}
+          >
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
       }
@@ -157,7 +167,7 @@ class SomoimDetail extends React.Component {
                         width="18px"
                         height="18px"
                       ></img>
-                      <p>&nbsp;25</p>
+                      <p>&nbsp;{somoim.member}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -167,7 +177,7 @@ class SomoimDetail extends React.Component {
                         width="23px"
                         height="23px"
                       ></img>
-                      <p>&nbsp;50</p>
+                      <p>&nbsp;{somoim.hits}</p>
                     </div>
                     <div className="detail-user-info-item">
                       <img
@@ -213,7 +223,15 @@ class SomoimDetail extends React.Component {
               >
                 이 소모임은...
               </div>
-              {somoim.description}
+              {somoim.description !== null &&
+                somoim.description.split("\n").map((line, i) => {
+                  return (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  );
+                })}
             </div>
             <div className="detail-footer">
               {this.props.loggedUser &&
@@ -222,7 +240,7 @@ class SomoimDetail extends React.Component {
                     className="unliked-likebutton"
                     onClick={this.onClickLikeButton}
                   >
-                    좋아요!
+                    좋아요 취소
                   </button>
                 ) : (
                   <button
