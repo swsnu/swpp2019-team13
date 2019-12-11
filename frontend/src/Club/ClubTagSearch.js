@@ -6,23 +6,14 @@ import { withRouter } from "react-router";
 import Header from "../Header/Header";
 import ClubCard from "../Club/ClubCard";
 import ClubDetail from "../Club/ClubDetail";
-import * as actionCreators from "../store/actions/index";
 
 import "./ClubTagSearch.css";
 
 class ClubTagSearch extends React.Component {
   state = {
+    clubTagSearchResultListPageNum: 0,
     clubDetailShow: false,
-    selectedClubID: null,
-    clubTagSearchResultListPageNum: 0
-  };
-
-  clubCardClickHandler = id => {
-    this.setState({
-      ...this.state,
-      clubDetailShow: true,
-      selectedClubID: id
-    });
+    selectedClubID: null
   };
 
   clubDetailCloseHandler = () => {
@@ -32,10 +23,12 @@ class ClubTagSearch extends React.Component {
     });
   };
 
-  clubCardGenerator = (list, index) => {
-    return (
-      <div className="ClubCard">{index < list.length ? list[index] : ""}</div>
-    );
+  clubCardClickHandler = id => {
+    this.setState({
+      ...this.state,
+      selectedClubID: id,
+      clubDetailShow: true
+    });
   };
 
   listPageChangeBarGenerator = list => {
@@ -75,14 +68,13 @@ class ClubTagSearch extends React.Component {
     );
   };
 
-  render() {
-    let selected_club;
-    if (this.props.clubs) {
-      selected_club = this.props.clubs.filter(
-        a => a.id === this.state.selectedClubID
-      )[0];
-    }
+  clubCardGenerator = (list, index) => {
+    return (
+      <div className="ClubCard">{index < list.length ? list[index] : ""}</div>
+    );
+  };
 
+  render() {
     let clubTagSearchResultList = [];
     if (this.props.clubs) {
       clubTagSearchResultList = this.props.clubs
@@ -91,12 +83,19 @@ class ClubTagSearch extends React.Component {
         )
         .map(item => (
           <ClubCard
-            key={item.id}
-            clickHandler={this.clubCardClickHandler}
-            club={item}
             forceRender={Math.random()}
+            key={item.id}
+            club={item}
+            clickHandler={this.clubCardClickHandler}
           />
         ));
+    }
+
+    let selected_club;
+    if (this.props.clubs) {
+      selected_club = this.props.clubs.filter(
+        a => a.id === this.state.selectedClubID
+      )[0];
     }
 
     return (
@@ -106,8 +105,8 @@ class ClubTagSearch extends React.Component {
           <div>
             <h1
               style={{
-                fontWeight: "bold",
-                display: "inline-block"
+                display: "inline-block",
+                fontWeight: "bold"
               }}
             >
               &apos;
@@ -139,10 +138,10 @@ class ClubTagSearch extends React.Component {
         </div>
 
         <ClubDetail
-          show={this.state.clubDetailShow}
-          club={selected_club}
-          closeHandler={this.clubDetailCloseHandler}
           forceRender={Math.random()}
+          show={this.state.clubDetailShow}
+          closeHandler={this.clubDetailCloseHandler}
+          club={selected_club}
         />
       </div>
     );
@@ -151,8 +150,8 @@ class ClubTagSearch extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    clubs: state.club.clubs,
-    tags: state.tag.tags
+    tags: state.tag.tags,
+    clubs: state.club.clubs
   };
 };
 
