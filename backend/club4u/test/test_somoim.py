@@ -214,6 +214,7 @@ class SomoimTestCase(TestCase):
         somoim2.likers.set([1, 2])
 
         response = client.get('/api/user/1/somoim/recommend/')
+        response = client.get('/api/user/1/somoim/recommend/')
         expected = [{'id': 1, 'title': 'somoim1',
                      'joiners': [],
                      'available_major': [],

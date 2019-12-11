@@ -200,6 +200,7 @@ class ClubTestCase(TestCase):
         club2.likers.set([1, 2])
 
         response = client.get('/api/user/1/club/recommend/')
+        response = client.get('/api/user/1/club/recommend/')
         expected = [{'id': 1, 'managers': [],
                      'likers': [{'id': 2, 'user': {'username': 'user2', 'last_name': 'name2'},
                                  'dept': {'id': 1, 'name': 'dept1'},
