@@ -6,6 +6,7 @@ import { ConnectedRouter } from "connected-react-router";
 import SignUp from "./Header/SignUp";
 import ClubMain from "./Club/ClubMain";
 import ClubTagSearch from "./Club/ClubTagSearch";
+import ClubTitleSearch from "./Club/ClubTitleSearch";
 import SomoimMain from "./Somoim/SomoimMain";
 import SomoimTagSearch from "./Somoim/SomoimTagSearch";
 import MyPage from "./MyPage/MyPage";
@@ -27,6 +28,11 @@ function App(props) {
           />
           <Route path="/club" exact component={ClubMain} />
           <Route path="/club/tag/:search_key" exact component={ClubTagSearch} />
+          <Route
+            path="/club/title/:search_key"
+            exact
+            component={ClubTitleSearch}
+          />
           <Route path="/somoim" exact component={SomoimMain} />
           <Route
             path="/somoim/tag/:search_key"
