@@ -25,6 +25,11 @@ class ClubDetail extends React.Component {
     this.props.addAppliedClub(newAppliedClub, this.props.loggedUser);
   };
 
+  onClickClubTag = id => {
+    this.props.closeHandler();
+    this.props.history.push("/club/tag/" + id);
+  };
+
   render() {
     let acceptQualification = false;
     let isLoggedUserLike = false;
@@ -103,7 +108,7 @@ class ClubDetail extends React.Component {
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
           <img
-            src={"media/" + club.poster_img[0]}
+            src={"/media/" + club.poster_img[0]}
             width="300"
             height="300"
             alt=""
@@ -136,7 +141,12 @@ class ClubDetail extends React.Component {
       let tagList;
       if (this.props.tags.length !== 0) {
         tagList = club.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
+          <Button
+            key={item}
+            variant="secondary"
+            onClick={() => this.onClickClubTag(this.props.tags[item - 1].id)}
+            style={{ marginRight: "5px" }}
+          >
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));

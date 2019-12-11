@@ -26,7 +26,7 @@ class ClubCard extends React.Component {
       if (club.poster_img && club.poster_img.length > 0)
         image = (
           <img
-            src={"media/" + club.poster_img[0]}
+            src={"/media/" + club.poster_img[0]}
             className="club-poster-img"
             width="100%"
             height="100%"

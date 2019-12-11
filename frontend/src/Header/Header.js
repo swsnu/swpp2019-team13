@@ -107,7 +107,9 @@ class Header extends Component {
           <div className="nav">
             <div
               className={`nav-item ${
-                this.props.location.pathname === "/club" ? "active" : ""
+                this.props.location.pathname.substring(0, 5) === "/club"
+                  ? "active"
+                  : ""
               }`}
               onClick={() => {
                 this.props.history.push("/club");
@@ -117,7 +119,9 @@ class Header extends Component {
             </div>
             <div
               className={`nav-item ${
-                this.props.location.pathname === "/somoim" ? "active" : ""
+                this.props.location.pathname.substring(0, 7) === "/somoim"
+                  ? "active"
+                  : ""
               }`}
               onClick={() => {
                 this.props.history.push("/somoim");
