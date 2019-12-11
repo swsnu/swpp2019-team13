@@ -2,7 +2,6 @@ import json
 import os
 import math
 
-from django.core.cache import cache
 
 from json import JSONDecodeError
 
@@ -14,6 +13,7 @@ from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.core.cache import cache
 from krwordrank.word import summarize_with_keywords
 
 from .models import *
