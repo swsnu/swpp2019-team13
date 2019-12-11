@@ -15,6 +15,8 @@ import JoinedSomoimTab from "./JoinedSomoimTab";
 
 import * as actionCreators from "../store/actions/index";
 
+import "./MyPage.css";
+
 class MyPage extends Component {
   state = {
     tab: 0,
@@ -77,150 +79,282 @@ class MyPage extends Component {
     return (
       <div>
         <Header />
-        <Container style={{ marginLeft: "16%" }}>
+        <Container>
           <Row>
             <Col sm="2">
-              <Accordion>
-                <Accordion.Toggle
-                  className="self-info-button"
-                  style={{ marginBottom: "5px", marginTop: "13px" }}
-                  as={Button}
-                  variant="outline-dark"
-                  size="lg"
-                  block
-                  eventKey="0"
-                  onClick={() => {
-                    this.setState({ ...this.state, tab: 0 });
-                  }}
-                >
-                  내 정보
-                </Accordion.Toggle>
-                {/* <Accordion.Collapse eventKey="0">
+              <div className="SideBar">
+                <Accordion>
+                  {this.state.tab === 0 ? (
+                    <Accordion.Toggle
+                      className="self-info-button"
+                      style={{
+                        marginBottom: "5px",
+                        marginTop: "13px"
+                      }}
+                      as={Button}
+                      variant="secondary"
+                      size="lg"
+                      block
+                      eventKey="0"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 0 });
+                      }}
+                    >
+                      내 정보
+                    </Accordion.Toggle>
+                  ) : (
+                    <Accordion.Toggle
+                      className="self-info-button"
+                      style={{
+                        marginBottom: "5px",
+                        marginTop: "13px"
+                      }}
+                      as={Button}
+                      variant="outline-secondary"
+                      size="lg"
+                      block
+                      eventKey="0"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 0 });
+                      }}
+                    >
+                      내 정보
+                    </Accordion.Toggle>
+                  )}
+
+                  {/* <Accordion.Collapse eventKey="0">
                   <Button></Button>
                 </Accordion.Collapse> */}
 
-                <Accordion.Toggle
-                  style={{ marginBottom: "5px", marginTop: "13px" }}
-                  as={Button}
-                  variant="outline-dark"
-                  size="lg"
-                  block
-                  eventKey="1"
-                >
-                  내 동아리
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="1">
-                  <div>
-                    <Button
-                      className="manage-club-button"
-                      style={{
-                        width: "95%",
-                        marginLeft: "5px"
-                      }}
-                      variant="outline-secondary"
-                      size="md"
-                      block
-                      onClick={() => {
-                        this.setState({ ...this.state, tab: 1 });
-                      }}
-                    >
-                      동아리 관리
-                    </Button>
-                    <Button
-                      className="like-club-button"
-                      style={{
-                        width: "95%",
-                        marginLeft: "5px"
-                      }}
-                      variant="outline-secondary"
-                      size="md"
-                      block
-                      onClick={() => {
-                        this.setState({ ...this.state, tab: 2 });
-                      }}
-                    >
-                      좋아요한 동아리
-                    </Button>
+                  <Accordion.Toggle
+                    style={{ marginBottom: "5px", marginTop: "13px" }}
+                    as={Button}
+                    variant="outline-secondary"
+                    size="lg"
+                    block
+                    eventKey="1"
+                  >
+                    내 동아리
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey="1">
+                    <div>
+                      {this.state.tab === 1 ? (
+                        <Button
+                          className="manage-club-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 1 });
+                          }}
+                        >
+                          동아리 관리
+                        </Button>
+                      ) : (
+                        <Button
+                          className="manage-club-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="outline-secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 1 });
+                          }}
+                        >
+                          동아리 관리
+                        </Button>
+                      )}
+                      {this.state.tab === 2 ? (
+                        <Button
+                          className="like-club-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 2 });
+                          }}
+                        >
+                          좋아요한 동아리
+                        </Button>
+                      ) : (
+                        <Button
+                          className="like-club-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="outline-secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 2 });
+                          }}
+                        >
+                          좋아요한 동아리
+                        </Button>
+                      )}
+                      {this.state.tab === 3 ? (
+                        <Button
+                          className="apply-club-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 3 });
+                          }}
+                        >
+                          지원한 동아리
+                        </Button>
+                      ) : (
+                        <Button
+                          className="apply-club-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="outline-secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 3 });
+                          }}
+                        >
+                          지원한 동아리
+                        </Button>
+                      )}
+                    </div>
+                  </Accordion.Collapse>
 
-                    <Button
-                      className="apply-club-button"
-                      style={{
-                        width: "95%",
-                        marginLeft: "5px"
-                      }}
-                      variant="outline-secondary"
-                      size="md"
-                      block
-                      onClick={() => {
-                        this.setState({ ...this.state, tab: 3 });
-                      }}
-                    >
-                      지원한 동아리
-                    </Button>
-                  </div>
-                </Accordion.Collapse>
-
-                <Accordion.Toggle
-                  style={{ marginBottom: "5px", marginTop: "13px" }}
-                  as={Button}
-                  variant="outline-dark"
-                  size="lg"
-                  block
-                  eventKey="2"
-                >
-                  내 소모임
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="2">
-                  <div>
-                    <Button
-                      className="manage-somoim-button"
-                      style={{
-                        width: "95%",
-                        marginLeft: "5px"
-                      }}
-                      variant="outline-secondary"
-                      size="md"
-                      block
-                      onClick={() => {
-                        this.setState({ ...this.state, tab: 4 });
-                      }}
-                    >
-                      소모임 관리
-                    </Button>
-                    <Button
-                      className="like-somoim-button"
-                      style={{
-                        width: "95%",
-                        marginLeft: "5px"
-                      }}
-                      variant="outline-secondary"
-                      size="md"
-                      block
-                      onClick={() => {
-                        this.setState({ ...this.state, tab: 5 });
-                      }}
-                    >
-                      좋아요한 소모임
-                    </Button>
-
-                    <Button
-                      className="join-somoim-button"
-                      style={{
-                        width: "95%",
-                        marginLeft: "5px"
-                      }}
-                      variant="outline-secondary"
-                      size="md"
-                      block
-                      onClick={() => {
-                        this.setState({ ...this.state, tab: 6 });
-                      }}
-                    >
-                      참여한 소모임
-                    </Button>
-                  </div>
-                </Accordion.Collapse>
-              </Accordion>
+                  <Accordion.Toggle
+                    style={{ marginBottom: "5px", marginTop: "13px" }}
+                    as={Button}
+                    variant="outline-secondary"
+                    size="lg"
+                    block
+                    eventKey="2"
+                  >
+                    내 소모임
+                  </Accordion.Toggle>
+                  <Accordion.Collapse eventKey="2">
+                    <div>
+                      {this.state.tab === 4 ? (
+                        <Button
+                          className="manage-somoim-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 4 });
+                          }}
+                        >
+                          소모임 관리
+                        </Button>
+                      ) : (
+                        <Button
+                          className="manage-somoim-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="outline-secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 4 });
+                          }}
+                        >
+                          소모임 관리
+                        </Button>
+                      )}
+                      {this.state.tab === 5 ? (
+                        <Button
+                          className="like-somoim-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 5 });
+                          }}
+                        >
+                          좋아요한 소모임
+                        </Button>
+                      ) : (
+                        <Button
+                          className="like-somoim-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="outline-secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 5 });
+                          }}
+                        >
+                          좋아요한 소모임
+                        </Button>
+                      )}
+                      {this.state.tab === 6 ? (
+                        <Button
+                          className="join-somoim-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 6 });
+                          }}
+                        >
+                          참여한 소모임
+                        </Button>
+                      ) : (
+                        <Button
+                          className="join-somoim-button"
+                          style={{
+                            width: "95%",
+                            marginLeft: "5px"
+                          }}
+                          variant="outline-secondary"
+                          size="md"
+                          block
+                          onClick={() => {
+                            this.setState({ ...this.state, tab: 6 });
+                          }}
+                        >
+                          참여한 소모임
+                        </Button>
+                      )}
+                    </div>
+                  </Accordion.Collapse>
+                </Accordion>
+              </div>
             </Col>
             <Col>
               <Card style={{ marginBottom: "5px", marginTop: "13px" }}>
