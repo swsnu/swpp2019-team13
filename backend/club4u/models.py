@@ -15,9 +15,9 @@ class Tag(models.Model):
         cache.delete('cached_tag')
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        cache.delete('cached_tag')
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_tag')
+    #     super().delete(*args, **kwargs)
 
 
 class Category(models.Model):
@@ -27,9 +27,9 @@ class Category(models.Model):
         cache.delete('cached_category')
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        cache.delete('cached_category')
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_category')
+    #     super().delete(*args, **kwargs)
 
 
 class Department(models.Model):
@@ -39,9 +39,9 @@ class Department(models.Model):
         cache.delete('cached_dept')
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        cache.delete('cached_dept')
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_dept')
+    #     super().delete(*args, **kwargs)
 
 
 class Major(models.Model):
@@ -57,9 +57,9 @@ class Major(models.Model):
         cache.delete('cached_major')
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        cache.delete('cached_major')
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_major')
+    #     super().delete(*args, **kwargs)
 
 
 class PreClub(models.Model):
@@ -109,9 +109,9 @@ class Club(models.Model):
         cache.delete('cached_club')
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        cache.delete('cached_club')
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_club')
+    #     super().delete(*args, **kwargs)
 
 
 class ClubPoster(models.Model):
@@ -152,9 +152,9 @@ class Somoim(models.Model):
         cache.delete('cached_somoim')
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        cache.delete('cached_somoim')
-        super().delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_somoim')
+    #     super().delete(*args, **kwargs)
 
 
 class UserProfile(models.Model):
