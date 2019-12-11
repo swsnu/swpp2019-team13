@@ -37,7 +37,7 @@ class ClubRegister extends React.Component {
                   background-color: #a456d8;
                   border: 2px solid #a456d8;
               }
-              `}
+          `}
         </style>
         <Modal
           show={this.props.show}
@@ -57,7 +57,7 @@ class ClubRegister extends React.Component {
                 </Form.Label>
                 <Form.Control
                   type="clubname"
-                  placeholder="Enter club name"
+                  placeholder="동아리 이름을 입력하세요."
                   id="club-name-input"
                   size="lg"
                   value={this.state.name}
@@ -99,7 +99,7 @@ class ClubRegister extends React.Component {
                     </Form.Label>
                     <Form.Control
                       type="manager"
-                      placeholder="Enter Club Manger Name"
+                      placeholder="동아리 관리자 이름을 입력하세요."
                       className="club-manager-input"
                       size="lg"
                       value={this.state.clubmanager}
