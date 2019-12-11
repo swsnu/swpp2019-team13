@@ -8,6 +8,7 @@ import Header from "../Header/Header";
 import ClubCard from "../Club/ClubCard";
 import ClubDetail from "../Club/ClubDetail";
 import ClubRegister from "../Club/ClubRegister";
+import ClubTitleSearchBar from "./ClubTitleSearchBar";
 import * as actionCreators from "../store/actions/index";
 
 import "./ClubMain.css";
@@ -214,6 +215,7 @@ class ClubMain extends React.Component {
     return (
       <div className="ClubMain">
         <Header />
+        <ClubTitleSearchBar />
         <div className="ClubList">
           <h1
             style={{
