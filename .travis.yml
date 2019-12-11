@@ -28,6 +28,8 @@ matrix:
         - pip install -r requirements.txt
         - pip install coveralls
         - cd ..
+      before_script:
+        - sudo redis-server /etc/redis/redis.conf --port 6379 --requirepass 'secret'
       script:
         - cd frontend
         - ./node_modules/.bin/eslint src
