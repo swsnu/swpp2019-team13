@@ -21,6 +21,11 @@ class SomoimDetail extends React.Component {
     this.props.addJoinedSomoim(this.props.somoim, this.props.loggedUser);
   };
 
+  onClickSomoimTag = name => {
+    this.props.closeHandler();
+    this.props.history.push("/somoim/tag/" + name);
+  };
+
   render() {
     let acceptQualification = false;
     let isLoggedUserLike = false;
@@ -99,7 +104,14 @@ class SomoimDetail extends React.Component {
       let tagList;
       if (this.props.tags.length !== 0) {
         tagList = somoim.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
+          <Button
+            onClick={() =>
+              this.onClickSomoimTag(this.props.tags[item - 1].name)
+            }
+            key={item}
+            variant="secondary"
+            style={{ marginRight: "5px" }}
+          >
             {"#" + this.props.tags[item - 1].name}
           </Button>
         ));
