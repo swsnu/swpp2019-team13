@@ -35,6 +35,9 @@ class ManagingClubTab extends Component {
           this.onClickCard,
           <Button
             id="manage-club-button"
+            variant="dark"
+            block
+            style={{ height: "100%" }}
             onClick={() => {
               this.props.history.push("/club/manage/" + item.id);
             }}

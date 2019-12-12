@@ -11,6 +11,8 @@ import ClubInfoTab from "./ClubInfoTab";
 import ApplicationFormTab from "./ApplicationFormTab";
 import ApplicantTab from "./ApplicantTab";
 
+import "./ClubManageMain.css";
+
 class ClubManageMain extends Component {
   state = {
     tab: 1,
@@ -46,53 +48,106 @@ class ClubManageMain extends Component {
     return (
       <div className="clubManageMain">
         <Header />
-        <Container style={{ marginLeft: "16%" }}>
+        <Container>
           <Row>
             <Col sm="2">
-              <Accordion>
-                <Accordion.Toggle
-                  style={{ marginBottom: "5px", marginTop: "13px" }}
-                  as={Button}
-                  id="clubmanage-main-clubinfo-button"
-                  variant="outline-dark"
-                  size="lg"
-                  block
-                  eventKey="0"
-                  onClick={() => {
-                    this.setState({ ...this.state, tab: 0 });
-                  }}
-                >
-                  동아리 정보
-                </Accordion.Toggle>
-                <Accordion.Toggle
-                  style={{ marginBottom: "5px", marginTop: "13px" }}
-                  as={Button}
-                  id="clubmanage-main-applicationform-button"
-                  variant="outline-dark"
-                  size="lg"
-                  block
-                  eventKey="1"
-                  onClick={() => {
-                    this.setState({ ...this.state, tab: 1 });
-                  }}
-                >
-                  지원서 양식 수정
-                </Accordion.Toggle>
-                <Accordion.Toggle
-                  style={{ marginBottom: "5px", marginTop: "13px" }}
-                  as={Button}
-                  id="clubmanage-main-applicantstatus-button"
-                  variant="outline-dark"
-                  size="lg"
-                  block
-                  eventKey="2"
-                  onClick={() => {
-                    this.setState({ ...this.state, tab: 2 });
-                  }}
-                >
-                  지원자 목록
-                </Accordion.Toggle>
-              </Accordion>
+              <div className="ClubManageSideBar">
+                <Accordion>
+                  {this.state.tab === 0 ? (
+                    <Accordion.Toggle
+                      style={{ marginBottom: "5px", marginTop: "13px" }}
+                      as={Button}
+                      id="clubmanage-main-clubinfo-button"
+                      variant="secondary"
+                      size="lg"
+                      block
+                      eventKey="0"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 0 });
+                      }}
+                    >
+                      동아리 정보
+                    </Accordion.Toggle>
+                  ) : (
+                    <Accordion.Toggle
+                      style={{ marginBottom: "5px", marginTop: "13px" }}
+                      as={Button}
+                      id="clubmanage-main-clubinfo-button"
+                      variant="outline-secondary"
+                      size="lg"
+                      block
+                      eventKey="0"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 0 });
+                      }}
+                    >
+                      동아리 정보
+                    </Accordion.Toggle>
+                  )}
+                  {this.state.tab === 1 ? (
+                    <Accordion.Toggle
+                      style={{ marginBottom: "5px", marginTop: "13px" }}
+                      as={Button}
+                      id="clubmanage-main-applicationform-button"
+                      variant="secondary"
+                      size="lg"
+                      block
+                      eventKey="1"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 1 });
+                      }}
+                    >
+                      지원서 양식 수정
+                    </Accordion.Toggle>
+                  ) : (
+                    <Accordion.Toggle
+                      style={{ marginBottom: "5px", marginTop: "13px" }}
+                      as={Button}
+                      id="clubmanage-main-applicationform-button"
+                      variant="outline-secondary"
+                      size="lg"
+                      block
+                      eventKey="1"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 1 });
+                      }}
+                    >
+                      지원서 양식 수정
+                    </Accordion.Toggle>
+                  )}
+                  {this.state.tab === 2 ? (
+                    <Accordion.Toggle
+                      style={{ marginBottom: "5px", marginTop: "13px" }}
+                      as={Button}
+                      id="clubmanage-main-applicantstatus-button"
+                      variant="secondary"
+                      size="lg"
+                      block
+                      eventKey="2"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 2 });
+                      }}
+                    >
+                      지원자 목록
+                    </Accordion.Toggle>
+                  ) : (
+                    <Accordion.Toggle
+                      style={{ marginBottom: "5px", marginTop: "13px" }}
+                      as={Button}
+                      id="clubmanage-main-applicantstatus-button"
+                      variant="outline-secondary"
+                      size="lg"
+                      block
+                      eventKey="2"
+                      onClick={() => {
+                        this.setState({ ...this.state, tab: 2 });
+                      }}
+                    >
+                      지원자 목록
+                    </Accordion.Toggle>
+                  )}
+                </Accordion>
+              </div>
             </Col>
             <Col>
               <Card style={{ marginBottom: "5px", marginTop: "13px" }}>
