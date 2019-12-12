@@ -600,7 +600,7 @@ def recommend_club(request, user_id=0):
 
         for (idx, val) in enumerate(target_liked_clubs):
             target_info[idx - 1] = 1
-            target_already_liked.append(target_liked_clubs[idx].id - 1)
+            target_already_liked.append(target_liked_clubs[idx].id)
 
         for candidate in candidates:
             candidate_info = [0 for x in range(club_counts)]
@@ -635,7 +635,7 @@ def recommend_club(request, user_id=0):
         for x in range(club_counts // 2):
             index = recommendation_scores.index(max(recommendation_scores))
             if recommendation_scores[index] > 0:
-                recommended_clubs |= Club.objects.filter(id=index+1)
+                recommended_clubs |= Club.objects.filter(id=Club.objects.all()[index+1].id)
             recommendation_scores[index] = 0
 
         if len(recommended_clubs) != 0:
@@ -773,7 +773,7 @@ def recommend_somoim(request, user_id=0):
 
         for (idx, val) in enumerate(target_liked_somoims):
             target_info[idx - 1] = 1
-            target_already_liked.append(target_liked_somoims[idx].id - 1)
+            target_already_liked.append(target_liked_somoims[idx].id)
 
         for candidate in candidates:
             candidate_info = [0 for x in range(somoim_counts)]
