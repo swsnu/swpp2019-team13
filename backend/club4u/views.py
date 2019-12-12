@@ -912,7 +912,7 @@ def application(request, club_id=0):
     #     return HttpResponse(401)
     try:
         application = Application.objects.get(
-            club_id=club_id, user_id=request.user.id)
+            club_id=club_id, user=UserProfile.objects.get(user_id=request.user.id))
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
@@ -921,7 +921,7 @@ def application(request, club_id=0):
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         application = Application.objects.get(
-            club_id=club_id, user_id=request.user.id)
+            club_id=club_id,  user=UserProfile.objects.get(user_id=request.user.id))
         body = json.loads(request.body.decode())
         for item in body:
             if item['type'] == 'shortText':
