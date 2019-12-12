@@ -365,12 +365,9 @@ describe("<SomoimMain />", () => {
     const component = mount(somoimMain);
     const mainInstance = component.find("SomoimMain").instance();
     let wrapper = component.find(".somoim-create-button");
+    console.log(wrapper.debug());
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimCreateShow).toBe(true);
-
-    wrapper = component.find("CloseButton");
-    wrapper.at(0).simulate("click");
-    expect(mainInstance.state.somoimCreateShow).toBe(false);
   });
 
   it("when somoim list info does not loaded yet", () => {

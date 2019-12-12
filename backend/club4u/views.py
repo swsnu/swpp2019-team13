@@ -12,6 +12,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Case, When
 
 from django.core.cache import cache
 from krwordrank.word import summarize_with_keywords
@@ -625,15 +626,17 @@ def recommend_club(request, user_id=0):
 
             target_info = [0 for x in range(club_counts)]
 
-            for (idx, val) in enumerate(target_liked_clubs):
-                target_info[idx - 1] = 1
-                target_already_liked.append(target_liked_clubs[idx].id - 1)
+            for target_like_club in target_liked_clubs:
+                target_idx = list(Club.objects.all().values_list('id', flat=True)).index(target_like_club.id)
+                target_info[target_idx] = 5
+                target_already_liked.append(target_like_club.id)
 
             for candidate in candidates:
                 candidate_info = [0 for x in range(club_counts)]
 
-                for (idx, val) in enumerate(candidate.like_clubs.all()):
-                    candidate_info[idx - 1] = 1
+                for cand_like_club in candidate.like_clubs.all():
+                    target_idx = list(Club.objects.all().values_list('id', flat=True)).index(cand_like_club.id)
+                    candidate_info[target_idx] = 5
 
                 (temp1, temp2, temp3) = (0, 0, 0)
                 for i in range(club_counts):
@@ -650,20 +653,23 @@ def recommend_club(request, user_id=0):
             recommendation_scores = [0 for x in range(club_counts)]
             candidate_index = 0
             for candidate in candidates:
-                cand_clubs_arr = candidate.like_clubs.all()
-                for (idx, val) in enumerate(cand_clubs_arr):
-                    if cand_clubs_arr[idx].id in target_already_liked:
+                for cand_like_club in candidate.like_clubs.all():
+                    if cand_like_club.id in target_already_liked:
                         continue
-                    recommendation_scores[idx - 1] += similarity_score[candidate_index]
+                    target_idx = list(Club.objects.all().values_list('id', flat=True)).index(cand_like_club.id)
+                    recommendation_scores[target_idx] += similarity_score[candidate_index]
                 candidate_index += 1
             
             # 5. make recommendation list
-            recommended_clubs = Club.objects.none()
-            for x in range(club_counts // 2):
+            recommended_id = []
+            for x in range(club_counts // 4):
                 index = recommendation_scores.index(max(recommendation_scores))
                 if recommendation_scores[index] > 0:
-                    recommended_clubs |= Club.objects.filter(id=index+1)
+                    recommended_id.append(Club.objects.all()[index].id)
                 recommendation_scores[index] = 0
+
+            preserved = Case(*[When(id=id, then=pos) for pos, id in enumerate(recommended_id)])
+            recommended_clubs = Club.objects.filter(id__in=recommended_id).order_by(preserved)
 
             if len(recommended_clubs) != 0:
                 serializer = ClubSerializer(recommended_clubs, many=True)
@@ -804,15 +810,17 @@ def recommend_somoim(request, user_id=0):
 
             target_info = [0 for x in range(somoim_counts)]
 
-            for (idx, val) in enumerate(target_liked_somoims):
-                target_info[idx - 1] = 1
-                target_already_liked.append(target_liked_somoims[idx].id - 1)
+            for target_like_somoim in target_liked_somoims:
+                target_idx = list(Somoim.objects.all().values_list('id', flat=True)).index(target_like_somoim.id)
+                target_info[target_idx] = 5
+                target_already_liked.append(target_like_somoim.id)
 
             for candidate in candidates:
                 candidate_info = [0 for x in range(somoim_counts)]
 
-                for (idx, val) in enumerate(candidate.like_somoims.all()):
-                    candidate_info[idx - 1] = 1
+                for cand_like_somoim in candidate.like_somoims.all():
+                    target_idx = list(Somoim.objects.all().values_list('id', flat=True)).index(cand_like_somoim.id)
+                    candidate_info[target_idx] = 5
 
                 (temp1, temp2, temp3) = (0, 0, 0)
                 for i in range(somoim_counts):
@@ -829,20 +837,23 @@ def recommend_somoim(request, user_id=0):
             recommendation_scores = [0 for x in range(somoim_counts)]
             candidate_index = 0
             for candidate in candidates:
-                cand_somoim_arr = candidate.like_somoims.all()
-                for (idx, val) in enumerate(cand_somoim_arr):
-                    if cand_somoim_arr[idx].id in target_already_liked:
+                for cand_like_somoim in candidate.like_somoims.all():
+                    if cand_like_somoim.id in target_already_liked:
                         continue
-                    recommendation_scores[idx - 1] += similarity_score[candidate_index]
+                    target_idx = list(Somoim.objects.all().values_list('id', flat=True)).index(cand_like_somoim.id)
+                    recommendation_scores[target_idx] += similarity_score[candidate_index]
                 candidate_index += 1
 
             # 5. make recommendation list
-            recommended_somoims = Somoim.objects.none()
-            for x in range(somoim_counts // 2):
+            recommended_id = []
+            for x in range(somoim_counts // 4):
                 index = recommendation_scores.index(max(recommendation_scores))
                 if recommendation_scores[index] > 0:
-                    recommended_somoims |= Somoim.objects.filter(id=index+1)
+                    recommended_id.append(Somoim.objects.all()[index].id)
                 recommendation_scores[index] = 0
+
+            preserved = Case(*[When(id=id, then=pos) for pos, id in enumerate(recommended_id)])
+            recommended_somoims = Somoim.objects.filter(id__in=recommended_id).order_by(preserved)
 
             if len(recommended_somoims) != 0:
                 serializer = SomoimSerializer(recommended_somoims, many=True)
