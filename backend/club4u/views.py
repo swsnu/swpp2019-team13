@@ -243,7 +243,7 @@ def clubhit(request, club_id=None):
             if 'club{}'.format(club_id) not in request.session:
                 request.session['club{}'.format(club_id)] = 1
                 selected_club.hits += 1
-                selected_club.save()
+                selected_club.save(club_id=club_id)
                 return HttpResponse(status=200)
 
             return HttpResponse(status=204)
@@ -271,20 +271,26 @@ def somoimhit(request, somoim_id=None):
 def club(request, club_id=None):
     if request.method == 'GET':
         try:
-            selected_club = Club.objects.get(id=club_id)
-            serializer = ClubSerializer(selected_club)
+            cached_club = cache.get('cached_club'+str(club_id))
+            if not cached_club:
+                selected_club = Club.objects.get(id=club_id)
+                serializer = ClubSerializer(selected_club)
 
-            poster_list = ClubPoster.objects.filter(
-                club_id=selected_club.id).values()
+                poster_list = ClubPoster.objects.filter(
+                    club_id=selected_club.id).values()
 
-            poster_img_list = []
+                poster_img_list = []
 
-            for poster in poster_list:
-                poster_img_list.append(poster['img'])
+                for poster in poster_list:
+                    poster_img_list.append(poster['img'])
 
-            response_dict = serializer.data
-            response_dict['poster_img'] = poster_img_list
-            return HttpResponse(JSONRenderer().render(response_dict))
+                response_dict = serializer.data
+                response_dict['poster_img'] = poster_img_list
+                #return HttpResponse(JSONRenderer().render(response_dict))
+
+                cached_club = response_dict
+                cache.set('cached_club'+str(club_id), cached_club)
+            return HttpResponse(JSONRenderer().render(cached_club))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
     if request.method == 'PUT':
@@ -361,7 +367,7 @@ def club(request, club_id=None):
             selected_club.recruit_end_day = req_data['recruit_end_day'].split('T')[
                 0]
 
-            selected_club.save()
+            selected_club.save(club_id=selected_club.id)
 
             return HttpResponse(status=204)
         except ObjectDoesNotExist:

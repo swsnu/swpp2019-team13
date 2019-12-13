@@ -85,7 +85,7 @@ DATABASES = {
         'PORT': '3306',
         'OPTIONS': {
             "init_command": "SET GLOBAL max_connections = 100000",
-            "connect_timeout": 20
+            "connect_timeout": 100
         }
     }
 }
