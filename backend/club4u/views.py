@@ -1,7 +1,7 @@
 import json
 import os
 import math
-
+import requests
 
 from json import JSONDecodeError
 
@@ -272,6 +272,9 @@ def somoimhit(request, somoim_id=None):
 def club(request, club_id=None):
     if request.method == 'GET':
         try:
+            api_key = 'acc_a5456ea645db19d'
+            api_secret = '4d87ad8101b40cf70577cdbe904313e5'
+            image_url = ''
             selected_club = Club.objects.get(id=club_id)
             serializer = ClubSerializer(selected_club)
 
@@ -279,15 +282,20 @@ def club(request, club_id=None):
                 club_id=selected_club.id).values()
 
             poster_img_list = []
-
+            img_tag_list = []
             for poster in poster_list:
+                image_url = poster['img'].url
                 poster_img_list.append(poster['img'])
+                img_tag_list.append(requests.get(
+                    'https://api.imagga.com/v2/tags?image_url=%s' % image_url, auth=(api_key, api_secret)))
 
             response_dict = serializer.data
             response_dict['poster_img'] = poster_img_list
+            response_dict['img_tag'] = img_tag_list
             return HttpResponse(JSONRenderer().render(response_dict))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
+
     if request.method == 'PUT':
         try:
             selected_club = Club.objects.get(id=club_id)
@@ -401,6 +409,9 @@ def clubposter(request, club_id=0):
 
 def club_list(request):
     if request.method == 'GET':
+        api_key = 'acc_a5456ea645db19d'
+        api_secret = '4d87ad8101b40cf70577cdbe904313e5'
+        image_path = ''
         cached_club = cache.get('cached_club')
         if not cached_club:
             serializer = ClubSerializer(Club.objects.all(), many=True)
@@ -409,9 +420,45 @@ def club_list(request):
                 poster_list = ClubPoster.objects.filter(
                     club_id=c['id']).values()
                 poster_img_list = []
+                img_tag_list = []
+                point_list = [0, 0, 0]
                 for poster in poster_list:
+                    image_path = '../backend/media/'+poster['img']
+                    #print(image_path)
                     poster_img_list.append(poster['img'])
+                    img_tag_list.append(requests.post('https://api.imagga.com/v2/tags',
+                         auth=(api_key, api_secret),
+                         files={'image': open(image_path, 'rb')}).json())
+
                 c['poster_img'] = poster_img_list
+                for tag in img_tag_list:
+                    for i in tag['result']['tags']:
+                        if i['tag']['en']=='smile': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='smiling': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='happy': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='happiness': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='entertainment': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='corporate': 
+                            point_list[1]+=i['confidence']
+                        if i['tag']['en']=='communication': 
+                            point_list[1]+=i['confidence']
+                        if i['tag']['en']=='teamwork': 
+                            point_list[1]+=i['confidence']
+                        if i['tag']['en']=='professional': 
+                            point_list[2]+=i['confidence']
+                        if i['tag']['en']=='working': 
+                            point_list[2]+=i['confidence']
+                        if i['tag']['en']=='discussion': 
+                            point_list[1]+=i['confidence']
+                            point_list[2]+=i['confidence']
+                        
+                    #print(tag['result']['tags'])
+                c['img_tag'] = point_list
             cached_club = JSONRenderer().render(serializer.data)
             cache.set('cached_club', cached_club)
             # return HttpResponse(JSONRenderer().render(serializer.data))
