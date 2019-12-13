@@ -260,7 +260,7 @@ def somoimhit(request, somoim_id=None):
                 request.session['somoim{}'.format(somoim_id)] = 1
                 selected_somoim = Somoim.objects.get(id=somoim_id)
                 selected_somoim.hits += 1
-                selected_somoim.save()
+                selected_somoim.save(somoim_id=somoim_id)
                 return HttpResponse(status=200)
 
             return HttpResponse(status=204)
@@ -389,10 +389,16 @@ def club(request, club_id=None):
 def somoim(request, somoim_id=None):
     if request.method == 'GET':
         try:
-            selected_somoim = Somoim.objects.get(id=somoim_id)
-            serializer = SomoimSerializer(selected_somoim)
-            response_dict = serializer.data
-            return HttpResponse(JSONRenderer().render(response_dict))
+            cached_somoim = cache.get('cached_somoim'+str(somoim_id))
+            if not cached_somoim:
+                selected_somoim = Somoim.objects.get(id=somoim_id)
+                serializer = SomoimSerializer(selected_somoim)
+                response_dict = serializer.data
+                #return HttpResponse(JSONRenderer().render(response_dict))
+
+                cache.set('cached_somoim'+str(somoim_id), cached_somoim)
+                cached_somoim = JSONRenderer().render(response_dict)
+            return HttpResponse(cached_somoim)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
     else:
@@ -504,7 +510,7 @@ def somoim_list(request):
         new_somoim.available_semester = available_semester
         new_somoim.session_day = session_day
 
-        new_somoim.save()
+        new_somoim.save(somoim_id=0)
 
         for major_id in available_major_id_list:
             new_somoim.available_major.add(Major.objects.get(id=major_id))

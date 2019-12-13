@@ -151,8 +151,9 @@ class Somoim(models.Model):
     member = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
-    def save(self, *args, **kwargs):
+    def save(self, somoim_id, *args, **kwargs):
         cache.delete('cached_somoim')
+        cache.delete('cached_somoim'+str(somoim_id))
         super().save(*args, **kwargs)
 
     # def delete(self, *args, **kwargs):

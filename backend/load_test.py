@@ -23,9 +23,13 @@ class LoadTask(TaskSet):
     # def somoim_list(self):
     #     self.client.get("/api/somoim/list/")
 
+    # @task
+    # def club_single(self):
+    #     self.client.get("/api/club/9/")
+
     @task
-    def club_list(self):
-        self.client.get("/api/club/9/")
+    def somoim_single(self):
+        self.client.get("/api/somoim/45/")
 
 
 # locust -f load_test.py --host='http://52.141.23.207:8000'
