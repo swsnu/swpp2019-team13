@@ -276,25 +276,20 @@ def club(request, club_id=None):
             if not cached_club:
                 selected_club = Club.objects.get(id=club_id)
                 serializer = ClubSerializer(selected_club)
-                api_key = 'acc_a5456ea645db19d'
-                api_secret = '4d87ad8101b40cf70577cdbe904313e5'
-                image_url = ''
 
                 poster_list = ClubPoster.objects.filter(
                     club_id=selected_club.id).values()
 
                 poster_img_list = []
-                img_tag_list = []
+                #img_tag_list = []
 
                 for poster in poster_list:
-                    image_url = poster['img'].url
+#                    image_url = poster['img'].url
                     poster_img_list.append(poster['img'])
-                    img_tag_list.append(requests.get(
-                        'https://api.imagga.com/v2/tags?image_url=%s' % image_url, auth=(api_key, api_secret)))
 
                 response_dict = serializer.data
                 response_dict['poster_img'] = poster_img_list
-                response_dict['img_tag'] = img_tag_list
+                #response_dict['img_tag'] = img_tag_list
                 #return HttpResponse(JSONRenderer().render(response_dict))
 
                 cached_club = response_dict
