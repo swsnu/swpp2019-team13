@@ -137,7 +137,7 @@ class ClubDetail extends React.Component {
           index++;
         }
         if (club.img_tag[0] > club.img_tag[1] && club.img_tag[0] > club.img_tag[2]) mood = "즐거운 우리";
-        else if (club.img_tag[1] > club.img_tag[0] && club.img_tag[1] > club.img_tag[2]) mood = "협동적인 ";
+        else if (club.img_tag[1] > club.img_tag[0] && club.img_tag[1] > club.img_tag[2]) mood = "협동적인 우리";
         else mood = "진지한 우리";
       }
 
@@ -263,7 +263,7 @@ class ClubDetail extends React.Component {
                   fontStyle: "italic"
                 }}
               >
-                {mood}갤러리
+                {mood}동아리
               </div>
               <div className="detail-gallery-container">
                 <button
