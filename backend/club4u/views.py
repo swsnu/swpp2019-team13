@@ -396,8 +396,8 @@ def somoim(request, somoim_id=None):
                 response_dict = serializer.data
                 #return HttpResponse(JSONRenderer().render(response_dict))
 
-                cache.set('cached_somoim'+str(somoim_id), cached_somoim)
                 cached_somoim = JSONRenderer().render(response_dict)
+                cache.set('cached_somoim'+str(somoim_id), cached_somoim)
             return HttpResponse(cached_somoim)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
