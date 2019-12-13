@@ -4,143 +4,135 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
 
-import ClubTitleSearchBar from "./ClubTitleSearchBar";
+import SomoimTitleSearch from "./SomoimTitleSearch";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as userActions from "../store/actions/user";
-import * as clubActions from "../store/actions/club";
+import * as somoimActions from "../store/actions/somoim";
 import * as categoryActions from "../store/actions/category";
 import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
 
-let temp_clubs = [
+
+let temp_somoims = [
     {
         id: 0,
-        name: "SNUStone",
-        description: "SNU Best HearthStone Club",
+        title: "title0",
+        summary: "summary0",
+        description: "description0",
         managers: [
             {
                 name: "manager0",
                 major: { id: 0, name: "major0" }
             }
         ],
-        category: 0,
-        auth_img: "1",
-        isRegistered: true,
-        available_major: [1],
-        tags: [1, 2],
+        available_semester: 1,
+        tags: [1],
+        goalJoiner: 20,
+        available_major: [0, 1],
+        joiners: [],
         likers: [],
-        recruit_start_day: "2019-12-8",
-        recruit_end_day: "2019-12-16",
-        member: 50,
-        hits: 1,
-        poster_img: []
+        session_day: 0
     },
     {
         id: 1,
-        name: "SnuWOD",
-        description: "SNU Best Training Club",
+        title: "title1",
+        summary: "summary1",
+        description: "description1",
         managers: [
             {
                 name: "manager1",
                 major: { id: 1, name: "major1" }
             }
         ],
-        category: 6,
-        auth_img: "2",
-        isRegistered: true,
-        tags: [2, 3],
-        available_major: [1],
-        likers: [],
-        recruit_start_day: "2019-12-8",
-        recruit_end_day: "2019-12-16",
-        member: 50,
-        hits: 1,
-        poster_img: []
+        available_semester: 1,
+        tags: [2],
+        goalJoiner: 10,
+        available_major: [0, 1],
+        joiners: [],
+        likers: [{ id: 0 }],
+        session_day: 1
     },
     {
         id: 2,
-        name: "SnuLoL",
-        description: "SNU Best LoL Club",
+        title: "title2",
+        summary: "summary2",
+        description: "description2",
         managers: [
             {
                 name: "manager2",
                 major: { id: 2, name: "major2" }
             }
         ],
-        category: 6,
-        auth_img: "3",
-        isRegistered: true,
-        tags: [2, 3],
-        available_major: [1],
-        likers: [],
-        recruit_start_day: "2019-12-8",
-        recruit_end_day: "2019-12-16",
-        member: 50,
-        hits: 1,
-        poster_img: []
+        available_semester: 3,
+        tags: [3],
+        goalJoiner: 10,
+        available_major: [2],
+        joiners: [],
+        likers: [{ id: 0 }]
     }
 ];
-
 let stubInitialState = {
-    clubs: [
+    somoims: [
         {
             id: 0,
-            name: "SNUStone",
-            description: "SNU Best HearthStone Club",
+            title: "title0",
+            summary: "summary0",
+            description: "description0",
             managers: [
                 {
                     name: "manager0",
                     major: { id: 0, name: "major0" }
                 }
             ],
+            available_semester: 1,
+            tags: [1],
+            goalJoiner: 20,
+            available_major: [0, 1],
             category: 0,
-            auth_img: "1",
-            isRegistered: true,
-            available_major: [1],
-            tags: [1, 2],
+            joiners: [],
             likers: [],
-            likes: 10,
-            poster_img: []
+            session_day: 0
         },
         {
             id: 1,
-            name: "SnuWOD",
-            description: "SNU Best Training Club",
+            title: "title1",
+            summary: "summary1",
+            description: "description1",
             managers: [
                 {
                     name: "manager1",
                     major: { id: 1, name: "major1" }
                 }
             ],
-            category: 6,
-            auth_img: "2",
-            isRegistered: true,
-            tags: [2, 3],
-            available_major: [1],
-            likers: [],
-            likes: 15,
-            poster_img: []
+            available_semester: 1,
+            category: 2,
+            tags: [2],
+            goalJoiner: 10,
+            available_major: [0, 1],
+            joiners: [],
+            likers: [{ id: 0 }],
+            session_day: 1
         },
         {
             id: 2,
-            name: "SnuLoL",
-            description: "SNU Best LoL Club",
+            title: "title2",
+            summary: "summary2",
+            description: "description2",
             managers: [
                 {
                     name: "manager2",
                     major: { id: 2, name: "major2" }
                 }
             ],
+            available_semester: 3,
             category: 6,
-            auth_img: "3",
-            isRegistered: true,
-            tags: [2, 3],
-            available_major: [1],
-            likers: [],
-            likes: 20,
-            poster_img: []
+            tags: [3],
+            goalJoiner: 10,
+            available_major: [2],
+            joiners: [],
+            likers: [{ id: 0 }]
         }
     ],
 
@@ -256,7 +248,7 @@ let stubInitialState = {
     ],
 
     loggedUser: {
-        id: 1,
+        id: 0,
         name: "test",
         email: "test@test.com",
         password: "test",
@@ -267,23 +259,23 @@ let stubInitialState = {
         available_session_day: 1
     },
 
-    recommendedClubs: null
+    recommendedSomoims: null
 };
 
 let mockStore = getMockStore(stubInitialState);
 
-describe("<ClubTitleSearchBar />", () => {
-    let clubTitleSearchBar;
+describe("<SomoimTitleSearch />", () => {
+    let somoimTitleSearch;
     let spyGetLoginInfo,
-        spyGetClubList,
+        spyGetSomoimList,
         spyGetCategoryList,
         spyGetTagList,
         spyGetDeptList,
         spyGetMajorList,
-        spyGetRecommendedClubs;
+        spyGetRecommendedSomoims;
 
     beforeEach(() => {
-        clubTitleSearchBar = (
+        somoimTitleSearch = (
             <Provider store={mockStore}>
                 <ConnectedRouter history={history}>
                     <Switch>
@@ -292,7 +284,7 @@ describe("<ClubTitleSearchBar />", () => {
                             exact
                             render={() => {
                                 return (
-                                    <ClubTitleSearchBar />
+                                    <SomoimTitleSearch match={{ params: { search_key: "SNUStone" } }} />
                                 );
                             }}
                         /> </Switch>
@@ -306,8 +298,8 @@ describe("<ClubTitleSearchBar />", () => {
                 return dispatch => { };
             });
 
-        spyGetClubList = jest
-            .spyOn(clubActions, "getClubList")
+        spyGetSomoimList = jest
+            .spyOn(somoimActions, "getSomoimList")
             .mockImplementation(() => {
                 return dispatch => { };
             });
@@ -336,43 +328,17 @@ describe("<ClubTitleSearchBar />", () => {
                 return dispatch => { };
             });
 
-        spyGetRecommendedClubs = jest
-            .spyOn(userActions, "getRecommendedClubs")
+        spyGetRecommendedSomoims = jest
+            .spyOn(userActions, "getRecommendedSomoims")
             .mockImplementation(() => {
                 return dispatch => { };
             });
     });
 
     it("should render Page", () => {
-        const component = mount(clubTitleSearchBar);
-        const wrapper = component.find(".ClubTitleSearchBar");
+        const component = mount(somoimTitleSearch);
+        const wrapper = component.find(".SomoimTitleSearch");
         expect(wrapper.length).toBe(1);
     });
 
-    it("should change", () => {
-        const component = mount(clubTitleSearchBar);
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("change", { target: { value: "123" } });
-        expect(wrapper.length).toBe(1);
-    });
-    it("should press enter", () => {
-        const component = mount(clubTitleSearchBar);
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("keypress", { key: "Enter2" });
-        expect(wrapper.length).toBe(1);
-    });
-    it("should press enter", () => {
-        const component = mount(clubTitleSearchBar);
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("keypress", { key: "Enter" });
-        expect(wrapper.length).toBe(1);
-    });
-    it("should press enter2", () => {
-        const component = mount(clubTitleSearchBar);
-        const mainInstance = component.find("ClubTitleSearchBar").instance();
-        mainInstance.setState({ searchKey: "1" });
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("keypress", { key: "Enter" });
-        expect(wrapper.length).toBe(1);
-    });
 });

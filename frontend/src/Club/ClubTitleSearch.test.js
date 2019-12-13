@@ -292,7 +292,7 @@ describe("<ClubTitleSearch />", () => {
                             exact
                             render={() => {
                                 return (
-                                    <ClubTitleSearch match={{ params: { search_key: 1 } }} />
+                                    <ClubTitleSearch match={{ params: { search_key: "SNUStone" } }} />
                                 );
                             }}
                         /> </Switch>

@@ -64,12 +64,12 @@ describe("<ApplicationFormTab />", () => {
     spyGetApplicationFormByID = jest
       .spyOn(clubActions, "getApplicationFormByID")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
     spyPutApplicationFormByID = jest
       .spyOn(clubActions, "putApplicationFormByID")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
   });
 
