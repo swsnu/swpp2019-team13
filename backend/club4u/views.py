@@ -272,19 +272,30 @@ def somoimhit(request, somoim_id=None):
 def club(request, club_id=None):
     if request.method == 'GET':
         try:
-            selected_club = Club.objects.get(id=club_id)
-            serializer = ClubSerializer(selected_club)
+            cached_club = cache.get('cached_club'+str(club_id))
+            if not cached_club:
+                selected_club = Club.objects.get(id=club_id)
+                serializer = ClubSerializer(selected_club)
 
-            poster_list = ClubPoster.objects.filter(
-                club_id=selected_club.id).values()
+                poster_list = ClubPoster.objects.filter(
+                    club_id=selected_club.id).values()
 
-            poster_img_list = []
-            for poster in poster_list:
-                poster_img_list.append(poster['img'])
+                poster_img_list = []
+#                img_tag_list = []
 
-            response_dict = serializer.data
-            response_dict['poster_img'] = poster_img_list
-            return HttpResponse(JSONRenderer().render(response_dict))
+                for poster in poster_list:
+#                    image_url = poster['img'].url
+                    poster_img_list.append(poster['img'])
+
+
+                response_dict = serializer.data
+                response_dict['poster_img'] = poster_img_list
+#                response_dict['img_tag'] = img_tag_list
+                #return HttpResponse(JSONRenderer().render(response_dict))
+
+                cached_club = response_dict
+                cache.set('cached_club'+str(club_id), cached_club)
+            return HttpResponse(JSONRenderer().render(cached_club))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
 
