@@ -256,7 +256,7 @@ class ApplyMain extends Component {
     return (
       <div>
         <Header />
-        <Container style={{ marginLeft: "16%" }}>
+        <Container>
           <Card>
             <Card.Header>
               <Row>

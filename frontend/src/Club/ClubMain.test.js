@@ -375,10 +375,6 @@ describe("<ClubMain />", () => {
     let wrapper = component.find(".club-create-button");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubRegisterShow).toBe(true);
-
-    wrapper = component.find("CloseButton");
-    wrapper.at(0).simulate("click");
-    expect(mainInstance.state.clubRegisterShow).toBe(false);
   });
 
   it("when club list info does not loaded yet", () => {

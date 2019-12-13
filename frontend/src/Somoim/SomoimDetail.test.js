@@ -79,7 +79,7 @@ const stubInitialState = {
         }
       ],
       available_semester: 3,
-      tags: [3],
+      tags: [2],
       goalJoiner: 10,
       available_major: [2],
       joiners: [],
