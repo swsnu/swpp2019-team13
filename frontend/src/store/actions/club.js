@@ -73,7 +73,10 @@ export const putApplicationByID = (id, form, fileData) => {
     return axios
       .put("/api/club/" + id + "/application/", form)
       .then(axios.post("/api/club/" + id + "/application/", fileData))
-      .then(res => dispatch(putApplicationByID_(form)));
+      .then(res => {
+        alert("지원서가 저장되었습니다.");
+        dispatch(putApplicationByID_(form));
+      });
   };
 };
 

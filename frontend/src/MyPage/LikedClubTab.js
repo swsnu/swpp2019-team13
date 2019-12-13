@@ -36,11 +36,14 @@ class LikedClubTab extends Component {
           this.onClickCard,
           <Button
             id="club-unlike-button"
+            variant="dark"
             onClick={() => {
               this.props.addLikedClub(item, this.props.loggedUser);
             }}
+            block
+            style={{ height: "100%" }}
           >
-            Unlike
+            좋아요 취소
           </Button>
         );
       });

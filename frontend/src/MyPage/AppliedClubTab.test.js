@@ -116,6 +116,7 @@ let mockStore = getMockStore(stubInitialState);
 
 describe("<AppliedClubTab />", () => {
   let appliedClubTab;
+  let spyPush;
 
   beforeEach(() => {
     appliedClubTab = (
@@ -133,6 +134,10 @@ describe("<AppliedClubTab />", () => {
         </ConnectedRouter>
       </Provider>
     );
+
+    spyPush = jest.spyOn(history, "push").mockImplementation(() => {
+      return dispatch => {};
+    });
   });
 
   it("should render Page", () => {
@@ -153,6 +158,14 @@ describe("<AppliedClubTab />", () => {
     wrapper = component.find("#spyClubDetail");
     wrapper.simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(false);
+  });
+
+  it("manage button click handle", () => {
+    let component = mount(appliedClubTab);
+    let mainInstance = component.find("AppliedClubTab").instance();
+    let wrapper = component.find("#apply-club-button");
+    wrapper.at(1).simulate("click");
+    expect(spyPush).toBeCalledTimes(1);
   });
 
   it("when appliedClubs info is not loaded", () => {

@@ -1,7 +1,8 @@
-import { Component } from "react";
+import React, { Component } from "react";
 
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
+import { Button } from "react-bootstrap";
 import { cardFactory, ClubDetailFactory } from "./MyPageTabFactory";
 
 class AppliedClubTab extends Component {
@@ -28,7 +29,22 @@ class AppliedClubTab extends Component {
     let list = null;
     if (this.props.appliedClubs) {
       list = this.props.appliedClubs.map((item, idx) => {
-        return cardFactory(item, idx, this.onClickCard);
+        return cardFactory(
+          item,
+          idx,
+          this.onClickCard,
+          <Button
+            id="apply-club-button"
+            variant="dark"
+            block
+            style={{ height: "100%" }}
+            onClick={() => {
+              this.props.history.push("/apply/" + item.id);
+            }}
+          >
+            지원서 수정
+          </Button>
+        );
       });
     }
     return ClubDetailFactory(
