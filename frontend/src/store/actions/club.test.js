@@ -5,6 +5,10 @@ import * as actionCreators from "./club";
 import store from "../store";
 
 describe("Category Actions", () => {
+  let spyWindowAlert;
+  beforeEach(() => {
+    spyWindowAlert = jest.spyOn(window, "alert").mockImplementation(path => { });
+  });
   it("postClubPoster", done => {
     const spypostClubPoster = jest
       .spyOn(axios, "post")

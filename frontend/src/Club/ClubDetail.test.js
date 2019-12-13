@@ -41,6 +41,7 @@ const stubInitialState = {
         }
       ],
       poster_img: ["1", "2", "3", "4", "5", "6"],
+      img_tag: [1, 2, 3],
       recruit_end_day: "end_day0",
       recruit_start_day: "start_day0",
       available_major: [0, 1, 2],
@@ -54,6 +55,7 @@ const stubInitialState = {
       category: 1,
       name: "name1",
       description: "description1",
+      img_tag: [1, 3, 2],
       managers: [
         {
           name: "manager1",
@@ -73,6 +75,7 @@ const stubInitialState = {
       id: 2,
       category: 2,
       name: "name2",
+      img_tag: [3, 1, 2],
       description: "description2",
       managers: [
         {
@@ -220,13 +223,13 @@ describe("<ClubDetail />", () => {
     spyaddLikedClub = jest
       .spyOn(userActions, "addLikedClub")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     spyaddAppliedClub = jest
       .spyOn(userActions, "addAppliedClub")
       .mockImplementation(() => {
-        return dispatch => {};
+        return dispatch => { };
       });
 
     clubDetail = (
@@ -400,7 +403,14 @@ describe("<ClubDetail />", () => {
     wrapper.simulate("click");
     expect(wrapper.length).toBe(1);
   });
-
+  /*
+  it("should click club-tag", () => {
+    const component = mount(clubDetail2);
+    const wrapper = component.find(".click-club-tag");
+    wrapper.simulate("click");
+    expect(wrapper.length).toBe(1);
+  });
+*/
   it("should click next & prev_and working", () => {
     const component = mount(clubDetail);
     const wrapper = component.find(".detail-gallery-button").at(1);

@@ -136,15 +136,18 @@ class ClubDetail extends React.Component {
           count++;
           index++;
         }
-        if (club.img_tag[0] > club.img_tag[1] && club.img_tag[0] > club.img_tag[2]) mood = " - 즐거운 분위기";
-        else if (club.img_tag[1] > club.img_tag[0] && club.img_tag[1] > club.img_tag[2]) mood = " - 협동적인 분위기";
-        else mood = " - 진지한 분위기";
+        if (club.img_tag) {
+          if (club.img_tag[0] > club.img_tag[1] && club.img_tag[0] > club.img_tag[2]) mood = " - 즐거운 분위기";
+          else if (club.img_tag[1] > club.img_tag[0] && club.img_tag[1] > club.img_tag[2]) mood = " - 협동적인 분위기";
+          else mood = " - 진지한 분위기";
+        }
       }
 
       let tagList;
       if (this.props.tags.length !== 0) {
         tagList = club.tags.map(tag_id => (
           <Button
+            className="click-club-tag"
             key={tag_id}
             variant="secondary"
             onClick={() => this.onClickClubTag(tag_id)}
