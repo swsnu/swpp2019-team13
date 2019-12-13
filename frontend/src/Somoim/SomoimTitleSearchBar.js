@@ -34,6 +34,7 @@ class SomoimTitleSearchBar extends Component {
           <i className="fa fa-search"></i>
         </div>
         <input
+          className="input"
           onChange={this.handleChange}
           onKeyPress={e => {
             if (e.key === "Enter") this.searchHandler();

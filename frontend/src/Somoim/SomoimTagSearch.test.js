@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Route, Switch } from "react-router-dom";
 
-import SomoimTitleSearchBar from "./SomoimTitleSearchBar";
+import SomoimTagSearch from "./SomoimTagSearch";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as userActions from "../store/actions/user";
@@ -17,121 +17,130 @@ import * as majorActions from "../store/actions/major";
 let temp_somoims = [
     {
         id: 0,
-        title: "title0",
-        summary: "summary0",
-        description: "description0",
+        name: "SNUStone",
+        description: "SNU Best HearthStone Somoim",
         managers: [
             {
                 name: "manager0",
                 major: { id: 0, name: "major0" }
             }
         ],
-        available_semester: 1,
-        tags: [1],
-        goalJoiner: 20,
-        available_major: [0, 1],
-        joiners: [],
+        category: 0,
+        auth_img: "1",
+        isRegistered: true,
+        available_major: [1],
+        tags: [1, 2],
         likers: [],
-        session_day: 0
+        recruit_start_day: "2019-12-8",
+        recruit_end_day: "2019-12-16",
+        member: 50,
+        hits: 1,
+        poster_img: []
     },
     {
         id: 1,
-        title: "title1",
-        summary: "summary1",
-        description: "description1",
+        name: "SnuWOD",
+        description: "SNU Best Training Somoim",
         managers: [
             {
                 name: "manager1",
                 major: { id: 1, name: "major1" }
             }
         ],
-        available_semester: 1,
-        tags: [2],
-        goalJoiner: 10,
-        available_major: [0, 1],
-        joiners: [],
-        likers: [{ id: 0 }],
-        session_day: 1
+        category: 6,
+        auth_img: "2",
+        isRegistered: true,
+        tags: [2, 3],
+        available_major: [1],
+        likers: [],
+        recruit_start_day: "2019-12-8",
+        recruit_end_day: "2019-12-16",
+        member: 50,
+        hits: 1,
+        poster_img: []
     },
     {
         id: 2,
-        title: "title2",
-        summary: "summary2",
-        description: "description2",
+        name: "SnuLoL",
+        description: "SNU Best LoL Somoim",
         managers: [
             {
                 name: "manager2",
                 major: { id: 2, name: "major2" }
             }
         ],
-        available_semester: 3,
-        tags: [3],
-        goalJoiner: 10,
-        available_major: [2],
-        joiners: [],
-        likers: [{ id: 0 }]
+        category: 6,
+        auth_img: "3",
+        isRegistered: true,
+        tags: [2, 3],
+        available_major: [1],
+        likers: [],
+        recruit_start_day: "2019-12-8",
+        recruit_end_day: "2019-12-16",
+        member: 50,
+        hits: 1,
+        poster_img: []
     }
 ];
+
 let stubInitialState = {
     somoims: [
         {
             id: 0,
-            title: "title0",
-            summary: "summary0",
-            description: "description0",
+            name: "SNUStone",
+            description: "SNU Best HearthStone Somoim",
             managers: [
                 {
                     name: "manager0",
                     major: { id: 0, name: "major0" }
                 }
             ],
-            available_semester: 1,
-            tags: [1],
-            goalJoiner: 20,
-            available_major: [0, 1],
             category: 0,
-            joiners: [],
+            auth_img: "1",
+            isRegistered: true,
+            available_major: [1],
+            tags: [1, 2],
             likers: [],
-            session_day: 0
+            likes: 10,
+            poster_img: []
         },
         {
             id: 1,
-            title: "title1",
-            summary: "summary1",
-            description: "description1",
+            name: "SnuWOD",
+            description: "SNU Best Training Somoim",
             managers: [
                 {
                     name: "manager1",
                     major: { id: 1, name: "major1" }
                 }
             ],
-            available_semester: 1,
-            category: 2,
-            tags: [2],
-            goalJoiner: 10,
-            available_major: [0, 1],
-            joiners: [],
-            likers: [{ id: 0 }],
-            session_day: 1
+            category: 6,
+            auth_img: "2",
+            isRegistered: true,
+            tags: [2, 3],
+            available_major: [1],
+            likers: [],
+            likes: 15,
+            poster_img: []
         },
         {
             id: 2,
-            title: "title2",
-            summary: "summary2",
-            description: "description2",
+            name: "SnuLoL",
+            description: "SNU Best LoL Somoim",
             managers: [
                 {
                     name: "manager2",
                     major: { id: 2, name: "major2" }
                 }
             ],
-            available_semester: 3,
             category: 6,
-            tags: [3],
-            goalJoiner: 10,
-            available_major: [2],
-            joiners: [],
-            likers: [{ id: 0 }]
+            auth_img: "3",
+            isRegistered: true,
+            tags: [2, 3],
+            available_major: [1],
+            likers: [],
+            likes: 20,
+            poster_img: []
         }
     ],
 
@@ -247,7 +256,7 @@ let stubInitialState = {
     ],
 
     loggedUser: {
-        id: 0,
+        id: 1,
         name: "test",
         email: "test@test.com",
         password: "test",
@@ -263,8 +272,8 @@ let stubInitialState = {
 
 let mockStore = getMockStore(stubInitialState);
 
-describe("<SomoimTitleSearchBar />", () => {
-    let somoimTitleSearchBar;
+describe("<SomoimTagSearch />", () => {
+    let somoimTagSearch;
     let spyGetLoginInfo,
         spyGetSomoimList,
         spyGetCategoryList,
@@ -274,7 +283,7 @@ describe("<SomoimTitleSearchBar />", () => {
         spyGetRecommendedSomoims;
 
     beforeEach(() => {
-        somoimTitleSearchBar = (
+        somoimTagSearch = (
             <Provider store={mockStore}>
                 <ConnectedRouter history={history}>
                     <Switch>
@@ -283,7 +292,7 @@ describe("<SomoimTitleSearchBar />", () => {
                             exact
                             render={() => {
                                 return (
-                                    <SomoimTitleSearchBar />
+                                    <SomoimTagSearch match={{ params: { search_key: 1 } }} />
                                 );
                             }}
                         /> </Switch>
@@ -335,35 +344,21 @@ describe("<SomoimTitleSearchBar />", () => {
     });
 
     it("should render Page", () => {
-        const component = mount(somoimTitleSearchBar);
-        const wrapper = component.find(".SomoimTitleSearchBar");
+        const component = mount(somoimTagSearch);
+        const wrapper = component.find(".somoimTagSearch");
         expect(wrapper.length).toBe(1);
     });
 
-    it("should change", () => {
-        const component = mount(somoimTitleSearchBar);
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("change", { target: { value: "123" } });
+    it("should click changepage", () => {
+        const component = mount(somoimTagSearch);
+        const wrapper = component.find(".changePage").at(0);
+        wrapper.simulate("click");
         expect(wrapper.length).toBe(1);
     });
-    it("should press enter", () => {
-        const component = mount(somoimTitleSearchBar);
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("keypress", { key: "Enter2" });
-        expect(wrapper.length).toBe(1);
-    });
-    it("should press enter", () => {
-        const component = mount(somoimTitleSearchBar);
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("keypress", { key: "Enter" });
-        expect(wrapper.length).toBe(1);
-    });
-    it("should press enter2", () => {
-        const component = mount(somoimTitleSearchBar);
-        const mainInstance = component.find("SomoimTitleSearchBar").instance();
-        mainInstance.setState({ searchKey: "1" });
-        const wrapper = component.find(".input").at(0);
-        wrapper.simulate("keypress", { key: "Enter" });
+    it("should click changepage", () => {
+        const component = mount(somoimTagSearch);
+        const wrapper = component.find(".changePage").at(1);
+        wrapper.simulate("click");
         expect(wrapper.length).toBe(1);
     });
 });
