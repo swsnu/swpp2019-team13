@@ -107,8 +107,9 @@ class Club(models.Model):
     member = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
-    def save(self, *args, **kwargs):
+    def save(self, club_id, *args, **kwargs):
         cache.delete('cached_club')
+        cache.delete('cached_club'+str(club_id))
         super().save(*args, **kwargs)
 
     # def delete(self, *args, **kwargs):

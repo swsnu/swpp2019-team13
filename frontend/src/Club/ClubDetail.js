@@ -104,7 +104,7 @@ class ClubDetail extends React.Component {
 
       let mainImage = <img src={null} width="300" height="300" alt="" />;
       let image = [];
-
+      let mood;
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
           <img
@@ -116,7 +116,7 @@ class ClubDetail extends React.Component {
         );
 
       if (club.poster_img && club.poster_img.length > 0) {
-        let count = 0;
+        let count = 0, count2 = 0;
         let index = this.state.selected_gallery;
         while (count < 4) {
           if (club.poster_img.length > index) {
@@ -136,6 +136,9 @@ class ClubDetail extends React.Component {
           count++;
           index++;
         }
+        if (club.img_tag[0] > club.img_tag[1] && club.img_tag[0] > club.img_tag[2]) mood = "즐거운 우리";
+        else if (club.img_tag[1] > club.img_tag[0] && club.img_tag[1] > club.img_tag[2]) mood = "협동적인 우리";
+        else mood = "진지한 우리";
       }
 
       let tagList;
@@ -260,7 +263,7 @@ class ClubDetail extends React.Component {
                   fontStyle: "italic"
                 }}
               >
-                갤러리
+                {mood}동아리
               </div>
               <div className="detail-gallery-container">
                 <button
@@ -306,13 +309,13 @@ class ClubDetail extends React.Component {
                     좋아요 취소
                   </button>
                 ) : (
-                  <button
-                    className="liked-likebutton"
-                    onClick={this.onClickLikeButton}
-                  >
-                    좋아요!
+                    <button
+                      className="liked-likebutton"
+                      onClick={this.onClickLikeButton}
+                    >
+                      좋아요!
                   </button>
-                ))}
+                  ))}
               {this.props.loggedUser &&
                 (acceptQualification ? (
                   <button
@@ -322,14 +325,14 @@ class ClubDetail extends React.Component {
                     지원하기
                   </button>
                 ) : (
-                  <button
-                    className="disabled-applybutton"
-                    title={qualificationMessage}
-                    disabled
-                  >
-                    지원하기
+                    <button
+                      className="disabled-applybutton"
+                      title={qualificationMessage}
+                      disabled
+                    >
+                      지원하기
                   </button>
-                ))}
+                  ))}
             </div>
           </Modal.Body>
         </Modal>
