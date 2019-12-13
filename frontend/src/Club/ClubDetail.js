@@ -266,7 +266,7 @@ class ClubDetail extends React.Component {
                   fontStyle: "italic"
                 }}
               >
-                {mood}동아리
+                갤러리{mood}
               </div>
               <div className="detail-gallery-container">
                 <button
