@@ -8,7 +8,6 @@ import SomoimDetail from "./SomoimDetail";
 import { getMockStore } from "../test-utils/mocks";
 import { history } from "../store/store";
 import * as userActions from "../store/actions/user";
-import * as clubActions from "../store/actions/club";
 import * as somoimActions from "../store/actions/somoim";
 import * as categoryActions from "../store/actions/category";
 import * as tagActions from "../store/actions/tag";
@@ -421,5 +420,17 @@ describe("<SomoimDetail />", () => {
     const component = mount(somoimDetail5);
     const wrapper = component.find("#available_major_string");
     expect(wrapper.text()).toBe(" : major1 외 1개 학과");
+  });
+
+  it("tag click handle", () => {
+    const component = mount(somoimDetail2);
+    const wrapper = component.find(".somoim-detail-tag");
+
+    let spyHandler = jest.spyOn(history, "push").mockImplementation(() => {
+      return dispatch => {};
+    });
+
+    wrapper.at(0).simulate("click");
+    expect(spyHandler).toBeCalledTimes(1);
   });
 });
