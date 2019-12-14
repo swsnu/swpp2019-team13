@@ -7,6 +7,7 @@ import "./ClubCard.css";
 import heart from "../images/heart.png";
 import views from "../images/views.png";
 import person from "../images/person.png";
+import * as actionCreators from "../store/actions/index";
 
 class ClubCard extends React.Component {
   render() {
@@ -25,7 +26,7 @@ class ClubCard extends React.Component {
       if (club.poster_img && club.poster_img.length > 0)
         image = (
           <img
-            src={"media/" + club.poster_img[0]}
+            src={"/media/" + club.poster_img[0]}
             className="club-poster-img"
             width="100%"
             height="100%"
@@ -35,11 +36,28 @@ class ClubCard extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = club.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
-            {"#" + this.props.tags[item - 1].name}
+        tagList = club.tags.map(tag_id => (
+          <Button
+            key={tag_id}
+            variant="secondary"
+            style={{ marginRight: "5px" }}
+          >
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
+      }
+
+      let recruit_period = "";
+      if (club.recruit_start_day) {
+        recruit_period +=
+          club.recruit_start_day.split("-")[1] +
+          "/" +
+          club.recruit_start_day.split("-")[2];
+        recruit_period += " ~ ";
+        recruit_period +=
+          club.recruit_end_day.split("-")[1] +
+          "/" +
+          club.recruit_end_day.split("-")[2];
       }
 
       return (
@@ -47,13 +65,14 @@ class ClubCard extends React.Component {
           className="Club-Card"
           onClick={() => {
             this.props.clickHandler(club.id);
+            this.props.addClubHitCount(club.id);
           }}
         >
           <div className="club-title">
             <h2>{club.name}</h2>
           </div>
           <div className="club-applicable-term">
-            <p>01/07 ~ 01/20</p>
+            <p>{recruit_period}</p>
           </div>
           <div className="club-poster">{image}</div>
           <div className="club-user-info">
@@ -65,7 +84,7 @@ class ClubCard extends React.Component {
                 height="15px"
                 alt="person"
               ></img>
-              <p>&nbsp;25</p>
+              <p>&nbsp;{club.member}</p>
             </div>
             <div className="club-user-info-item">
               <img
@@ -75,7 +94,7 @@ class ClubCard extends React.Component {
                 height="20px"
                 alt="views"
               ></img>
-              <p>&nbsp;50</p>
+              <p>&nbsp;{club.hits}</p>
             </div>
             <div className="club-user-info-item">
               <img
@@ -103,7 +122,10 @@ const mapStateToProps = state => {
   };
 };
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    addClubHitCount: club_id =>
+      dispatch(actionCreators.addClubHitCount(club_id))
+  };
 };
 export default connect(
   mapStateToProps,

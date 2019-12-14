@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.cache import cache
+
+from django.db.models.signals import m2m_changed
+
 
 # Create your models here.
 
@@ -9,13 +13,37 @@ class Tag(models.Model):
     suggested = models.IntegerField(default=1)
     selected = models.IntegerField(default=1)
 
+    def save(self, *args, **kwargs):
+        cache.delete('cached_tag')
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_tag')
+    #     super().delete(*args, **kwargs)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=64)
 
+    def save(self, *args, **kwargs):
+        cache.delete('cached_category')
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_category')
+    #     super().delete(*args, **kwargs)
+
 
 class Department(models.Model):
     name = models.CharField(max_length=64)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_dept')
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_dept')
+    #     super().delete(*args, **kwargs)
 
 
 class Major(models.Model):
@@ -26,6 +54,14 @@ class Major(models.Model):
         null=True
     )
     name = models.CharField(max_length=64)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_major')
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_major')
+    #     super().delete(*args, **kwargs)
 
 
 class PreClub(models.Model):
@@ -68,6 +104,17 @@ class Club(models.Model):
         related_name="clubs",
         blank=True
     )
+    member = models.IntegerField(default=0)
+    hits = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_club')
+        cache.delete('cached_club'+str(self.id))
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_club')
+    #     super().delete(*args, **kwargs)
 
 
 class ClubPoster(models.Model):
@@ -101,6 +148,17 @@ class Somoim(models.Model):
         related_name="somoims",
         blank=True
     )
+    member = models.IntegerField(default=0)
+    hits = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        cache.delete('cached_somoim')
+        cache.delete('cached_somoim'+str(self.id))
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     cache.delete('cached_somoim')
+    #     super().delete(*args, **kwargs)
 
 
 class UserProfile(models.Model):
@@ -152,3 +210,12 @@ class UserProfile(models.Model):
         related_name="joiners",
         blank=True
     )
+
+
+def user_changed(sender, **kwargs):
+    cache.delete('cached_recommended_club')
+    cache.delete('cached_recommended_somoim')
+
+
+m2m_changed.connect(user_changed, sender=UserProfile.like_clubs.through)
+m2m_changed.connect(user_changed, sender=UserProfile.like_somoims.through)

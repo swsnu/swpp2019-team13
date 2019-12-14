@@ -75,7 +75,10 @@ class ClubInfoTab extends Component {
 
   handleAddition(tag) {
     this.setState({
-      tags: this.state.tags.concat(tag)
+      tags: this.state.tags.concat({
+        id: this.state.tags.length.toString(),
+        text: tag.text
+      })
     });
   }
 
@@ -335,6 +338,7 @@ class ClubInfoTab extends Component {
             <Form.Control
               as="textarea"
               size="lg"
+              rows={1}
               id="clubinfo-summary-input"
               onChange={event => {
                 this.setState({ summary: event.target.value });
@@ -347,6 +351,7 @@ class ClubInfoTab extends Component {
             <Form.Control
               as="textarea"
               size="lg"
+              rows={15}
               id="clubinfo-description-input"
               onChange={event => {
                 this.setState({ description: event.target.value });

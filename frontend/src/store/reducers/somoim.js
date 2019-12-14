@@ -36,7 +36,16 @@ const reducer = (state = initialState, action) => {
         likers: []
       };
       return { ...state, somoims: state.somoims.concat(newSomoim) };
-
+    case actionTypes.ADD_SOMOIM_HITCOUNT:
+      return {
+        ...state,
+        somoims: state.somoims.map(a => {
+          if (a.id === action.somoim_id) {
+            a.hits += 1;
+          }
+          return a;
+        })
+      };
     default:
       break;
   }

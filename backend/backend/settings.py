@@ -82,7 +82,11 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '3306',
+        'OPTIONS': {
+            "init_command": "SET GLOBAL max_connections = 100000",
+            "connect_timeout": 100
+        }
     }
 }
 
@@ -133,3 +137,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # drop session when browser close
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}

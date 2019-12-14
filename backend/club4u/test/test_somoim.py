@@ -38,7 +38,9 @@ class SomoimTestCase(TestCase):
                      'managers': [],
                      'session_day': 0,
                      'summary': 'summary1',
-                     'tags': []}]
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -203,17 +205,90 @@ class SomoimTestCase(TestCase):
 
     def test_get_recommend_somoim_list_success(self):
         client = getLoggedInClient()
+
         somoim = Somoim.objects.get(id=1)
-        somoim.likers.set([1, 2])
+        somoim2 = Somoim.objects.create(id=2, title='somoim2', summary='summary2', description='description2',
+                                        goalJoiner=2, category=Category.objects.get(id=1))
+
+        somoim.likers.set([2])
+        somoim2.likers.set([1, 2])
+
         response = client.get('/api/user/1/somoim/recommend/')
+        response = client.get(
+            '/api/user/1/somoim/recommend/')  # for caching test
+        expected = [{'id': 1, 'title': 'somoim1',
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [{'id': 2, 'user': {'username': 'user2', 'last_name': 'name2'},
+                                 'dept': {'id': 1, 'name': 'dept1'},
+                                 'major': {'id': 1, 'name': 'major1', 'dept': 1},
+                                 'grade': 1, 'available_semester': 1,
+                                 'available_session_day': 0,
+                                 'manage_clubs': [], 'like_clubs':[],
+                                 'apply_clubs':[], 'manage_somoims':[],
+                                 'like_somoims':[1, 2], 'join_somoims':[]}],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
 
         self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
+
+    def test_get_recommend_somoim_list_success_but_no_list(self):
+        client = getLoggedInClient()
+
+        somoim2 = Somoim.objects.create(id=2, title='somoim2', summary='summary2', description='description2',
+                                        goalJoiner=2, category=Category.objects.get(id=1))
+
+        somoim2.likers.set([1, 2])
+
+        response = client.get('/api/user/1/somoim/recommend/')
+        expected = [{'id': 1, 'title': 'somoim1',
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, expected)
 
     def test_get_recommend_somoim_list_not_logged_in(self):
         client = Client(enforce_csrf_checks=False)
         response = client.get('/api/user/1/somoim/recommend/')
+
+        expected = [{'id': 1, 'title': 'somoim1',
+                     'joiners': [],
+                     'available_major': [],
+                     'available_semester': 0,
+                     'category': 1,
+                     'description': 'description1',
+                     'goalJoiner': 2,
+                     'likers': [],
+                     'managers': [],
+                     'session_day': 0,
+                     'summary': 'summary1',
+                     'tags': [],
+                     'member': 0,
+                     'hits': 0}]
+
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, b'')
+        self.assertJSONEqual(response.content, expected)
 
     def test_get_recommend_somoim_list_user_not_found(self):
         client = getLoggedInClient()
@@ -230,6 +305,7 @@ class SomoimTestCase(TestCase):
     def test_get_specific_somoim_success(self):
         client = Client(enforce_csrf_checks=False)
         response = client.get('/api/somoim/1/')
+        response = client.get('/api/somoim/1/')
 
         expected = {'id': 1, 'title': 'somoim1',
                     'joiners': [],
@@ -242,7 +318,9 @@ class SomoimTestCase(TestCase):
                     'managers': [],
                     'session_day': 0,
                     'summary': 'summary1',
-                    'tags': []}
+                    'tags': [],
+                    'member': 0,
+                    'hits': 0}
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -254,4 +332,22 @@ class SomoimTestCase(TestCase):
     def test_get_specific_somoim_wrong_method(self):
         client = Client(enforce_csrf_checks=False)
         response = client.patch('/api/somoim/1/')
+        self.assertEqual(response.status_code, 405)
+
+    def test_somoim_hit_success(self):
+        client = getLoggedInClient()
+        response = client.put('/api/somoim/1/hits/')
+        self.assertEqual(response.status_code, 200)
+
+        response = client.put('/api/somoim/1/hits/')
+        self.assertEqual(response.status_code, 204)
+
+    def test_somoim_hit_not_found(self):
+        client = getLoggedInClient()
+        response = client.put('/api/somoim/10/hits/')
+        self.assertEqual(response.status_code, 404)
+
+    def test_somoim_hit_wrong_method(self):
+        client = getLoggedInClient()
+        response = client.patch('/api/somoim/1/hits/')
         self.assertEqual(response.status_code, 405)

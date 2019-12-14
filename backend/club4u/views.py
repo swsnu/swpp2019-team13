@@ -1,9 +1,9 @@
 import json
 import os
+import math
+import requests
 
-# import itertools
 from json import JSONDecodeError
-# import numpy as np
 
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib.auth.models import User
@@ -12,7 +12,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.renderers import JSONRenderer
 from django.contrib.auth import login, authenticate, logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Case, When
 
+from django.core.cache import cache
 from krwordrank.word import summarize_with_keywords
 
 from .models import *
@@ -21,22 +23,28 @@ from .serializers import *
 from .application_serializers import *
 
 
-
 def category_list(request):
     if request.method == 'GET':
-        response_dict = [
-            category for category in Category.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        cached_category = cache.get('cached_category')
+        if not cached_category:
+            cached_category = [category for category in Category.objects.all().values()]
+            cache.set('cached_category',cached_category)
+        return JsonResponse(cached_category, safe = False)
     else:
-        return HttpResponse(status=405)
+        return HttpResponse(status = 405)
 
 
 def tag_list(request):
     if request.method == 'GET':
-        response_dict = [tag for tag in Tag.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        # response_dict=[tag for tag in Tag.objects.all().values()]
+        # return JsonResponse(response_dict, safe = False)
+        cached_tag = cache.get('cached_tag')
+        if not cached_tag:
+            cached_tag = [tag for tag in Tag.objects.all().values()]
+            cache.set('cached_tag',cached_tag)
+        return JsonResponse(cached_tag, safe = False)
     else:
-        return HttpResponse(status=405)
+        return HttpResponse(status = 405)
 
 
 def tag_extlist(request):
@@ -44,14 +52,14 @@ def tag_extlist(request):
         # min_count = 1
         # max_length = 10
         # wordrank_extractor = KRWordRank(min_count, max_length)
-        req_data = json.loads(request.body.decode())
-        response_tags = req_data['description']
-        keywords = summarize_with_keywords([response_tags], min_count=5, max_length=10,
-                                           beta=0.85, max_iter=20, stopwords={}, verbose=True)
-        arr = sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:10]
+        req_data=json.loads(request.body.decode())
+        response_tags=req_data['description']
+        keywords=summarize_with_keywords([response_tags], min_count = 5, max_length = 10,
+                                           beta = 0.85, max_iter = 20, stopwords = {}, verbose = True)
+        arr=sorted(keywords.items(), key = lambda x: x[1], reverse=True)[:10]
         response_dict = {}
         word = list(map(lambda a: a[0], arr))
-        num = list(map(lambda a: a[1], arr))
+        num=list(map(lambda a: a[1], arr))
 
         # first select tag with highest value
         for i in range(0, 10):
@@ -59,11 +67,11 @@ def tag_extlist(request):
                 break
             # drop tag if it exists in list and selected ratio is lower than 0.5
             if Tag.objects.filter(name=word[i]).exists():
-                tag = Tag.objects.get(name=word[i])
+                tag=Tag.objects.get(name=word[i])
                 if tag.selected != 0 and tag.suggested < tag.selected*2:
-                    response_dict[word[i]] = num[i]
+                    response_dict[word[i]]=num[i]
             else:
-                response_dict[word[i]] = num[i]
+                response_dict[word[i]]=num[i]
         return JsonResponse(response_dict, safe=False)
     else:
         return HttpResponse(status=405)
@@ -71,24 +79,34 @@ def tag_extlist(request):
 
 def dept_list(request):
     if request.method == 'GET':
-        response_dict = [dept for dept in Department.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        # response_dict=[dept for dept in Department.objects.all().values()]
+        # return JsonResponse(response_dict, safe=False)
+        cached_dept = cache.get('cached_dept')
+        if not cached_dept:
+            cached_dept = [dept for dept in Department.objects.all().values()]
+            cache.set('cached_dept',cached_dept)
+        return JsonResponse(cached_dept, safe = False)
     else:
         return HttpResponse(status=405)
 
 
 def major_list(request):
     if request.method == 'GET':
-        response_dict = [major for major in Major.objects.all().values()]
-        return JsonResponse(response_dict, safe=False)
+        # response_dict=[major for major in Major.objects.all().values()]
+        # return JsonResponse(response_dict, safe=False)
+        cached_major = cache.get('cached_major')
+        if not cached_major:
+            cached_major = [major for major in Major.objects.all().values()]
+            cache.set('cached_major',cached_major)
+        return JsonResponse(cached_major, safe = False)
     else:
         return HttpResponse(status=405)
 
 
 def user_list(request):
-    users = UserProfile.objects.all()
+    users=UserProfile.objects.all()
     if request.method == 'GET':
-        app_array = []
+        app_array=[]
         for item in users:
             app_array.append(UserProfileSerializer(item).data)
         return HttpResponse(JSONRenderer().render(app_array))
@@ -99,17 +117,17 @@ def user_list(request):
 def signup(request):
     if request.method == 'POST':
         try:
-            req_data = json.loads(request.body.decode())
-            email = req_data['email']
-            password = req_data['password']
+            req_data=json.loads(request.body.decode())
+            email=req_data['email']
+            password=req_data['password']
             # use last name to save whole name
-            name = req_data['name']
-            dept = Department.objects.get(id=req_data['dept'])
-            major = Major.objects.get(id=req_data['major'])
-            grade = req_data['grade']
-            available_semester = req_data['available_semester']
-            available_session_day = req_data['available_session_day']
-            user = User.objects.create_user(
+            name=req_data['name']
+            dept=Department.objects.get(id=req_data['dept'])
+            major=Major.objects.get(id=req_data['major'])
+            grade=req_data['grade']
+            available_semester=req_data['available_semester']
+            available_session_day=req_data['available_session_day']
+            user=User.objects.create_user(
                 username=email, password=password, last_name=name)
             user.save()
             userprofile = UserProfile(user=user, dept=dept,
@@ -218,26 +236,68 @@ def preclub_list(request):
     else:
         return HttpResponse(status=405)
 
+def clubhit(request, club_id=None):
+    if request.method == 'PUT':
+        try:
+            selected_club = Club.objects.get(id=club_id)
+
+            if 'club{}'.format(club_id) not in request.session:
+                request.session['club{}'.format(club_id)] = 1
+                selected_club.hits += 1
+                selected_club.save()
+                return HttpResponse(status=200)
+
+            return HttpResponse(status=204)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
+
+def somoimhit(request, somoim_id=None):
+    if request.method == 'PUT':
+        try:
+            if 'somoim{}'.format(somoim_id) not in request.session:
+                request.session['somoim{}'.format(somoim_id)] = 1
+                selected_somoim = Somoim.objects.get(id=somoim_id)
+                selected_somoim.hits += 1
+                selected_somoim.save()
+                return HttpResponse(status=200)
+
+            return HttpResponse(status=204)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=404)
+    else:
+        return HttpResponse(status=405)
 
 def club(request, club_id=None):
     if request.method == 'GET':
         try:
-            selected_club = Club.objects.get(id=club_id)
-            serializer = ClubSerializer(selected_club)
+            cached_club = cache.get('cached_club'+str(club_id))
+            if not cached_club:
+                selected_club = Club.objects.get(id=club_id)
+                serializer = ClubSerializer(selected_club)
 
-            poster_list = ClubPoster.objects.filter(
-                club_id=selected_club.id).values()
+                poster_list = ClubPoster.objects.filter(
+                    club_id=selected_club.id).values()
 
-            poster_img_list = []
+                poster_img_list = []
+                #img_tag_list = []
 
-            for poster in poster_list:
-                poster_img_list.append(poster['img'])
+                for poster in poster_list:
+#                    image_url = poster['img'].url
+                    poster_img_list.append(poster['img'])
 
-            response_dict = serializer.data
-            response_dict['poster_img'] = poster_img_list
-            return HttpResponse(JSONRenderer().render(response_dict))
+                response_dict = serializer.data
+                response_dict['poster_img'] = poster_img_list
+                #response_dict['img_tag'] = img_tag_list
+                #return HttpResponse(JSONRenderer().render(response_dict))
+
+                cached_club = response_dict
+                cache.set('cached_club'+str(club_id), cached_club)
+            return HttpResponse(JSONRenderer().render(cached_club))
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
+
     if request.method == 'PUT':
         try:
             selected_club = Club.objects.get(id=club_id)
@@ -268,7 +328,14 @@ def club(request, club_id=None):
                     tag = Tag(name=text, suggested=1, selected=0)
                     tag.save()
 
+            # Handle New Tag in tags
+
             tags = req_data['tags']
+            for tag in tags:
+                if not Tag.objects.filter(name=tag['text']).exists():
+                    tag = Tag(name=tag['text'], suggested=1, selected=1)
+                    tag.save()
+
             selected_club.tags.clear()
 
             for tag in tags:
@@ -317,10 +384,16 @@ def club(request, club_id=None):
 def somoim(request, somoim_id=None):
     if request.method == 'GET':
         try:
-            selected_somoim = Somoim.objects.get(id=somoim_id)
-            serializer = SomoimSerializer(selected_somoim)
-            response_dict = serializer.data
-            return HttpResponse(JSONRenderer().render(response_dict))
+            cached_somoim = cache.get('cached_somoim'+str(somoim_id))
+            if not cached_somoim:
+                selected_somoim = Somoim.objects.get(id=somoim_id)
+                serializer = SomoimSerializer(selected_somoim)
+                response_dict = serializer.data
+                #return HttpResponse(JSONRenderer().render(response_dict))
+
+                cached_somoim = JSONRenderer().render(response_dict)
+                cache.set('cached_somoim'+str(somoim_id), cached_somoim)
+            return HttpResponse(cached_somoim)
         except ObjectDoesNotExist:
             return HttpResponse(status=404)
     else:
@@ -344,28 +417,73 @@ def clubposter(request, club_id=0):
 
 def club_list(request):
     if request.method == 'GET':
-        serializer = ClubSerializer(Club.objects.all(), many=True)
+        api_key = 'acc_a5456ea645db19d'
+        api_secret = '4d87ad8101b40cf70577cdbe904313e5'
+        image_path = ''
+        cached_club = cache.get('cached_club')
+        if not cached_club:
+            serializer = ClubSerializer(Club.objects.all(), many=True)
+            response_dict = serializer.data
+            for c in response_dict:
+                poster_list = ClubPoster.objects.filter(
+                    club_id=c['id']).values()
+                poster_img_list = []
+                img_tag_list = []
+                point_list = [0, 0, 0]
+                for poster in poster_list:
+                    image_path = '../backend/media/'+poster['img']
+                    #print(image_path)
+                    poster_img_list.append(poster['img'])
+                    if poster['img']!="img":
+                        img_tag_list.append(requests.post('https://api.imagga.com/v2/tags',
+                             auth=(api_key, api_secret),
+                             files={'image': open(image_path, 'rb')}).json())
 
-        response_dict = serializer.data
-
-        for c in response_dict:
-            poster_list = ClubPoster.objects.filter(
-                club_id=c['id']).values()
-
-            poster_img_list = []
-            for poster in poster_list:
-                poster_img_list.append(poster['img'])
-
-            c['poster_img'] = poster_img_list
-        return HttpResponse(JSONRenderer().render(serializer.data))
+                c['poster_img'] = poster_img_list
+                for tag in img_tag_list:
+                    for i in tag['result']['tags']:
+                        if i['tag']['en']=='smile': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='smiling': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='happy': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='happiness': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='entertainment': 
+                            point_list[0]+=i['confidence']
+                        if i['tag']['en']=='corporate': 
+                            point_list[1]+=i['confidence']
+                        if i['tag']['en']=='communication': 
+                            point_list[1]+=i['confidence']
+                        if i['tag']['en']=='teamwork': 
+                            point_list[1]+=i['confidence']
+                        if i['tag']['en']=='professional': 
+                            point_list[2]+=i['confidence']
+                        if i['tag']['en']=='working': 
+                            point_list[2]+=i['confidence']
+                        if i['tag']['en']=='discussion': 
+                            point_list[1]+=i['confidence']
+                            point_list[2]+=i['confidence']
+                        
+                    #print(tag['result']['tags'])
+                c['img_tag'] = point_list
+            cached_club = JSONRenderer().render(serializer.data)
+            cache.set('cached_club', cached_club)
+            # return HttpResponse(JSONRenderer().render(serializer.data))
+        return HttpResponse(cached_club)
     else:
         return HttpResponse(status=405)
 
 
 def somoim_list(request):
     if request.method == 'GET':
-        serializer = SomoimSerializer(Somoim.objects.all(), many=True)
-        return HttpResponse(JSONRenderer().render(serializer.data))
+        cached_somoim = cache.get('cached_somoim')
+        if not cached_somoim:
+            serializer = SomoimSerializer(Somoim.objects.all(), many=True)
+            cached_somoim = JSONRenderer().render(serializer.data)
+            cache.set('cached_somoim', cached_somoim)
+        return HttpResponse(cached_somoim)
     elif request.method == 'POST':
         req_data = json.loads(request.body.decode())
         title = req_data['title']
@@ -379,7 +497,6 @@ def somoim_list(request):
 
         category = Category.objects.get(id=category_id)
 
-        # TODO : Add Tag
         new_somoim = Somoim()
         new_somoim.title = title
         new_somoim.category = category
@@ -519,92 +636,121 @@ def apply_club(request, user_id=0):
 
 def recommend_club(request, user_id=0):
     if not request.user.is_authenticated:
-        return HttpResponse([])
+        unsorted_clubs = Club.objects.all()
+        sorted_clubs = sorted(unsorted_clubs, key=lambda c: -c.likers.count())
+        serializer = ClubSerializer(sorted_clubs, many=True)
+
+        # ADD POSTER IMAGES TO EACH CLUB DATA
+        response_dict = serializer.data
+        for c in response_dict:
+            poster_list = ClubPoster.objects.filter(
+                club_id=c['id']).values()
+
+            poster_img_list = []
+            for poster in poster_list:
+                poster_img_list.append(poster['img'])
+
+            c['poster_img'] = poster_img_list
+
+        return HttpResponse(JSONRenderer().render(serializer.data))
+
     try:
         user = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # # calculate the number of nodes
-        # user_counts = UserProfile.objects.count()
-        # club_counts = Club.objects.count()
-        # somoim_counts = Somoim.objects.count()
-        # tag_counts = Tag.objects.count()
-        
-        # # initialize graph
-        # graph_size = user_counts + club_counts + somoim_counts + tag_counts
-        # graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
-        
-        # # make graph
-        # for user_profile in UserProfile.objects.all():
-        #     for user_like_club in user_profile.like_clubs.all():
-        #         graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
-        #         graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
-        #     for user_like_somoim in user_profile.like_somoims.all():
-        #         graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
-        #         graph_[user_counts + club_counts +
-        #               user_like_somoim.id - 1][user_profile.id-1] = 1
-        # for each_club in Club.objects.all():
-        #     for each_tag in each_club.tags.all():
-        #         if each_tag.selected != 0:
-        #             graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-        #             graph_[user_counts + club_counts + somoim_counts +
-        #                 each_tag.id - 1][user_counts + each_club.id - 1] = 1
-        # for each_somoim in Somoim.objects.all():
-        #     for each_tag in each_somoim.tags.all():
-        #         if each_tag.selected != 0:
-        #             graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-        #             graph_[user_counts + club_counts + somoim_counts +
-        #                 each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
-        
-        # # change graph's data structure: list to numpy
-        # graph = np.array(graph_)
-        
-        # # calculate recommedation score
-        # ## prepare
-        # clubs_recommendation_score = np.zeros(club_counts)
-        # start_index = user_counts
-        # end_index = start_index + club_counts
-        # graph_2 = np.matmul(graph, graph)
-        # multed_graph = graph
+        cached_recommended_club = cache.get('cached_recommended_club')
+        if not cached_recommended_club:
+            # 1. get clubs which user likes
+            target_liked_clubs = user.like_clubs.all()
 
-        # ## calculate
-        # for i in range(5):
-        #     prev_counts = multed_graph[user_id-1][start_index:end_index]
-        #     multed_graph = np.matmul(multed_graph, graph_2)
-        #     cur_counts = multed_graph[user_id-1][start_index:end_index]
-        #     counts = cur_counts - prev_counts
-        #     clubs_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
-        
+            # 2. get users who likes club in above list
+            candidates = set()
+            for target_like_club in target_liked_clubs:
+                for candidate in target_like_club.likers.all():
+                    if candidate.id is user.id:
+                        continue
+                    candidates.add(candidate)
 
-        # # make recommedation clubs list by using recommenation score
-        # ## get liked clubs' id
-        # already_liked_clubs = graph[user_id-1][start_index:end_index]
-        # already_liked_clubs_id = []
-        # for i in range(club_counts):
-        #     if already_liked_clubs[i].item() == 1:
-        #         already_liked_clubs_id.append(i)
-        
-        # ## make recommedation list
-        # recommended_clubs = Club.objects.none()
-        # score_cut = 150
-        # for i in range(club_counts):
-        #     index = clubs_recommendation_score.argmax()
-        #     if index not in already_liked_clubs_id and clubs_recommendation_score[index] > score_cut:
-        #         # recommended_clubs |= Club.objects.filter(id=index+1)
-        #         recommended_clubs = itertools.chain(recommended_clubs, Club.objects.filter(id=index+1))
-        #     clubs_recommendation_score[index] = -1
-        
-        recommended_clubs = Club.objects.none()
-        for user_like_club in user.like_clubs.all():
-            for liker in user_like_club.likers.all():
-                for c in liker.like_clubs.all():
-                    if recommended_clubs.filter(id=c.id).count() == 0:
-                        recommended_clubs |= Club.objects.filter(id=c.id)
-        
-        serializer = ClubSerializer(recommended_clubs, many=True)
-        return HttpResponse(JSONRenderer().render(serializer.data))
+            # 3. calculate similarity between target user and each candidate user
+            # by user-based collaborate filtering (CF)
+            # use cosine similarity
+            similarity_score = []
+            target_already_liked = []
+            club_counts = Club.objects.count()
+
+            target_info = [0 for x in range(club_counts)]
+
+            for target_like_club in target_liked_clubs:
+                target_idx = list(Club.objects.all().values_list('id', flat=True)).index(target_like_club.id)
+                target_info[target_idx] = 5
+                target_already_liked.append(target_like_club.id)
+
+            for candidate in candidates:
+                candidate_info = [0 for x in range(club_counts)]
+
+                for cand_like_club in candidate.like_clubs.all():
+                    target_idx = list(Club.objects.all().values_list('id', flat=True)).index(cand_like_club.id)
+                    candidate_info[target_idx] = 5
+
+                (temp1, temp2, temp3) = (0, 0, 0)
+                for i in range(club_counts):
+                    x = target_info[i]
+                    y = candidate_info[i]
+
+                    temp1 += (x * x)
+                    temp2 += (y * y)
+                    temp3 += (x * y)
+                
+                similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
+
+            # 4. calculate recommendation score of club by using above information
+            recommendation_scores = [0 for x in range(club_counts)]
+            candidate_index = 0
+            for candidate in candidates:
+                for cand_like_club in candidate.like_clubs.all():
+                    if cand_like_club.id in target_already_liked:
+                        continue
+                    target_idx = list(Club.objects.all().values_list('id', flat=True)).index(cand_like_club.id)
+                    recommendation_scores[target_idx] += similarity_score[candidate_index]
+                candidate_index += 1
+            
+            # 5. make recommendation list
+            recommended_id = []
+            for x in range(club_counts // 4):
+                index = recommendation_scores.index(max(recommendation_scores))
+                if recommendation_scores[index] > 0:
+                    recommended_id.append(Club.objects.all()[index].id)
+                recommendation_scores[index] = 0
+
+            preserved = Case(*[When(id=id, then=pos) for pos, id in enumerate(recommended_id)])
+            recommended_clubs = Club.objects.filter(id__in=recommended_id).order_by(preserved)
+
+            if len(recommended_clubs) != 0:
+                serializer = ClubSerializer(recommended_clubs, many=True)
+            else:
+                unsorted_clubs = Club.objects.all().exclude(id__in=target_already_liked)
+                sorted_clubs = sorted(unsorted_clubs, key=lambda c: -c.likers.count())
+                serializer = ClubSerializer(sorted_clubs, many=True)
+
+            # ADD POSTER IMAGES TO EACH CLUB DATA
+            response_dict = serializer.data
+            for c in response_dict:
+                poster_list = ClubPoster.objects.filter(
+                    club_id=c['id']).values()
+
+                poster_img_list = []
+                for poster in poster_list:
+                    poster_img_list.append(poster['img'])
+
+                c['poster_img'] = poster_img_list
+
+            # return HttpResponse(JSONRenderer().render(serializer.data))
+
+            cached_recommended_club = JSONRenderer().render(serializer.data)
+            cache.set('cached_recommended_club', cached_recommended_club)
+        return HttpResponse(cached_recommended_club)
     else:
         return HttpResponse(status=405)
 
@@ -628,6 +774,7 @@ def manage_somoim(request, user_id=0):
             user.manage_somoims.get(id=somoim_id)
             user.manage_somoims.remove(user.manage_somoims.get(id=somoim_id))
         except ObjectDoesNotExist:
+            user.join_somoims.add(Somoim.objects.get(id=somoim_id))
             user.manage_somoims.add(Somoim.objects.get(id=somoim_id))
         return HttpResponse(status=204)
     else:
@@ -686,93 +833,96 @@ def join_somoim(request, user_id=0):
 
 def recommend_somoim(request, user_id=0):
     if not request.user.is_authenticated:
-        return HttpResponse([])
+        unsorted_somoims = Somoim.objects.all()
+        sorted_somoims = sorted(unsorted_somoims, key=lambda c: -c.likers.count())
+        serializer = SomoimSerializer(sorted_somoims, many=True)
+
+        return HttpResponse(JSONRenderer().render(serializer.data))
     try:
         user = UserProfile.objects.get(id=user_id)
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
     if request.method == 'GET':
-        # # calculate the number of nodes
-        # user_counts = UserProfile.objects.count()
-        # club_counts = Club.objects.count()
-        # somoim_counts = Somoim.objects.count()
-        # tag_counts = Tag.objects.count()
-        
-        # # initialize graph
-        # graph_size = user_counts + club_counts + somoim_counts + tag_counts
-        # graph_ = [[0 for x in range(graph_size)] for y in range(graph_size)]
-        
-        # # make graph
-        # for user_profile in UserProfile.objects.all():
-        #     for user_like_club in user_profile.like_clubs.all():
-        #         graph_[user_profile.id-1][user_counts + user_like_club.id - 1] = 1
-        #         graph_[user_counts + user_like_club.id - 1][user_profile.id-1] = 1
-        #     for user_like_somoim in user_profile.like_somoims.all():
-        #         graph_[user_profile.id-1][user_counts + club_counts + user_like_somoim.id - 1] = 1
-        #         graph_[user_counts + club_counts +
-        #               user_like_somoim.id - 1][user_profile.id-1] = 1
-        # for each_club in Club.objects.all():
-        #     for each_tag in each_club.tags.all():
-        #         if each_tag.selected != 0:
-        #             graph_[user_counts + each_club.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-        #             graph_[user_counts + club_counts + somoim_counts +
-        #                 each_tag.id - 1][user_counts + each_club.id - 1] = 1
-        # for each_somoim in Somoim.objects.all():
-        #     for each_tag in each_somoim.tags.all():
-        #         if each_tag.selected != 0:
-        #             graph_[user_counts + club_counts + each_somoim.id - 1][user_counts + club_counts + somoim_counts + each_tag.id - 1] = 1
-        #             graph_[user_counts + club_counts + somoim_counts +
-        #                 each_tag.id - 1][user_counts + club_counts + each_somoim.id - 1] = 1
-        
-        # # change graph's data structure: list to numpy
-        # graph = np.array(graph_)
-        
-        # # calculate recommedation score
-        # ## prepare
-        # somoims_recommendation_score = np.zeros(somoim_counts)
-        # start_index = user_counts + club_counts
-        # end_index = start_index + somoim_counts
-        # graph_2 = np.matmul(graph, graph)
-        # multed_graph = graph
+        cached_recommended_somoim = cache.get('cached_recommended_somoim')
+        if not cached_recommended_somoim:
+            # 1. get somoims which user likes
+            target_liked_somoims = user.like_somoims.all()
 
-        # ## calculate
-        # for i in range(5):
-        #     prev_counts = multed_graph[user_id-1][start_index:end_index]
-        #     multed_graph = np.matmul(multed_graph, graph_2)
-        #     cur_counts = multed_graph[user_id-1][start_index:end_index]
-        #     counts = cur_counts - prev_counts
-        #     somoims_recommendation_score += (counts * 100 / ((2*i + 3)**(2*i + 1)))
-        # print(somoims_recommendation_score)
-        
-        # # make recommedation clubs list by using recommenation score
-        # ## get liked clubs' id
-        # already_liked_somoims = graph[user_id-1][start_index:end_index]
-        # already_liked_somoims_id = []
-        # for i in range(somoim_counts):
-        #     if already_liked_somoims[i].item() == 1:
-        #         already_liked_somoims_id.append(i)
-        
-        # ## make recommedation list
-        # recommended_somoims = Somoim.objects.none()
-        # score_cut = 150
-        # for i in range(somoim_counts):
-        #     index = somoims_recommendation_score.argmax()
-        #     if index not in already_liked_somoims_id and somoims_recommendation_score[index] > score_cut:
-        #         # recommended_somoims |= Somoim.objects.filter(id=index+1)
-        #         recommended_somoims = itertools.chain(recommended_somoims, Somoim.objects.filter(id=index+1))
-        #     somoims_recommendation_score[index] = -1
+            # 2. get users who likes somoim in above list
+            candidates = set()
+            for target_like_somoim in target_liked_somoims:
+                for candidate in target_like_somoim.likers.all():
+                    if candidate.id is user.id:
+                        continue
+                    candidates.add(candidate)
 
-        recommended_somoims = Somoim.objects.none()
-        for user_like_somoim in user.like_somoims.all():
-            for liker in user_like_somoim.likers.all():
-                for s in liker.like_somoims.all():
-                    if recommended_somoims.filter(id=s.id).count() == 0:
-                        recommended_somoims |= Somoim.objects.filter(
-                            id=s.id)
-        
-        serializer = SomoimSerializer(recommended_somoims, many=True)
-        return HttpResponse(JSONRenderer().render(serializer.data))
+            # 3. calculate similarity between target user and each candidate user
+            # by user-based collaborate filtering (CF)
+            # use cosine similarity
+            similarity_score = []
+            target_already_liked = []
+            somoim_counts = Somoim.objects.count()
+
+            target_info = [0 for x in range(somoim_counts)]
+
+            for target_like_somoim in target_liked_somoims:
+                target_idx = list(Somoim.objects.all().values_list('id', flat=True)).index(target_like_somoim.id)
+                target_info[target_idx] = 5
+                target_already_liked.append(target_like_somoim.id)
+
+            for candidate in candidates:
+                candidate_info = [0 for x in range(somoim_counts)]
+
+                for cand_like_somoim in candidate.like_somoims.all():
+                    target_idx = list(Somoim.objects.all().values_list('id', flat=True)).index(cand_like_somoim.id)
+                    candidate_info[target_idx] = 5
+
+                (temp1, temp2, temp3) = (0, 0, 0)
+                for i in range(somoim_counts):
+                    x = target_info[i]
+                    y = candidate_info[i]
+
+                    temp1 += (x * x)
+                    temp2 += (y * y)
+                    temp3 += (x * y)
+
+                similarity_score.append(temp3 / (math.sqrt(temp1 * temp2)))
+
+            # 4. calculate recommendation score of somoim by using above information
+            recommendation_scores = [0 for x in range(somoim_counts)]
+            candidate_index = 0
+            for candidate in candidates:
+                for cand_like_somoim in candidate.like_somoims.all():
+                    if cand_like_somoim.id in target_already_liked:
+                        continue
+                    target_idx = list(Somoim.objects.all().values_list('id', flat=True)).index(cand_like_somoim.id)
+                    recommendation_scores[target_idx] += similarity_score[candidate_index]
+                candidate_index += 1
+
+            # 5. make recommendation list
+            recommended_id = []
+            for x in range(somoim_counts // 4):
+                index = recommendation_scores.index(max(recommendation_scores))
+                if recommendation_scores[index] > 0:
+                    recommended_id.append(Somoim.objects.all()[index].id)
+                recommendation_scores[index] = 0
+
+            preserved = Case(*[When(id=id, then=pos) for pos, id in enumerate(recommended_id)])
+            recommended_somoims = Somoim.objects.filter(id__in=recommended_id).order_by(preserved)
+
+            if len(recommended_somoims) != 0:
+                serializer = SomoimSerializer(recommended_somoims, many=True)
+            else:
+                unsorted_somoims = Somoim.objects.all().exclude(id__in=target_already_liked)
+                sorted_somoims = sorted(unsorted_somoims, key=lambda c: -c.likers.count())
+                serializer = SomoimSerializer(sorted_somoims, many=True)
+
+            # return HttpResponse(JSONRenderer().render(serializer.data))
+
+            cached_recommended_somoim = JSONRenderer().render(serializer.data)
+            cache.set('cached_recommended_somoim', cached_recommended_somoim)
+        return HttpResponse(cached_recommended_somoim)
     else:
         return HttpResponse(status=405)
 
@@ -829,7 +979,7 @@ def application(request, club_id=0):
     #     return HttpResponse(401)
     try:
         application = Application.objects.get(
-            club_id=club_id, user_id=request.user.id)
+            club_id=club_id, user=UserProfile.objects.get(user_id=request.user.id))
     except ObjectDoesNotExist:
         return HttpResponseNotFound()
 
@@ -838,7 +988,7 @@ def application(request, club_id=0):
         return HttpResponse(JSONRenderer().render(serializer.data))
     elif request.method == 'PUT':
         application = Application.objects.get(
-            club_id=club_id, user_id=request.user.id)
+            club_id=club_id,  user=UserProfile.objects.get(user_id=request.user.id))
         body = json.loads(request.body.decode())
         for item in body:
             if item['type'] == 'shortText':

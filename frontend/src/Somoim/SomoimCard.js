@@ -9,6 +9,7 @@ import "./SomoimCard.css";
 import heart from "../images/heart.png";
 import views from "../images/views.png";
 import person from "../images/person.png";
+import * as actionCreators from "../store/actions/index";
 
 class SomoimCard extends React.Component {
   render() {
@@ -20,9 +21,13 @@ class SomoimCard extends React.Component {
 
       let tagList;
       if (this.props.tags.length !== 0) {
-        tagList = somoim.tags.map(item => (
-          <Button key={item} variant="secondary" style={{ marginRight: "5px" }}>
-            {"#" + this.props.tags[item - 1].name}
+        tagList = somoim.tags.map(tag_id => (
+          <Button
+            key={tag_id}
+            variant="secondary"
+            style={{ marginRight: "5px" }}
+          >
+            {"#" + this.props.tags.filter(tag => tag.id === tag_id)[0].name}
           </Button>
         ));
       }
@@ -32,6 +37,7 @@ class SomoimCard extends React.Component {
           className="Somoim-Card"
           onClick={() => {
             this.props.clickHandler(somoim.id);
+            this.props.addSomoimHitCount(somoim.id);
           }}
         >
           <div className="somoim-title">
@@ -60,11 +66,11 @@ class SomoimCard extends React.Component {
           <div className="somoim-user-info">
             <div className="somoim-user-info-item">
               <img src={person} width="15px" height="15px" alt="person"></img>
-              <p>&nbsp;25</p>
+              <p>&nbsp;{somoim.member}</p>
             </div>
             <div className="somoim-user-info-item">
               <img src={views} width="20px" height="20px" alt="views"></img>
-              <p>&nbsp;50</p>
+              <p>&nbsp;{somoim.hits}</p>
             </div>
             <div className="somoim-user-info-item">
               <img src={heart} width="25px" height="28px" alt="heart"></img>
@@ -88,7 +94,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return {};
+  return {
+    addSomoimHitCount: club_id =>
+      dispatch(actionCreators.addSomoimHitCount(club_id))
+  };
 };
 
 export default connect(

@@ -3,7 +3,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Button } from "react-bootstrap";
-import SomoimDetail from "../Somoim/SomoimDetail";
 import * as actionCreators from "../store/actions/index";
 import { cardFactory, SomoimDetailFactory } from "./MyPageTabFactory";
 
@@ -36,12 +35,15 @@ class LikedSomoimTab extends Component {
           idx,
           this.onClickCard,
           <Button
+            variant="dark"
             id="somoim-unlike-button"
+            style={{ height: "100%" }}
             onClick={() => {
               this.props.addLikedSomoim(item, this.props.loggedUser);
             }}
+            block
           >
-            Unlike
+            좋아요 취소
           </Button>
         );
       });

@@ -13,61 +13,109 @@ import * as categoryActions from "../store/actions/category";
 import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
+
+jest.mock("../Club/ClubDetail", () => {
+  return jest.fn(props => {
+    return <div id="spyClubDetail" onClick={props.closeHandler}></div>;
+  });
+});
+jest.mock("../Club/ClubCard", () => {
+  return jest.fn(props => {
+    return <div id="spyClubCard" onClick={props.clickHandler}></div>;
+  });
+});
+jest.mock("../Club/ClubRegister", () => {
+  return jest.fn(props => {
+    return <div id="spyClubRegister" onClick={props.clickHandler}></div>;
+  });
+});
+jest.mock("../Club/ClubTitleSearchBar", () => {
+  return jest.fn(props => {
+    return <div id="spyClubTitleSearchBar" onClick={props.clickHandler}></div>;
+  });
+});
+
 let temp_clubs = [
   {
     id: 0,
     name: "SNUStone",
-    content: "SNU Best HearthStone Club",
-    clubmanager: "김지훈",
+    description: "SNU Best HearthStone Club",
+    managers: [
+      {
+        name: "manager0",
+        major: { id: 0, name: "major0" }
+      }
+    ],
     category: 0,
     auth_img: "1",
     isRegistered: true,
     available_major: [1],
     tags: [1, 2],
     likers: [],
-    likes: 10,
-    majors: [],
+    recruit_start_day: "2019-12-8",
+    recruit_end_day: "2019-12-16",
+    member: 50,
+    hits: 1,
     poster_img: []
   },
   {
     id: 1,
     name: "SnuWOD",
-    content: "SNU Best Training Club",
-    clubmanager: "김동우",
+    description: "SNU Best Training Club",
+    managers: [
+      {
+        name: "manager1",
+        major: { id: 1, name: "major1" }
+      }
+    ],
     category: 6,
     auth_img: "2",
     isRegistered: true,
     tags: [2, 3],
     available_major: [1],
     likers: [],
-    likes: 15,
-    majors: [],
+    recruit_start_day: "2019-12-8",
+    recruit_end_day: "2019-12-16",
+    member: 50,
+    hits: 1,
     poster_img: []
   },
-
   {
     id: 2,
     name: "SnuLoL",
-    content: "SNU Best LoL Club",
-    clubmanager: "김도현",
+    description: "SNU Best LoL Club",
+    managers: [
+      {
+        name: "manager2",
+        major: { id: 2, name: "major2" }
+      }
+    ],
     category: 6,
     auth_img: "3",
     isRegistered: true,
     tags: [2, 3],
     available_major: [1],
     likers: [],
-    likes: 20,
-    majors: [],
+    recruit_start_day: "2019-12-8",
+    recruit_end_day: "2019-12-16",
+    member: 50,
+    hits: 1,
     poster_img: []
   }
 ];
+
 let stubInitialState = {
   clubs: [
     {
       id: 0,
       name: "SNUStone",
-      content: "SNU Best HearthStone Club",
-      clubmanager: "김지훈",
+      description: "SNU Best HearthStone Club",
+      managers: [
+        {
+          name: "manager0",
+          major: { id: 0, name: "major0" }
+        }
+      ],
       category: 0,
       auth_img: "1",
       isRegistered: true,
@@ -75,14 +123,18 @@ let stubInitialState = {
       tags: [1, 2],
       likers: [],
       likes: 10,
-      majors: [],
       poster_img: []
     },
     {
       id: 1,
       name: "SnuWOD",
-      content: "SNU Best Training Club",
-      clubmanager: "김동우",
+      description: "SNU Best Training Club",
+      managers: [
+        {
+          name: "manager1",
+          major: { id: 1, name: "major1" }
+        }
+      ],
       category: 6,
       auth_img: "2",
       isRegistered: true,
@@ -90,15 +142,18 @@ let stubInitialState = {
       available_major: [1],
       likers: [],
       likes: 15,
-      majors: [],
       poster_img: []
     },
-
     {
       id: 2,
       name: "SnuLoL",
-      content: "SNU Best LoL Club",
-      clubmanager: "김도현",
+      description: "SNU Best LoL Club",
+      managers: [
+        {
+          name: "manager2",
+          major: { id: 2, name: "major2" }
+        }
+      ],
       category: 6,
       auth_img: "3",
       isRegistered: true,
@@ -106,10 +161,10 @@ let stubInitialState = {
       available_major: [1],
       likers: [],
       likes: 20,
-      majors: [],
       poster_img: []
     }
   ],
+
   categories: [
     {
       id: 0,
@@ -140,6 +195,7 @@ let stubInitialState = {
       name: "운동부"
     }
   ],
+
   tags: [
     { id: 0, name: "friendship" },
     { id: 1, name: "love" },
@@ -150,11 +206,13 @@ let stubInitialState = {
     { id: 6, name: "art" },
     { id: 7, name: "nothing" }
   ],
+
   majors: [
     { id: 0, name: "cs" },
     { id: 1, name: "economy" },
     { id: 2, name: "music" }
   ],
+
   depts: [
     {
       id: 0,
@@ -217,7 +275,19 @@ let stubInitialState = {
       name: "자유전공학부"
     }
   ],
-  loggedUser: { id: 1 },
+
+  loggedUser: {
+    id: 1,
+    name: "test",
+    email: "test@test.com",
+    password: "test",
+    dept: 0,
+    major: 1,
+    grade: 3,
+    available_semester: 2,
+    available_session_day: 1
+  },
+
   recommendedClubs: null
 };
 
@@ -298,11 +368,10 @@ describe("<ClubMain />", () => {
     const wrapper = component.find("ClubMain");
     expect(wrapper.length).toBe(1);
   });
-
   it("club card click event handling", () => {
     const component = mount(clubMain);
     const mainInstance = component.find("ClubMain").instance();
-    const wrapper = component.find("ClubCard");
+    const wrapper = component.find("#spyClubCard");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(true);
   });
@@ -310,14 +379,14 @@ describe("<ClubMain />", () => {
   it("club card click event handling2", () => {
     const component = mount(clubMain);
     const mainInstance = component.find("ClubMain").instance();
-    let wrapper = component.find("ClubCard");
+    let wrapper = component.find("#spyClubCard");
     wrapper.at(0).simulate("click");
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(true);
 
-    wrapper = component.find("CloseButton");
-    wrapper.at(0).simulate("click");
+    wrapper = component.find("#spyClubDetail");
+    wrapper.simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(false);
   });
 
@@ -327,10 +396,6 @@ describe("<ClubMain />", () => {
     let wrapper = component.find(".club-create-button");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubRegisterShow).toBe(true);
-
-    wrapper = component.find("CloseButton");
-    wrapper.at(0).simulate("click");
-    expect(mainInstance.state.clubRegisterShow).toBe(false);
   });
 
   it("when club list info does not loaded yet", () => {
@@ -354,7 +419,7 @@ describe("<ClubMain />", () => {
     );
 
     const component = mount(clubMain);
-    const wrapper = component.find("ClubCard");
+    const wrapper = component.find("#spyClubCard");
     expect(wrapper.length).toBe(0);
 
     stubInitialState.clubs = savedClubs;
@@ -457,7 +522,7 @@ describe("<ClubMain />", () => {
     let mainInstance = component.find("ClubMain").instance();
     mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
     let wrapper = component.find(".recommended-club-card");
-    expect(wrapper.length).toBe(9);
+    expect(wrapper.length).toBe(3);
 
     stubInitialState.recommendedClubs = [];
     mockStore = getMockStore(stubInitialState);
@@ -490,7 +555,7 @@ describe("<ClubMain />", () => {
       ...mainInstance.state,
       isUserInfoLoaded: true
     });
-    expect(spyGetRecommendedClubs).toBeCalledTimes(9);
+    expect(spyGetRecommendedClubs).toBeCalledTimes(8);
 
     stubInitialState.loggedUser = saved;
     mockStore = getMockStore(stubInitialState);

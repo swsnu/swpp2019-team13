@@ -73,7 +73,10 @@ export const putApplicationByID = (id, form, fileData) => {
     return axios
       .put("/api/club/" + id + "/application/", form)
       .then(axios.post("/api/club/" + id + "/application/", fileData))
-      .then(res => dispatch(putApplicationByID_(form)));
+      .then(res => {
+        // alert("지원서가 저장되었습니다.");
+        dispatch(putApplicationByID_(form));
+      });
   };
 };
 
@@ -117,6 +120,21 @@ export const putClubInformation = (id, clubInfo) => {
     return axios
       .put("/api/club/" + id + "/", clubInfo)
       .then(res => dispatch(putClubInformation_()));
+  };
+};
+
+export const addClubHitCount_ = id => {
+  return {
+    type: actionTypes.ADD_CLUB_HITCOUNT,
+    club_id: id
+  };
+};
+
+export const addClubHitCount = id => {
+  return dispatch => {
+    return axios.put("/api/club/" + id + "/hits/").then(res => {
+      if (res.status === 200) dispatch(addClubHitCount_(id));
+    });
   };
 };
 
