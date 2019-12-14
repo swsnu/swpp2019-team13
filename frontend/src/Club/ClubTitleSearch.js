@@ -38,6 +38,7 @@ class ClubTitleSearch extends React.Component {
         .filter(item => item.name === this.props.match.params.search_key)
         .map(item => (
           <ClubCard
+            className="clubcard"
             forceRender={Math.random()}
             key={item.id}
             club={item}
@@ -73,15 +74,15 @@ class ClubTitleSearch extends React.Component {
           {clubTitleSearchResultList.length === 0 ? (
             <div>검색하신 동아리가 없습니다.</div>
           ) : (
-            <div>
-              <div className="card-flex-container">
-                <div className="ClubCard">{clubTitleSearchResultList[0]}</div>
-                <div className="ClubCard"></div>
-                <div className="ClubCard"></div>
-                <div className="ClubCard"></div>
+              <div>
+                <div className="card-flex-container">
+                  <div className="ClubCard">{clubTitleSearchResultList[0]}</div>
+                  <div className="ClubCard"></div>
+                  <div className="ClubCard"></div>
+                  <div className="ClubCard"></div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
 
         <ClubDetail
