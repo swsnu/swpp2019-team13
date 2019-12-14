@@ -244,7 +244,7 @@ def clubhit(request, club_id=None):
             if 'club{}'.format(club_id) not in request.session:
                 request.session['club{}'.format(club_id)] = 1
                 selected_club.hits += 1
-                selected_club.save(club_id=club_id)
+                selected_club.save()
                 return HttpResponse(status=200)
 
             return HttpResponse(status=204)
@@ -260,7 +260,7 @@ def somoimhit(request, somoim_id=None):
                 request.session['somoim{}'.format(somoim_id)] = 1
                 selected_somoim = Somoim.objects.get(id=somoim_id)
                 selected_somoim.hits += 1
-                selected_somoim.save(somoim_id=somoim_id)
+                selected_somoim.save()
                 return HttpResponse(status=200)
 
             return HttpResponse(status=204)
@@ -372,7 +372,7 @@ def club(request, club_id=None):
             selected_club.recruit_end_day = req_data['recruit_end_day'].split('T')[
                 0]
 
-            selected_club.save(club_id=selected_club.id)
+            selected_club.save()
 
             return HttpResponse(status=204)
         except ObjectDoesNotExist:
@@ -505,7 +505,7 @@ def somoim_list(request):
         new_somoim.available_semester = available_semester
         new_somoim.session_day = session_day
 
-        new_somoim.save(somoim_id=0)
+        new_somoim.save()
 
         for major_id in available_major_id_list:
             new_somoim.available_major.add(Major.objects.get(id=major_id))

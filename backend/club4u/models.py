@@ -107,9 +107,9 @@ class Club(models.Model):
     member = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
-    def save(self, club_id, *args, **kwargs):
+    def save(self, *args, **kwargs):
         cache.delete('cached_club')
-        cache.delete('cached_club'+str(club_id))
+        cache.delete('cached_club'+str(self.id))
         super().save(*args, **kwargs)
 
     # def delete(self, *args, **kwargs):
@@ -151,9 +151,9 @@ class Somoim(models.Model):
     member = models.IntegerField(default=0)
     hits = models.IntegerField(default=0)
 
-    def save(self, somoim_id, *args, **kwargs):
+    def save(self, *args, **kwargs):
         cache.delete('cached_somoim')
-        cache.delete('cached_somoim'+str(somoim_id))
+        cache.delete('cached_somoim'+str(self.id))
         super().save(*args, **kwargs)
 
     # def delete(self, *args, **kwargs):
