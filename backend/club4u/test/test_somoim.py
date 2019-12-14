@@ -305,6 +305,7 @@ class SomoimTestCase(TestCase):
     def test_get_specific_somoim_success(self):
         client = Client(enforce_csrf_checks=False)
         response = client.get('/api/somoim/1/')
+        response = client.get('/api/somoim/1/')
 
         expected = {'id': 1, 'title': 'somoim1',
                     'joiners': [],

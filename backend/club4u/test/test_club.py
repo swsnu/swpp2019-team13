@@ -72,7 +72,8 @@ class ClubTestCase(TestCase):
                      'summary': 'summary1',
                      'tags': [],
                      'member': 0,
-                     'hits': 0}]
+                     'hits': 0,
+                     'img_tag':[0,0,0]}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 
@@ -290,6 +291,7 @@ class ClubTestCase(TestCase):
 
     def test_get_club_by_id_success(self):
         client = Client(enforce_csrf_checks=False)
+        response = client.get('/api/club/1/')
         response = client.get('/api/club/1/')
         expected = {'id': 1, 'appliers': [],
                     'available_major': [],

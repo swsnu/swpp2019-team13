@@ -97,9 +97,10 @@ class SomoimTagSearch extends React.Component {
         a => a.id === this.state.selectedSomoimID
       )[0];
     }
-
+    let selected_tag = "";
+    if (this.props.match.params.search_key) selected_tag = this.props.tags[this.props.match.params.search_key - 1].name;
     return (
-      <div className="SomoimTagSearch">
+      <div className="somoimTagSearch">
         <Header />
         <div className="SomoimList" style={{ marginBottom: "25px" }}>
           <div>
@@ -110,7 +111,7 @@ class SomoimTagSearch extends React.Component {
               }}
             >
               &apos;
-              {this.props.tags[this.props.match.params.search_key - 1].name}
+              {selected_tag}
               &apos; 태그 검색 결과:
             </h1>
           </div>

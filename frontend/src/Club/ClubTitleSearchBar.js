@@ -34,6 +34,7 @@ class ClubTitleSearchBar extends Component {
           <i className="fa fa-search"></i>
         </div>
         <input
+          className="input"
           id="search-bar"
           type="text"
           placeholder="동아리명을 검색해보세요"

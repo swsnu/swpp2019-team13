@@ -100,14 +100,14 @@ class ClubTagSearch extends React.Component {
 
     let selected_tag = "";
 
-    if (this.props.tags) {
+    if (this.props.tags && this.props.match.params.search_key) {
       selected_tag = this.props.tags.filter(
-        tag => tag.id == this.props.match.params.search_key
+        tag => String(tag.id) === String(this.props.match.params.search_key)
       )[0].name;
     }
 
     return (
-      <div className="ClubTagSearch">
+      <div className="clubTagSearch">
         <Header />
         <div className="ClubTagSearchResult" style={{ marginBottom: "25px" }}>
           <div>

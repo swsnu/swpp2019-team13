@@ -244,7 +244,7 @@ def clubhit(request, club_id=None):
             if 'club{}'.format(club_id) not in request.session:
                 request.session['club{}'.format(club_id)] = 1
                 selected_club.hits += 1
-                selected_club.save(club_id=club_id)
+                selected_club.save()
                 return HttpResponse(status=200)
 
             return HttpResponse(status=204)
@@ -260,7 +260,7 @@ def somoimhit(request, somoim_id=None):
                 request.session['somoim{}'.format(somoim_id)] = 1
                 selected_somoim = Somoim.objects.get(id=somoim_id)
                 selected_somoim.hits += 1
-                selected_somoim.save(somoim_id=somoim_id)
+                selected_somoim.save()
                 return HttpResponse(status=200)
 
             return HttpResponse(status=204)
@@ -276,25 +276,20 @@ def club(request, club_id=None):
             if not cached_club:
                 selected_club = Club.objects.get(id=club_id)
                 serializer = ClubSerializer(selected_club)
-                api_key = 'acc_a5456ea645db19d'
-                api_secret = '4d87ad8101b40cf70577cdbe904313e5'
-                image_url = ''
 
                 poster_list = ClubPoster.objects.filter(
                     club_id=selected_club.id).values()
 
                 poster_img_list = []
-                img_tag_list = []
+                #img_tag_list = []
 
                 for poster in poster_list:
-                    image_url = poster['img'].url
+#                    image_url = poster['img'].url
                     poster_img_list.append(poster['img'])
-                    img_tag_list.append(requests.get(
-                        'https://api.imagga.com/v2/tags?image_url=%s' % image_url, auth=(api_key, api_secret)))
 
                 response_dict = serializer.data
                 response_dict['poster_img'] = poster_img_list
-                response_dict['img_tag'] = img_tag_list
+                #response_dict['img_tag'] = img_tag_list
                 #return HttpResponse(JSONRenderer().render(response_dict))
 
                 cached_club = response_dict
@@ -377,7 +372,7 @@ def club(request, club_id=None):
             selected_club.recruit_end_day = req_data['recruit_end_day'].split('T')[
                 0]
 
-            selected_club.save(club_id=selected_club.id)
+            selected_club.save()
 
             return HttpResponse(status=204)
         except ObjectDoesNotExist:
@@ -439,9 +434,10 @@ def club_list(request):
                     image_path = '../backend/media/'+poster['img']
                     #print(image_path)
                     poster_img_list.append(poster['img'])
-                    img_tag_list.append(requests.post('https://api.imagga.com/v2/tags',
-                         auth=(api_key, api_secret),
-                         files={'image': open(image_path, 'rb')}).json())
+                    if poster['img']!="img":
+                        img_tag_list.append(requests.post('https://api.imagga.com/v2/tags',
+                             auth=(api_key, api_secret),
+                             files={'image': open(image_path, 'rb')}).json())
 
                 c['poster_img'] = poster_img_list
                 for tag in img_tag_list:
@@ -510,7 +506,7 @@ def somoim_list(request):
         new_somoim.available_semester = available_semester
         new_somoim.session_day = session_day
 
-        new_somoim.save(somoim_id=0)
+        new_somoim.save()
 
         for major_id in available_major_id_list:
             new_somoim.available_major.add(Major.objects.get(id=major_id))

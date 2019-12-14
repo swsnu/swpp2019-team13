@@ -37,7 +37,7 @@ matrix:
         - yarn test --coverage --watchAll=false
         - cd ..
         - cd backend
-        - pylint --load-plugins pylint_django */models.py */views.py */test/*.py --disable='C0103, R1705, C0301, R0904, R0801, C0412, C0114, C0115, C0116, W0511, C0330, C0303, W0614, W0401, R1721, R0912, R0914, R0915, C0200, W0621, W0221, C0326, W0612, W0613'
+        - pylint --load-plugins pylint_django */models.py */views.py */test/*.py --disable='C0103, R1705, C0301, R0904, R0801, C0412, C0114, C0115, C0116, W0511, C0330, C0303, W0614, W0401, R1721, R0912, R0914, R0915, C0200, W0621, W0221, C0326, W0612, W0613, C0302, R1702, C0411'
         - coverage run --branch --source='./club4u' manage.py test
         - coverage report --fail-under=90
         - coverage xml
