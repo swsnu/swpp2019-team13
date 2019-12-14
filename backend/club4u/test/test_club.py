@@ -291,6 +291,7 @@ class ClubTestCase(TestCase):
     def test_get_club_by_id_success(self):
         client = Client(enforce_csrf_checks=False)
         response = client.get('/api/club/1/')
+        response = client.get('/api/club/1/')
         expected = {'id': 1, 'appliers': [],
                     'available_major': [],
                     'available_semester': 0,
