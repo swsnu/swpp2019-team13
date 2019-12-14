@@ -55,18 +55,18 @@ const stubInitialState = {
       category: 1,
       name: "name1",
       description: "description1",
-      img_tag: [0, 2, 1],
       managers: [
         {
           name: "manager1",
           major: { id: 1, name: "major1" }
         }
       ],
-      poster_img: [],
+      poster_img: ["1"],
       recruit_end_day: "end_day1",
       recruit_start_day: "start_day1",
       available_major: [1],
       tags: [1, 2],
+      img_tag: [0, 2, 1],
       likers: [{ id: 0 }],
       available_semester: 2,
       session_day: 1
@@ -82,7 +82,7 @@ const stubInitialState = {
           major: { id: 2, name: "major2" }
         }
       ],
-      poster_img: null,
+      poster_img: ["2"],
       img_tag: [2, 1, 0],
       recruit_end_day: "end_day2",
       recruit_start_day: "start_day2",
@@ -142,7 +142,7 @@ const stubInitialState2 = {
           major: { id: 0, name: "major0" }
         }
       ],
-      poster_img: ["1", "2", "3", "4", "5", "6"],
+      poster_img: [],
       recruit_end_day: "end_day0",
       recruit_start_day: "start_day0",
       available_major: [0, 1, 2],
@@ -223,13 +223,13 @@ describe("<ClubDetail />", () => {
     spyaddLikedClub = jest
       .spyOn(userActions, "addLikedClub")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyaddAppliedClub = jest
       .spyOn(userActions, "addAppliedClub")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     clubDetail = (
@@ -402,6 +402,18 @@ describe("<ClubDetail />", () => {
     const wrapper = component.find(".unliked-likebutton");
     wrapper.simulate("click");
     expect(wrapper.length).toBe(1);
+  });
+
+  it("tag click handle", () => {
+    const component = mount(clubDetail2);
+    const wrapper = component.find(".club-detail-tag");
+
+    let spyHandler = jest.spyOn(history, "push").mockImplementation(() => {
+      return dispatch => {};
+    });
+
+    wrapper.at(0).simulate("click");
+    expect(spyHandler).toBeCalledTimes(1);
   });
 
   it("should click next & prev_and working", () => {

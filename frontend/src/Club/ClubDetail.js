@@ -116,7 +116,8 @@ class ClubDetail extends React.Component {
         );
 
       if (club.poster_img && club.poster_img.length > 0) {
-        let count = 0, count2 = 0;
+        let count = 0,
+          count2 = 0;
         let index = this.state.selected_gallery;
         while (count < 4) {
           if (club.poster_img.length > index) {
@@ -137,10 +138,17 @@ class ClubDetail extends React.Component {
           index++;
         }
         if (club.img_tag) {
-          if (club.img_tag[0] > club.img_tag[1] && club.img_tag[0] > club.img_tag[2]) mood = "- 즐거운 분위기";
-          else if (club.img_tag[1] > club.img_tag[0] && club.img_tag[1] > club.img_tag[2]) mood = " - 협동적인 분위기";
+          if (
+            club.img_tag[0] > club.img_tag[1] &&
+            club.img_tag[0] > club.img_tag[2]
+          )
+            mood = "- 즐거운 분위기";
+          else if (
+            club.img_tag[1] > club.img_tag[0] &&
+            club.img_tag[1] > club.img_tag[2]
+          )
+            mood = " - 협동적인 분위기";
           else mood = " - 진지한 분위기";
-
         }
       }
 
@@ -149,6 +157,7 @@ class ClubDetail extends React.Component {
         tagList = club.tags.map(tag_id => (
           <Button
             key={tag_id}
+            className="club-detail-tag"
             variant="secondary"
             onClick={() => this.onClickClubTag(tag_id)}
             style={{ marginRight: "5px" }}
@@ -312,13 +321,13 @@ class ClubDetail extends React.Component {
                     좋아요 취소
                   </button>
                 ) : (
-                    <button
-                      className="liked-likebutton"
-                      onClick={this.onClickLikeButton}
-                    >
-                      좋아요!
+                  <button
+                    className="liked-likebutton"
+                    onClick={this.onClickLikeButton}
+                  >
+                    좋아요!
                   </button>
-                  ))}
+                ))}
               {this.props.loggedUser &&
                 (acceptQualification ? (
                   <button
@@ -328,14 +337,14 @@ class ClubDetail extends React.Component {
                     지원하기
                   </button>
                 ) : (
-                    <button
-                      className="disabled-applybutton"
-                      title={qualificationMessage}
-                      disabled
-                    >
-                      지원하기
+                  <button
+                    className="disabled-applybutton"
+                    title={qualificationMessage}
+                    disabled
+                  >
+                    지원하기
                   </button>
-                  ))}
+                ))}
             </div>
           </Modal.Body>
         </Modal>
