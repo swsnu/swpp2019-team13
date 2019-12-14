@@ -1,8 +1,8 @@
 import React from "react";
-import { mount } from "enzyme";
+import { mount, shallow } from "enzyme";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, MemoryRouter } from "react-router-dom";
 
 import ClubTagSearch from "./ClubTagSearch";
 import { getMockStore } from "../test-utils/mocks";
@@ -13,6 +13,18 @@ import * as categoryActions from "../store/actions/category";
 import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
+
+jest.mock("../Club/ClubDetail", () => {
+  return jest.fn(props => {
+    return <div id="spyClubDetail" onClick={props.closeHandler}></div>;
+  });
+});
+
+jest.mock("../Club/ClubCard", () => {
+  return jest.fn(props => {
+    return <div id="spyClubCard" onClick={props.clickHandler}></div>;
+  });
+});
 
 let temp_clubs = [
   {
@@ -269,7 +281,7 @@ let stubInitialState = {
 
   recommendedClubs: null
 };
-
+MemoryRouter;
 let mockStore = getMockStore(stubInitialState);
 
 describe("<ClubTagSearch />", () => {
@@ -352,17 +364,46 @@ describe("<ClubTagSearch />", () => {
     const component = mount(clubTagSearch);
     const wrapper = component.find(".changePage").at(0);
     wrapper.simulate("click");
+    let mainInstance = component.find("ClubTagSearch").instance();
+    mainInstance.setState({
+      ...mainInstance.state,
+      clubTagSearchResultListPageNum: 1
+    });
+    component.update();
+    wrapper.simulate("click");
     expect(wrapper.length).toBe(1);
   });
-  it("should click changepage", () => {
+
+  it("should click changepage2", () => {
     const component = mount(clubTagSearch);
     const wrapper = component.find(".changePage").at(1);
+    wrapper.simulate("click");
+    let mainInstance = component.find("ClubTagSearch").instance();
+    mainInstance.setState({
+      ...mainInstance.state,
+      clubTagSearchResultListPageNum: -3
+    });
+    component.update();
     wrapper.simulate("click");
     expect(wrapper.length).toBe(1);
   });
 
   it("tag key matching", () => {
-    const component = mount(clubTagSearch);
+    const component = mount(
+      <Provider store={mockStore}>
+        <MemoryRouter initialEntries={["/1"]}>
+          <Switch>
+            <Route
+              path="/:search_key"
+              exact
+              render={() => {
+                return <ClubTagSearch match={{ params: { search_key: 1 } }} />;
+              }}
+            />
+          </Switch>
+        </MemoryRouter>
+      </Provider>
+    );
     let mainInstance = component.find("ClubTagSearch").instance();
     mainInstance.setState({
       ...mainInstance.state,
@@ -371,5 +412,56 @@ describe("<ClubTagSearch />", () => {
     component.update();
     const wrapper = component.find(".changePage").at(1);
     expect(wrapper.length).toBe(1);
+  });
+
+  it("club card click handle", () => {
+    let component = mount(
+      <Provider store={mockStore}>
+        <MemoryRouter initialEntries={["/2"]}>
+          <Switch>
+            <Route
+              path="/:search_key"
+              exact
+              render={() => {
+                return <ClubTagSearch match={{ params: { search_key: 1 } }} />;
+              }}
+            />
+          </Switch>
+        </MemoryRouter>
+      </Provider>
+    );
+    // let mainInstance = component.find("ClubTagSearch").instance();
+    // mainInstance.setState({
+    //   ...mainInstance.state,
+    //   forceRender: Math.random()
+    // });
+    // component.update();
+    let wrapper = component.find("#spyClubCard").at(1);
+    wrapper.simulate("click");
+    wrapper = component.find("#spyClubDetail");
+    wrapper.simulate("click");
+    expect(wrapper.length).toBe(1);
+  });
+
+  it("club info does not loaded yet", () => {
+    mockStore = getMockStore({ ...stubInitialState, clubs: null });
+    let component = mount(
+      <Provider store={mockStore}>
+        <MemoryRouter initialEntries={["/2"]}>
+          <Switch>
+            <Route
+              path="/:search_key"
+              exact
+              render={() => {
+                return <ClubTagSearch match={{ params: { search_key: 1 } }} />;
+              }}
+            />
+          </Switch>
+        </MemoryRouter>
+      </Provider>
+    );
+    const wrapper = component.find(".clubTagSearch");
+    expect(wrapper.length).toBe(1);
+    mockStore = getMockStore(stubInitialState);
   });
 });
