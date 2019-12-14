@@ -213,75 +213,75 @@ describe("<MyPage />", () => {
     spyGetLoginInfo = jest
       .spyOn(userActions, "getLoginInfo")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetClubList = jest
       .spyOn(clubActions, "getClubList")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetSomoimList = jest
       .spyOn(somoimActions, "getSomoimList")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetCategoryList = jest
       .spyOn(categoryActions, "getCategoryList")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetTagList = jest
       .spyOn(tagActions, "getTagList")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetDeptList = jest
       .spyOn(deptActions, "getDeptList")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetMajorList = jest
       .spyOn(majorActions, "getMajorList")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetManagingClubs = jest
       .spyOn(userActions, "getManagingClubs")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
     spyGetLikedClubs = jest
       .spyOn(userActions, "getLikedClubs")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
     spyGetAppliedClubs = jest
       .spyOn(userActions, "getAppliedClubs")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
 
     spyGetManagingSomoims = jest
       .spyOn(userActions, "getManagingSomoims")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
     spyGetLikedSomoims = jest
       .spyOn(userActions, "getLikedSomoims")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
     spyGetJoinedSomoims = jest
       .spyOn(userActions, "getJoinedSomoims")
       .mockImplementation(() => {
-        return dispatch => { };
+        return dispatch => {};
       });
   });
 
@@ -325,7 +325,10 @@ describe("<MyPage />", () => {
   it("self info button click event handling", () => {
     const component = mount(myPage);
     const mainInstance = component.find("MyPage").instance();
-    const wrapper = component.find(".self-info-button");
+    let wrapper = component.find(".manage-club-button");
+    wrapper.at(0).simulate("click");
+    wrapper = component.find(".self-info-button");
+    wrapper.at(0).simulate("click");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(0);
   });
@@ -335,6 +338,7 @@ describe("<MyPage />", () => {
     const mainInstance = component.find("MyPage").instance();
     const wrapper = component.find(".manage-club-button");
     wrapper.at(0).simulate("click");
+    wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(1);
   });
 
@@ -342,6 +346,7 @@ describe("<MyPage />", () => {
     const component = mount(myPage);
     const mainInstance = component.find("MyPage").instance();
     const wrapper = component.find(".like-club-button");
+    wrapper.at(0).simulate("click");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(2);
   });
@@ -351,6 +356,7 @@ describe("<MyPage />", () => {
     const mainInstance = component.find("MyPage").instance();
     const wrapper = component.find(".apply-club-button");
     wrapper.at(0).simulate("click");
+    wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(3);
   });
 
@@ -358,6 +364,7 @@ describe("<MyPage />", () => {
     const component = mount(myPage);
     const mainInstance = component.find("MyPage").instance();
     const wrapper = component.find(".manage-somoim-button");
+    wrapper.at(0).simulate("click");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(4);
   });
@@ -367,6 +374,7 @@ describe("<MyPage />", () => {
     const mainInstance = component.find("MyPage").instance();
     const wrapper = component.find(".like-somoim-button");
     wrapper.at(0).simulate("click");
+    wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(5);
   });
 
@@ -374,6 +382,7 @@ describe("<MyPage />", () => {
     const component = mount(myPage);
     const mainInstance = component.find("MyPage").instance();
     const wrapper = component.find(".join-somoim-button");
+    wrapper.at(0).simulate("click");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.tab).toBe(6);
   });
