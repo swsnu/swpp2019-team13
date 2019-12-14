@@ -72,7 +72,8 @@ class ClubTestCase(TestCase):
                      'summary': 'summary1',
                      'tags': [],
                      'member': 0,
-                     'hits': 0}]
+                     'hits': 0,
+                     'img_tag':[0,0,0]}]
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, expected)
 

@@ -434,9 +434,10 @@ def club_list(request):
                     image_path = '../backend/media/'+poster['img']
                     #print(image_path)
                     poster_img_list.append(poster['img'])
-                    img_tag_list.append(requests.post('https://api.imagga.com/v2/tags',
-                         auth=(api_key, api_secret),
-                         files={'image': open(image_path, 'rb')}).json())
+                    if poster['img']!="img":
+                        img_tag_list.append(requests.post('https://api.imagga.com/v2/tags',
+                             auth=(api_key, api_secret),
+                             files={'image': open(image_path, 'rb')}).json())
 
                 c['poster_img'] = poster_img_list
                 for tag in img_tag_list:
