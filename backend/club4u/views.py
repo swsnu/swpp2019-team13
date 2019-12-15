@@ -412,32 +412,35 @@ def clubposter(request, club_id=0):
             image_path = '../backend/media/'+request.FILES['image'].name
             img_tag = requests.post('https://api.imagga.com/v2/tags',
             auth=(api_key, api_secret),files={'image': open(image_path, 'rb')}).json()
+            while img_tag['status']['type']=='error':
+                image_path = '../backend/media/'+request.FILES['image'].name
+                img_tag = requests.post('https://api.imagga.com/v2/tags',
+                auth=(api_key, api_secret),files={'image': open(image_path, 'rb')}).json()
             #print(img_tag)
-            if img_tag['status']['type']!='error' :
-                for i in img_tag['result']['tags']:
-                    if i['tag']['en']=='smile': 
-                        point_list[0]+=i['confidence']
-                    if i['tag']['en']=='smiling': 
-                        point_list[0]+=i['confidence']
-                    if i['tag']['en']=='happy': 
-                        point_list[0]+=i['confidence']
-                    if i['tag']['en']=='happiness': 
-                        point_list[0]+=i['confidence']
-                    if i['tag']['en']=='entertainment': 
-                        point_list[0]+=i['confidence']
-                    if i['tag']['en']=='corporate': 
-                        point_list[1]+=i['confidence']
-                    if i['tag']['en']=='communication': 
-                        point_list[1]+=i['confidence']
-                    if i['tag']['en']=='teamwork': 
-                        point_list[1]+=i['confidence']
-                    if i['tag']['en']=='professional': 
-                        point_list[2]+=i['confidence']
-                    if i['tag']['en']=='working': 
-                        point_list[2]+=i['confidence']
-                    if i['tag']['en']=='discussion': 
-                        point_list[1]+=i['confidence']
-                        point_list[2]+=i['confidence']
+            for i in img_tag['result']['tags']:
+                if i['tag']['en']=='smile': 
+                    point_list[0]+=i['confidence']
+                if i['tag']['en']=='smiling': 
+                    point_list[0]+=i['confidence']
+                if i['tag']['en']=='happy': 
+                    point_list[0]+=i['confidence']
+                if i['tag']['en']=='happiness': 
+                    point_list[0]+=i['confidence']
+                if i['tag']['en']=='entertainment': 
+                    point_list[0]+=i['confidence']
+                if i['tag']['en']=='corporate': 
+                    point_list[1]+=i['confidence']
+                if i['tag']['en']=='communication': 
+                    point_list[1]+=i['confidence']
+                if i['tag']['en']=='teamwork': 
+                    point_list[1]+=i['confidence']
+                if i['tag']['en']=='professional': 
+                    point_list[2]+=i['confidence']
+                if i['tag']['en']=='working': 
+                    point_list[2]+=i['confidence']
+                if i['tag']['en']=='discussion': 
+                    point_list[1]+=i['confidence']
+                    point_list[2]+=i['confidence']
             new_poster.delete()
 
             new_poster = ClubPoster(
