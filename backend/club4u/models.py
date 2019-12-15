@@ -124,6 +124,9 @@ class ClubPoster(models.Model):
         on_delete=models.CASCADE,
         related_name='club_poster'
     )
+    point0 = models.IntegerField(default=0)
+    point1 = models.IntegerField(default=0)
+    point2 = models.IntegerField(default=0)
 
 
 class Somoim(models.Model):
