@@ -74,7 +74,7 @@ export const putApplicationByID = (id, form, fileData) => {
       .put("/api/club/" + id + "/application/", form)
       .then(axios.post("/api/club/" + id + "/application/", fileData))
       .then(res => {
-        alert("지원서가 저장되었습니다.");
+        // alert("지원서가 저장되었습니다.");
         dispatch(putApplicationByID_(form));
       });
   };

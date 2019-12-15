@@ -105,6 +105,7 @@ class SomoimDetail extends React.Component {
       if (this.props.tags.length !== 0) {
         tagList = somoim.tags.map(tag_id => (
           <Button
+            className={"somoim-detail-tag"}
             onClick={() => this.onClickSomoimTag(tag_id)}
             key={tag_id}
             variant="secondary"

@@ -14,6 +14,29 @@ import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
 
+jest.mock("../Somoim/SomoimDetail", () => {
+  return jest.fn(props => {
+    return <div id="spySomoimDetail" onClick={props.closeHandler}></div>;
+  });
+});
+jest.mock("../Somoim/SomoimCard", () => {
+  return jest.fn(props => {
+    return <div id="spySomoimCard" onClick={props.clickHandler}></div>;
+  });
+});
+jest.mock("../Somoim/SomoimCreate", () => {
+  return jest.fn(props => {
+    return <div id="spySomoimCreate" onClick={props.clickHandler}></div>;
+  });
+});
+jest.mock("../Somoim/SomoimTitleSearchBar", () => {
+  return jest.fn(props => {
+    return (
+      <div id="spySomoimTitleSearchBar" onClick={props.clickHandler}></div>
+    );
+  });
+});
+
 let temp_somoims = [
   {
     id: 0,
@@ -342,7 +365,7 @@ describe("<SomoimMain />", () => {
   it("somoim card click event handling", () => {
     const component = mount(somoimMain);
     const mainInstance = component.find("SomoimMain").instance();
-    const wrapper = component.find("SomoimCard");
+    const wrapper = component.find("#spySomoimCard");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimDetailShow).toBe(true);
   });
@@ -350,14 +373,14 @@ describe("<SomoimMain />", () => {
   it("somoim card click event handling", () => {
     const component = mount(somoimMain);
     const mainInstance = component.find("SomoimMain").instance();
-    let wrapper = component.find("SomoimCard");
+    let wrapper = component.find("#spySomoimCard");
     wrapper.at(0).simulate("click");
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimDetailShow).toBe(true);
 
-    const detailInstance = component.find("SomoimDetail").instance();
-    detailInstance.props.closeHandler();
+    wrapper = component.find("#spySomoimDetail");
+    wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimDetailShow).toBe(false);
   });
 
@@ -365,7 +388,7 @@ describe("<SomoimMain />", () => {
     const component = mount(somoimMain);
     const mainInstance = component.find("SomoimMain").instance();
     let wrapper = component.find(".somoim-create-button");
-    console.log(wrapper.debug());
+    // console.log(wrapper.debug());
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.somoimCreateShow).toBe(true);
   });
@@ -495,7 +518,7 @@ describe("<SomoimMain />", () => {
     let mainInstance = component.find("SomoimMain").instance();
     mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
     let wrapper = component.find(".recommended-somoim-card");
-    expect(wrapper.length).toBe(9);
+    expect(wrapper.length).toBe(3);
 
     stubInitialState.recommendedSomoims = saved;
     mockStore = getMockStore(stubInitialState);

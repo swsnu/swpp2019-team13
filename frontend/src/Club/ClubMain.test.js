@@ -14,6 +14,27 @@ import * as tagActions from "../store/actions/tag";
 import * as deptActions from "../store/actions/dept";
 import * as majorActions from "../store/actions/major";
 
+jest.mock("../Club/ClubDetail", () => {
+  return jest.fn(props => {
+    return <div id="spyClubDetail" onClick={props.closeHandler}></div>;
+  });
+});
+jest.mock("../Club/ClubCard", () => {
+  return jest.fn(props => {
+    return <div id="spyClubCard" onClick={props.clickHandler}></div>;
+  });
+});
+jest.mock("../Club/ClubRegister", () => {
+  return jest.fn(props => {
+    return <div id="spyClubRegister" onClick={props.clickHandler}></div>;
+  });
+});
+jest.mock("../Club/ClubTitleSearchBar", () => {
+  return jest.fn(props => {
+    return <div id="spyClubTitleSearchBar" onClick={props.clickHandler}></div>;
+  });
+});
+
 let temp_clubs = [
   {
     id: 0,
@@ -350,7 +371,7 @@ describe("<ClubMain />", () => {
   it("club card click event handling", () => {
     const component = mount(clubMain);
     const mainInstance = component.find("ClubMain").instance();
-    const wrapper = component.find("ClubCard");
+    const wrapper = component.find("#spyClubCard");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(true);
   });
@@ -358,14 +379,14 @@ describe("<ClubMain />", () => {
   it("club card click event handling2", () => {
     const component = mount(clubMain);
     const mainInstance = component.find("ClubMain").instance();
-    let wrapper = component.find("ClubCard");
+    let wrapper = component.find("#spyClubCard");
     wrapper.at(0).simulate("click");
     wrapper = component.find("Header");
     wrapper.at(0).simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(true);
 
-    const detailInstance = component.find("ClubDetail").instance();
-    detailInstance.props.closeHandler();
+    wrapper = component.find("#spyClubDetail");
+    wrapper.simulate("click");
     expect(mainInstance.state.clubDetailShow).toBe(false);
   });
 
@@ -398,7 +419,7 @@ describe("<ClubMain />", () => {
     );
 
     const component = mount(clubMain);
-    const wrapper = component.find("ClubCard");
+    const wrapper = component.find("#spyClubCard");
     expect(wrapper.length).toBe(0);
 
     stubInitialState.clubs = savedClubs;
@@ -501,7 +522,7 @@ describe("<ClubMain />", () => {
     let mainInstance = component.find("ClubMain").instance();
     mainInstance.setState({ ...mainInstance.state, selected_category: 6 });
     let wrapper = component.find(".recommended-club-card");
-    expect(wrapper.length).toBe(9);
+    expect(wrapper.length).toBe(3);
 
     stubInitialState.recommendedClubs = [];
     mockStore = getMockStore(stubInitialState);
