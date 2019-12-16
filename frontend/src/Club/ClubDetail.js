@@ -104,7 +104,14 @@ class ClubDetail extends React.Component {
 
       let mainImage = <img src={null} width="300" height="300" alt="" />;
       let image = [];
-      let mood;
+      let mood, mood1, mood2, mood3;
+      /*
+      if (club.img_tag) {
+        mood1 = club.img_tag[0];
+        mood2 = club.img_tag[1];
+        mood3 = club.img_tag[2];
+      }
+      */
       if (club.poster_img && club.poster_img.length > 0)
         mainImage = (
           <img
@@ -321,13 +328,13 @@ class ClubDetail extends React.Component {
                     좋아요 취소
                   </button>
                 ) : (
-                  <button
-                    className="liked-likebutton"
-                    onClick={this.onClickLikeButton}
-                  >
-                    좋아요!
+                    <button
+                      className="liked-likebutton"
+                      onClick={this.onClickLikeButton}
+                    >
+                      좋아요!
                   </button>
-                ))}
+                  ))}
               {this.props.loggedUser &&
                 (acceptQualification ? (
                   <button
@@ -337,14 +344,14 @@ class ClubDetail extends React.Component {
                     지원하기
                   </button>
                 ) : (
-                  <button
-                    className="disabled-applybutton"
-                    title={qualificationMessage}
-                    disabled
-                  >
-                    지원하기
+                    <button
+                      className="disabled-applybutton"
+                      title={qualificationMessage}
+                      disabled
+                    >
+                      지원하기
                   </button>
-                ))}
+                  ))}
             </div>
           </Modal.Body>
         </Modal>
