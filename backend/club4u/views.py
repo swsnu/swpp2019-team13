@@ -402,8 +402,8 @@ def somoim(request, somoim_id=None):
 def clubposter(request, club_id=0):
     if request.method == 'POST':
         try:
-            api_key = 'acc_cd9bbed9fa3bdd4'
-            api_secret = 'ff6b5c495abe6b1d475c6926966e9798'
+            api_key = 'acc_2f819dc73643a55'
+            api_secret = '836c2e26372e7be573ad75504bb3c22e'
             point_list = [0, 0, 0]
             selectedClub = Club.objects.get(id=club_id)
             new_poster = ClubPoster(
@@ -413,10 +413,10 @@ def clubposter(request, club_id=0):
             img_tag = requests.post('https://api.imagga.com/v2/tags',
             auth=(api_key, api_secret),files={'image': open(image_path, 'rb')}).json()
             while img_tag['status']['type']=='error':
-                image_path = '../backend/media/'+request.FILES['image'].name
                 img_tag = requests.post('https://api.imagga.com/v2/tags',
                 auth=(api_key, api_secret),files={'image': open(image_path, 'rb')}).json()
-            #print(img_tag)
+            
+            #print(img_tag['result']['tags'])
             for i in img_tag['result']['tags']:
                 if i['tag']['en']=='smile': 
                     point_list[0]+=i['confidence']
@@ -434,18 +434,28 @@ def clubposter(request, club_id=0):
                     point_list[1]+=i['confidence']
                 if i['tag']['en']=='teamwork': 
                     point_list[1]+=i['confidence']
+                if i['tag']['en']=='friendship': 
+                    point_list[1]+=i['confidence']
+                if i['tag']['en']=='together': 
+                    point_list[1]+=i['confidence']
                 if i['tag']['en']=='professional': 
                     point_list[2]+=i['confidence']
                 if i['tag']['en']=='working': 
                     point_list[2]+=i['confidence']
+                if i['tag']['en']=='work': 
+                    point_list[2]+=i['confidence']
                 if i['tag']['en']=='discussion': 
                     point_list[1]+=i['confidence']
                     point_list[2]+=i['confidence']
-            new_poster.delete()
+                if i['tag']['en']=='learning': 
+                    point_list[2]+=i['confidence']
+                if i['tag']['en']=='seat': 
+                    point_list[2]+=i['confidence']
 
-            new_poster = ClubPoster(
+            new_poster2 = ClubPoster(
                 img=request.FILES['image'], club=selectedClub, point0=point_list[0], point1=point_list[1], point2=point_list[2])
-            new_poster.save()
+            new_poster.delete()
+            new_poster2.save()
         except ObjectDoesNotExist:
             return HttpResponseNotFound()
 
