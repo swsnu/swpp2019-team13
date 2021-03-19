@@ -1,5 +1,5 @@
 django==2.2.8
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 mysqlclient==1.4.4
 pillow==6.2.1
 coverage==4.5.4
